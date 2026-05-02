@@ -1,0 +1,367 @@
+<template>
+  <div class="content-container">
+    <el-tabs v-model="activeTab" class="content-tabs">
+      <!-- Article Management Tab -->
+      <el-tab-pane label="文章管理" name="articles">
+        <div class="action-bar">
+          <el-button type="primary" @click="openArticleDialog(null)">新增文章</el-button>
+        </div>
+        
+        <el-table :data="articles" style="width: 100%" v-loading="loadingArticles" stripe>
+          <el-table-column prop="title" label="标题" min-width="200" />
+          <el-table-column prop="category" label="分类" width="120" />
+          <el-table-column prop="source" label="来源" width="150" />
+          <el-table-column prop="views" label="阅读量" width="100" />
+          <el-table-column label="发布时间" width="180">
+            <template #default="scope">
+              {{ formatDate(scope.row.created_at) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="150" align="right">
+            <template #default="scope">
+              <el-button link type="danger" @click="deleteArticle(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+
+      <!-- Teacher Management Tab -->
+      <el-tab-pane label="心理老师管理" name="teachers">
+        <div class="action-bar">
+          <el-button type="primary" @click="openTeacherDialog(null)">新增/编辑老师档案</el-button>
+        </div>
+        
+        <el-table :data="teachers" style="width: 100%" v-loading="loadingTeachers" stripe>
+          <el-table-column label="头像" width="80">
+            <template #default>
+              <div class="teacher-avatar-small">
+                <i class="fa-solid fa-user-graduate"></i>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="姓名" width="120" />
+          <el-table-column prop="username" label="账号" width="120" />
+          <el-table-column prop="title" label="职称" width="150" />
+          <el-table-column prop="location" label="办公地点" min-width="150" />
+          <el-table-column label="操作" width="150" align="right">
+            <template #default="scope">
+              <el-button link type="primary" @click="openTeacherDialog(scope.row)">编辑</el-button>
+              <el-button link type="danger" @click="deleteTeacher(scope.row.user_id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+
+    <!-- Article Dialog -->
+    <el-dialog v-model="articleDialogVisible" title="新增文章" width="600px">
+      <el-form :model="articleForm" label-width="80px">
+        <el-form-item label="标题" required>
+          <el-input v-model="articleForm.title" />
+        </el-form-item>
+        <el-form-item label="分类">
+          <el-input v-model="articleForm.category" />
+        </el-form-item>
+        <el-form-item label="来源">
+          <el-input v-model="articleForm.source" />
+        </el-form-item>
+        <el-form-item label="封面链接">
+          <el-input v-model="articleForm.cover_url" />
+        </el-form-item>
+        <el-form-item label="摘要">
+          <el-input v-model="articleForm.summary" type="textarea" :rows="2" />
+        </el-form-item>
+        <el-form-item label="正文" required>
+          <el-upload
+            class="upload-demo"
+            action="http://127.0.0.1:8000/api/teacher/upload"
+            :headers="uploadHeaders"
+            :on-success="handleUploadSuccess"
+            :before-upload="beforeUpload"
+            :show-file-list="false"
+          >
+            <el-button type="success" size="small" plain style="margin-bottom: 10px;">上传 Word/PDF 生成正文链接</el-button>
+          </el-upload>
+          <el-input v-model="articleForm.content" type="textarea" :rows="6" placeholder="可手动输入正文，或上传文件获取访问链接" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="articleDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitArticle">保存</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <!-- Teacher Dialog -->
+    <el-dialog v-model="teacherDialogVisible" title="编辑老师档案" width="600px">
+      <el-form :model="teacherForm" label-width="100px">
+        <el-form-item label="绑定用户ID" required>
+          <el-input-number v-model="teacherForm.user_id" :min="1" />
+          <span class="help-text">请填写已有教师角色的User ID</span>
+        </el-form-item>
+        <el-form-item label="职称">
+          <el-input v-model="teacherForm.title" />
+        </el-form-item>
+        <el-form-item label="办公地点">
+          <el-input v-model="teacherForm.location" />
+        </el-form-item>
+        <el-form-item label="简介">
+          <el-input v-model="teacherForm.intro" type="textarea" :rows="3" />
+        </el-form-item>
+        <el-form-item label="可预约时段">
+          <el-input v-model="teacherForm.time_slots_str" type="textarea" :rows="3" placeholder='例如: ["周一 09:00-11:00", "周三 14:00-16:00"]' />
+          <span class="help-text">请填写合法的 JSON 数组字符串</span>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="teacherDialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitTeacher">保存</el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+const activeTab = ref('articles')
+
+const uploadHeaders = computed(() => {
+  return { Authorization: `Bearer ${localStorage.getItem('token')}` }
+})
+
+const beforeUpload = (file) => {
+  const isDoc = file.name.endsWith('.doc') || file.name.endsWith('.docx') || file.name.endsWith('.pdf')
+  if (!isDoc) {
+    ElMessage.error('只能上传 Word 或 PDF 文件!')
+  }
+  return isDoc
+}
+
+const handleUploadSuccess = (res, file) => {
+  if (res.url) {
+    ElMessage.success('文件上传成功')
+    // Simply append link or convert to iframe/embed HTML
+    articleForm.value.content += `\n<br><a href="${res.url}" target="_blank">查看附件：${file.name}</a>`
+  }
+}
+
+// Articles
+const articles = ref([])
+const loadingArticles = ref(false)
+const articleDialogVisible = ref(false)
+const articleForm = ref({
+  title: '',
+  summary: '',
+  content: '',
+  cover_url: '',
+  category: '心理科普',
+  source: ''
+})
+
+const fetchArticles = async () => {
+  loadingArticles.value = true
+  try {
+    const token = localStorage.getItem('token')
+    const res = await axios.get('http://127.0.0.1:8000/api/teacher/articles', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    articles.value = res.data
+  } catch (error) {
+    ElMessage.error('获取文章列表失败')
+  } finally {
+    loadingArticles.value = false
+  }
+}
+
+const openArticleDialog = (row) => {
+  articleForm.value = {
+    title: '',
+    summary: '',
+    content: '',
+    cover_url: '',
+    category: '心理科普',
+    source: ''
+  }
+  articleDialogVisible.value = true
+}
+
+const submitArticle = async () => {
+  if (!articleForm.value.title || !articleForm.value.content) {
+    ElMessage.warning('标题和正文必填')
+    return
+  }
+  try {
+    const token = localStorage.getItem('token')
+    await axios.post('http://127.0.0.1:8000/api/teacher/articles', articleForm.value, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    ElMessage.success('保存成功')
+    articleDialogVisible.value = false
+    fetchArticles()
+  } catch (error) {
+    ElMessage.error('保存失败')
+  }
+}
+
+const deleteArticle = async (id) => {
+  try {
+    await ElMessageBox.confirm('确定要删除这篇文章吗？', '警告', { type: 'warning' })
+    const token = localStorage.getItem('token')
+    await axios.delete(`http://127.0.0.1:8000/api/teacher/articles/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    ElMessage.success('删除成功')
+    fetchArticles()
+  } catch (error) {
+    if (error !== 'cancel') ElMessage.error('删除失败')
+  }
+}
+
+// Teachers
+const teachers = ref([])
+const loadingTeachers = ref(false)
+const teacherDialogVisible = ref(false)
+const teacherForm = ref({
+  user_id: 1,
+  title: '',
+  intro: '',
+  location: '',
+  time_slots_str: '[]'
+})
+
+const fetchTeachers = async () => {
+  loadingTeachers.value = true
+  try {
+    const token = localStorage.getItem('token')
+    const res = await axios.get('http://127.0.0.1:8000/api/teacher/teachers_profiles', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    teachers.value = res.data
+  } catch (error) {
+    ElMessage.error('获取老师列表失败')
+  } finally {
+    loadingTeachers.value = false
+  }
+}
+
+const openTeacherDialog = (row) => {
+  if (row) {
+    teacherForm.value = {
+      user_id: row.user_id,
+      title: row.title,
+      intro: row.intro,
+      location: row.location,
+      time_slots_str: JSON.stringify(row.time_slots || [])
+    }
+  } else {
+    teacherForm.value = {
+      user_id: 1,
+      title: '',
+      intro: '',
+      location: '',
+      time_slots_str: '[]'
+    }
+  }
+  teacherDialogVisible.value = true
+}
+
+const submitTeacher = async () => {
+  try {
+    const token = localStorage.getItem('token')
+    let timeSlots = []
+    try {
+      timeSlots = JSON.parse(teacherForm.value.time_slots_str)
+    } catch (e) {
+      ElMessage.error('可预约时段 JSON 格式错误')
+      return
+    }
+    
+    const payload = {
+      user_id: teacherForm.value.user_id,
+      title: teacherForm.value.title,
+      intro: teacherForm.value.intro,
+      location: teacherForm.value.location,
+      time_slots: timeSlots
+    }
+    
+    await axios.post('http://127.0.0.1:8000/api/teacher/teachers_profiles', payload, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    ElMessage.success('保存成功')
+    teacherDialogVisible.value = false
+    fetchTeachers()
+  } catch (error) {
+    ElMessage.error('保存失败')
+  }
+}
+
+const deleteTeacher = async (id) => {
+  try {
+    await ElMessageBox.confirm('确定要删除该老师账号及档案吗？', '警告', { type: 'warning' })
+    const token = localStorage.getItem('token')
+    await axios.delete(`http://127.0.0.1:8000/api/teacher/teachers_profiles/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    ElMessage.success('删除成功')
+    fetchTeachers()
+  } catch (error) {
+    if (error !== 'cancel') ElMessage.error('删除失败')
+  }
+}
+
+const formatDate = (dateString) => {
+  if (!dateString) return ''
+  const d = new Date(dateString)
+  return d.toLocaleString()
+}
+
+onMounted(() => {
+  fetchArticles()
+  fetchTeachers()
+})
+</script>
+
+<style scoped>
+.content-container {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  min-height: calc(100vh - 140px);
+}
+
+.content-tabs {
+  margin-top: -10px;
+}
+
+.action-bar {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.help-text {
+  font-size: 12px;
+  color: #9CA3AF;
+  margin-left: 10px;
+  line-height: 1.2;
+}
+
+.teacher-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #3B82F6;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+</style>

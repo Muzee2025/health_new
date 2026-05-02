@@ -1,0 +1,8 @@
+# RAG Module dependencies
+langchain>=0.1.0
+langchain-chroma>=0.1.0
+langchain-openai>=0.1.0
+langchain-community>=0.0.30
+chromadb>=0.4.24
+unstructured>=0.13.0
+markdown>=3.6

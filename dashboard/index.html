@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light" />
+  <title>企业级仪表盘</title>
+  <style>
+    /* ========== 设计令牌 ========== */
+    :root {
+      --color-primary: #7b58ff;
+      --color-primary-soft: #d6d5fd;
+      --color-surface: #ffffff;
+      --color-text: #1a1a24;
+      --color-text-secondary: #5c5c6f;
+      --color-success: #22c55e;
+      --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --radius-card: 4px;
+      --ease: ease-out;
+      --t-fast: 0.2s;
+      --sidebar-w: 80px;
+      --sidebar-w-sm: 56px;
+      --font: "PingFang SC", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--color-text);
+      background: linear-gradient(165deg, #f5f4ff 0%, #faf9ff 40%, #eef0ff 100%);
+      overflow-x: hidden;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .edb {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    /* ========== 左侧导航 ========== */
+    .edb-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--sidebar-w);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0 16px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-right: 1px solid rgba(123, 88, 255, 0.1);
+      box-shadow: 2px 0 16px rgba(123, 88, 255, 0.06);
+    }
+
+    .edb-sidebar__logo {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-card);
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-soft) 100%);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .edb-sidebar__nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .edb-sidebar__wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .edb-sidebar__btn {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: none;
+      border-radius: var(--radius-card);
+      background: transparent;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      transition: background var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    }
+
+    .edb-sidebar__btn:hover {
+      background: rgba(123, 88, 255, 0.1);
+    }
+
+    .edb-sidebar__btn:active {
+      transform: scale(0.94);
+    }
+
+    .edb-sidebar__btn:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .edb-sidebar__hint {
+      position: absolute;
+      left: calc(100% + 10px);
+      top: 50%;
+      transform: translate(4px, -50%);
+      padding: 6px 10px;
+      background: var(--color-text);
+      color: #fff;
+      font-size: 12px;
+      white-space: nowrap;
+      border-radius: var(--radius-card);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+      box-shadow: var(--shadow-card);
+    }
+
+    .edb-sidebar__wrap:hover .edb-sidebar__hint {
+      opacity: 1;
+      transform: translate(0, -50%);
+    }
+
+    .edb-sidebar__footer {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(123, 88, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .edb-sidebar__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-card);
+      background: linear-gradient(145deg, var(--color-primary-soft), #fff);
+      border: 1px solid rgba(123, 88, 255, 0.25);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+
+    .edb-sidebar__preview {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    .edb-sidebar__add {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1.5px dashed rgba(123, 88, 255, 0.45);
+      background: rgba(123, 88, 255, 0.06);
+      color: var(--color-primary);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      transition: background var(--t-fast) var(--ease);
+    }
+
+    .edb-sidebar__add:hover {
+      background: rgba(123, 88, 255, 0.14);
+    }
+
+    /* ========== 主区 ========== */
+    .edb-main {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 20px 0;
+    }
+
+    .edb-main__inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* 顶部 4 卡片 240×100 */
+    .edb-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 240px));
+      gap: 16px;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .edb-stat {
+      width: 100%;
+      max-width: 240px;
+      height: 100px;
+      padding: 14px 16px;
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      transition: box-shadow var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+    }
+
+    .edb-stat:hover {
+      box-shadow: 0 4px 14px rgba(123, 88, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .edb-stat__row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+    }
+
+    .edb-stat__icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .edb-stat__value {
+      font-weight: 700;
+      font-size: 18px;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(90deg, var(--color-primary), #9b7cff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .edb-stat__delta {
+      font-size: 12px;
+      font-weight: 600;
+      color: #16a34a;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .edb-stat__delta--down {
+      color: #dc2626;
+    }
+
+    /* 双栏 */
+    .edb-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .edb-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .edb-card__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(123, 88, 255, 0.08);
+    }
+
+    .edb-card__title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .edb-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 2px;
+      background: rgba(123, 88, 255, 0.08);
+      border-radius: var(--radius-card);
+    }
+
+    .edb-tabs__btn {
+      border: none;
+      background: transparent;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-card);
+      cursor: pointer;
+      transition: color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    }
+
+    .edb-tabs__btn--active {
+      color: var(--color-primary);
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(123, 88, 255, 0.15);
+    }
+
+    .edb-flow {
+      height: 280px;
+    }
+
+    .edb-flow canvas {
+      display: block;
+      width: 100%;
+      height: 240px;
+    }
+
+    .edb-ai {
+      padding: 14px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: linear-gradient(110deg, #fff 0%, rgba(214, 213, 253, 0.45) 100%);
+      min-height: 120px;
+    }
+
+    .edb-ai__icon svg {
+      width: 44px;
+      height: 44px;
+      display: block;
+    }
+
+    .edb-ai__title {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .edb-ai__sub {
+      margin: 0;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    .edb-sys__row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(123, 88, 255, 0.06);
+      font-size: 13px;
+    }
+
+    .edb-sys__row:last-child {
+      border-bottom: none;
+    }
+
+    .edb-sys__tag {
+      width: 40px;
+      font-weight: 600;
+    }
+
+    .edb-sys__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-success);
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25);
+    }
+
+    .edb-sys__meta {
+      flex: 1;
+      text-align: right;
+      color: var(--color-text-secondary);
+      font-size: 12px;
+    }
+
+    .edb-trend {
+      position: relative;
+    }
+
+    .edb-trend canvas {
+      display: block;
+      width: 100%;
+      height: 200px;
+      cursor: crosshair;
+    }
+
+    .edb-trend__tip {
+      position: absolute;
+      pointer-events: none;
+      padding: 6px 8px;
+      background: var(--color-text);
+      color: #fff;
+      font-size: 11px;
+      border-radius: var(--radius-card);
+      opacity: 0;
+      transform: translate(-50%, -100%) translateY(-8px);
+      transition: opacity 0.12s ease-out;
+      white-space: nowrap;
+    }
+
+    .edb-trend__tip--on {
+      opacity: 1;
+    }
+
+    /* 日历：选中日紫色边框 */
+    .edb-cal {
+      padding-bottom: 10px;
+    }
+
+    .edb-cal__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+    }
+
+    .edb-cal__label {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .edb-cal__nav {
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: var(--radius-card);
+      background: rgba(123, 88, 255, 0.1);
+      color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .edb-cal__weeks {
+      display: grid;
+      grid-template-columns: repeat(7, 32px);
+      gap: 4px;
+      justify-content: center;
+      padding: 0 8px 6px;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      text-align: center;
+    }
+
+    .edb-cal__days {
+      display: grid;
+      grid-template-columns: repeat(7, 32px);
+      gap: 4px;
+      justify-content: center;
+      padding: 0 8px 10px;
+    }
+
+    .edb-cal__day {
+      width: 32px;
+      height: 32px;
+      border: 2px solid transparent;
+      border-radius: var(--radius-card);
+      background: transparent;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+    }
+
+    .edb-cal__day:hover:not(:disabled) {
+      background: rgba(123, 88, 255, 0.08);
+    }
+
+    .edb-cal__day:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .edb-cal__day--today:not(.edb-cal__day--selected) {
+      border-color: rgba(123, 88, 255, 0.35);
+    }
+
+    .edb-cal__day--selected {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      font-weight: 700;
+      background: rgba(123, 88, 255, 0.06);
+    }
+
+    /* 消息 */
+    .edb-msg__list {
+      list-style: none;
+      margin: 0;
+      padding: 8px 0;
+      max-height: 200px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .edb-msg__list::-webkit-scrollbar {
+      width: 0;
+    }
+
+    .edb-msg__item {
+      display: flex;
+      gap: 10px;
+      padding: 10px 14px;
+      align-items: flex-start;
+    }
+
+    .edb-msg__ico {
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .edb-msg__text {
+      margin: 0 0 4px;
+      font-size: 13px;
+    }
+
+    .edb-msg__time {
+      margin: 0;
+      font-size: 11px;
+      color: var(--color-text-secondary);
+    }
+
+    /* 系统状态 */
+    .edb-load {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .edb-load__title {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .edb-load__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-success);
+    }
+
+    .edb-load__sub {
+      margin: 0;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+
+    /* 底部条 */
+    .edb-footer {
+      margin-top: 20px;
+      margin-left: calc(-1 * (var(--sidebar-w) + 20px));
+      margin-right: -20px;
+      padding-left: calc(var(--sidebar-w) + 20px);
+      padding-right: 20px;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--color-primary-soft);
+      border-top: 1px solid rgba(123, 88, 255, 0.12);
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+    .edb-footer__text {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .edb-footer__btn {
+      border: none;
+      border-radius: var(--radius-card);
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--color-primary), #6346e0);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+    }
+
+    .edb-footer__btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(123, 88, 255, 0.35);
+    }
+
+    /* 遮罩 */
+    .edb-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(20, 20, 30, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--t-fast) var(--ease);
+    }
+
+    .edb-overlay--open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .edb-overlay__box {
+      width: min(360px, 90vw);
+      min-height: 100px;
+      background: #fff;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+
+    /* 响应式 */
+    @media (max-width: 1199px) {
+      .edb-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 991px) {
+      :root {
+        --sidebar-w: var(--sidebar-w-sm);
+      }
+      .edb-sidebar__hint {
+        display: none;
+      }
+      .edb-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .edb-stat {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .edb-main {
+        padding: 12px 12px 0;
+      }
+      .edb-stats {
+        grid-template-columns: 1fr;
+      }
+      .edb-footer {
+        margin-left: calc(-1 * (var(--sidebar-w) + 12px));
+        margin-right: -12px;
+        padding-left: calc(var(--sidebar-w) + 12px);
+        padding-right: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="edb">
+    <aside class="edb-sidebar" aria-label="主导航">
+      <div class="edb-sidebar__logo" aria-hidden="true">E</div>
+      <nav class="edb-sidebar__nav" aria-label="业务导航">
+        <div class="edb-sidebar__wrap">
+          <button type="button" class="edb-sidebar__btn" data-tip="数据录入" aria-label="数据录入" role="button">📝</button>
+          <span class="edb-sidebar__hint" role="tooltip">数据录入</span>
+        </div>
+        <div class="edb-sidebar__wrap">
+          <button type="button" class="edb-sidebar__btn" data-tip="社区与AI对话" aria-label="社区与AI对话" role="button">💬</button>
+          <span class="edb-sidebar__hint" role="tooltip">社区 · AI对话</span>
+        </div>
+        <div class="edb-sidebar__wrap">
+          <button type="button" class="edb-sidebar__btn" data-tip="个人中心" aria-label="个人中心" role="button">👤</button>
+          <span class="edb-sidebar__hint" role="tooltip">个人中心</span>
+        </div>
+      </nav>
+      <div class="edb-sidebar__footer">
+        <div class="edb-sidebar__avatar" aria-hidden="true">👤</div>
+        <div class="edb-sidebar__preview">
+          <span>Preview</span>
+          <button type="button" class="edb-sidebar__add" id="edb-add" aria-label="预览扩展" role="button">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="edb-main">
+      <div class="edb-main__inner">
+        <section class="edb-stats" aria-label="核心指标">
+          <article class="edb-stat">
+            <div class="edb-stat__row">
+              <span class="edb-stat__icon" aria-hidden="true">⚡</span>
+              <span class="edb-stat__value">1.2TB</span>
+            </div>
+            <span class="edb-stat__delta">+18% 周环比</span>
+          </article>
+          <article class="edb-stat">
+            <div class="edb-stat__row">
+              <span class="edb-stat__icon" aria-hidden="true">📊</span>
+              <span class="edb-stat__value">42ms</span>
+            </div>
+            <span class="edb-stat__delta edb-stat__delta--down">−3.1% 延迟</span>
+          </article>
+          <article class="edb-stat">
+            <div class="edb-stat__row">
+              <span class="edb-stat__icon" aria-hidden="true">✅</span>
+              <span class="edb-stat__value">99.2%</span>
+            </div>
+            <span class="edb-stat__delta">+0.3% 可用性</span>
+          </article>
+          <article class="edb-stat">
+            <div class="edb-stat__row">
+              <span class="edb-stat__icon" aria-hidden="true">🔒</span>
+              <span class="edb-stat__value">A+</span>
+            </div>
+            <span class="edb-stat__delta">合规通过</span>
+          </article>
+        </section>
+
+        <div class="edb-grid">
+          <div class="edb-col-left">
+            <section class="edb-card edb-flow" aria-label="跨系统数据流向">
+              <div class="edb-card__head">
+                <h2 class="edb-card__title">跨系统数据流向</h2>
+                <div class="edb-tabs" role="tablist">
+                  <button type="button" class="edb-tabs__btn edb-tabs__btn--active" id="tab-flow-traffic" role="tab" aria-selected="true">流量</button>
+                  <button type="button" class="edb-tabs__btn" id="tab-flow-latency" role="tab" aria-selected="false">延迟</button>
+                </div>
+              </div>
+              <canvas id="c-flow" width="800" height="240" aria-label="流向画布"></canvas>
+            </section>
+
+            <section class="edb-card edb-ai" aria-label="智能调度">
+              <div class="edb-ai__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M24 6l4 8 9 2-6 7 1 9-8-4-8 4 1-9-6-7 9-2 4-8z" stroke="#7B58FF" stroke-width="1.5" stroke-linejoin="round"/>
+                  <path d="M12 40h24" stroke="#7B58FF" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <p class="edb-ai__title">AI OPTIMIZATION ACTIVE</p>
+                <p class="edb-ai__sub">策略引擎实时监控跨系统队列与延迟，自动扩容。</p>
+              </div>
+            </section>
+
+            <section class="edb-card" aria-label="模块状态">
+              <div class="edb-card__head">
+                <h2 class="edb-card__title">HR / AD / OA</h2>
+              </div>
+              <div class="edb-sys__row">
+                <span class="edb-sys__tag">HR</span>
+                <span class="edb-sys__dot" aria-hidden="true"></span>
+                <span>在线</span>
+                <span class="edb-sys__meta">同步 1.2k 条 / h</span>
+              </div>
+              <div class="edb-sys__row">
+                <span class="edb-sys__tag">AD</span>
+                <span class="edb-sys__dot" aria-hidden="true"></span>
+                <span>在线</span>
+                <span class="edb-sys__meta">Token 新鲜度 98%</span>
+              </div>
+              <div class="edb-sys__row">
+                <span class="edb-sys__tag">OA</span>
+                <span class="edb-sys__dot" aria-hidden="true"></span>
+                <span>在线</span>
+                <span class="edb-sys__meta">审批队列 42</span>
+              </div>
+            </section>
+
+            <section class="edb-card edb-trend" aria-label="同步趋势">
+              <div class="edb-card__head">
+                <h2 class="edb-card__title">同步趋势</h2>
+              </div>
+              <div style="position: relative; padding: 0 8px 8px;">
+                <canvas id="c-trend" width="800" height="200"></canvas>
+                <div id="tip-trend" class="edb-trend__tip" role="tooltip"></div>
+              </div>
+            </section>
+          </div>
+
+          <div class="edb-col-right">
+            <section class="edb-card edb-cal" aria-label="日历">
+              <div class="edb-cal__bar">
+                <button type="button" class="edb-cal__nav" id="cal-prev" aria-label="上月">‹</button>
+                <h2 class="edb-cal__label" id="cal-label">—</h2>
+                <button type="button" class="edb-cal__nav" id="cal-next" aria-label="下月">›</button>
+              </div>
+              <div class="edb-cal__weeks" aria-hidden="true">
+                <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+              </div>
+              <div class="edb-cal__days" id="cal-grid"></div>
+            </section>
+
+            <section class="edb-card" aria-label="消息">
+              <div class="edb-card__head">
+                <h2 class="edb-card__title">消息</h2>
+              </div>
+              <ul class="edb-msg__list">
+                <li class="edb-msg__item">
+                  <span class="edb-msg__ico" aria-hidden="true">✅</span>
+                  <div>
+                    <p class="edb-msg__text">夜间批处理完成，无异常。</p>
+                    <p class="edb-msg__time">今天 08:12</p>
+                  </div>
+                </li>
+                <li class="edb-msg__item">
+                  <span class="edb-msg__ico" aria-hidden="true">⚠️</span>
+                  <div>
+                    <p class="edb-msg__text">边缘节点 B 延迟升高，已切换备用链路。</p>
+                    <p class="edb-msg__time">昨天 21:40</p>
+                  </div>
+                </li>
+                <li class="edb-msg__item">
+                  <span class="edb-msg__ico" aria-hidden="true">✅</span>
+                  <div>
+                    <p class="edb-msg__text">证书轮换任务已预约。</p>
+                    <p class="edb-msg__time">周一 09:05</p>
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            <section class="edb-card edb-load" aria-label="系统状态">
+              <div>
+                <p class="edb-load__title">
+                  <span class="edb-load__dot" aria-hidden="true"></span>
+                  系统负载正常
+                </p>
+                <p class="edb-load__sub">CPU、内存均在阈值内。</p>
+              </div>
+              <div style="font-size: 28px;" aria-hidden="true">📈</div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <footer class="edb-footer" role="contentinfo">
+        <p class="edb-footer__text">准备好接入新系统了吗？</p>
+        <button type="button" class="edb-footer__btn" id="btn-connect">立即连接</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="edb-overlay" id="edb-overlay" aria-hidden="true">
+    <div class="edb-overlay__box" role="dialog" aria-modal="true" aria-label="预览占位"></div>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+
+  var flowMode = 'traffic';
+  var flowRaf = 0;
+  var trendPts = [];
+  var trendHover = -1;
+
+  function alignCanvas(canvas) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = canvas.getBoundingClientRect();
+    var w = Math.floor(r.width * dpr);
+    var h = Math.floor(r.height * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    var ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return { ctx: ctx, cw: r.width, ch: r.height };
+  }
+
+  function drawFlow(canvas) {
+    var a = alignCanvas(canvas);
+    var ctx = a.ctx;
+    var w = a.cw;
+    var h = a.ch;
+    ctx.clearRect(0, 0, w, h);
+    var pad = 20;
+    var y = h / 2;
+    var p0 = { x: pad, y: y };
+    var p1 = { x: w / 2, y: y };
+    var p2 = { x: w - pad, y: y };
+
+    function circle(x, y, label) {
+      ctx.beginPath();
+      ctx.arc(x, y, 12, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = 'rgba(123,88,255,0.5)';
+      ctx.lineWidth = 1.5;
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#1a1a24';
+      ctx.font = '600 10px PingFang SC, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, x, y + 28);
+    }
+
+    function curve(from, to, amp, dash) {
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      for (var t = 0; t <= 1; t += 0.05) {
+        var x = from.x + (to.x - from.x) * t;
+        var yy = from.y + Math.sin(t * Math.PI * 3) * amp;
+        ctx.lineTo(x, yy);
+      }
+      ctx.strokeStyle = flowMode === 'traffic' ? 'rgba(123,88,255,0.55)' : 'rgba(99,70,224,0.45)';
+      ctx.lineWidth = flowMode === 'traffic' ? 2 : 1.5;
+      ctx.setLineDash(dash);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    circle(p0.x, p0.y, '源');
+    circle(p1.x, p1.y, '总线');
+    circle(p2.x, p2.y, '目标');
+    curve(p0, p1, flowMode === 'traffic' ? 8 : 14, flowMode === 'traffic' ? [5, 5] : [3, 6]);
+    curve(p1, p2, flowMode === 'traffic' ? 6 : 12, flowMode === 'traffic' ? [5, 5] : [3, 6]);
+
+    if (flowMode === 'traffic') {
+      var tt = Date.now() / 1500 % 1;
+      var x = p0.x + (p1.x - p0.x) * tt;
+      var yy = p0.y + Math.sin(tt * Math.PI * 3) * 8;
+      ctx.beginPath();
+      ctx.arc(x, yy, 3, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(123,88,255,0.6)';
+      ctx.fill();
+    } else {
+      ctx.strokeStyle = '#7B58FF';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pad, h - 28);
+      for (var x = pad; x < w - pad; x += 5) {
+        var u = (x - pad) / (w - 2 * pad);
+        ctx.lineTo(x, h - 28 - Math.sin(u * Math.PI * 2.2) * 24 - u * 18);
+      }
+      ctx.stroke();
+    }
+  }
+
+  function flowLoop(canvas) {
+    if (flowRaf) cancelAnimationFrame(flowRaf);
+    function tick() {
+      if (flowMode !== 'traffic') {
+        flowRaf = 0;
+        return;
+      }
+      drawFlow(canvas);
+      flowRaf = requestAnimationFrame(tick);
+    }
+    flowRaf = requestAnimationFrame(tick);
+  }
+
+  function drawTrend(canvas, mx, my) {
+    var a = alignCanvas(canvas);
+    var ctx = a.ctx;
+    var w = a.cw;
+    var h = a.ch;
+    var pl = 32;
+    var pb = 20;
+    var pt = 10;
+    var pr = 8;
+    ctx.clearRect(0, 0, w, h);
+    var n = 12;
+    trendPts = [];
+    for (var i = 0; i < n; i++) {
+      var t = i / (n - 1);
+      var vx = pl + t * (w - pl - pr);
+      var vy = pt + (h - pt - pb) * (0.55 - 0.38 * Math.sin(t * Math.PI * 1.3 + 0.3) - t * 0.06);
+      trendPts.push({ x: vx, y: vy, lab: 9 + i + ':00', val: 50 + Math.round(30 * Math.sin(i * 0.45) + i * 3) });
+    }
+    var g = ctx.createLinearGradient(0, pt, 0, h - pb);
+    g.addColorStop(0, 'rgba(123,88,255,0.35)');
+    g.addColorStop(1, 'rgba(214,213,253,0.05)');
+    ctx.beginPath();
+    ctx.moveTo(trendPts[0].x, h - pb);
+    trendPts.forEach(function (p) { ctx.lineTo(p.x, p.y); });
+    ctx.lineTo(trendPts[n - 1].x, h - pb);
+    ctx.closePath();
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(trendPts[0].x, trendPts[0].y);
+    for (var j = 1; j < n; j++) ctx.lineTo(trendPts[j].x, trendPts[j].y);
+    ctx.strokeStyle = '#7B58FF';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#8b8b9e';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    for (var k = 0; k < n; k += 2) ctx.fillText(trendPts[k].lab, trendPts[k].x, h - 4);
+
+    trendHover = -1;
+    var best = 1e9;
+    if (mx >= 0) {
+      for (var z = 0; z < trendPts.length; z++) {
+        var d = Math.abs(trendPts[z].x - mx);
+        if (d < best) { best = d; trendHover = z; }
+      }
+    }
+    if (trendHover >= 0 && mx >= 0) {
+      var p = trendPts[trendHover];
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = 'rgba(123,88,255,0.35)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(p.x, pt);
+      ctx.lineTo(p.x, h - pb);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.strokeStyle = '#7B58FF';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+    }
+  }
+
+  function setTip(el, on, x, y, text) {
+    if (!el) return;
+    if (!on) {
+      el.classList.remove('edb-trend__tip--on');
+      el.textContent = '';
+      return;
+    }
+    el.textContent = text;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.classList.add('edb-trend__tip--on');
+  }
+
+  /* 日历 */
+  var calY, calM, calSel;
+
+  function renderCal() {
+    var now = new Date();
+    if (calY == null) {
+      calY = now.getFullYear();
+      calM = now.getMonth();
+      calSel = now.getDate();
+    }
+    document.getElementById('cal-label').textContent = calY + '年 ' + (calM + 1) + '月';
+    var grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    var first = new Date(calY, calM, 1);
+    var sd = first.getDay();
+    var skip = sd === 0 ? 6 : sd - 1;
+    var dim = new Date(calY, calM + 1, 0).getDate();
+    for (var i = 0; i < skip; i++) {
+      var e = document.createElement('button');
+      e.type = 'button';
+      e.className = 'edb-cal__day';
+      e.disabled = true;
+      grid.appendChild(e);
+    }
+    for (var d = 1; d <= dim; d++) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'edb-cal__day';
+      b.textContent = String(d);
+      b.setAttribute('aria-label', calY + '年' + (calM + 1) + '月' + d + '日');
+      if (calY === now.getFullYear() && calM === now.getMonth() && d === now.getDate()) b.classList.add('edb-cal__day--today');
+      if (d === calSel) b.classList.add('edb-cal__day--selected');
+      b.addEventListener('click', (function (day) {
+        return function () {
+          calSel = day;
+          renderCal();
+        };
+      })(d));
+      grid.appendChild(b);
+    }
+  }
+
+  function bind() {
+    var cFlow = document.getElementById('c-flow');
+    var cTrend = document.getElementById('c-trend');
+    var tip = document.getElementById('tip-trend');
+    var tabT = document.getElementById('tab-flow-traffic');
+    var tabL = document.getElementById('tab-flow-latency');
+
+    function resize() {
+      if (cFlow) {
+        if (flowMode === 'traffic') flowLoop(cFlow);
+        else drawFlow(cFlow);
+      }
+      if (cTrend) drawTrend(cTrend, -1, -1);
+    }
+
+    function setFlow(m) {
+      flowMode = m;
+      tabT.classList.toggle('edb-tabs__btn--active', m === 'traffic');
+      tabL.classList.toggle('edb-tabs__btn--active', m === 'latency');
+      tabT.setAttribute('aria-selected', m === 'traffic');
+      tabL.setAttribute('aria-selected', m === 'latency');
+      if (!cFlow) return;
+      if (m === 'traffic') flowLoop(cFlow);
+      else {
+        if (flowRaf) cancelAnimationFrame(flowRaf);
+        flowRaf = 0;
+        drawFlow(cFlow);
+      }
+    }
+
+    tabT.addEventListener('click', function () { setFlow('traffic'); });
+    tabL.addEventListener('click', function () { setFlow('latency'); });
+
+    if (cTrend && tip) {
+      cTrend.addEventListener('mousemove', function (e) {
+        var r = cTrend.getBoundingClientRect();
+        var x = e.clientX - r.left;
+        var y = e.clientY - r.top;
+        drawTrend(cTrend, x, y);
+        if (trendHover >= 0 && trendPts[trendHover]) {
+          var p = trendPts[trendHover];
+          setTip(tip, true, p.x, p.y, p.lab + ' · ' + p.val + ' 条');
+        }
+      });
+      cTrend.addEventListener('mouseleave', function () {
+        drawTrend(cTrend, -1, -1);
+        setTip(tip, false, 0, 0, '');
+      });
+    }
+
+    document.getElementById('cal-prev').addEventListener('click', function () {
+      calM--;
+      if (calM < 0) { calM = 11; calY--; }
+      renderCal();
+    });
+    document.getElementById('cal-next').addEventListener('click', function () {
+      calM++;
+      if (calM > 11) { calM = 0; calY++; }
+      renderCal();
+    });
+    renderCal();
+
+    document.getElementById('btn-connect').addEventListener('click', function () {
+      window.alert('connecting…');
+    });
+
+    var ov = document.getElementById('edb-overlay');
+    var add = document.getElementById('edb-add');
+    add.addEventListener('click', function () {
+      ov.classList.add('edb-overlay--open');
+      ov.setAttribute('aria-hidden', 'false');
+    });
+    ov.addEventListener('click', function (e) {
+      if (e.target === ov) {
+        ov.classList.remove('edb-overlay--open');
+        ov.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    var rt;
+    window.addEventListener('resize', function () {
+      clearTimeout(rt);
+      rt = setTimeout(resize, 100);
+    });
+    resize();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+})();
+  </script>
+</body>
+</html>

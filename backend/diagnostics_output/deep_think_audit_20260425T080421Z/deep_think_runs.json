@@ -1,0 +1,1522 @@
+[
+  {
+    "started_at": "2026-04-25T08:04:22.385390+00:00",
+    "ended_at": "2026-04-25T08:04:29.509002+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-01",
+    "nonce": "41c24af5113c4ef2",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 3166.07,
+    "total_latency_ms": 7123.6,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时3.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 30,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:25.551353+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:25.551441+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:25.802650+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:26.067549+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:26.075931+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:26.285224+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:26.285361+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:26.285390+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:26.597503+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:26.597692+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:27.111560+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:27.622781+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:28.137379+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:28.650177+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.163151+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.178909+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.210204+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.241046+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.256446+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.272630+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.288595+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.304128+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.319959+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.335360+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.351067+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.381251+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.396706+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.412432+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:29.443269+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:04:29.507401+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:04:29.557924+00:00",
+    "ended_at": "2026-04-25T08:04:37.333580+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-02",
+    "nonce": "066740b065a7ff96",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 2841.88,
+    "total_latency_ms": 7775.66,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时4.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 32,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:32.399566+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:32.399781+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:32.662732+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:32.925226+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:32.927036+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:33.127961+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:33.128178+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:33.128198+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:33.437078+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:33.437277+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:33.945866+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:34.455177+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:34.965816+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:35.473756+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:35.987651+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:36.502009+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.012606+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.027896+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.058703+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.074840+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.090938+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.106836+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.122238+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.137756+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.168526+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.184069+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.200108+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.215955+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.231371+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.246946+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:37.262231+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:04:37.333193+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:04:37.351729+00:00",
+    "ended_at": "2026-04-25T08:04:42.992657+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-03",
+    "nonce": "1bbaf80df6826805",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 1226.21,
+    "total_latency_ms": 5640.93,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时4.1秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 31,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:38.577829+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:38.577916+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:38.829901+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:39.092413+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:39.094073+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:39.294418+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:39.294550+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:39.294592+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:39.608148+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:39.608326+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:40.116675+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:40.618809+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:41.134943+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:41.646624+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:42.157609+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.672765+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.688217+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.703598+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.719101+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.734585+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.750672+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.766291+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.781956+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.797938+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.813440+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.829155+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.858571+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.874840+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.904987+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:42.920910+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:04:42.992475+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9972,
+      "negative_confidence": 0.0028,
+      "polarity": 0.9944
+    },
+    "polarity_gap": 0.2307,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:04:43.013179+00:00",
+    "ended_at": "2026-04-25T08:04:48.522739+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-04",
+    "nonce": "feb8f8ea7c8897f0",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 1565.06,
+    "total_latency_ms": 5509.56,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时3.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 30,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:44.578112+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:44.578225+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:44.834861+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:45.087141+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:04:45.089291+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:45.304425+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:45.304550+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:04:45.304577+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:04:45.614642+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:45.614804+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:46.128931+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:46.643446+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:47.157218+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:04:47.668661+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.181993+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.198467+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.214943+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.245518+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.261060+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.277199+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.293184+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.324078+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.339606+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.354915+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.371048+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.387107+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.403434+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.418740+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:04:48.434046+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:04:48.522538+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:04:48.541201+00:00",
+    "ended_at": "2026-04-25T08:05:32.461200+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-05",
+    "nonce": "15b2b55e3af5a927",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 39959.45,
+    "total_latency_ms": 43920.0,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时3.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 30,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:28.500577+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:28.500641+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:28.757302+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:29.022974+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:29.024746+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:29.225845+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:29.226013+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:29.226055+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:29.532247+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:29.532438+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:30.045445+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:30.555892+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:31.070852+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:31.582118+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.092191+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.122307+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.139039+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.169356+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.184986+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.215743+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.230965+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.246327+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.261875+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.277207+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.293481+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.324216+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.339739+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.355050+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:32.385018+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:05:32.461033+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:05:32.476034+00:00",
+    "ended_at": "2026-04-25T08:05:40.133035+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-06",
+    "nonce": "732738ceff47b70b",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 2674.85,
+    "total_latency_ms": 7657.0,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时4.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 32,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:35.150811+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:35.150869+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:35.403333+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:35.664197+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:35.666320+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:35.880633+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:35.880764+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:35.880785+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:36.187278+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:36.187354+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:36.699876+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:37.212127+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:37.723855+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:38.238524+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:38.749680+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:39.260517+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.770331+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.786342+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.802278+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.832702+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.848348+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.864321+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.880139+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.895448+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.926439+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.942065+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.957427+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.972771+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:39.988636+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:40.019148+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:40.035143+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:05:40.132803+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:05:40.152180+00:00",
+    "ended_at": "2026-04-25T08:05:45.465321+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-07",
+    "nonce": "e38a3f350b55d429",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 1828.74,
+    "total_latency_ms": 5313.14,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时3.1秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 29,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:41.980816+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:41.980906+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:42.237113+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:42.502050+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:42.503859+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:42.717915+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:42.718058+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:42.718111+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:43.028059+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:43.028171+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:43.541896+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:44.051891+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:44.565253+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.072828+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.088471+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.118370+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.134385+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.164890+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.181091+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.211389+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.227344+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.243029+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.273638+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.289478+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.320123+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.335931+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.367219+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:45.382496+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:05:45.465026+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9972,
+      "negative_confidence": 0.0028,
+      "polarity": 0.9944
+    },
+    "polarity_gap": 0.2307,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:05:45.484394+00:00",
+    "ended_at": "2026-04-25T08:05:52.356327+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-08",
+    "nonce": "249743dde2666b29",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 2853.8,
+    "total_latency_ms": 6871.93,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时3.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 30,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:48.338121+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:48.338184+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:48.592612+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:48.854109+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:48.856635+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:49.069014+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:49.069211+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:49.069251+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:49.380270+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:49.380447+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:49.892827+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:50.404381+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:50.913499+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:51.426970+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:51.938138+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:51.969145+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:51.985081+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.015022+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.045152+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.061077+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.076666+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.107098+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.122465+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.152925+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.168543+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.199825+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.230684+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.260782+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:52.276753+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:05:52.356048+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:05:52.371344+00:00",
+    "ended_at": "2026-04-25T08:05:57.670994+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-09",
+    "nonce": "bf7825135a37e3ae",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 1308.93,
+    "total_latency_ms": 5299.65,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时3.6秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 30,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:53.680175+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:53.680239+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:53.939614+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:54.201657+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:54.203781+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:54.418666+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:54.418788+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:54.418810+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:54.728654+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:54.728722+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:55.240291+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:55.752594+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:56.267495+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:56.780284+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.296162+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.312116+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.327786+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.343505+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.374028+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.389771+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.405120+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.436633+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.452471+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.482563+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.497936+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.527974+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.543959+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.559313+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:05:57.590323+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:05:57.670763+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9916,
+      "negative_confidence": 0.0084,
+      "polarity": 0.9832
+    },
+    "polarity_gap": 0.2195,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  },
+  {
+    "started_at": "2026-04-25T08:05:57.687658+00:00",
+    "ended_at": "2026-04-25T08:06:03.412802+00:00",
+    "status_code": 200,
+    "content_type": "text/event-stream; charset=utf-8",
+    "client_trace_id": "diag-20260425t080421z-10",
+    "nonce": "5869669f3b8cb680",
+    "nonce_echo_ok": false,
+    "first_token_latency_ms": 1195.07,
+    "total_latency_ms": 5725.15,
+    "has_deep_think_tag": true,
+    "reply_text": "【深度思考·耗时4.1秒】\n\n我看到你现在正被“我最近获得比赛第二名 我很开心”这件事压得很难受，这很正常，不需要逼自己立刻振作。\n先给你一个今天就能做的小方案：\n1）先给情绪 20 分钟出口（写下来或找可信的人说出来）；\n2）做一件 10 分钟可完成的小事（洗澡/散步/收拾桌面），把身体从“僵住”状态拉回来；\n3）今晚尽量按时休息，明天再决定下一步，不在情绪最重时做重大决定。\n\n——结束·如需精简请回复‘简洁模式’",
+    "event_count": 31,
+    "events": [
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:58.882617+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:58.882682+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:59.140211+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:59.404787+00:00"
+      },
+      {
+        "event": "memory_chunk",
+        "at": "2026-04-25T08:05:59.406632+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:59.620520+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:59.620634+00:00"
+      },
+      {
+        "event": "trend_chunk",
+        "at": "2026-04-25T08:05:59.620650+00:00"
+      },
+      {
+        "event": "phase",
+        "at": "2026-04-25T08:05:59.928509+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:05:59.928661+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:06:00.440302+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:06:00.954420+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:06:01.466014+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:06:01.979438+00:00"
+      },
+      {
+        "event": "heartbeat",
+        "at": "2026-04-25T08:06:02.492246+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.004935+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.034813+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.065881+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.097204+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.113224+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.129840+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.145224+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.176885+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.192998+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.209212+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.239516+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.269945+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.285830+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.316920+00:00"
+      },
+      {
+        "event": "message_chunk",
+        "at": "2026-04-25T08:06:03.333200+00:00"
+      },
+      {
+        "event": "done",
+        "at": "2026-04-25T08:06:03.412569+00:00"
+      }
+    ],
+    "input_sentiment": {
+      "positive_confidence": 0.8819,
+      "negative_confidence": 0.1181,
+      "polarity": 0.7637
+    },
+    "reply_sentiment": {
+      "positive_confidence": 0.9972,
+      "negative_confidence": 0.0028,
+      "polarity": 0.9944
+    },
+    "polarity_gap": 0.2307,
+    "sentiment_contradiction": false,
+    "severity": "OK",
+    "suspicious_latency": false
+  }
+]

@@ -1,0 +1,38 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">心理教师卡通形象</title>
+  <desc id="desc">温馨卡通风格心理教师，包含书本、听诊器和微笑符号</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F3FBFF" />
+      <stop offset="100%" stop-color="#EAF6FF" />
+    </linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7CB7FF" />
+      <stop offset="100%" stop-color="#4D8FEC" />
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="184" height="184" rx="28" fill="url(#bg)" />
+  <circle cx="96" cy="70" r="32" fill="#FFD9B3" />
+  <path d="M64 70c0-19 14-34 32-34s32 15 32 34v6c-7-5-14-8-21-9-6 3-11 4-15 4s-9-1-15-4c-7 1-14 4-21 9z" fill="#5E4A3D" />
+  <circle cx="84" cy="72" r="3.5" fill="#2F3A44" />
+  <circle cx="108" cy="72" r="3.5" fill="#2F3A44" />
+  <path d="M84 87c8 7 16 7 24 0" fill="none" stroke="#E56E6E" stroke-width="3" stroke-linecap="round" />
+
+  <path d="M52 162c2-35 18-50 44-50 26 0 42 15 44 50z" fill="url(#shirt)" />
+  <rect x="78" y="112" width="36" height="18" rx="9" fill="#FFFFFF" opacity="0.92" />
+
+  <rect x="20" y="108" width="46" height="34" rx="6" fill="#FFD66E" stroke="#D6AA3B" stroke-width="2" />
+  <line x1="27" y1="118" x2="59" y2="118" stroke="#B48722" stroke-width="2" />
+  <line x1="27" y1="126" x2="54" y2="126" stroke="#B48722" stroke-width="2" />
+  <line x1="27" y1="134" x2="50" y2="134" stroke="#B48722" stroke-width="2" />
+
+  <path d="M144 114c-7 0-12 5-12 12s5 12 12 12 12-5 12-12" fill="none" stroke="#6E7C8A" stroke-width="4" stroke-linecap="round" />
+  <circle cx="144" cy="114" r="4" fill="#6E7C8A" />
+  <path d="M133 126c-3 6-9 11-16 13" fill="none" stroke="#6E7C8A" stroke-width="4" stroke-linecap="round" />
+
+  <circle cx="150" cy="56" r="14" fill="#FFFFFF" opacity="0.95" />
+  <circle cx="144" cy="54" r="1.8" fill="#4D8FEC" />
+  <circle cx="156" cy="54" r="1.8" fill="#4D8FEC" />
+  <path d="M145 61c4 3 7 3 11 0" fill="none" stroke="#4D8FEC" stroke-width="2" stroke-linecap="round" />
+</svg>

@@ -1,0 +1,18 @@
+{
+  "runs": 10,
+  "nonce_echo_success_rate": 0.0,
+  "sentiment_contradiction_rate": 0.0,
+  "suspicious_latency_rate": 0.0,
+  "latency_ms_avg": 6897.92,
+  "latency_ms_min": 5235.48,
+  "latency_ms_max": 10031.19,
+  "latency_ms_p50": 6874.35,
+  "latency_ms_p90": 8356.14,
+  "p_value_nonce_success_below_95pct": 9.765625000000087e-14,
+  "p_value_contradiction_above_10pct": 1.0,
+  "hypothesis_note": "nonce: H0(success>=95%); contradiction: H0(rate<=10%)",
+  "session_id": "f88f4549-1b93-47ad-86e1-9c45b8b082c2",
+  "username": "diag_20260425t080618z",
+  "model_version_assumed": "emohaa (from backend service hardcoded model field)",
+  "trace_id_type": "client_trace_id injected by diagnostic script"
+}
