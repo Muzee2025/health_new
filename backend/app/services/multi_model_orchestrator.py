@@ -88,7 +88,7 @@ class MultiModelOrchestrator:
         self._alerts: List[Dict[str, Any]] = []
         # 用户要求协同链路真实调用，默认关闭缓存，确保每次都会触发外部模型计费。
         self._cache_ttl_sec = 0
-        self._dashscope_key = os.getenv("QWEN_API_KEY", "sk-6081658a77294de599b7e22980adf29c")
+        self._dashscope_key = os.getenv("QWEN_API_KEY", "XXXXXXX")
         self._emohaa_service = ZhipuEmohaaService()
 
     @staticmethod
