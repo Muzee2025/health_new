@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 # 配置通义千问大模型客户端
 client = openai.AsyncOpenAI(
-    api_key="sk-6081658a77294de599b7e22980adf29c",
+    api_key="XXXXXXX",
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
 )
 
