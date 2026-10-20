@@ -1,0 +1,21 @@
+{
+  "task": "W1 design refinement",
+  "checkedAt": "2026-10-20T16:48:40.428012+00:00",
+  "baseCommit": "4b2898fd69518429421464cb848a7cb58414826b",
+  "branch": "codex/w1-design-refinement",
+  "protectedOriginalFiles": 104,
+  "protectedModified": [],
+  "packageUnchanged": true,
+  "legacyPreserved": 7,
+  "markdownChecked": 33,
+  "newMarkdownChecked": 4,
+  "brokenLinks": [],
+  "oldBaselineScreenshotsPreserved": 14,
+  "newBrowserScreenshots": 6,
+  "figmaExportSha256": "390472c8b637ed8d09468ee1c1aab6d56e166c5184417b399d49ad6f13efba52",
+  "approvedAssets": 124,
+  "approvedBytes": 694184,
+  "largestApprovedBytes": 55511,
+  "thirdPartyAssets": 6,
+  "errors": []
+}

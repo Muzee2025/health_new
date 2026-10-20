@@ -12,7 +12,7 @@ const warnings = [];
 const contrasts = [];
 const limits = { svg: 50 * 1024, webp: 200 * 1024, background: 300 * 1024, logoPng: 2 * 1024 * 1024 };
 const hardAssetLimit = 2 * 1024 * 1024;
-const required = ['id', 'path', 'type', 'size', 'usage', 'license', 'source', 'owner', 'status'];
+const required = ['id', 'path', 'type', 'size', 'usage', 'license', 'source', 'owner', 'status', 'sha256'];
 const add = (arr, code, file, message) => arr.push({ code, file, message });
 const exists = (p) => { try { return fs.statSync(p).isFile(); } catch { return false; } };
 const walk = (dir) => {
@@ -24,6 +24,7 @@ const walk = (dir) => {
 };
 const hashFile = (p) => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
 const rel = (p) => path.relative(root, p).replaceAll('\\', '/');
+const isAssetMetadata = (p) => ['manifest.json', 'LICENSES.md'].includes(path.relative(assetsRoot, p).replaceAll('\\', '/')) || path.basename(p) === '.gitattributes';
 const categoryFor = (p, item) => {
   const lower = `${p} ${item.type}`.toLowerCase();
   if (/background|(^|\/)bg-/.test(lower)) return 'background';
@@ -156,14 +157,29 @@ if (manifest) {
     if (dims && Array.isArray(item.size) && (dims[0] !== item.size[0] || dims[1] !== item.size[1])) add(errors, 'DIMENSIONS_MISMATCH', p, `Actual dimensions ${dims[0]}x${dims[1]} differ from manifest.`);
     if (['.png', '.webp'].includes(ext) && !dims) add(errors, 'DIMENSIONS_UNREADABLE', p, 'Could not parse actual image dimensions.');
     const digest = hashFile(full);
-    if (item.sha256 && item.sha256 !== digest) add(errors, 'HASH_MISMATCH', p, 'Manifest sha256 does not match file content.');
+    if (typeof item.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(item.sha256)) add(errors, 'HASH_INVALID', p, 'Manifest sha256 must be a lowercase SHA-256 digest.');
+    else if (item.sha256 !== digest) add(errors, 'HASH_MISMATCH', p, 'Manifest sha256 does not match file content.');
+    if (item.sourceInput || (item.status === 'approved' && ['MIT', 'CC0-1.0'].includes(item.license))) {
+      const input = item.sourceInput;
+      const safeInput = typeof input === 'string' && !path.posix.isAbsolute(input) && !path.win32.isAbsolute(input) && !input.includes('\\') && !input.split('/').includes('..');
+      if (!safeInput) add(errors, 'SOURCE_PATH_UNSAFE', p, 'Upstream input must be a safe repository-relative POSIX path.');
+      else {
+        const inputPath = path.resolve(root, input);
+        if (!inputPath.startsWith(`${root}${path.sep}`) || !exists(inputPath)) add(errors, 'SOURCE_INPUT_MISSING', p, 'Recorded upstream input is missing or outside the repository.');
+        else if (typeof item.sourceSha256 !== 'string' || !/^[a-f0-9]{64}$/.test(item.sourceSha256) || hashFile(inputPath) !== item.sourceSha256) add(errors, 'SOURCE_HASH_MISMATCH', p, 'Recorded upstream digest does not match the preserved source input.');
+      }
+      for (const key of ['sourceRevision', 'modifications', 'notice']) {
+        if (typeof item[key] !== 'string' || !item[key].trim()) add(errors, 'SOURCE_METADATA_MISSING', p, `Third-party metadata requires ${key}.`);
+      }
+      if (item.notice !== 'src/assets/LICENSES.md') add(errors, 'SOURCE_NOTICE_MISSING', p, 'Third-party notice must point to the versioned license register.');
+    }
     const key = `${item.type}:${digest}`;
     const prior = seenHashes.get(key);
     if (prior && item.status === 'approved' && prior.status === 'approved') add(errors, 'HASH_DUPLICATE', p, `Approved asset duplicates ${prior.path} within the same type.`);
     else if (prior) add(warnings, 'LEGACY_HASH_DUPLICATE', p, `Same-type duplicate with ${prior.path}; duplicate includes an unverified legacy asset.`);
     else seenHashes.set(key, { path: p, status: item.status });
   }
-  const allFiles = walk(assetsRoot).filter((p) => !['manifest.json', 'LICENSES.md'].includes(path.relative(assetsRoot, p).replaceAll('\\', '/')));
+  const allFiles = walk(assetsRoot).filter((p) => !isAssetMetadata(p));
   const listed = new Set([...paths].map((p) => path.resolve(assetsRoot, p)));
   for (const f of allFiles) if (!listed.has(path.resolve(f))) add(errors, 'COVERAGE_MISSING', rel(f), 'Asset file is not listed in manifest.');
   for (const p of paths) {
@@ -182,7 +198,7 @@ if (manifest) {
 
 // Check local executable resources in the new library and PPT kit; old application pages are W2 debt.
 const scanRoots = ['src/styles', 'src/assets', 'docs/design/ppt-kit'].map((p) => path.join(root, p));
-const previewPath = path.join(root, 'docs/design/library-preview.html');
+const previewFiles = walk(path.join(root, 'docs/design')).filter((f) => /^library-preview\.(?:html|css|js|mjs)$/.test(path.basename(f)));
 const remoteRe = /(?:https?:)?\/\/[^\s"')<>]+/gi;
 const isStandardXmlns = (content, url, index) => {
   const prefix = content.slice(Math.max(0, index - 160), index);
@@ -195,7 +211,9 @@ for (const dir of scanRoots) for (const f of walk(dir)) {
   const content = fs.readFileSync(f, 'utf8');
   if (hasRemoteReference(content)) add(errors, 'REMOTE_RESOURCE', rel(f), 'New library source contains an external resource URL.');
 }
-if (exists(previewPath) && hasRemoteReference(fs.readFileSync(previewPath, 'utf8'))) add(errors, 'REMOTE_RESOURCE', rel(previewPath), 'New library preview contains an external resource URL.');
+for (const previewPath of previewFiles) {
+  if (hasRemoteReference(fs.readFileSync(previewPath, 'utf8'))) add(errors, 'REMOTE_RESOURCE', rel(previewPath), 'New library preview contains an external resource URL.');
+}
 
 const tokenData = readTokens();
 if (tokenData) {
@@ -209,6 +227,8 @@ if (tokenData) {
     } catch (e) { add(errors, 'TOKEN_UNRESOLVED', rel(tokenData.tokenPath), `${label}: ${e.message}`); }
   };
   pair('--brand-600', '--brand-100', 'brand text on brand tint');
+  pair('--text-primary', '--surface', 'primary text on surface');
+  pair('--text-secondary', '--surface', 'secondary text on surface');
   for (const name of ['success', 'warning', 'danger', 'info']) pair(`--${name}-text`, `--${name}-100`, `${name} text on tint`);
 
   const palettePath = path.join(root, 'docs/design/ppt-kit/chart-palette.json');
@@ -252,7 +272,7 @@ for (const f of oldFiles) {
 
 const approved = assets.filter((a) => a?.status === 'approved').length;
 const legacy = assets.filter((a) => a?.status === 'legacy-unverified').length;
-const fileCount = walk(assetsRoot).filter((p) => !['manifest.json', 'LICENSES.md'].includes(path.relative(assetsRoot, p).replaceAll('\\', '/'))).length;
+const fileCount = walk(assetsRoot).filter((p) => !isAssetMetadata(p)).length;
 if (manifest) {
   const approvedByHash = new Map();
   for (const item of assets.filter((a) => a?.status === 'approved' && typeof a.path === 'string')) {

@@ -1,130 +1,33 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>心域智链 · 本地素材库</title>
-  <link rel="icon" href="/src/assets/brand/brand-favicon-32.png" />
-  <link rel="stylesheet" href="/src/styles/tokens.css" />
-  <link rel="stylesheet" href="/src/styles/base.css" />
-  <style>
-    .xy-design { margin: 0; }
-    .library { max-width: 1280px; margin: auto; padding: var(--space-7); }
-    .masthead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-5); border-bottom: 1px solid var(--border); }
-    .masthead img { width: 225px; }
-    .masthead a { font-size: var(--text-sm); }
-    .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--space-8); align-items: center; min-height: 350px; padding: var(--space-9) 0; }
-    .hero h1 { margin-bottom: var(--space-5); font-size: clamp(var(--text-h3), 3.5vw, 44px); max-width: 15em; }
-    .hero p { color: var(--text-secondary); }
-    .hero figure { margin: 0; background: var(--brand-100); border-radius: 50% 50% var(--radius-xl) var(--radius-xl); display: grid; place-items: center; min-height: 270px; }
-    .hero figure img { width: 150px; }
-    .section { padding: var(--space-8) 0; border-top: 1px solid var(--border); }
-    .section > h2 { margin-bottom: var(--space-3); font-size: var(--text-h3); }
-    .section > p { margin-bottom: var(--space-6); color: var(--text-secondary); }
-    .token-band { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-2); }
-    .swatch { min-height: 80px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
-    .token-band p { font-size: var(--text-sm); margin-top: var(--space-2); }
-    .token-band code { font-family: var(--font-sans); color: var(--text-secondary); font-size: var(--text-xs); }
-    .text-samples { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
-    .tag { padding: var(--space-1) var(--space-3); border-radius: var(--radius-sm); font-size: var(--text-sm); }
-    .tag-success { color: var(--success-text); background: var(--success-100); }
-    .tag-warning { color: var(--warning-text); background: var(--warning-100); }
-    .tag-danger { color: var(--danger-text); background: var(--danger-100); }
-    .tag-info { color: var(--info-text); background: var(--info-100); }
-    .toolbar { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-6); }
-    .toolbar button { padding: var(--space-2) var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--surface); }
-    .toolbar button[aria-pressed="true"] { color: var(--gray-0); background: var(--brand-600); border-color: var(--brand-600); }
-    .avatar-wall { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-5); align-items: start; }
-    .avatar-wall figure, .illustrations figure, .brand-row figure, .background-row figure { margin: 0; }
-    .avatar-wall img { display: block; width: 96px; margin-bottom: var(--space-2); border-radius: var(--radius-lg); }
-    figcaption { font-size: var(--text-sm); color: var(--text-secondary); }
-    .brand-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); align-items: center; }
-    .brand-row img { display: block; width: 100%; height: 130px; object-fit: contain; margin-bottom: var(--space-3); }
-    .illustrations { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-4); }
-    .illustrations img { display: block; width: 100%; margin-bottom: var(--space-3); }
-    .icon-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--space-4); margin-top: var(--space-8); }
-    .icon-row svg { width: 32px; height: 32px; color: var(--brand-600); display: block; margin-bottom: var(--space-2); }
-    .icon-row span { font-size: var(--text-sm); }
-    .background-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
-    .background-row img { border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: var(--space-3); width: 100%; }
-    .chart-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
-    .chart-panel { min-width: 0; }
-    .chart-panel h3 { font-size: var(--text-base); }
-    .chart { height: 280px; width: 100%; }
-    .data-note { font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-3); }
-    .links { display: flex; flex-wrap: wrap; gap: var(--space-5); margin: var(--space-6) 0; }
-    .footer { padding: var(--space-6) 0; border-top: 1px solid var(--border); font-size: var(--text-sm); color: var(--text-secondary); }
-    @media (max-width: 800px) { .library { padding: var(--space-5); } .hero { gap: var(--space-5); } .hero figure { min-height: 240px; } .avatar-wall { grid-template-columns: repeat(4, 1fr); } .illustrations { grid-template-columns: repeat(3, 1fr); } .icon-row { grid-template-columns: repeat(4, 1fr); } .chart-row { grid-template-columns: 1fr; } .chart { height: 300px; } .brand-row { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 520px) { .library { padding: var(--space-4); } .masthead { align-items: start; } .masthead img { width: 180px; } .hero { grid-template-columns: 1fr; padding: var(--space-7) 0; } .hero figure { min-height: 220px; } .hero figure img { width: 120px; } .token-band { grid-template-columns: repeat(3, 1fr); } .avatar-wall { grid-template-columns: repeat(3, 1fr); } .avatar-wall img { width: 80px; } .illustrations { grid-template-columns: 1fr 1fr; } .background-row { grid-template-columns: 1fr; } .section { padding: var(--space-7) 0; } }
-  </style>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>心域智链 · 素材工作台</title>
+<link rel="icon" href="/src/assets/brand/brand-favicon-32.png" />
+<link rel="stylesheet" href="/src/styles/tokens.css" /><link rel="stylesheet" href="/src/styles/base.css" /><link rel="stylesheet" href="./library-preview.css" />
 </head>
 <body class="xy-design">
-<main class="library">
-  <header class="masthead"><img src="/src/assets/brand/brand-logo-horizontal.svg" alt="心域智链，连接、理解、支持" width="300" height="96" /><a href="#catalog">查看素材目录</a></header>
-  <section class="hero" aria-labelledby="page-title"><div><h1 id="page-title">让支持可见，<br />让连接有温度。</h1><p>心域智链本地素材库。围合的心形与开放的连接节点，组成品牌、状态插画和领域图标的共同语言。</p><p class="data-note">W1 设计资产目录 · 独立预览 · 所有图表数据均为合成示例</p></div><figure><img src="/src/assets/brand/brand-logo-vertical.svg" alt="心域智链竖版标志" width="180" height="190" /></figure></section>
-  <section class="section" id="catalog"><h2>品牌的四种用法</h2><p>横版用于页头，竖版用于封面；单色适配低色彩场景，反白版用于品牌深色底。小尺寸使用专用 favicon。</p><div class="brand-row" id="brand-row"></div></section>
-  <section class="section"><h2>同一套颜色，清楚表达不同含义</h2><p>品牌色用于识别；正文使用深色中性文字。状态始终同时保留文字，避免仅靠颜色区分。</p><div class="token-band" id="token-band"></div><div class="text-samples"><span class="tag tag-success">已完成 · 成功</span><span class="tag tag-warning">请关注 · 提示</span><span class="tag tag-danger">需要处理 · 风险</span><span class="tag tag-info">了解更多 · 信息</span></div><p class="data-note">正文与上述标签文字/背景均按 WCAG AA 4.5:1 验证。图表色块用于数据编码，不承担正文文字角色。</p></section>
-  <section class="section"><h2>不指代真人的原创角色</h2><p>中性学生角色不预设性别标签。情绪表情遵循现有模型的六个字段，只帮助识别，不代表诊断。</p><div class="toolbar" aria-label="头像类别"><button type="button" data-group="teachers" aria-pressed="true">教师 3</button><button type="button" data-group="students" aria-pressed="false">学生 4</button><button type="button" data-group="emotions" aria-pressed="false">情绪 6</button></div><div class="avatar-wall" id="avatars"></div><p id="avatar-status" class="data-note" aria-live="polite"></p></section>
-  <section class="section"><h2>每种状态，都留下可行动的方向</h2><p>插画只提供支持线索。页面应另行显示“完成测评”“调整筛选”“返回首页”“重试”或校内求助入口，避免把说明藏在图片中。</p><div class="illustrations" id="illustrations"></div><div class="icon-row" id="icons"></div></section>
-  <section class="section"><h2>安静的背景，让内容留在前面</h2><p>登录图形集中于右侧；大屏提供深色底参考。业务接入前仍需对实际叠加文字逐项检查对比度。</p><div class="background-row"><figure><img src="/src/assets/backgrounds/bg-login-1440.webp" alt="登录背景，右侧弧线与支持符号" width="1440" height="900" loading="lazy" /><figcaption>登录背景 · 左侧预留表单区域</figcaption></figure><figure><img src="/src/assets/backgrounds/bg-dashboard-1440.webp" alt="深色大屏背景，右侧弧线节点" width="1440" height="900" loading="lazy" /><figcaption>教师大屏背景 · 内容另行排版</figcaption></figure></div></section>
-  <section class="section"><h2>三个图表，共用一个颜色来源</h2><p>趋势使用品牌色，情绪与风险使用明确字段映射。此处仅验证主题与色板，不连接真实后端。</p><div class="toolbar"><button type="button" id="dataset-toggle" aria-pressed="false">切换到示例 B</button></div><div class="chart-row"><div class="chart-panel"><h3>支持记录趋势</h3><div class="chart" id="trend" role="img" aria-label="合成支持记录趋势图"></div></div><div class="chart-panel"><h3>情绪分布</h3><div class="chart" id="emotion" role="img" aria-label="合成六类情绪分布图"></div></div><div class="chart-panel"><h3>风险分级</h3><div class="chart" id="risk" role="img" aria-label="合成低中高风险分布图"></div></div></div><p class="data-note" id="dataset-status" aria-live="polite"></p></section>
-  <nav class="links" aria-label="素材文档"><a href="./素材库规范.md">素材库规范</a><a href="./ppt-kit/16x9-grid.md">PPT 网格规范</a><a href="./ppt-kit/chart-palette.json">同源图表色板</a><a href="/src/assets/manifest.json">完整 manifest</a><a href="/src/assets/LICENSES.md">来源与许可</a></nav>
-  <footer class="footer">本目录只展示 approved 项目自制资产。七个遗留头像保持原位置并标为 legacy-unverified，未纳入本页与 PPT 素材包。对外授权及商业使用由负责人确认。</footer>
+<a class="skip-link" href="#main">跳到内容</a>
+<aside class="rail">
+<a class="brand-home" href="#main" aria-label="心域智链素材工作台首页"><img src="/src/assets/brand/brand-favicon-source.svg" width="42" height="42" alt="" /><span>心域智链<small>素材工作台</small></span></a>
+<nav aria-label="页内导航"><a href="#identity" class="active">品牌与表达<span>标志、颜色</span></a><a href="#library">挑选素材<span>搜索、预览、下载</span></a><a href="#in-use">放进场景<span>从表达走向陪伴</span></a><a href="#charts">数据的温度<span>图表与语义</span></a></nav>
+<div class="rail-note"><i></i>所有素材均在本地<p>让一致的表达，<br />成为支持的一部分。</p></div>
+</aside>
+<main id="main" class="workspace">
+<header class="topbar"><span>设计资源 / 素材工作台</span><a href="./素材库规范.md">使用规范</a></header>
+<section class="intro" aria-labelledby="page-title"><div><p class="intro-note">为校园里的每一份心情，留一个位置。</p><h1 id="page-title">让表达有温度，<br />让陪伴有形状。</h1><p class="intro-description">从一个标志，到一条支持提示。<br />在这里找到心域智链共同的视觉语言。</p><a class="button primary" href="#library">挑选一份素材 <span aria-hidden="true">↓</span></a></div><div class="intro-scene"><div class="scene-tab">一份温柔的回应</div><img class="hero-art" src="/src/assets/illustrations/illu-crisis-banner-320.svg" width="320" height="180" alt="相连的支持符号，表达有人陪伴" /><p class="scene-title">慢慢说，我们在听。</p><p>每一种心情，都值得被认真对待。</p><div class="scene-person"><img data-teacher-avatar width="34" height="34" alt="原创教师角色头像" /><span>支持，从理解开始</span><i></i></div></div></section>
+<section id="identity" class="section" aria-labelledby="identity-title"><div class="section-heading"><div><h2 id="identity-title">一个标志，三种靠近的方式。</h2><p>比较不同的表达，再看看它们在日常中的样子。</p></div><span class="section-aside">品牌探索</span></div><div id="concepts" class="concept-grid"></div>
+<div class="brand-lab"><div><h3 id="brand-lab-title">标志应用预览</h3><p id="brand-concept-description">同一个标志，在明暗与尺寸之间保持清晰。</p><fieldset class="segmented" id="brand-variants"><legend class="sr-only">标志呈现方式</legend><button type="button" data-variant="horizontal" aria-pressed="true">标准</button><button type="button" data-variant="mono" aria-pressed="false">单色</button><button type="button" data-variant="reverse" aria-pressed="false">反白</button></fieldset><label class="range-label" for="logo-scale">预览宽度 <output id="logo-scale-value">240 px</output></label><input id="logo-scale" type="range" min="96" max="300" value="240" step="8" /><p class="small muted">拖动查看缩放效果。下载规格以素材详情为准。</p></div><div id="logo-stage" class="logo-stage"><img id="logo-preview" src="/src/assets/brand/brand-logo-horizontal.svg" width="300" height="96" alt="心域智链标准标志" /></div></div>
+<div class="small-marks"><div><h3>小小一枚，也要清楚。</h3><p>推荐方案「相伴」的专用小尺寸符号，按实际大小预览。</p></div><div id="small-mark-previews"></div></div>
+<div class="palette-heading"><h3>把温度留给品牌，把清晰留给信息。</h3><p>点击色块复制色值。风险与情绪始终配有文字，不只依靠颜色。</p></div><div id="palette" class="palette"></div><div class="semantic-samples"><span class="tag success">已完成</span><span class="tag warning">请关注</span><span class="tag danger">需要处理</span><span class="tag info">了解更多</span><span class="small muted">品牌表达与状态语义分开使用</span></div></section>
+<section id="library" class="section" aria-labelledby="library-title"><div class="section-heading"><div><h2 id="library-title">找到恰好合适的那一份。</h2><p>浏览角色、插画与品牌素材，选择适合页面的格式和尺寸。</p></div><span id="library-total" class="section-aside"></span></div>
+<div class="library-controls"><div class="search-field"><label for="asset-search">搜索素材</label><input id="asset-search" type="search" placeholder="如 陪伴 / 教师 / anxiety" autocomplete="off" /></div><label class="format-field" for="format-filter">格式<select id="format-filter"><option value="all">全部格式</option><option value="svg">SVG 矢量</option><option value="webp">WebP 图片</option><option value="png">PNG 图片</option></select></label></div><div id="category-filters" class="category-filters" role="group" aria-label="素材类别"></div><div class="results-bar"><p id="results-count" role="status" aria-live="polite"></p><button type="button" id="clear-filters" class="text-button" hidden>清空筛选</button></div><div id="asset-grid" class="asset-grid"></div><div id="empty-results" class="empty-results" hidden><p>还没有找到相符的素材。</p><span>试试“学生”“插画”或更换格式。</span><button type="button" class="button" id="empty-reset">清空筛选，查看全部</button></div><details class="legacy-note"><summary>关于未列出的 7 个旧头像</summary><p>旧头像的来源与许可仍待核实，因此保留原文件供现有页面兼容，不进入这里的预览、复制及下载。新页面请使用本库角色。</p></details></section>
+<section id="in-use" class="section" aria-labelledby="use-title"><div class="section-heading"><div><h2 id="use-title">放进生活里，才知道是否合适。</h2><p>以下是合成场景，用来判断素材的语气、比例与留白。</p></div><span class="section-aside">使用示例</span></div><div class="use-layout"><div class="empty-scene"><span class="sample-label">报告页面 / 空状态</span><img src="/src/assets/illustrations/illu-empty-report-320.svg" width="320" height="180" alt="等待展开的报告插画" loading="lazy" /><h3>先从了解自己开始。</h3><p>完成一次测评后，你的报告会出现在这里。</p><button class="button primary" type="button" data-find="empty-report">选用这张插画</button></div><div class="support-scene"><span class="sample-label">消息列表 / 支持提示</span><div class="sample-message"><img data-teacher-avatar width="48" height="48" alt="原创教师角色头像" loading="lazy" /><div><strong>给自己一点时间</strong><p>不必一次说清所有感受。<br />准备好时，可以从一件小事聊起。</p></div></div><div class="support-callout"><img src="/src/assets/illustrations/illu-crisis-banner-320.svg" width="160" height="90" alt="陪伴与支持插画" loading="lazy" /><p>需要支持时，<br />向身边可信任的人开口。</p></div><button class="text-button" type="button" data-find="teachers">挑选陪伴角色 <span aria-hidden="true">↗</span></button></div></div></section>
+<section id="charts" class="section" aria-labelledby="charts-title"><div class="section-heading"><div><h2 id="charts-title">数据清楚，情绪被看见。</h2><p>同源配色下的三种图表。以下均为合成数据，不代表任何学生或诊断结果。</p></div><button type="button" id="dataset-toggle" class="button" aria-pressed="false">切换到示例 B</button></div><div class="chart-row"><div class="chart-panel"><h3>支持记录趋势</h3><p>一周的支持记录 / 次</p><div class="chart" id="trend" role="img" aria-label="合成支持记录趋势图"></div></div><div class="chart-panel"><h3>六类情绪</h3><p>真实字段对应的合成比例 / %</p><div class="chart" id="emotion" role="img" aria-label="合成六类情绪分布图"></div></div><div class="chart-panel"><h3>风险分级</h3><p>低、中、高风险的合成分布 / %</p><div class="chart" id="risk" role="img" aria-label="合成低中高风险分布图"></div></div></div><details class="data-description"><summary>查看图表数据与字段</summary><p id="dataset-status" aria-live="polite"></p></details></section>
+<footer class="footer"><div><strong>心域智链</strong><p>让一致的表达，成为支持的一部分。</p></div><nav aria-label="相关资料"><a href="./素材库规范.md">素材使用规范</a><a href="./ppt-kit/16x9-grid.md">PPT 网格规范</a><a href="/src/assets/LICENSES.md">来源与许可</a><a href="/src/assets/manifest.json">完整素材清单</a></nav><p class="small">项目自制素材可在项目内部复用；外部素材按详情标注的许可使用。对外授权及商业使用由负责人确认。展示页独立运行，不连接真实后端。</p></footer>
 </main>
-<script type="module">
-  import * as echarts from 'echarts';
-  import { registerChartTheme, readDesignToken, EMOTION_FIELDS } from '../../src/styles/echarts-theme.js';
-  import manifest from '../../src/assets/manifest.json';
-  const theme = registerChartTheme(echarts);
-  const emotionNames = { joy: '喜悦', sadness: '悲伤', neutral: '平静', fear: '恐惧', anxiety: '焦虑', anger: '愤怒' };
-  const approved = manifest.assets.filter(asset => asset.status === 'approved');
-  const url = path => `/src/assets/${path}`;
-  document.querySelector('#brand-row').innerHTML = [['horizontal', '横版'], ['vertical', '竖版'], ['mono', '单色'], ['reverse', '反白']].map(([name, label]) => `<figure><img src="${url(`brand/brand-logo-${name}.svg`)}" width="300" height="130" alt="${label}品牌标志" /><figcaption>${label}</figcaption></figure>`).join('');
-  const swatches = [['brand-500', '联结紫'], ['brand-600', '交互深紫'], ['brand-100', '支持浅紫'], ['info', '安定蓝'], ['gray-800', '正文墨'], ['gray-0', '纸白']];
-  document.querySelector('#token-band').innerHTML = swatches.map(([token, label]) => `<div><div class="swatch" style="background:var(--${token})"></div><p>${label}<br /><code>${readDesignToken(token)}</code></p></div>`).join('');
-  function showAvatars(group) {
-    const assets = approved.filter(a => a.path.startsWith(`avatars/${group}/`) && a.path.endsWith('-96.webp'));
-    document.querySelector('#avatars').innerHTML = assets.map((asset, index) => {
-      const mood = EMOTION_FIELDS.find(key => asset.path.includes(`emotion-${key}-`));
-      const label = mood ? `${emotionNames[mood]} / ${mood}` : `${group === 'teachers' ? '教师' : '学生'}角色 ${index + 1}`;
-      return `<figure><img src="${url(asset.path)}" width="96" height="96" alt="${label}原创几何头像" /><figcaption>${label}</figcaption></figure>`;
-    }).join('');
-    document.querySelectorAll('[data-group]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.group === group)));
-    document.querySelector('#avatar-status').textContent = `当前显示 ${assets.length} 个${{ teachers: '教师', students: '学生', emotions: '情绪' }[group]}角色；每个角色均提供 SVG、PNG 源导出及 48/96/256/512 WebP。`;
-  }
-  document.querySelectorAll('[data-group]').forEach(button => button.addEventListener('click', () => showAvatars(button.dataset.group)));
-  showAvatars('teachers');
-  document.querySelector('#illustrations').innerHTML = [['empty-report', '暂无报告'], ['empty-list', '列表为空'], ['not-found', '页面未找到'], ['network-error', '网络连接中断'], ['crisis-banner', '寻求支持']].map(([name, label]) => `<figure><img src="${url(`illustrations/illu-${name}-320.svg`)}" width="320" height="180" alt="${label}状态插画" loading="lazy" /><figcaption>${label}</figcaption></figure>`).join('');
-  document.querySelector('#icons').innerHTML = [['assessment', '测评'], ['report', '报告'], ['treehole', '树洞'], ['alert', '预警'], ['support', '干预支持'], ['audit', '审计'], ['appointment', '预约'], ['knowledge', '知识库']].map(([id, label]) => `<div><svg aria-hidden="true" width="32" height="32"><use href="${url('icons/icon-domain-sprite-24.svg')}#${id}" /></svg><span>${label}</span></div>`).join('');
-  const trend = echarts.init(document.querySelector('#trend'), 'xinyu');
-  const emotion = echarts.init(document.querySelector('#emotion'), 'xinyu');
-  const risk = echarts.init(document.querySelector('#risk'), 'xinyu');
-  let datasetB = false;
-  function emotionLayout() {
-    const compact = document.querySelector('#emotion').clientWidth < 400;
-    return {
-      radius: compact ? ['28%', '46%'] : ['34%', '60%'],
-      label: { fontSize: Number.parseFloat(readDesignToken('text-xs')), formatter: compact ? '{b}\n{c}%' : '{b} {c}%', alignTo: 'edge', edgeDistance: 10, distanceToLabelLine: 3 },
-      labelLine: { length: compact ? 8 : 15, length2: compact ? 6 : 15 },
-    };
-  }
-  function renderCharts() {
-    const trendValues = datasetB ? [8, 11, 9, 14, 13, 16, 15] : [5, 8, 7, 12, 10, 14, 12];
-    const emotionValues = datasetB ? [20, 10, 35, 8, 20, 7] : [26, 12, 32, 6, 18, 6];
-    const riskValues = datasetB ? [72, 22, 6] : [80, 16, 4];
-    trend.setOption({ aria: { enabled: true }, animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, tooltip: { trigger: 'axis' }, grid: { left: 36, right: 12, top: 30, bottom: 32 }, xAxis: { type: 'category', data: ['一', '二', '三', '四', '五', '六', '日'] }, yAxis: { type: 'value', minInterval: 1 }, series: [{ name: '支持记录（合成）', type: 'line', smooth: false, data: trendValues, itemStyle: { color: theme.color[0] } }] });
-    emotion.setOption({ aria: { enabled: true }, animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, tooltip: { trigger: 'item' }, series: [{ name: '情绪（合成）', type: 'pie', center: ['50%', '50%'], ...emotionLayout(), data: EMOTION_FIELDS.map((key, i) => ({ name: emotionNames[key], value: emotionValues[i], itemStyle: { color: theme.xy.emotions[key], borderColor: readDesignToken('text-secondary'), borderWidth: 1 } })) }] });
-    risk.setOption({ aria: { enabled: true }, animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, tooltip: { trigger: 'axis' }, grid: { left: 36, right: 12, top: 30, bottom: 32 }, xAxis: { type: 'category', data: ['低', '中', '高'] }, yAxis: { type: 'value', minInterval: 1 }, series: [{ name: '风险（合成）', type: 'bar', barMaxWidth: 38, label: { show: true, position: 'top', color: readDesignToken('text-primary'), formatter: '{c}%' }, data: ['low', 'mid', 'high'].map((key, i) => ({ value: riskValues[i], itemStyle: { color: theme.xy.risks[key], borderColor: readDesignToken('text-secondary'), borderWidth: 1 } })) }] });
-    document.querySelector('#dataset-status').textContent = `当前为合成示例 ${datasetB ? 'B' : 'A'}。支持记录：${trendValues.join('、')}；六类情绪占比：${EMOTION_FIELDS.map((key, i) => `${emotionNames[key]}${emotionValues[i]}%`).join('、')}；低/中/高风险：${riskValues.join('/')}%。`;
-    const toggle = document.querySelector('#dataset-toggle');
-    toggle.textContent = `切换到示例 ${datasetB ? 'A' : 'B'}`;
-    toggle.setAttribute('aria-pressed', String(datasetB));
-  }
-  document.querySelector('#dataset-toggle').addEventListener('click', () => { datasetB = !datasetB; renderCharts(); });
-  renderCharts();
-  const resize = () => { [trend, emotion, risk].forEach(chart => chart.resize()); emotion.setOption({ series: [emotionLayout()] }); };
-  new ResizeObserver(resize).observe(document.querySelector('.chart-row'));
-  window.addEventListener('pagehide', () => [trend, emotion, risk].forEach(chart => chart.dispose()), { once: true });
-</script>
+<dialog id="asset-dialog" aria-labelledby="detail-title" aria-describedby="detail-usage"><div class="dialog-header"><span>素材详情</span><button type="button" id="dialog-close" aria-label="关闭素材详情">×</button></div><div class="detail-layout"><div id="detail-preview" class="detail-preview"></div><div class="detail-content"><p id="detail-category" class="small muted"></p><h2 id="detail-title"></h2><p id="detail-usage"></p><div class="detail-selects"><label for="detail-format">文件格式<select id="detail-format"></select></label><label for="detail-size">导出尺寸<select id="detail-size"></select></label></div><p id="detail-file" class="small muted"></p><div class="detail-actions"><button type="button" id="copy-path" class="button primary">复制项目引用路径</button><a id="download-asset" class="button" download>下载文件</a></div><p id="detail-feedback" role="status" aria-live="polite"></p><div id="copy-fallback" hidden><label for="fallback-path">自动复制不可用，请选择下方路径并复制</label><input id="fallback-path" readonly /></div><p id="detail-license" class="license-note"></p><details><summary>查看文件信息</summary><dl id="detail-meta"></dl></details></div></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script type="module" src="./library-preview.js"></script>
 </body>
 </html>

@@ -1,0 +1,19 @@
+{
+  "task": "W1 design refinement: Windows checkout integrity",
+  "date": "2026-10-21",
+  "coreAutocrlf": true,
+  "method": "git checkout-index --all into a new ignored directory; run the copied check-assets.mjs; rebuild copied assets using the existing sharp runtime; validate again",
+  "beforeFix": {
+    "exitCode": 1,
+    "errors": 6,
+    "errorCounts": { "HASH_MISMATCH": 4, "SOURCE_HASH_MISMATCH": 2 }
+  },
+  "preservationRules": [
+    { "file": "src/assets/icons/phosphor/.gitattributes", "rule": "*.svg -text" },
+    { "file": "docs/design/ppt-kit/upstream/.gitattributes", "rule": "* -text" }
+  ],
+  "freshCheckoutAfterFix": { "exitCode": 0, "coverage": "131/131", "errors": 0, "legacyWarnings": 7 },
+  "rebuildInFreshCheckout": { "exitCode": 0, "approved": 124, "legacy": 7, "total": 131 },
+  "postRebuildValidation": { "exitCode": 0, "coverage": "131/131", "errors": 0, "legacyWarnings": 7 },
+  "scope": "Preserve raw upstream inputs/notices and downloadable SVG license-comment bytes; image inventory excludes .gitattributes as configuration metadata; existing legacy files and business code unchanged"
+}

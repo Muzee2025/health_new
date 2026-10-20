@@ -1,6 +1,6 @@
 # 截图与浏览器验证
 
-> owner: A / E04 ｜ version: 1.0 ｜ status: 定稿 ｜ updated: 2026-10-21
+> owner: A / E04 ｜ version: 1.1 ｜ status: 定稿 ｜ updated: 2026-10-21
 
 ## 当前前端基线
 
@@ -26,6 +26,8 @@
 
 ## 新素材库展示页
 
+本节下方四张展示截图为初始W1（4b2898f）证据。设计优化后的当前截图及QA见文末，原14页业务合成基线不变。
+
 [library-preview-qa.json](library-preview-qa.json) 保存Lead的浏览器验证结果；展示页为 `/docs/design/library-preview.html`，与业务页面入口分开加载。只允许本地展示资源，不连接真实后端。
 
 | 证据 | 内容 |
@@ -38,3 +40,9 @@
 实际检查包含头像分组3/4/6个、键盘Enter切换数据、三图的实际数据、响应式尺寸和减少动态偏好。三图在减少动态模式下关闭动画并显示最终数据，展示页错误0、warning0、外部请求0、坏图0。品牌PNG512/1024另通过sharp检查透明通道及透明像素；这项检查记录在QA JSON，不能冒充静态校验器提供的能力。
 
 截图由浏览器原生捕获并仅转换为WebP，未修改画面元素。业务截图的水印是捕获前注入的DOM，非后期图像合成。
+
+## 设计优化后的工作台
+
+当前验证为[refinement/qa.json](refinement/qa.json)：桌面1440×1000、手机390×844，三候选九版本、搜索筛选、真实两尺寸下载哈希、复制成功/失败、Esc焦点与三图更新均通过；控制台error/warning、坏图、外部/后端请求均0。
+
+图像入口：[桌面](refinement/desktop.webp)、[品牌比较](refinement/brand-comparison.webp)、[素材浏览](refinement/asset-browser.webp)、[手机](refinement/mobile.webp)、[手机详情](refinement/mobile-detail.webp)、[手机情绪图](refinement/mobile-emotion.webp)、[Figma原生导出](refinement/figma-brand-board.png)。具体命令与边界见[优化验收](../优化验收记录.md)。

@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "updated": "2026-10-20",
+  "version": "2.0.0",
+  "updated": "2026-10-21",
   "source": "src/styles/tokens.css",
   "order": [
     "brand-500",
@@ -20,8 +20,8 @@
     "emo-anger"
   ],
   "colors": [
-    "#7B58FF",
-    "#6244E8",
+    "#78558F",
+    "#604372",
     "#16A34A",
     "#F59E0B",
     "#DC2626",
@@ -48,5 +48,13 @@
     "low": "#16A34A",
     "mid": "#F59E0B",
     "high": "#DC2626"
+  },
+  "brand": {
+    "brand-500": "#78558F",
+    "brand-600": "#604372",
+    "brand-100": "#EEE7F2",
+    "accent-apricot": "#E8B185",
+    "accent-sage": "#8BA696",
+    "surface-warm": "#FCFAF7"
   }
 }

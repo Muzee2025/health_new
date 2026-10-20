@@ -1,6 +1,6 @@
 # 心域智链 PPT 16:9 网格
 
-> owner: B / E03 ｜ version: 1.0 ｜ status: 定稿 ｜ updated: 2026-10-20
+> owner: B / R1 ｜ version: 2.0 ｜ status: 定稿 ｜ updated: 2026-10-21
 
 画布为1600×900（16:9；PowerPoint可选13.333×7.5英寸）。安全边距左右104、上下80；内容宽1392，采用12列、列间24。标题与正文左对齐，单行不超过约30个汉字；一页只表达一个主要判断，不使用无依据指标。
 
@@ -10,4 +10,4 @@
 
 截图使用screenshot-frames/screenshot-frame-16x9.svg；框内窗为x24/y80/宽1552/高796，以等比contain放入截图，留白优于拉伸。替换占位文字时必须遮蔽或删除它。截图只用明确标识的合成数据或已脱敏图，保留采集日期、页面及“合成示例”标识；本包不含真实学生数据。
 
-图标来自icon-sheet.svg，与src/assets/icons/icon-domain-sprite-24.svg同源；建议24–36pt。logo引用见logo-reference.md。封面和章节底板的装饰图形集中在右侧，左侧文字区域不叠加无关纹理。所有素材只允许项目内部复用，对外授权/商用由负责人确认。
+图标来自icon-sheet.svg，与src/assets/icons/icon-domain-sprite-24.svg同源；建议24–36pt。logo引用见logo-reference.md。封面和章节底板使用推荐「相伴」的舒展书页，装饰集中在右侧，左侧文字区域不叠加纹理。品牌灰紫承担识别与交互，杏色只用于书页与光感，不替代风险语义色。自制素材允许项目内部复用，对外授权/商用由负责人确认；第三方素材遵循随附MIT/CC0条款。

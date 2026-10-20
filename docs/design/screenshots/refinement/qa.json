@@ -1,0 +1,289 @@
+{
+  "task": "R4",
+  "checkedAt": "2026-10-20T16:38:57.462Z",
+  "baseCommit": "4b2898f",
+  "tests": [
+    {
+      "name": "desktop-layout",
+      "passed": true,
+      "viewport": [
+        1440,
+        1000
+      ],
+      "scrollWidth": 1440,
+      "font": "\"Microsoft YaHei\", \"PingFang SC\", system-ui, sans-serif",
+      "cards": 44,
+      "overlay": false
+    },
+    {
+      "name": "three-logos-three-versions",
+      "passed": true,
+      "logos": [
+        {
+          "concept": "xiangban",
+          "variant": "horizontal",
+          "src": "/src/assets/brand/brand-logo-horizontal.svg"
+        },
+        {
+          "concept": "xiangban",
+          "variant": "mono",
+          "src": "/src/assets/brand/brand-logo-mono.svg"
+        },
+        {
+          "concept": "xiangban",
+          "variant": "reverse",
+          "src": "/src/assets/brand/brand-logo-reverse.svg"
+        },
+        {
+          "concept": "yongguang",
+          "variant": "horizontal",
+          "src": "/src/assets/brand/concepts/brand-concept-yongguang.svg"
+        },
+        {
+          "concept": "yongguang",
+          "variant": "mono",
+          "src": "/src/assets/brand/concepts/brand-concept-yongguang-mono.svg"
+        },
+        {
+          "concept": "yongguang",
+          "variant": "reverse",
+          "src": "/src/assets/brand/concepts/brand-concept-yongguang-reverse.svg"
+        },
+        {
+          "concept": "zhiyin",
+          "variant": "horizontal",
+          "src": "/src/assets/brand/concepts/brand-concept-zhiyin.svg"
+        },
+        {
+          "concept": "zhiyin",
+          "variant": "mono",
+          "src": "/src/assets/brand/concepts/brand-concept-zhiyin-mono.svg"
+        },
+        {
+          "concept": "zhiyin",
+          "variant": "reverse",
+          "src": "/src/assets/brand/concepts/brand-concept-zhiyin-reverse.svg"
+        }
+      ]
+    },
+    {
+      "name": "actual-downloads",
+      "passed": true,
+      "count": 2
+    },
+    {
+      "name": "clipboard-success",
+      "passed": true,
+      "clipboard": "src/assets/avatars/teachers/avatar-teacher-01-256.webp"
+    },
+    {
+      "name": "clipboard-denied-and-escape",
+      "passed": true,
+      "selectedManualPath": true,
+      "focusRestored": true
+    },
+    {
+      "name": "search-filter-empty-reset",
+      "passed": true,
+      "anxietyGroups": 1,
+      "format": "webp",
+      "emptyReset": true
+    },
+    {
+      "name": "charts-dataset-and-reduced-motion",
+      "passed": true,
+      "charts": [
+        {
+          "id": "trend",
+          "animation": false,
+          "data": [
+            [
+              8,
+              11,
+              9,
+              14,
+              13,
+              16,
+              15
+            ]
+          ]
+        },
+        {
+          "id": "emotion",
+          "animation": false,
+          "data": [
+            [
+              {
+                "name": "喜悦",
+                "value": 20,
+                "itemStyle": {
+                  "color": "#F59E0B",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "name": "悲伤",
+                "value": 10,
+                "itemStyle": {
+                  "color": "#3B82F6",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "name": "平静",
+                "value": 35,
+                "itemStyle": {
+                  "color": "#4B5563",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "name": "恐惧",
+                "value": 8,
+                "itemStyle": {
+                  "color": "#6366F1",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "name": "焦虑",
+                "value": 20,
+                "itemStyle": {
+                  "color": "#8B5CF6",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "name": "愤怒",
+                "value": 7,
+                "itemStyle": {
+                  "color": "#EF4444",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              }
+            ]
+          ]
+        },
+        {
+          "id": "risk",
+          "animation": false,
+          "data": [
+            [
+              {
+                "value": 72,
+                "itemStyle": {
+                  "color": "#16A34A",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "value": 22,
+                "itemStyle": {
+                  "color": "#F59E0B",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              },
+              {
+                "value": 6,
+                "itemStyle": {
+                  "color": "#DC2626",
+                  "borderColor": "#56625C",
+                  "borderWidth": 1
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mobile-layout-dialog",
+      "passed": true,
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollWidth": 390,
+      "dialogBounds": {
+        "x": 19,
+        "y": 30.875,
+        "width": 352,
+        "height": 782.25
+      }
+    },
+    {
+      "name": "loaded-images",
+      "passed": true,
+      "brokenImages": []
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "blockedRequests": [],
+  "downloads": [
+    {
+      "id": "avatar-teacher-01-48-webp",
+      "filename": "avatar-teacher-01-48.webp",
+      "bytes": 678,
+      "sha256": "a8d63e71ea10397ce7fc9477b1026e9ff3fce3f1754271c4c527b67045c114e5",
+      "dimensions": [
+        48,
+        48
+      ],
+      "matchesManifest": true
+    },
+    {
+      "id": "avatar-teacher-01-256-webp",
+      "filename": "avatar-teacher-01-256.webp",
+      "bytes": 3624,
+      "sha256": "207695e0813cbe71cc2e298b8ff60dfc8eaa63a0f2d91801816fea518c8fe90d",
+      "dimensions": [
+        256,
+        256
+      ],
+      "matchesManifest": true
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "desktop.webp",
+      "bytes": 64764,
+      "sha256": "2b94ae31731a225fd17484703358536649d59fcd87839679ecbae8cbf9c32350"
+    },
+    {
+      "file": "brand-comparison.webp",
+      "bytes": 62194,
+      "sha256": "8f511ea4002bf6c3259c2247e24a7b203f68646f5c6125fd6ec06d8a811edf0e"
+    },
+    {
+      "file": "asset-browser.webp",
+      "bytes": 75850,
+      "sha256": "d9e37c674e38c6c761b51a933583f0aea99224015e7846d1b885a16abf241b04"
+    },
+    {
+      "file": "mobile.webp",
+      "bytes": 29682,
+      "sha256": "86c40a081dab24577a0888d8859dd090b6642eeda25911589a6aaf7fb46dc6d1"
+    },
+    {
+      "file": "mobile-detail.webp",
+      "bytes": 18096,
+      "sha256": "49c16daefb37092109e32bf6f44bbcd68fdae41c843a67f0d2fed185f430f370"
+    },
+    {
+      "file": "mobile-emotion.webp",
+      "bytes": 6148,
+      "sha256": "1c9503ed1ddb8437d94b642ca225585351d4af6b81bfd7179bfd00a029ce7bdf"
+    }
+  ],
+  "status": "passed",
+  "browser": "155.0.4283.62"
+}
