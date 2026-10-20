@@ -2,3 +2,47 @@ node_modules/
 dist/
 .DS_Store
 *.local
+
+# Dependencies, build output and caches
+.venv/
+venv/
+.vite/
+coverage/
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Environment secrets (safe templates and frontend dev configuration are source)
+.env
+.env.*
+!.env.example
+!/.env.development
+
+# Runtime data stays on disk but is never source controlled
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+backend/chroma*/
+logs/
+uploads/
+backend/uploads/
+backend/temp/
+backend/diagnostics_output/
+tmp/
+*.log
+
+# Local editor and assistant state
+.idea/
+.vscode/
+.workbuddy/
+Thumbs.db
+
+# Intermediate document output
+deliverables/**/*.tmp
+docs/**/*.bak
