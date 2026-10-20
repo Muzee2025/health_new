@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-10-20",
+  "source": "src/styles/tokens.css",
+  "order": [
+    "brand-500",
+    "brand-600",
+    "success",
+    "warning",
+    "danger",
+    "info",
+    "risk-low",
+    "risk-mid",
+    "risk-high",
+    "emo-joy",
+    "emo-sadness",
+    "emo-neutral",
+    "emo-fear",
+    "emo-anxiety",
+    "emo-anger"
+  ],
+  "colors": [
+    "#7B58FF",
+    "#6244E8",
+    "#16A34A",
+    "#F59E0B",
+    "#DC2626",
+    "#2563EB",
+    "#16A34A",
+    "#F59E0B",
+    "#DC2626",
+    "#F59E0B",
+    "#3B82F6",
+    "#4B5563",
+    "#6366F1",
+    "#8B5CF6",
+    "#EF4444"
+  ],
+  "emotions": {
+    "joy": "#F59E0B",
+    "sadness": "#3B82F6",
+    "neutral": "#4B5563",
+    "fear": "#6366F1",
+    "anxiety": "#8B5CF6",
+    "anger": "#EF4444"
+  },
+  "risks": {
+    "low": "#16A34A",
+    "mid": "#F59E0B",
+    "high": "#DC2626"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "task": "W1",
+  "date": "2026-10-20",
+  "url": "http://127.0.0.1:5173/docs/design/library-preview.html",
+  "browser": "existing Microsoft Edge 155 through bundled Playwright 1.62.1",
+  "browserPluginAvailable": false,
+  "scope": "Independent asset catalog only; no real backend access",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "interactions": {
+    "avatarGroupCounts": [
+      3,
+      4,
+      6
+    ],
+    "keyboardDatasetToggle": true,
+    "datasetB": {
+      "trend": [
+        8,
+        11,
+        9,
+        14,
+        13,
+        16,
+        15
+      ],
+      "emotion": [
+        {
+          "name": "喜悦",
+          "value": 20
+        },
+        {
+          "name": "悲伤",
+          "value": 10
+        },
+        {
+          "name": "平静",
+          "value": 35
+        },
+        {
+          "name": "恐惧",
+          "value": 8
+        },
+        {
+          "name": "焦虑",
+          "value": 20
+        },
+        {
+          "name": "愤怒",
+          "value": 7
+        }
+      ],
+      "risks": [
+        72,
+        22,
+        6
+      ],
+      "text": "当前为合成示例 B。支持记录：8、11、9、14、13、16、15；六类情绪占比：喜悦20%、悲伤10%、平静35%、恐惧8%、焦虑20%、愤怒7%；低/中/高风险：72/22/6%。"
+    }
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "documentWidth": 390,
+    "overlay": false,
+    "reducedMotion": true,
+    "chartWidths": [
+      358,
+      358,
+      358
+    ],
+    "avatarStatus": "当前显示 6 个情绪角色；每个角色均提供 SVG、PNG 源导出及 48/96/256/512 WebP。"
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "documentWidth": 1440,
+    "bodyTextLength": 1080,
+    "overlay": false,
+    "brokenImages": 0,
+    "chartAnimations": [
+      false,
+      false,
+      false
+    ]
+  },
+  "appErrors": [],
+  "appWarnings": [],
+  "blockedRequests": [],
+  "logoPngAlpha": [
+    {
+      "size": 512,
+      "hasAlpha": true,
+      "minimumAlpha": 0
+    },
+    {
+      "size": 1024,
+      "hasAlpha": true,
+      "minimumAlpha": 0
+    }
+  ],
+  "screenshots": [
+    "library-desktop.webp",
+    "library-charts-desktop.webp",
+    "library-mobile.webp",
+    "library-mobile-chart.webp"
+  ]
+}

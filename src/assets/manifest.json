@@ -1,0 +1,1596 @@
+{
+  "version": "1.0.0",
+  "updated": "2026-10-20",
+  "assets": [
+    {
+      "id": "brand-logo-horizontal-svg",
+      "path": "brand/brand-logo-horizontal.svg",
+      "type": "svg",
+      "size": [
+        300,
+        96
+      ],
+      "usage": "品牌标志 / 文档 / PPT",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "532447502d964f1e34a4ad95f0f53e4f7ee0b4d26bf00436a30c5cb9f8f976bc"
+    },
+    {
+      "id": "brand-logo-vertical-svg",
+      "path": "brand/brand-logo-vertical.svg",
+      "type": "svg",
+      "size": [
+        180,
+        190
+      ],
+      "usage": "品牌标志 / 文档 / PPT",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "5aca4b15751c943248b91d97f94ef1018cd2a31b4174a74ef1206a0cfb73a401"
+    },
+    {
+      "id": "brand-logo-mono-svg",
+      "path": "brand/brand-logo-mono.svg",
+      "type": "svg",
+      "size": [
+        300,
+        96
+      ],
+      "usage": "品牌标志 / 文档 / PPT",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "0763ea6c1f90f9f11950e88227820481e44cba9f9d1f8fb13d4f29c08ef1ad0f"
+    },
+    {
+      "id": "brand-logo-reverse-svg",
+      "path": "brand/brand-logo-reverse.svg",
+      "type": "svg",
+      "size": [
+        300,
+        96
+      ],
+      "usage": "品牌标志 / 文档 / PPT",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "c2b3447e29abb9b3cb6b05026c263af528a2d68df4373863dde7e0620d7e28ef"
+    },
+    {
+      "id": "brand-logo-vertical-512-png",
+      "path": "brand/brand-logo-vertical-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "竖版品牌位图导出",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "a20f6c5c24cc4ccd6c2841728b039683c02b4742e5e006cf6d0673490ee6e43f"
+    },
+    {
+      "id": "brand-logo-vertical-1024-png",
+      "path": "brand/brand-logo-vertical-1024.png",
+      "type": "png",
+      "size": [
+        1024,
+        1024
+      ],
+      "usage": "竖版品牌位图导出",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "97eb0c4006d3af7e433f80ca5a97a603b7ea2ad70534d30e0d1d1f85b4469603"
+    },
+    {
+      "id": "brand-favicon-source-svg",
+      "path": "brand/brand-favicon-source.svg",
+      "type": "svg",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "应用图标矢量源",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "439ad17de12acb5b7a309e6f7b58e0dfde5570f323232a229474d861397875f1"
+    },
+    {
+      "id": "brand-favicon-16-png",
+      "path": "brand/brand-favicon-16.png",
+      "type": "png",
+      "size": [
+        16,
+        16
+      ],
+      "usage": "favicon / 应用图标",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "c3989639aa7d79734a7f3af2d2e8ff973bb4efed46c09c9f12f358b6d7b30d23"
+    },
+    {
+      "id": "brand-favicon-32-png",
+      "path": "brand/brand-favicon-32.png",
+      "type": "png",
+      "size": [
+        32,
+        32
+      ],
+      "usage": "favicon / 应用图标",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e3960d4ca124652a3b0c94a23e0a981767df3f61bd9b5b331e62d313009256e6"
+    },
+    {
+      "id": "brand-favicon-180-png",
+      "path": "brand/brand-favicon-180.png",
+      "type": "png",
+      "size": [
+        180,
+        180
+      ],
+      "usage": "favicon / 应用图标",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "b6be0fb8b8a9ef0ae997d1844a582c2791627832b5b4037713268b285a65e5be"
+    },
+    {
+      "id": "brand-favicon-512-png",
+      "path": "brand/brand-favicon-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "favicon / 应用图标",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "eed9fb64416280fe3cdb1dc8c3b86b0fc4cbe165e4b51d312fff00afb94314bd"
+    },
+    {
+      "id": "illu-empty-report-320-svg",
+      "path": "illustrations/illu-empty-report-320.svg",
+      "type": "svg",
+      "size": [
+        320,
+        180
+      ],
+      "usage": "状态插画：empty-report；行动说明须由页面可访问文字承载",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "cb83a16056b7a8bd47b50bc3cf2595aa30eee8b0c6df6af89274661b75b83c9b"
+    },
+    {
+      "id": "illu-empty-list-320-svg",
+      "path": "illustrations/illu-empty-list-320.svg",
+      "type": "svg",
+      "size": [
+        320,
+        180
+      ],
+      "usage": "状态插画：empty-list；行动说明须由页面可访问文字承载",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e8fdb17c7e2d49ccc79a6009c1a4792aca4e0442a2aa0d72b7f2c15e4ca576a3"
+    },
+    {
+      "id": "illu-not-found-320-svg",
+      "path": "illustrations/illu-not-found-320.svg",
+      "type": "svg",
+      "size": [
+        320,
+        180
+      ],
+      "usage": "状态插画：not-found；行动说明须由页面可访问文字承载",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "11042c696a270be2e397e25f046fd8f533d23a50b293ae5459a2d972afd25110"
+    },
+    {
+      "id": "illu-network-error-320-svg",
+      "path": "illustrations/illu-network-error-320.svg",
+      "type": "svg",
+      "size": [
+        320,
+        180
+      ],
+      "usage": "状态插画：network-error；行动说明须由页面可访问文字承载",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "ac53ecb6b36cecf9fcf2b857b56220678fcbb2680af8a637f8c7b6dd6012d852"
+    },
+    {
+      "id": "illu-crisis-banner-320-svg",
+      "path": "illustrations/illu-crisis-banner-320.svg",
+      "type": "svg",
+      "size": [
+        320,
+        180
+      ],
+      "usage": "状态插画：crisis-banner；行动说明须由页面可访问文字承载",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "6f19252d037222a34f09d6b65fdb158836022ba266789a5010011c0b9a150dd0"
+    },
+    {
+      "id": "avatar-teacher-01-source-svg",
+      "path": "avatars/teachers/avatar-teacher-01-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "ca29470f3a46ba5c663aa91bc7cb036ce65ba48a47ea30bd8cf3dc5e9d3e6bc0"
+    },
+    {
+      "id": "avatar-teacher-01-source-512-png",
+      "path": "avatars/teachers/avatar-teacher-01-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "02bab59d184e861efc73423369b8e11127b2aa557332f2d595c2a2d3fd700623"
+    },
+    {
+      "id": "avatar-teacher-01-48-webp",
+      "path": "avatars/teachers/avatar-teacher-01-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 teacher-01；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "69ac1e5e9232b54243be164f8462f07df40202f6feeb81371c03de45851f3d37"
+    },
+    {
+      "id": "avatar-teacher-01-96-webp",
+      "path": "avatars/teachers/avatar-teacher-01-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 teacher-01；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "00bb21710119a246d2e8e93525d71f7dbcb211e06b803d4794f4858ed787d616"
+    },
+    {
+      "id": "avatar-teacher-01-256-webp",
+      "path": "avatars/teachers/avatar-teacher-01-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 teacher-01；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "91b2f5799bf4da8c97b9fc5a844ac63792713abc52fd24f2f905dbbe6fe1bc63"
+    },
+    {
+      "id": "avatar-teacher-01-512-webp",
+      "path": "avatars/teachers/avatar-teacher-01-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 teacher-01；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "cdc0ee4dda63c42462011f3d560dfcb01453993142d8fc1b4493774d14388868"
+    },
+    {
+      "id": "avatar-teacher-02-source-svg",
+      "path": "avatars/teachers/avatar-teacher-02-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "cf12461a6501c00262781630927db6d09e121f4c3576614e6a4b73d7b3896332"
+    },
+    {
+      "id": "avatar-teacher-02-source-512-png",
+      "path": "avatars/teachers/avatar-teacher-02-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "5445d44c2e111a998b27ad5c8a8c7f31e4498e884d45b1aad27e4baec9d29575"
+    },
+    {
+      "id": "avatar-teacher-02-48-webp",
+      "path": "avatars/teachers/avatar-teacher-02-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 teacher-02；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "479bad4eaf76cb0852f51af61324cf19770710b8aa5f5200409365623a717604"
+    },
+    {
+      "id": "avatar-teacher-02-96-webp",
+      "path": "avatars/teachers/avatar-teacher-02-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 teacher-02；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "bcde512685b6711439ff3d12500ea7695bfae3d401ea6dd5f9c6a704a8d29f48"
+    },
+    {
+      "id": "avatar-teacher-02-256-webp",
+      "path": "avatars/teachers/avatar-teacher-02-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 teacher-02；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "215bdd1b8ea65aff5e24bfbf3eaf7a707b7f38a924d20f7251054086510bc73f"
+    },
+    {
+      "id": "avatar-teacher-02-512-webp",
+      "path": "avatars/teachers/avatar-teacher-02-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 teacher-02；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "43585a06e4f40c6a16deab53816349ea5997cc78f090b2e7f0fdad1984ac94d5"
+    },
+    {
+      "id": "avatar-teacher-03-source-svg",
+      "path": "avatars/teachers/avatar-teacher-03-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "c459ebed6bae549e802a1de9f28402cbb4b922e73c51a642b0b3ec0fe9b7b1d1"
+    },
+    {
+      "id": "avatar-teacher-03-source-512-png",
+      "path": "avatars/teachers/avatar-teacher-03-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "0ea8faa423718a331b23bc5436ae45ab426d9e7d00c14e18e59c55f87d3feeef"
+    },
+    {
+      "id": "avatar-teacher-03-48-webp",
+      "path": "avatars/teachers/avatar-teacher-03-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 teacher-03；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "cb38d1487020ff4b7a4a49afb9ce36092e3340821585008cc8c9c8e93ab6435b"
+    },
+    {
+      "id": "avatar-teacher-03-96-webp",
+      "path": "avatars/teachers/avatar-teacher-03-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 teacher-03；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "63449ae8c0a51c2f781d1a90b6409ced87848621b3727910cc61ba99950277f6"
+    },
+    {
+      "id": "avatar-teacher-03-256-webp",
+      "path": "avatars/teachers/avatar-teacher-03-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 teacher-03；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "b2e1fbb84be4eb7da3cdae0b71a4832a54f17051f8d62585150dcb6facaf495b"
+    },
+    {
+      "id": "avatar-teacher-03-512-webp",
+      "path": "avatars/teachers/avatar-teacher-03-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 teacher-03；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "71ae237ab161a454634dc3da82e5f4f04c05f1543b029fe46dcf394698499126"
+    },
+    {
+      "id": "avatar-student-01-source-svg",
+      "path": "avatars/students/avatar-student-01-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "884b5077737dc07ea0997652ebe94d7868696f3fd74de2aa72120e56361b5208"
+    },
+    {
+      "id": "avatar-student-01-source-512-png",
+      "path": "avatars/students/avatar-student-01-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "47899a01b6f15c7c73d5b21cf80c099a8496da92dc60ea3008b38ab51640d58f"
+    },
+    {
+      "id": "avatar-student-01-48-webp",
+      "path": "avatars/students/avatar-student-01-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 student-01；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "91f9d83619862227d9206dcbc09d84144d921606bf0c7ffb0b9087b4f03febfd"
+    },
+    {
+      "id": "avatar-student-01-96-webp",
+      "path": "avatars/students/avatar-student-01-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 student-01；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "adc81920d5cec498d3e8a8bb23f78015996e55ebbfd6ed70aa52caae66b0d1b7"
+    },
+    {
+      "id": "avatar-student-01-256-webp",
+      "path": "avatars/students/avatar-student-01-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 student-01；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "2d287cff35cefc85d8d2fc135e47fadb9637c14ae4a079474cea2eb49819a297"
+    },
+    {
+      "id": "avatar-student-01-512-webp",
+      "path": "avatars/students/avatar-student-01-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 student-01；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "d42178cac34f67da9b7552a97d5f8c582687339881e3ef5a6812381ebb6c75f0"
+    },
+    {
+      "id": "avatar-student-02-source-svg",
+      "path": "avatars/students/avatar-student-02-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "57d260f82b77532d64fb7b49d6a4d485c84b1b3e4ed527635a4e732517d835a8"
+    },
+    {
+      "id": "avatar-student-02-source-512-png",
+      "path": "avatars/students/avatar-student-02-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e2f4389db316eecc457d5b15706c348632e4db83b615b2f878da9a8390a3f8eb"
+    },
+    {
+      "id": "avatar-student-02-48-webp",
+      "path": "avatars/students/avatar-student-02-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 student-02；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "8d2b481d9da9174120d5fd3e3455de4a4fdce7df10556174cbad5d94ef8da6a8"
+    },
+    {
+      "id": "avatar-student-02-96-webp",
+      "path": "avatars/students/avatar-student-02-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 student-02；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "f98e6298fdd1cc92c476364901fdf96403c8f03c30680a33daa82ad68d7b9ecb"
+    },
+    {
+      "id": "avatar-student-02-256-webp",
+      "path": "avatars/students/avatar-student-02-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 student-02；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "feb0fcb0bec009e7752b1b2d6690eddcbfe7abf0f84f9b87be7099c9ad042abc"
+    },
+    {
+      "id": "avatar-student-02-512-webp",
+      "path": "avatars/students/avatar-student-02-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 student-02；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "f0ab98f25c2179b8f878675cd7b6abefad76ada1b19f049c355729f0a9831f50"
+    },
+    {
+      "id": "avatar-student-03-source-svg",
+      "path": "avatars/students/avatar-student-03-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "5b3d47fda04e9b97304b0703241edb4b07d5f4a29621ca218227b0ef02d87547"
+    },
+    {
+      "id": "avatar-student-03-source-512-png",
+      "path": "avatars/students/avatar-student-03-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "8872abe66f68228251efb5ab2fc75ea354271163475268bcc044ceda808ef88f"
+    },
+    {
+      "id": "avatar-student-03-48-webp",
+      "path": "avatars/students/avatar-student-03-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 student-03；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "d4832ab4b73f8393d8ed84c006a758408dc0d01c1e687cb0a1d32f4142471d64"
+    },
+    {
+      "id": "avatar-student-03-96-webp",
+      "path": "avatars/students/avatar-student-03-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 student-03；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "3f0eb77a9609ba748c9a0f2d0eed4c2317c5ffdcd9c4a4b53ce1f44d25d74755"
+    },
+    {
+      "id": "avatar-student-03-256-webp",
+      "path": "avatars/students/avatar-student-03-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 student-03；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "7d155b1fe4f2de60a07848427e4652d4872911ac379a5e4277d4c498b2d8307f"
+    },
+    {
+      "id": "avatar-student-03-512-webp",
+      "path": "avatars/students/avatar-student-03-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 student-03；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "6b505c62a3043fb85ff62c2bbdb0e4bfa5bbd4f6d45b3418c6634858c8139801"
+    },
+    {
+      "id": "avatar-student-04-source-svg",
+      "path": "avatars/students/avatar-student-04-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "b62e756792d4eb4fe5abcfa816be003ad1437388dc5e88893c50e281316ff2c9"
+    },
+    {
+      "id": "avatar-student-04-source-512-png",
+      "path": "avatars/students/avatar-student-04-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "7849d28d7ce91aad4f49c9e8b7144f98f7aaaa2a6954a5d7969f1c0b6e5853c7"
+    },
+    {
+      "id": "avatar-student-04-48-webp",
+      "path": "avatars/students/avatar-student-04-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 student-04；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "575c029ca113e3fa3e4cc7e4c315ff55bda582798db286e83b234a8c73911173"
+    },
+    {
+      "id": "avatar-student-04-96-webp",
+      "path": "avatars/students/avatar-student-04-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 student-04；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e453d6745c25bb03ebbe134f10b80666df4ecb58eb8d8f0c889815f501c47a8f"
+    },
+    {
+      "id": "avatar-student-04-256-webp",
+      "path": "avatars/students/avatar-student-04-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 student-04；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "7fe9b8dfc750649cb636ef9b046da18243f4a2efb9625d1466250ae1aaaa8c73"
+    },
+    {
+      "id": "avatar-student-04-512-webp",
+      "path": "avatars/students/avatar-student-04-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 student-04；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e0857e6d491e85c9aee3d3e6fed573caac71e20e8d3f174e3f22d9ff2915241d"
+    },
+    {
+      "id": "avatar-emotion-joy-source-svg",
+      "path": "avatars/emotions/avatar-emotion-joy-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "fe42d7927a8f015d1a9256e0ad65cf1d2ce4764cc5dafbbb80d93355e18e1f4b"
+    },
+    {
+      "id": "avatar-emotion-joy-source-512-png",
+      "path": "avatars/emotions/avatar-emotion-joy-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "a09ea15ce35cedb75f3710229bc4c617928499d6b954d7d37be1e92a6b4c2cd1"
+    },
+    {
+      "id": "avatar-emotion-joy-48-webp",
+      "path": "avatars/emotions/avatar-emotion-joy-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 emotion-joy；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "b543d225b18e6946a8b69841cec42d445e45ca58b6bfb4edfa521c17b652f9b4"
+    },
+    {
+      "id": "avatar-emotion-joy-96-webp",
+      "path": "avatars/emotions/avatar-emotion-joy-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 emotion-joy；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "509718ca8d7637ab7c1598369d8f57e61c6ec99b1b3db21f4a53801301326aff"
+    },
+    {
+      "id": "avatar-emotion-joy-256-webp",
+      "path": "avatars/emotions/avatar-emotion-joy-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 emotion-joy；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "a1ae9673e413c7478e1e85ae72dab6db6b84be92a5237e680d2d398511abc698"
+    },
+    {
+      "id": "avatar-emotion-joy-512-webp",
+      "path": "avatars/emotions/avatar-emotion-joy-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 emotion-joy；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "de284f198fd00bf4c0655118665e37d25e0d67d678e323de9be4cdc0319e7e2d"
+    },
+    {
+      "id": "avatar-emotion-sadness-source-svg",
+      "path": "avatars/emotions/avatar-emotion-sadness-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "77edbfdefabe73e977fb6452acc1c98fd05aaeb44b156f142731ef376bf3bb9c"
+    },
+    {
+      "id": "avatar-emotion-sadness-source-512-png",
+      "path": "avatars/emotions/avatar-emotion-sadness-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "5007d90026be7b0f2f34c20f7337b52b8ad9af987c5a7cb6ca69629ed14f419f"
+    },
+    {
+      "id": "avatar-emotion-sadness-48-webp",
+      "path": "avatars/emotions/avatar-emotion-sadness-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 emotion-sadness；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "2d7abe9fb64be5f28ad52ae9fb6290642abe0775bc937fe905a0b9289aafa02f"
+    },
+    {
+      "id": "avatar-emotion-sadness-96-webp",
+      "path": "avatars/emotions/avatar-emotion-sadness-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 emotion-sadness；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "81ba40029e2c99896717c60c3f7c225d120b4f67a58e55d98c6f1f009bc1e208"
+    },
+    {
+      "id": "avatar-emotion-sadness-256-webp",
+      "path": "avatars/emotions/avatar-emotion-sadness-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 emotion-sadness；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "9eb59b345249b6c4e8770ca81217e09919a0f3e89ce4f9b1680803ebf6e8cd61"
+    },
+    {
+      "id": "avatar-emotion-sadness-512-webp",
+      "path": "avatars/emotions/avatar-emotion-sadness-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 emotion-sadness；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "148b7bb2c695908b97ed263c21c8271f2876c2aaf68878b51cc3ed3d20785a74"
+    },
+    {
+      "id": "avatar-emotion-neutral-source-svg",
+      "path": "avatars/emotions/avatar-emotion-neutral-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e5a9ec2fc02871edaeb285bb8adcd6694c21fff45d1e8f0a1aea4771fe9cb2f1"
+    },
+    {
+      "id": "avatar-emotion-neutral-source-512-png",
+      "path": "avatars/emotions/avatar-emotion-neutral-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "335be140b84ed2f393dd0ed86b795b08edd9e8aa04801da12ad7c2f84ab6d623"
+    },
+    {
+      "id": "avatar-emotion-neutral-48-webp",
+      "path": "avatars/emotions/avatar-emotion-neutral-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 emotion-neutral；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "bfdc4b10f55c8fcc998bb4fb1ba0c5045423e5d00bd38d585930a4de558bfe9b"
+    },
+    {
+      "id": "avatar-emotion-neutral-96-webp",
+      "path": "avatars/emotions/avatar-emotion-neutral-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 emotion-neutral；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "624c098f9965d4d5f4e49d347cfa80099456ac51748c01a9d6e67f72ebf55485"
+    },
+    {
+      "id": "avatar-emotion-neutral-256-webp",
+      "path": "avatars/emotions/avatar-emotion-neutral-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 emotion-neutral；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "0ab429a6c904579d272efef988d4832bab3815e75641e73a0dfc0368ca0c604e"
+    },
+    {
+      "id": "avatar-emotion-neutral-512-webp",
+      "path": "avatars/emotions/avatar-emotion-neutral-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 emotion-neutral；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "5f79ccc9480e9c8fc7e428fc0ae1561c903f1df134ecb65a3ac55f5cb94d77f8"
+    },
+    {
+      "id": "avatar-emotion-fear-source-svg",
+      "path": "avatars/emotions/avatar-emotion-fear-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "c05a9388c915e0f1bf1d7e3bab6b9c1058fd3d07e49cb4da47acd825df592668"
+    },
+    {
+      "id": "avatar-emotion-fear-source-512-png",
+      "path": "avatars/emotions/avatar-emotion-fear-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "1ca7b9680d57d39efc9623449dee8995d609fe61f5e91928ea4aa9497c97cfc6"
+    },
+    {
+      "id": "avatar-emotion-fear-48-webp",
+      "path": "avatars/emotions/avatar-emotion-fear-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 emotion-fear；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "24e4a647e953838bbecd100e8439ef278f03b37cebde481ce60b6057d4679b97"
+    },
+    {
+      "id": "avatar-emotion-fear-96-webp",
+      "path": "avatars/emotions/avatar-emotion-fear-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 emotion-fear；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "23fe39ba9aa06ed9dbf1a871866f63390b6ca47b512d2b3c91ab6fc33f3dd7a8"
+    },
+    {
+      "id": "avatar-emotion-fear-256-webp",
+      "path": "avatars/emotions/avatar-emotion-fear-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 emotion-fear；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "9d27b9fa9584328370e5bfec41e6df0573e811bbd206a7736ed5a7b094b30716"
+    },
+    {
+      "id": "avatar-emotion-fear-512-webp",
+      "path": "avatars/emotions/avatar-emotion-fear-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 emotion-fear；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "ae2094b743842ef65e410a730b7f1983b3446c3e7f5d7768bdece52164c9b7ed"
+    },
+    {
+      "id": "avatar-emotion-anxiety-source-svg",
+      "path": "avatars/emotions/avatar-emotion-anxiety-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "b601faf7ddb4b5a215790eb4773f39600bb1005504cc7e74246cee3b1b5bf200"
+    },
+    {
+      "id": "avatar-emotion-anxiety-source-512-png",
+      "path": "avatars/emotions/avatar-emotion-anxiety-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "11011eeaf350acb5a25b4d6a14d7f2a858167d7e1005f53c04689229c653d888"
+    },
+    {
+      "id": "avatar-emotion-anxiety-48-webp",
+      "path": "avatars/emotions/avatar-emotion-anxiety-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 emotion-anxiety；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "7c178a231ce9cba2829e0af4d50e7a634e469c1dd60a774eb35ab6e2cef4c4ee"
+    },
+    {
+      "id": "avatar-emotion-anxiety-96-webp",
+      "path": "avatars/emotions/avatar-emotion-anxiety-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 emotion-anxiety；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "79a5a22b38712334674a4721979d1870c2d398cd7bd116cd0bdde52e6e62ece0"
+    },
+    {
+      "id": "avatar-emotion-anxiety-256-webp",
+      "path": "avatars/emotions/avatar-emotion-anxiety-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 emotion-anxiety；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "41bfad4b49ecca2487f4d2f2f635ae61d9dabba2637e1e631d7fbf59c9ca9431"
+    },
+    {
+      "id": "avatar-emotion-anxiety-512-webp",
+      "path": "avatars/emotions/avatar-emotion-anxiety-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 emotion-anxiety；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "d4107f6b49a3a97c6e8a948026baedd2f3a42b4b4a4f0db2dbc62811aef730ba"
+    },
+    {
+      "id": "avatar-emotion-anger-source-svg",
+      "path": "avatars/emotions/avatar-emotion-anger-source.svg",
+      "type": "svg",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创几何头像矢量源；不指代真人",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "a51f7236e039e18d10065d0993f71ee6aa1950c6298d47960641d4af106d187d"
+    },
+    {
+      "id": "avatar-emotion-anger-source-512-png",
+      "path": "avatars/emotions/avatar-emotion-anger-source-512.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "头像PNG源导出，制作工具复用",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "274226efcd5f1115258a07ee5a1c6d6fa330bd6a984e7786607ae945bf8ef423"
+    },
+    {
+      "id": "avatar-emotion-anger-48-webp",
+      "path": "avatars/emotions/avatar-emotion-anger-48.webp",
+      "type": "webp",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "原创头像 emotion-anger；建议展示不超过48px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "00de6f15ae3f6662963afe15bed7605ca5830580fdab0e2cf8c0c718e9550f3d"
+    },
+    {
+      "id": "avatar-emotion-anger-96-webp",
+      "path": "avatars/emotions/avatar-emotion-anger-96.webp",
+      "type": "webp",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "原创头像 emotion-anger；建议展示不超过96px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "abdd6be85a2311f4cd2ba38ca99b37feaaaceefaba960a9babc80e8a173dc805"
+    },
+    {
+      "id": "avatar-emotion-anger-256-webp",
+      "path": "avatars/emotions/avatar-emotion-anger-256.webp",
+      "type": "webp",
+      "size": [
+        256,
+        256
+      ],
+      "usage": "原创头像 emotion-anger；建议展示不超过256px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "fcf8df6d7a8e5e465c153b48b0b157cd61932178a7b039b25081a4c41b7fe20c"
+    },
+    {
+      "id": "avatar-emotion-anger-512-webp",
+      "path": "avatars/emotions/avatar-emotion-anger-512.webp",
+      "type": "webp",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "原创头像 emotion-anger；建议展示不超过512px",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e62ae27003b2d007a588e1d2605101ab8bfb4e10e33381c117338aa48c9bd584"
+    },
+    {
+      "id": "icon-domain-sprite-24-svg",
+      "path": "icons/icon-domain-sprite-24.svg",
+      "type": "svg",
+      "size": [
+        192,
+        24
+      ],
+      "usage": "领域symbol sprite；24×24 viewBox；currentColor继承；使用#assessment等符号id",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "b9ace5a37cb464ad68643ba71b4b4896897ec5bfcb52b41d3bcf90a82144ef22"
+    },
+    {
+      "id": "bg-login-1440-svg",
+      "path": "backgrounds/bg-login-1440.svg",
+      "type": "svg",
+      "size": [
+        1440,
+        900
+      ],
+      "usage": "login背景；文字需单独渲染在空白/实色区域",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "e489579cd835964516ac1d75e755340e9f5a06fd1a03e8ef6c2e4f4c243a3451"
+    },
+    {
+      "id": "bg-login-1440-webp",
+      "path": "backgrounds/bg-login-1440.webp",
+      "type": "webp",
+      "size": [
+        1440,
+        900
+      ],
+      "usage": "login背景WebP",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "3474adc5df356cf8684b4ba6570737906f441416a80aa1ef7f37d31648f2db78"
+    },
+    {
+      "id": "bg-dashboard-1440-svg",
+      "path": "backgrounds/bg-dashboard-1440.svg",
+      "type": "svg",
+      "size": [
+        1440,
+        900
+      ],
+      "usage": "dashboard背景；文字需单独渲染在空白/实色区域",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "df3fb35ca2e4ba85821ddb506cb414718a1cf33ab9739806de7cb873617c26f9"
+    },
+    {
+      "id": "bg-dashboard-1440-webp",
+      "path": "backgrounds/bg-dashboard-1440.webp",
+      "type": "webp",
+      "size": [
+        1440,
+        900
+      ],
+      "usage": "dashboard背景WebP",
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 几何矢量源",
+      "owner": "心域智链项目组（B / E03 制作）",
+      "status": "approved",
+      "sha256": "24593bd26699669cf2b1099ae037972bea89ef7d8136b4642480ef388107cdf6"
+    },
+    {
+      "id": "legacy-psych-teacher-cartoon-svg",
+      "path": "avatars/psych-teacher-cartoon.svg",
+      "type": "svg",
+      "size": [
+        192,
+        192
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "fb424040ce5be0cb9e5b67b1d47f2c809aa781563caafd373c6ddaff6dbe6221"
+    },
+    {
+      "id": "legacy-psych-teacher-cartoon-48-png",
+      "path": "avatars/psych-teacher-cartoon-48.png",
+      "type": "png",
+      "size": [
+        48,
+        48
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "8d44a328c56e9c8f04ce8652aba4b1f8339a69c7955574c21415530368d9f281"
+    },
+    {
+      "id": "legacy-psych-teacher-cartoon-96-png",
+      "path": "avatars/psych-teacher-cartoon-96.png",
+      "type": "png",
+      "size": [
+        96,
+        96
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "2126fbf22c32003deed3a01e06f4ecc26b6f9d55d995c8928dcaeb84b9b2fcab"
+    },
+    {
+      "id": "legacy-psych-teacher-cartoon-192-png",
+      "path": "avatars/psych-teacher-cartoon-192.png",
+      "type": "png",
+      "size": [
+        192,
+        192
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "67839745b7ee87ff4b122d393019b655315a49ffcb3ce45b09fc8f7d5e765583"
+    },
+    {
+      "id": "legacy-psych-teacher-1-png",
+      "path": "avatars/teachers/psych-teacher-1.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "9122cc6d87c4981cc797fc72a1bd91c297002408342bccb4216b86b4c67b1ab2"
+    },
+    {
+      "id": "legacy-psych-teacher-2-png",
+      "path": "avatars/teachers/psych-teacher-2.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "a31892394919c5e9a0d23c4200c2f03705082bb7175cdf86c4529cd81f35bc4a"
+    },
+    {
+      "id": "legacy-psych-teacher-3-png",
+      "path": "avatars/teachers/psych-teacher-3.png",
+      "type": "png",
+      "size": [
+        512,
+        512
+      ],
+      "usage": "既有引用保留，禁止新增使用；不纳入approved素材包",
+      "license": "unverified",
+      "source": "仓库既有文件；原始来源与授权待核实",
+      "owner": "原作者待核实",
+      "status": "legacy-unverified",
+      "sha256": "029a8b166f6676cc4b8e2ef9aedbe6dbe89fb4ed30def24d0529f046bd9fe910"
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "task": "W1",
+  "checkedAt": "2026-10-20T16:06:49.170632+00:00",
+  "baseCommit": "83b428d531842865e461c1e719826c7c5db3bc9a",
+  "branch": "codex/w1-assets",
+  "protectedOriginalFiles": 104,
+  "protectedModified": [],
+  "packageChanges": {
+    "assets:build": "node scripts/build-design-assets.mjs",
+    "assets:check": "node scripts/check-assets.mjs"
+  },
+  "markdownChecked": 29,
+  "newMarkdownChecked": 7,
+  "brokenLinks": [],
+  "missingIndexEntries": [],
+  "approvedAssets": 99,
+  "approvedBytes": 584574,
+  "largestApprovedBytes": 43483,
+  "baseline": {
+    "totals": {
+      "expectedPages": 14,
+      "capturedPages": 14,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "pagesOverLimit": []
+    },
+    "console": {
+      "error": 0,
+      "warning": 23
+    },
+    "screenshots": [
+      {
+        "file": "student-dashboard-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 46736
+      },
+      {
+        "file": "student-test-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 39850
+      },
+      {
+        "file": "student-appointments-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 33528
+      },
+      {
+        "file": "student-articles-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 31172
+      },
+      {
+        "file": "student-advanced-chat-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 24888
+      },
+      {
+        "file": "student-report-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 50526
+      },
+      {
+        "file": "student-treehole-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 45548
+      },
+      {
+        "file": "student-questions-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 25708
+      },
+      {
+        "file": "teacher-advanced-dashboard-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 43266
+      },
+      {
+        "file": "teacher-students-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 23946
+      },
+      {
+        "file": "teacher-student-900001-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 39910
+      },
+      {
+        "file": "teacher-appointments-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 20184
+      },
+      {
+        "file": "teacher-content-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 19586
+      },
+      {
+        "file": "teacher-interventions-1440.webp",
+        "hashAndSizeMatch": true,
+        "bytes": 22512
+      }
+    ]
+  },
+  "errors": []
+}

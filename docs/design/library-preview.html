@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>心域智链 · 本地素材库</title>
+  <link rel="icon" href="/src/assets/brand/brand-favicon-32.png" />
+  <link rel="stylesheet" href="/src/styles/tokens.css" />
+  <link rel="stylesheet" href="/src/styles/base.css" />
+  <style>
+    .xy-design { margin: 0; }
+    .library { max-width: 1280px; margin: auto; padding: var(--space-7); }
+    .masthead { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-5); border-bottom: 1px solid var(--border); }
+    .masthead img { width: 225px; }
+    .masthead a { font-size: var(--text-sm); }
+    .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--space-8); align-items: center; min-height: 350px; padding: var(--space-9) 0; }
+    .hero h1 { margin-bottom: var(--space-5); font-size: clamp(var(--text-h3), 3.5vw, 44px); max-width: 15em; }
+    .hero p { color: var(--text-secondary); }
+    .hero figure { margin: 0; background: var(--brand-100); border-radius: 50% 50% var(--radius-xl) var(--radius-xl); display: grid; place-items: center; min-height: 270px; }
+    .hero figure img { width: 150px; }
+    .section { padding: var(--space-8) 0; border-top: 1px solid var(--border); }
+    .section > h2 { margin-bottom: var(--space-3); font-size: var(--text-h3); }
+    .section > p { margin-bottom: var(--space-6); color: var(--text-secondary); }
+    .token-band { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--space-2); }
+    .swatch { min-height: 80px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+    .token-band p { font-size: var(--text-sm); margin-top: var(--space-2); }
+    .token-band code { font-family: var(--font-sans); color: var(--text-secondary); font-size: var(--text-xs); }
+    .text-samples { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
+    .tag { padding: var(--space-1) var(--space-3); border-radius: var(--radius-sm); font-size: var(--text-sm); }
+    .tag-success { color: var(--success-text); background: var(--success-100); }
+    .tag-warning { color: var(--warning-text); background: var(--warning-100); }
+    .tag-danger { color: var(--danger-text); background: var(--danger-100); }
+    .tag-info { color: var(--info-text); background: var(--info-100); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-6); }
+    .toolbar button { padding: var(--space-2) var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--surface); }
+    .toolbar button[aria-pressed="true"] { color: var(--gray-0); background: var(--brand-600); border-color: var(--brand-600); }
+    .avatar-wall { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-5); align-items: start; }
+    .avatar-wall figure, .illustrations figure, .brand-row figure, .background-row figure { margin: 0; }
+    .avatar-wall img { display: block; width: 96px; margin-bottom: var(--space-2); border-radius: var(--radius-lg); }
+    figcaption { font-size: var(--text-sm); color: var(--text-secondary); }
+    .brand-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-6); align-items: center; }
+    .brand-row img { display: block; width: 100%; height: 130px; object-fit: contain; margin-bottom: var(--space-3); }
+    .illustrations { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-4); }
+    .illustrations img { display: block; width: 100%; margin-bottom: var(--space-3); }
+    .icon-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: var(--space-4); margin-top: var(--space-8); }
+    .icon-row svg { width: 32px; height: 32px; color: var(--brand-600); display: block; margin-bottom: var(--space-2); }
+    .icon-row span { font-size: var(--text-sm); }
+    .background-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+    .background-row img { border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: var(--space-3); width: 100%; }
+    .chart-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+    .chart-panel { min-width: 0; }
+    .chart-panel h3 { font-size: var(--text-base); }
+    .chart { height: 280px; width: 100%; }
+    .data-note { font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-3); }
+    .links { display: flex; flex-wrap: wrap; gap: var(--space-5); margin: var(--space-6) 0; }
+    .footer { padding: var(--space-6) 0; border-top: 1px solid var(--border); font-size: var(--text-sm); color: var(--text-secondary); }
+    @media (max-width: 800px) { .library { padding: var(--space-5); } .hero { gap: var(--space-5); } .hero figure { min-height: 240px; } .avatar-wall { grid-template-columns: repeat(4, 1fr); } .illustrations { grid-template-columns: repeat(3, 1fr); } .icon-row { grid-template-columns: repeat(4, 1fr); } .chart-row { grid-template-columns: 1fr; } .chart { height: 300px; } .brand-row { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .library { padding: var(--space-4); } .masthead { align-items: start; } .masthead img { width: 180px; } .hero { grid-template-columns: 1fr; padding: var(--space-7) 0; } .hero figure { min-height: 220px; } .hero figure img { width: 120px; } .token-band { grid-template-columns: repeat(3, 1fr); } .avatar-wall { grid-template-columns: repeat(3, 1fr); } .avatar-wall img { width: 80px; } .illustrations { grid-template-columns: 1fr 1fr; } .background-row { grid-template-columns: 1fr; } .section { padding: var(--space-7) 0; } }
+  </style>
+</head>
+<body class="xy-design">
+<main class="library">
+  <header class="masthead"><img src="/src/assets/brand/brand-logo-horizontal.svg" alt="心域智链，连接、理解、支持" width="300" height="96" /><a href="#catalog">查看素材目录</a></header>
+  <section class="hero" aria-labelledby="page-title"><div><h1 id="page-title">让支持可见，<br />让连接有温度。</h1><p>心域智链本地素材库。围合的心形与开放的连接节点，组成品牌、状态插画和领域图标的共同语言。</p><p class="data-note">W1 设计资产目录 · 独立预览 · 所有图表数据均为合成示例</p></div><figure><img src="/src/assets/brand/brand-logo-vertical.svg" alt="心域智链竖版标志" width="180" height="190" /></figure></section>
+  <section class="section" id="catalog"><h2>品牌的四种用法</h2><p>横版用于页头，竖版用于封面；单色适配低色彩场景，反白版用于品牌深色底。小尺寸使用专用 favicon。</p><div class="brand-row" id="brand-row"></div></section>
+  <section class="section"><h2>同一套颜色，清楚表达不同含义</h2><p>品牌色用于识别；正文使用深色中性文字。状态始终同时保留文字，避免仅靠颜色区分。</p><div class="token-band" id="token-band"></div><div class="text-samples"><span class="tag tag-success">已完成 · 成功</span><span class="tag tag-warning">请关注 · 提示</span><span class="tag tag-danger">需要处理 · 风险</span><span class="tag tag-info">了解更多 · 信息</span></div><p class="data-note">正文与上述标签文字/背景均按 WCAG AA 4.5:1 验证。图表色块用于数据编码，不承担正文文字角色。</p></section>
+  <section class="section"><h2>不指代真人的原创角色</h2><p>中性学生角色不预设性别标签。情绪表情遵循现有模型的六个字段，只帮助识别，不代表诊断。</p><div class="toolbar" aria-label="头像类别"><button type="button" data-group="teachers" aria-pressed="true">教师 3</button><button type="button" data-group="students" aria-pressed="false">学生 4</button><button type="button" data-group="emotions" aria-pressed="false">情绪 6</button></div><div class="avatar-wall" id="avatars"></div><p id="avatar-status" class="data-note" aria-live="polite"></p></section>
+  <section class="section"><h2>每种状态，都留下可行动的方向</h2><p>插画只提供支持线索。页面应另行显示“完成测评”“调整筛选”“返回首页”“重试”或校内求助入口，避免把说明藏在图片中。</p><div class="illustrations" id="illustrations"></div><div class="icon-row" id="icons"></div></section>
+  <section class="section"><h2>安静的背景，让内容留在前面</h2><p>登录图形集中于右侧；大屏提供深色底参考。业务接入前仍需对实际叠加文字逐项检查对比度。</p><div class="background-row"><figure><img src="/src/assets/backgrounds/bg-login-1440.webp" alt="登录背景，右侧弧线与支持符号" width="1440" height="900" loading="lazy" /><figcaption>登录背景 · 左侧预留表单区域</figcaption></figure><figure><img src="/src/assets/backgrounds/bg-dashboard-1440.webp" alt="深色大屏背景，右侧弧线节点" width="1440" height="900" loading="lazy" /><figcaption>教师大屏背景 · 内容另行排版</figcaption></figure></div></section>
+  <section class="section"><h2>三个图表，共用一个颜色来源</h2><p>趋势使用品牌色，情绪与风险使用明确字段映射。此处仅验证主题与色板，不连接真实后端。</p><div class="toolbar"><button type="button" id="dataset-toggle" aria-pressed="false">切换到示例 B</button></div><div class="chart-row"><div class="chart-panel"><h3>支持记录趋势</h3><div class="chart" id="trend" role="img" aria-label="合成支持记录趋势图"></div></div><div class="chart-panel"><h3>情绪分布</h3><div class="chart" id="emotion" role="img" aria-label="合成六类情绪分布图"></div></div><div class="chart-panel"><h3>风险分级</h3><div class="chart" id="risk" role="img" aria-label="合成低中高风险分布图"></div></div></div><p class="data-note" id="dataset-status" aria-live="polite"></p></section>
+  <nav class="links" aria-label="素材文档"><a href="./素材库规范.md">素材库规范</a><a href="./ppt-kit/16x9-grid.md">PPT 网格规范</a><a href="./ppt-kit/chart-palette.json">同源图表色板</a><a href="/src/assets/manifest.json">完整 manifest</a><a href="/src/assets/LICENSES.md">来源与许可</a></nav>
+  <footer class="footer">本目录只展示 approved 项目自制资产。七个遗留头像保持原位置并标为 legacy-unverified，未纳入本页与 PPT 素材包。对外授权及商业使用由负责人确认。</footer>
+</main>
+<script type="module">
+  import * as echarts from 'echarts';
+  import { registerChartTheme, readDesignToken, EMOTION_FIELDS } from '../../src/styles/echarts-theme.js';
+  import manifest from '../../src/assets/manifest.json';
+  const theme = registerChartTheme(echarts);
+  const emotionNames = { joy: '喜悦', sadness: '悲伤', neutral: '平静', fear: '恐惧', anxiety: '焦虑', anger: '愤怒' };
+  const approved = manifest.assets.filter(asset => asset.status === 'approved');
+  const url = path => `/src/assets/${path}`;
+  document.querySelector('#brand-row').innerHTML = [['horizontal', '横版'], ['vertical', '竖版'], ['mono', '单色'], ['reverse', '反白']].map(([name, label]) => `<figure><img src="${url(`brand/brand-logo-${name}.svg`)}" width="300" height="130" alt="${label}品牌标志" /><figcaption>${label}</figcaption></figure>`).join('');
+  const swatches = [['brand-500', '联结紫'], ['brand-600', '交互深紫'], ['brand-100', '支持浅紫'], ['info', '安定蓝'], ['gray-800', '正文墨'], ['gray-0', '纸白']];
+  document.querySelector('#token-band').innerHTML = swatches.map(([token, label]) => `<div><div class="swatch" style="background:var(--${token})"></div><p>${label}<br /><code>${readDesignToken(token)}</code></p></div>`).join('');
+  function showAvatars(group) {
+    const assets = approved.filter(a => a.path.startsWith(`avatars/${group}/`) && a.path.endsWith('-96.webp'));
+    document.querySelector('#avatars').innerHTML = assets.map((asset, index) => {
+      const mood = EMOTION_FIELDS.find(key => asset.path.includes(`emotion-${key}-`));
+      const label = mood ? `${emotionNames[mood]} / ${mood}` : `${group === 'teachers' ? '教师' : '学生'}角色 ${index + 1}`;
+      return `<figure><img src="${url(asset.path)}" width="96" height="96" alt="${label}原创几何头像" /><figcaption>${label}</figcaption></figure>`;
+    }).join('');
+    document.querySelectorAll('[data-group]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.group === group)));
+    document.querySelector('#avatar-status').textContent = `当前显示 ${assets.length} 个${{ teachers: '教师', students: '学生', emotions: '情绪' }[group]}角色；每个角色均提供 SVG、PNG 源导出及 48/96/256/512 WebP。`;
+  }
+  document.querySelectorAll('[data-group]').forEach(button => button.addEventListener('click', () => showAvatars(button.dataset.group)));
+  showAvatars('teachers');
+  document.querySelector('#illustrations').innerHTML = [['empty-report', '暂无报告'], ['empty-list', '列表为空'], ['not-found', '页面未找到'], ['network-error', '网络连接中断'], ['crisis-banner', '寻求支持']].map(([name, label]) => `<figure><img src="${url(`illustrations/illu-${name}-320.svg`)}" width="320" height="180" alt="${label}状态插画" loading="lazy" /><figcaption>${label}</figcaption></figure>`).join('');
+  document.querySelector('#icons').innerHTML = [['assessment', '测评'], ['report', '报告'], ['treehole', '树洞'], ['alert', '预警'], ['support', '干预支持'], ['audit', '审计'], ['appointment', '预约'], ['knowledge', '知识库']].map(([id, label]) => `<div><svg aria-hidden="true" width="32" height="32"><use href="${url('icons/icon-domain-sprite-24.svg')}#${id}" /></svg><span>${label}</span></div>`).join('');
+  const trend = echarts.init(document.querySelector('#trend'), 'xinyu');
+  const emotion = echarts.init(document.querySelector('#emotion'), 'xinyu');
+  const risk = echarts.init(document.querySelector('#risk'), 'xinyu');
+  let datasetB = false;
+  function emotionLayout() {
+    const compact = document.querySelector('#emotion').clientWidth < 400;
+    return {
+      radius: compact ? ['28%', '46%'] : ['34%', '60%'],
+      label: { fontSize: Number.parseFloat(readDesignToken('text-xs')), formatter: compact ? '{b}\n{c}%' : '{b} {c}%', alignTo: 'edge', edgeDistance: 10, distanceToLabelLine: 3 },
+      labelLine: { length: compact ? 8 : 15, length2: compact ? 6 : 15 },
+    };
+  }
+  function renderCharts() {
+    const trendValues = datasetB ? [8, 11, 9, 14, 13, 16, 15] : [5, 8, 7, 12, 10, 14, 12];
+    const emotionValues = datasetB ? [20, 10, 35, 8, 20, 7] : [26, 12, 32, 6, 18, 6];
+    const riskValues = datasetB ? [72, 22, 6] : [80, 16, 4];
+    trend.setOption({ aria: { enabled: true }, animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, tooltip: { trigger: 'axis' }, grid: { left: 36, right: 12, top: 30, bottom: 32 }, xAxis: { type: 'category', data: ['一', '二', '三', '四', '五', '六', '日'] }, yAxis: { type: 'value', minInterval: 1 }, series: [{ name: '支持记录（合成）', type: 'line', smooth: false, data: trendValues, itemStyle: { color: theme.color[0] } }] });
+    emotion.setOption({ aria: { enabled: true }, animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, tooltip: { trigger: 'item' }, series: [{ name: '情绪（合成）', type: 'pie', center: ['50%', '50%'], ...emotionLayout(), data: EMOTION_FIELDS.map((key, i) => ({ name: emotionNames[key], value: emotionValues[i], itemStyle: { color: theme.xy.emotions[key], borderColor: readDesignToken('text-secondary'), borderWidth: 1 } })) }] });
+    risk.setOption({ aria: { enabled: true }, animation: !matchMedia('(prefers-reduced-motion: reduce)').matches, tooltip: { trigger: 'axis' }, grid: { left: 36, right: 12, top: 30, bottom: 32 }, xAxis: { type: 'category', data: ['低', '中', '高'] }, yAxis: { type: 'value', minInterval: 1 }, series: [{ name: '风险（合成）', type: 'bar', barMaxWidth: 38, label: { show: true, position: 'top', color: readDesignToken('text-primary'), formatter: '{c}%' }, data: ['low', 'mid', 'high'].map((key, i) => ({ value: riskValues[i], itemStyle: { color: theme.xy.risks[key], borderColor: readDesignToken('text-secondary'), borderWidth: 1 } })) }] });
+    document.querySelector('#dataset-status').textContent = `当前为合成示例 ${datasetB ? 'B' : 'A'}。支持记录：${trendValues.join('、')}；六类情绪占比：${EMOTION_FIELDS.map((key, i) => `${emotionNames[key]}${emotionValues[i]}%`).join('、')}；低/中/高风险：${riskValues.join('/')}%。`;
+    const toggle = document.querySelector('#dataset-toggle');
+    toggle.textContent = `切换到示例 ${datasetB ? 'A' : 'B'}`;
+    toggle.setAttribute('aria-pressed', String(datasetB));
+  }
+  document.querySelector('#dataset-toggle').addEventListener('click', () => { datasetB = !datasetB; renderCharts(); });
+  renderCharts();
+  const resize = () => { [trend, emotion, risk].forEach(chart => chart.resize()); emotion.setOption({ series: [emotionLayout()] }); };
+  new ResizeObserver(resize).observe(document.querySelector('.chart-row'));
+  window.addEventListener('pagehide', () => [trend, emotion, risk].forEach(chart => chart.dispose()), { once: true });
+</script>
+</body>
+</html>

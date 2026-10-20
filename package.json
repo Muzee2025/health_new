@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "assets:build": "node scripts/build-design-assets.mjs",
+    "assets:check": "node scripts/check-assets.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

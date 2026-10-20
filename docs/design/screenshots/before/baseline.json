@@ -1,0 +1,879 @@
+{
+  "schemaVersion": 1,
+  "owner": "E04",
+  "task": "W1-T7",
+  "status": "synthetic-baseline-captured",
+  "generatedAt": "2026-10-20T11:56:26.053Z",
+  "fixtureTime": "2026-10-20T01:00:00.000Z",
+  "baselineLabel": "合成演示数据 · 改造前基线",
+  "source": "当前前端基线；所有 API 均由本脚本在浏览器路由层合成响应。真实后端、真实账号、真实学生数据均未使用。",
+  "app": "http://127.0.0.1:5173",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "timezone": "Asia/Shanghai",
+  "browser": {
+    "engine": "Chromium",
+    "channel": null,
+    "executablePathConfigured": true,
+    "headless": true,
+    "browserPluginAvailable": false,
+    "fallbackReason": "Browser plugin not available; isolation requires per-request Playwright routing and synthetic API fulfillment."
+  },
+  "artifactFormat": "WebP",
+  "maxBytes": 307200,
+  "pages": [
+    {
+      "name": "student-dashboard",
+      "path": "/student/dashboard",
+      "url": "http://127.0.0.1:5173/student/dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 188,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-dashboard-1440.webp",
+        "bytes": 46736,
+        "sha256": "14bce1a704a0f5d5d1a83aa072bc824848d9f7a1b21e27e2a2d9046bc7f9492d"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 4,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/latest_scores",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/red_energy",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/treehole_words",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/appointment_stats",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "student-test",
+      "path": "/student/test",
+      "url": "http://127.0.0.1:5173/student/test",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 322,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-test-1440.webp",
+        "bytes": 39850,
+        "sha256": "f3433253314c8b0dc93bad330ac40e2b2c7cae1a50303c3bb88717be3786e6f9"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "student-appointments",
+      "path": "/student/appointments",
+      "url": "http://127.0.0.1:5173/student/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 307,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/psych-teacher-3.png",
+          "complete": true,
+          "naturalWidth": 512,
+          "naturalHeight": 512
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-appointments-1440.webp",
+        "bytes": 33528,
+        "sha256": "3249ba262a3761dfc817f38f68ca11407f0d9c5ad160b26ae323e49cda25528e"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/teachers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/appointments",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "student-articles",
+      "path": "/student/articles",
+      "url": "http://127.0.0.1:5173/student/articles",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 204,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 1,
+      "screenshot": {
+        "file": "student-articles-1440.webp",
+        "bytes": 31172,
+        "sha256": "d2eac910b788dac0441e3f0c3ef17d12f74b9a384a9243c95ebcef35e047b62c"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        },
+        {
+          "type": "warning",
+          "text": "ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/radio.html\n\n    at debugWarn (http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=2c7e9cc4:9075:37)\n    at watch.immediate (http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=2c7e9cc4:10096:14)\n    at callWithErrorHandling (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-X3Q"
+        },
+        {
+          "type": "warning",
+          "text": "ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/radio.html\n\n    at debugWarn (http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=2c7e9cc4:9075:37)\n    at watch.immediate (http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=2c7e9cc4:10096:14)\n    at callWithErrorHandling (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-X3Q"
+        },
+        {
+          "type": "warning",
+          "text": "ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.\nFor more detail, please visit: https://element-plus.org/en-US/component/radio.html\n\n    at debugWarn (http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=2c7e9cc4:9075:37)\n    at watch.immediate (http://127.0.0.1:5173/node_modules/.vite/deps/element-plus.js?v=2c7e9cc4:10096:14)\n    at callWithErrorHandling (http://127.0.0.1:5173/node_modules/.vite/deps/chunk-X3Q"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 1,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/articles",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "student-advanced-chat",
+      "path": "/student/advanced-chat",
+      "url": "http://127.0.0.1:5173/student/advanced-chat",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 157,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-advanced-chat-1440.webp",
+        "bytes": 24888,
+        "sha256": "3277feb4f72a2355ac98267d44df464d47dfce6468b78d055e5b9460955af62b"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        },
+        {
+          "type": "warning",
+          "text": "[ECharts] The ticks may be not readable when set min: 0, max: 100 and alignTicks: true"
+        },
+        {
+          "type": "warning",
+          "text": "[ECharts] The ticks may be not readable when set min: 0, max: 100 and alignTicks: true"
+        },
+        {
+          "type": "warning",
+          "text": "[ECharts] The ticks may be not readable when set min: 0, max: 100 and alignTicks: true"
+        },
+        {
+          "type": "warning",
+          "text": "[ECharts] The ticks may be not readable when set min: 0, max: 100 and alignTicks: true"
+        },
+        {
+          "type": "warning",
+          "text": "[ECharts] The ticks may be not readable when set min: 0, max: 100 and alignTicks: true"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 2,
+      "unknownApis": []
+    },
+    {
+      "name": "student-report",
+      "path": "/student/report",
+      "url": "http://127.0.0.1:5173/student/report",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 629,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-report-1440.webp",
+        "bytes": 50526,
+        "sha256": "2f3dd1121bb3c313842f5935af35fec9151fdf485adda98a0821f4800fc1e257"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/model/current",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/report/analysis/latest",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "student-treehole",
+      "path": "/student/treehole",
+      "url": "http://127.0.0.1:5173/student/treehole",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 387,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-treehole-1440.webp",
+        "bytes": 45548,
+        "sha256": "08b9a8109339fce07359de51e2708d49491a7a1da0c9a8ddf3a0357d255f451c"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/treehole/posts",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 4,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "student-questions",
+      "path": "/student/questions",
+      "url": "http://127.0.0.1:5173/student/questions",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 165,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-questions-1440.webp",
+        "bytes": 25708,
+        "sha256": "7bcddfbd82a1f0935aeb752d7387bc9f0f09d2c533b8e88cb343d1fe3d5bf2df"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 1,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/questions",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 3,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "teacher-advanced-dashboard",
+      "path": "/teacher/advanced-dashboard",
+      "url": "http://127.0.0.1:5173/teacher/advanced-dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 264,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-advanced-dashboard-1440.webp",
+        "bytes": 43266,
+        "sha256": "0b1beee165d1c4b00a5b2002c61f7b366fc2cacf7b22e94a5ad1eb33ffa7a6c3"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/dashboard/metrics",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/crisis/pending",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 2,
+      "blockedWebSocketCount": 2,
+      "unknownApis": []
+    },
+    {
+      "name": "teacher-students",
+      "path": "/teacher/students",
+      "url": "http://127.0.0.1:5173/teacher/students",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 228,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-students-1440.webp",
+        "bytes": 23946,
+        "sha256": "78ae1e8a8da4800ea09d4f9c99316557cf375a4de8bd29e382bdb28550467c05"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 2,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "teacher-student-900001",
+      "path": "/teacher/student/900001",
+      "url": "http://127.0.0.1:5173/teacher/student/900001",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 408,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-student-900001-1440.webp",
+        "bytes": 39910,
+        "sha256": "00d348c5d5b9725ac89d571c28e368f0340754f393da56c6fede02b6d9932315"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        },
+        {
+          "type": "warning",
+          "text": "[Vue warn]: Component is missing template or render function:  RefImpl \n  at <Anonymous> \n  at <ElIcon key=0 class=\"el-timeline-item__icon\" > \n  at <ElTimelineItem key=\"rec_demo-intervention-01\" timestamp=\"2026/10/19 10:00:00\" type=\"primary\"  ... > \n  at <ElTimeline> \n  at <StudentDetail onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > \n  at <RouterView> \n  at <Layout onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > \n  at <RouterView> \n  at <App>"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/student/900001",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 2,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "teacher-appointments",
+      "path": "/teacher/appointments",
+      "url": "http://127.0.0.1:5173/teacher/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 177,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/psych-teacher-1.png",
+          "complete": true,
+          "naturalWidth": 512,
+          "naturalHeight": 512
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-appointments-1440.webp",
+        "bytes": 20184,
+        "sha256": "bd7b1faf5f2423e98f9b7f62b1e704bb031b04afa2f746dfe62e5d5553f62a7b"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/appointments",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 2,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "teacher-content",
+      "path": "/teacher/content",
+      "url": "http://127.0.0.1:5173/teacher/content",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 172,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-content-1440.webp",
+        "bytes": 19586,
+        "sha256": "ab32f641008b2d7c01a7e2a8be5e6dd2e4abec568fa3eec35b3013e586ea993c"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/articles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/teachers_profiles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 2,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "name": "teacher-interventions",
+      "path": "/teacher/interventions",
+      "url": "http://127.0.0.1:5173/teacher/interventions",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 186,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "https://api.dicebear.com/7.x/avataaars/svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-interventions-1440.webp",
+        "bytes": 22512,
+        "sha256": "17be13daf8433847ea61a248f742cf0f4ede60ec83d4f9d9cf48497973006fa8"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/interventions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 2,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    }
+  ],
+  "interactions": [
+    {
+      "interaction": "student-dashboard-trend-range",
+      "observed": true,
+      "from": "近30天",
+      "to": "近90天"
+    }
+  ],
+  "totals": {
+    "expectedPages": 14,
+    "capturedPages": 14,
+    "unknownApiCount": 0,
+    "pageErrorCount": 0,
+    "imageLoadFailureCount": 0,
+    "pagesOverLimit": []
+  }
+}

@@ -1,8 +1,8 @@
 # 文档索引
 
-> owner: A ｜ version: 0.1 ｜ status: 评审 ｜ updated: 2026-10-20
+> owner: A ｜ version: 0.2 ｜ status: 评审 ｜ updated: 2026-10-21
 
-本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线产物提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
+本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
 ## 项目入口
 
@@ -19,9 +19,23 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001 名称；ADR-002 校内 Linux + Docker 目标（尚未实现） |
-| [进度看板](team/进度看板.md) | 定稿 | W0 任务、阻塞与后续入口 |
-| [门禁记录](team/门禁记录.md) | 定稿 | G0 技术项通过，真人签字待补 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001 名称；ADR-002 部署目标；ADR-003 素材库与业务迁移边界 |
+| [进度看板](team/进度看板.md) | 定稿 | W0/W1任务、阻塞与W2入口 |
+| [门禁记录](team/门禁记录.md) | 定稿 | G0技术项、G1素材库技术项通过，真人签字待补 |
+
+## 素材库与设计
+
+| 文档 | 状态 | 说明 |
+| --- | --- | --- |
+| [设计方案](design/设计方案.md) | 定稿 | gpt-6.1-sol设计方向、布局与执行者自评 |
+| [素材库规范](design/素材库规范.md) | 定稿 | token、主题、命名、来源、生成及使用规则 |
+| [素材来源与许可](../src/assets/LICENSES.md) | 定稿 | 99项自制素材与7项待核实遗留素材逐项记录 |
+| [W1验收记录](design/验收记录.md) | 定稿 | 静态校验、浏览器、回归与独立复核结果 |
+| [截图与浏览器验证](design/screenshots/README.md) | 定稿 | 14页合成基线与4张展示页验证截图 |
+| [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
+| [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
+
+其他入口：[独立展示页](design/library-preview.html)、[素材清单](../src/assets/manifest.json)、[截图基线清单](design/screenshots/before/baseline.json)、[展示页QA](design/screenshots/library-preview-qa.json)。展示页通过Vite开发服务器访问。
 
 ## 基线与测试
 
@@ -56,3 +70,6 @@
 | [仓库静态检查](../scripts/check-repo.py) | 从仓库根目录运行 `py -3.12 scripts/check-repo.py`，检查跟踪文件、路径和仓库卫生；不会打印文件内容或密钥。 |
 | [环境诊断](../scripts/check-env.ps1) | 从仓库根目录运行 `powershell -ExecutionPolicy Bypass -File scripts/check-env.ps1`；报告工具版本、依赖目录及环境变量是否设置，不输出变量值。 |
 | [后端隔离基线](../scripts/run-backend-baseline.py) | 从仓库根目录运行 `.\.venv\Scripts\python.exe scripts/run-backend-baseline.py`；需要先安装 pytest，使用临时数据库并阻止外部网络。 |
+| [素材构建](../scripts/build-design-assets.mjs) | `npm run assets:build`，使用已有sharp；模块定位参数见素材库规范。 |
+| [素材校验](../scripts/check-assets.mjs) | `npm run assets:check` 或添加 `-- --json`，仅使用Node内置模块。 |
+| [合成界面基线](../scripts/capture-ui-baseline.mjs) | `node scripts/capture-ui-baseline.mjs`，隔离后端/外部请求；参数见截图说明。 |
