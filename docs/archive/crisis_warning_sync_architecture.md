@@ -1,3 +1,7 @@
+> owner: A ｜ version: 0.1 ｜ status: 定稿 ｜ updated: 2026-10-20
+
+> 归档说明：历史文档完整保留，原路径为 `docs/crisis_warning_sync_architecture.md`。文中指标、标题与实现描述均为历史内容，未经本次核验，不代表当前状态。
+
 # 心理危机预警双向同步机制架构说明文档
 
 ## 一、架构概述

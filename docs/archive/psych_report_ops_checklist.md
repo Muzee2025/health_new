@@ -1,3 +1,7 @@
+> owner: A ｜ version: 0.1 ｜ status: 定稿 ｜ updated: 2026-10-20
+
+> 归档说明：历史文档完整保留，原路径为 `docs/psych_report_ops_checklist.md`。文中指标、标题与实现描述均为历史内容，未经本次核验，不代表当前状态。
+
 # 心理报告模块运维清理清单
 
 ## 1) 缓存链路巡检

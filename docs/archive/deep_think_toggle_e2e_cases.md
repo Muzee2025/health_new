@@ -1,3 +1,7 @@
+> owner: A ｜ version: 0.1 ｜ status: 定稿 ｜ updated: 2026-10-20
+
+> 归档说明：历史文档完整保留，原路径为 `docs/deep_think_toggle_e2e_cases.md`。文中指标、标题与实现描述均为历史内容，未经本次核验，不代表当前状态。
+
 # 深度思考开关 E2E 测试用例
 
 ## 场景 1：开关切换与样式反馈
