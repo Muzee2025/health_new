@@ -18,9 +18,20 @@ const SPECS = [
   {id:'risk', use:'compare', title:'分级记录，一眼对照', type:'横向条形', unit:'分级记录（条）', intro:'示例分级字段的计数展示，不提供诊断或个人风险判断。', columns:['分级','记录（条）','占比（%）'], rows:data => data.risks.map(item => [item.name,item.value,percent(item.value,sum(data.risks.map(item => item.value)))]), summary:data => `低、中、高三级合计 ${format(sum(data.risks.map(item => item.value)))} 条示例记录。`},
   {id:'appointment', use:'compare', title:'预约计划与完成，放在一起看', type:'分组柱形', unit:'星期 / 预约（次）', intro:'按星期汇总区间内计划与已完成预约，完成数不超过计划数。', columns:['星期','计划（次）','完成（次）'], rows:data => data.appointments.map(item => [item.name,item.planned,item.completed]), summary:data => `计划 ${format(sum(data.appointments.map(item => item.planned)))} 次，完成 ${format(sum(data.appointments.map(item => item.completed)))} 次。`},
   {id:'channel', use:'composition', title:'支持从哪里来', type:'100%堆叠条形', unit:'支持记录构成（%）', intro:'工作日与周末分别为分母；比例保留一位小数，每组总计100%。', columns:['日期类型','支持渠道','记录（次）','占比（%）'], rows:data => data.channels.flatMap(group => CHANNEL_NAMES.map((name,index) => [group.name,name,group.counts[index],`${group.percentages[index].toFixed(1)}%`])), summary:data => `工作日 ${format(data.channels[0].total)} 次、周末 ${format(data.channels[1].total)} 次；比较渠道占比。`},
-  {id:'heatmap', use:'compare', title:'一周里，哪些时段有预约', type:'星期 × 时段热力矩阵', unit:'星期 / 时段 / 计划预约（次）', intro:'每格为所选区间同星期、同时段的计划预约合计。', columns:['星期','时段','计划预约（次）'], rows:data => data.heatmap.map(item => [item.name,item.slot,item.value]), summary:data => `28个星期与时段组合，共 ${format(sum(data.heatmap.map(item => item.value)))} 次计划预约。`},
-  {id:'histogram', use:'distribution', title:'会话时长，分布在哪些区间', type:'等宽直方图', unit:'会话时长（分钟） / 会话（次）', intro:'固定10分钟组距，左闭右开；例如10–19代表[10,20)分钟。', columns:['时长区间（分钟）','会话（次）'], rows:data => data.histogram.map(item => [`[${item.min}, ${item.max})`,item.value]), summary:data => `${format(data.durations.length)} 次会话，均值 ${(sum(data.durations) / data.durations.length).toFixed(1)} 分钟；由同一原始样本分箱。`},
-  {id:'scatter', use:'relationship', title:'资源被浏览，也被收藏', type:'互动散点', unit:'横轴：浏览（次） / 纵轴：收藏（次）', intro:'每点代表一份示例资源；仅展示互动关联，不推断因果或健康影响。', columns:['资源','浏览（次）','收藏（次）'], rows:data => data.resources.map(item => [item.name,item.views,item.saves]), summary:data => `8份资源，共 ${format(sum(data.resources.map(item => item.views)))} 次浏览、${format(sum(data.resources.map(item => item.saves)))} 次收藏。`},
+  {id:'heatmap', use:'compare', title:'一周里，哪些时段有预约', type:'星期 × 时段热力矩阵', unit:'星期 / 时段 / 计划预约（次）', intro:'每格为所选区间同星期、同时段的计划预约合计；色阶随范围与样例调整。', columns:['星期','时段','计划预约（次）'], rows:data => data.heatmap.map(item => [item.name,item.slot,item.value]), summary:data => `28个星期与时段组合，共 ${format(sum(data.heatmap.map(item => item.value)))} 次计划预约。`},
+  {id:'histogram', use:'distribution', title:'会话时长，分布在哪些区间', type:'等宽直方图', unit:'会话时长（分钟） / 会话（次）', intro:'横轴数字是分箱边界；每箱10分钟、左闭右开，如[10,20)包含10，不含20。', columns:['时长区间（分钟）','会话（次）'], rows:data => data.histogram.map(item => [`[${item.min}, ${item.max})`,item.value]), summary:data => `${format(data.durations.length)} 次会话，均值 ${(sum(data.durations) / data.durations.length).toFixed(1)} 分钟；由同一原始样本分箱。`},
+  {id:'scatter', use:'relationship', title:'资源被浏览，也被收藏', type:'互动散点', unit:'横轴：浏览（次） / 纵轴：收藏（次）', intro:'仅8份示例资源，每点一份；用于并列读值，不据此推断统计相关、因果或健康影响。', columns:['资源','浏览（次）','收藏（次）'], rows:data => data.resources.map(item => [item.name,item.views,item.saves]), summary:data => `8份资源，共 ${format(sum(data.resources.map(item => item.views)))} 次浏览、${format(sum(data.resources.map(item => item.saves)))} 次收藏。`},
+];
+
+const sourceNotes = data => [
+  ['支持记录',`${data.range}个日计数，共${format(sum(data.daily.map(day => day.support)))}次；日均分母为${data.range}天。`],
+  ['情绪组成',`分母为${format(sum(data.emotions.map(item => item.value)))}条情绪记录；每条归入一个分类。`],
+  ['分级记录',`分母为${format(sum(data.risks.map(item => item.value)))}条分级记录；不与情绪记录合并。`],
+  ['预约对比',`按星期累计：计划${format(sum(data.appointments.map(item => item.planned)))}次，完成${format(sum(data.appointments.map(item => item.completed)))}次。`],
+  ['渠道组成',`工作日${data.daily.filter(day => day.weekday < 5).length}天、分母${format(data.channels[0].total)}次；周末${data.daily.filter(day => day.weekday >= 5).length}天、分母${format(data.channels[1].total)}次。各组分别为100%，比较内部构成，非日均次数。`],
+  ['时段矩阵',`28格累计${format(sum(data.heatmap.map(item => item.value)))}次计划预约；为同星期、同时段的累计，非日均。色阶随当前快照最大值调整。`],
+  ['时长分布',`${format(data.durations.length)}个会话样本；8个等宽箱完整覆盖[0,80)分钟，均值由原始样本计算。`],
+  ['资源散点',`${data.resources.length}份资源各为一个点；浏览与收藏均为区间累计次数，不是收藏率。`],
 ];
 
 export function initChartLibrary() {
@@ -37,6 +48,7 @@ export function initChartLibrary() {
   const colors = [token('brand-500'),token('accent-sage'),token('accent-apricot')];
   const text = token('text-primary');
   const secondary = token('text-secondary');
+  const heatColors = [token('brand-100'),token('brand-500')];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const instances = new Map();
   const pending = new Set();
@@ -60,10 +72,13 @@ export function initChartLibrary() {
     if (spec.id === 'channel') return {...base,grid:{left:52,right:18,top:exporting ? 42:22,bottom:36},legend:exporting ? {top:0,textStyle:{fontSize:12,color:secondary}}:undefined,xAxis:{...base.yAxis,max:100,interval:25,axisLabel:{fontSize:12,color:secondary,formatter:'{value}%'}},yAxis:{type:'category',inverse:true,data:data.channels.map(group => group.name),axisLine:{show:false},axisTick:{show:false},axisLabel:{fontSize:12,color:text}},series:CHANNEL_NAMES.map((name,index) => ({name,type:'bar',stack:'total',barMaxWidth:44,label:{show:true,fontSize:12,color:index ? text:token('surface'),formatter:params => `${Number(params.value).toFixed(1)}%`},itemStyle:{color:colors[index],borderColor:token('surface'),borderWidth:1},data:data.channels.map(group => group.percentages[index])}))};
     if (spec.id === 'heatmap') {
       const max = Math.max(...data.heatmap.map(item => item.value));
-      const shades = [token('surface-subtle'),token('accent-sage-soft'),token('accent-sage'),token('brand-500')];
-      return {...base,grid:{left:76,right:15,top:15,bottom:35},visualMap:{show:false,min:0,max,dimension:2,inRange:{color:shades}},xAxis:{type:'category',data:WEEKDAYS,axisLabel:{interval:0,fontSize:12,color:secondary,formatter:value => value.replace('周','')},splitArea:{show:false},axisLine:{show:false},axisTick:{show:false}},yAxis:{type:'category',inverse:true,data:TIME_SLOTS,axisLabel:{fontSize:12,color:secondary},axisLine:{show:false},axisTick:{show:false}},series:[{type:'heatmap',data:data.heatmap.map(item => { const level = Math.min(3,Math.floor(item.value / (max + 1) * 4)); return {value:[item.weekday,item.time,item.value],itemStyle:{color:shades[level],borderWidth:3,borderColor:token('surface')},label:{color:level === 3 ? token('surface'):text}}; }),label:{show:true,fontSize:12},emphasis:{disabled:true}}]};
+      return {...base,grid:{left:76,right:15,top:15,bottom:76},visualMap:{type:'continuous',show:true,min:0,max,dimension:2,orient:'horizontal',left:'center',bottom:0,itemWidth:10,itemHeight:100,calculable:false,precision:0,text:[`${max} 次`,'0 次'],textGap:9,textStyle:{fontSize:12,color:secondary},inRange:{color:heatColors}},xAxis:{type:'category',data:WEEKDAYS,axisLabel:{interval:0,fontSize:12,color:secondary,formatter:value => value.replace('周','')},splitArea:{show:false},axisLine:{show:false},axisTick:{show:false}},yAxis:{type:'category',inverse:true,data:TIME_SLOTS,axisLabel:{fontSize:12,color:secondary},axisLine:{show:false},axisTick:{show:false}},series:[{type:'heatmap',data:data.heatmap.map(item => ({value:[item.weekday,item.time,item.value],itemStyle:{borderWidth:2,borderColor:token('surface')}})),label:{show:true,fontSize:12,color:text,backgroundColor:token('surface'),padding:[1,2],borderRadius:2},emphasis:{disabled:true}}]};
     }
-    if (spec.id === 'histogram') return {...base,grid:{left:40,right:14,top:22,bottom:43},xAxis:{...base.xAxis,data:data.histogram.map(item => item.name),axisLabel:{...base.xAxis.axisLabel,interval:0,rotate:35}},series:[{type:'bar',barCategoryGap:'2%',label,itemStyle:{color:colors[1],borderColor:secondary,borderWidth:1,borderRadius:0},data:data.histogram.map(item => item.value)}]};
+    if (spec.id === 'histogram') return {...base,grid:{left:40,right:14,top:25,bottom:36},xAxis:{...base.xAxis,type:'value',min:0,max:80,interval:10,axisLabel:{...base.xAxis.axisLabel,hideOverlap:false,showMinLabel:true,showMaxLabel:true},splitLine:{show:false}},series:[{type:'custom',encode:{x:[0,1],y:2},data:data.histogram.map(item => [item.min,item.max,item.value]),renderItem:(params,api) => {
+      const start = api.coord([api.value(0),api.value(2)]);
+      const end = api.coord([api.value(1),0]);
+      return {type:'group',children:[{type:'rect',shape:{x:start[0] + .75,y:start[1],width:Math.max(0,end[0] - start[0] - 1.5),height:Math.max(0,end[1] - start[1])},style:{fill:colors[1],stroke:secondary,lineWidth:1}},{type:'text',style:{text:String(api.value(2)),x:(start[0] + end[0]) / 2,y:start[1] - 8,align:'center',verticalAlign:'bottom',fill:text,fontSize:12,fontFamily:token('font-sans')}}]};
+    }}]};
     return {...base,grid:{left:48,right:28,top:35,bottom:48},xAxis:{...base.yAxis,name:'浏览（次）',nameLocation:'middle',nameGap:29,nameTextStyle:{color:secondary,fontSize:12}},yAxis:{...base.yAxis,name:'收藏（次）',nameTextStyle:{color:secondary,fontSize:12}},series:[{type:'scatter',symbolSize:11,itemStyle:{color:colors[0],opacity:1,borderColor:token('surface'),borderWidth:1},label:{show:true,position:'top',distance:7,color:text,fontSize:12,formatter:params => exporting ? params.data.name:String(params.data.rank)},data:data.resources.map((item,index) => ({name:item.name,rank:index + 1,value:[item.views,item.saves]}))}]};
   }
   function draw(spec) {
@@ -87,12 +102,14 @@ export function initChartLibrary() {
     const supportTotal = sum(current.daily.map(day => day.support));
     document.querySelector('[data-chart-overview="total"]').textContent = format(supportTotal);
     document.querySelector('[data-chart-overview="average"]').textContent = (supportTotal / current.range).toFixed(1);
+    document.querySelector('[data-chart-source-period]').textContent = `${current.period}；按UTC日界线生成，区间含首尾日期。`;
+    document.querySelector('[data-chart-source-definitions]').innerHTML = sourceNotes(current).map(([name,note]) => `<div><dt>${escape(name)}</dt><dd>${escape(note)}</dd></div>`).join('');
     for (const spec of SPECS) {
       const card = cards.get(spec.id);
       card.hidden = state.use !== 'all' && state.use !== spec.use;
       card.querySelector('.chart-takeaway').innerHTML = summaryMarkup(spec.summary(current),spec.id === 'trend');
       const context = `合成示例 ${state.sample} / ${current.period}`;
-      card.querySelector('.chart-source').textContent = context;
+      card.querySelector('.chart-source').textContent = `${context} / 来源：固定合成样本`;
       card.querySelector('.chart-canvas').setAttribute('aria-label',`${spec.title}。${spec.unit}。${spec.summary(current)} ${context}。详细数值见查看数据。`);
       card.querySelector('caption').innerHTML = `<strong>${spec.title}</strong><span>合成示例 ${state.sample} / <span class="chart-caption-period">${escape(current.period)}</span></span>`;
       const rows = spec.rows(current);
@@ -102,7 +119,7 @@ export function initChartLibrary() {
       const key = card.querySelector('.chart-inline-key');
       if (spec.id === 'emotion') key.innerHTML = current.emotions.map(item => `<span><i style="background:${escape(theme.xy.emotions[item.field])}" aria-hidden="true"></i>${item.name}<b>${percent(item.value,sum(current.emotions.map(item => item.value)))}</b><small>${item.value} 条</small></span>`).join('');
       if (spec.id === 'channel') key.innerHTML = CHANNEL_NAMES.map((name,index) => `<span><i style="background:${escape(colors[index])}" aria-hidden="true"></i>${name}</span>`).join('');
-      if (spec.id === 'heatmap') key.textContent = '每格直接标出次数；浅色较少，深色较多。';
+      if (spec.id === 'heatmap') key.textContent = `0–${Math.max(...current.heatmap.map(item => item.value))}次，按数值线性映射；每格直接标值。`;
       if (spec.id === 'scatter') key.innerHTML = current.resources.map((item,index) => `<span><b>${index + 1}</b><span>${item.name}<small>浏览 ${format(item.views)} 次 / 收藏 ${format(item.saves)} 次</small></span></span>`).join('');
       draw(spec);
     }
@@ -150,7 +167,7 @@ export function initChartLibrary() {
       const inner = host.querySelector('svg')?.cloneNode(true);
       if (!inner) throw new Error('SVG renderer did not produce an export');
       inner.setAttribute('x','20'); inner.setAttribute('y','105');
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="920" height="550" viewBox="0 0 920 550" role="img" aria-labelledby="export-title export-description"><title id="export-title">${escape(spec.title)}</title><desc id="export-description">${escape(spec.summary(data))} ${escape(spec.intro)}</desc><rect width="920" height="550" fill="${escape(token('surface'))}"/><g fill="${escape(text)}" font-family="Microsoft YaHei, sans-serif"><text x="36" y="36" font-size="22" font-weight="600">${escape(spec.title)}</text><text x="36" y="64" font-size="14">${escape(spec.unit)} · ${escape(spec.summary(data))}</text><text x="36" y="88" font-size="12">合成示例 ${data.sample} / ${data.period} / ${data.range}天</text></g>${new XMLSerializer().serializeToString(inner)}<text x="36" y="518" font-size="12" fill="${escape(secondary)}" font-family="Microsoft YaHei, sans-serif">${escape(spec.intro)}</text><text x="36" y="539" font-size="12" fill="${escape(secondary)}" font-family="Microsoft YaHei, sans-serif">心域智链素材库 · 固定合成数据，不代表真实学生、诊断或疗效。</text></svg>`;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="920" height="550" viewBox="0 0 920 550" role="img" aria-labelledby="export-title export-description"><title id="export-title">${escape(spec.title)}</title><desc id="export-description">${escape(spec.summary(data))} ${escape(spec.intro)}</desc><rect width="920" height="550" fill="${escape(token('surface'))}"/><g fill="${escape(text)}" font-family="Microsoft YaHei, sans-serif"><text x="36" y="36" font-size="22" font-weight="600">${escape(spec.title)}</text><text x="36" y="64" font-size="14">${escape(spec.unit)} · ${escape(spec.summary(data))}</text><text x="36" y="88" font-size="12">合成示例 ${data.sample} / ${data.period} / ${data.range}天 / UTC日界 / 固定生成规则</text></g>${new XMLSerializer().serializeToString(inner)}<text x="36" y="518" font-size="12" fill="${escape(secondary)}" font-family="Microsoft YaHei, sans-serif">${escape(spec.intro)}</text><text x="36" y="539" font-size="12" fill="${escape(secondary)}" font-family="Microsoft YaHei, sans-serif">心域智链素材库 · 固定合成数据；计数非人数，不代表真实学生、诊断或疗效。</text></svg>`;
       const url = URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
       const link = document.createElement('a');
       link.href = url; link.download = `chart-${spec.id}-${data.sample}-${data.range}d.svg`;

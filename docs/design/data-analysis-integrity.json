@@ -1,0 +1,28 @@
+{
+  "task": "W1 Data professional visualization",
+  "checkedAt": "2026-10-21T11:28:42.544756+00:00",
+  "baseCommit": "048507f840d9a6a204b48ca537b1490d2b0c47d3",
+  "branch": "codex/w1-data-analysis",
+  "protectedExistingFiles": 349,
+  "protectedModified": [],
+  "allowedExistingChanges": [
+    "docs/README.md",
+    "docs/design/chart-library.css",
+    "docs/design/chart-library.js",
+    "docs/design/library-preview.html",
+    "docs/design/screenshots/README.md",
+    "docs/design/数据视觉精修方案.md",
+    "docs/team/决策记录.md",
+    "docs/team/进度看板.md",
+    "docs/team/门禁记录.md",
+    "scripts/check-chart-gallery.mjs"
+  ],
+  "demoDataUnchanged": true,
+  "businessSourcesAndDependenciesUnchanged": true,
+  "historicalEvidenceUnchanged": true,
+  "markdownChecked": 36,
+  "newMarkdownChecked": 0,
+  "brokenLinks": [],
+  "screenshots": 14,
+  "errors": []
+}

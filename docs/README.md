@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 0.5 ｜ status: 评审 ｜ updated: 2026-10-21
+> owner: A ｜ version: 0.6 ｜ status: 评审 ｜ updated: 2026-10-21
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -19,7 +19,7 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001至006：名称、部署、W1边界、品牌、八图展台与数据精修 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001至007：名称、部署、W1边界、品牌、八图、数据精修与Data校核 |
 | [进度看板](team/进度看板.md) | 定稿 | W0/W1任务、阻塞与W2入口 |
 | [门禁记录](team/门禁记录.md) | 定稿 | G0技术项、G1素材库技术项通过，真人签字待补 |
 
@@ -33,7 +33,7 @@
 | [工作台升级方案](design/展示页升级方案.md) | 定稿 | 搜索筛选、详情规格、复制下载和执行验证 |
 | [图表升级方案](design/图表升级方案.md) | 定稿 | 8种图表、用途筛选、合成样例、数据与SVG导出 |
 | [图表验收记录](design/图表验收记录.md) | 历史G1-C | 对应8c93e03的八图扩充、浏览器与独立复核 |
-| [数据视觉精修](design/数据视觉精修方案.md) | 定稿 | 当前区间概览、数字层级、分组表格、窄屏精修及实际验收；原八图数据不变 |
+| [数据视觉精修](design/数据视觉精修方案.md) | 定稿 | 区间概览与表格；新增Data连续热力色标、水平直方边界、来源分母与本轮验收；固定数据不变 |
 | [资源与Skill调研](design/资源与Skill调研.md) | 调研完成 | 官方来源、许可、固定版本与实际采用记录 |
 | [素材来源与许可](../src/assets/LICENSES.md) | 定稿 | 124项approved与7项待核实遗留素材；自制/MIT/CC0分别记录 |
 | [设计优化验收](design/优化验收记录.md) | 定稿 | 当前工作台的实际下载、浏览器、Figma与独立复核 |
@@ -42,7 +42,7 @@
 | [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
 | [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
 
-其他入口：[素材工作台](design/library-preview.html)、[素材清单](../src/assets/manifest.json)、[当前数据QA](design/screenshots/data-polish/qa.json)、[八图扩充QA](design/screenshots/charts/qa.json)、[品牌优化QA](design/screenshots/refinement/qa.json)、[Figma交接](design/figma-refinement.json)、[初始14页基线](design/screenshots/before/baseline.json)、[历史展示页QA](design/screenshots/library-preview-qa.json)。展示页通过Vite开发服务器访问。
+其他入口：[素材工作台](design/library-preview.html)、[素材清单](../src/assets/manifest.json)、[当前Data QA](design/screenshots/data-analysis/qa.json)、[Data完整性](design/data-analysis-integrity.json)、[前轮数据精修QA](design/screenshots/data-polish/qa.json)、[八图扩充QA](design/screenshots/charts/qa.json)、[品牌优化QA](design/screenshots/refinement/qa.json)、[Figma交接](design/figma-refinement.json)、[初始14页基线](design/screenshots/before/baseline.json)、[历史展示页QA](design/screenshots/library-preview-qa.json)。展示页通过Vite开发服务器访问。
 
 ## 基线与测试
 

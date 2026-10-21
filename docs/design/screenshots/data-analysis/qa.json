@@ -1,0 +1,398 @@
+{
+  "task": "Chart browser QA",
+  "checkedAt": "2026-10-21T11:21:43.235Z",
+  "baseCommit": "048507f",
+  "environment": {
+    "baseUrl": "http://127.0.0.1:5173/docs/design/library-preview.html",
+    "browserPluginAvailability": "absent",
+    "automation": "Playwright with installed Edge/Chromium",
+    "reason": "Browser plugin not available; local browser driven by Playwright",
+    "viewports": [
+      [
+        1440,
+        1000
+      ],
+      [
+        390,
+        844
+      ],
+      [
+        320,
+        844
+      ]
+    ]
+  },
+  "tests": [
+    {
+      "name": "page identity, meaningful content and no framework overlay",
+      "passed": true,
+      "title": "心域智链 · 素材工作台",
+      "pathname": "/docs/design/library-preview.html"
+    },
+    {
+      "name": "eight SVG charts and reduced motion",
+      "passed": true,
+      "charts": [
+        {
+          "id": "trend",
+          "renderer": "svg",
+          "types": [
+            "line"
+          ]
+        },
+        {
+          "id": "emotion",
+          "renderer": "svg",
+          "types": [
+            "pie"
+          ]
+        },
+        {
+          "id": "risk",
+          "renderer": "svg",
+          "types": [
+            "bar"
+          ]
+        },
+        {
+          "id": "appointment",
+          "renderer": "svg",
+          "types": [
+            "bar",
+            "bar"
+          ]
+        },
+        {
+          "id": "channel",
+          "renderer": "svg",
+          "types": [
+            "bar",
+            "bar",
+            "bar"
+          ]
+        },
+        {
+          "id": "heatmap",
+          "renderer": "svg",
+          "types": [
+            "heatmap"
+          ]
+        },
+        {
+          "id": "histogram",
+          "renderer": "svg",
+          "types": [
+            "custom"
+          ]
+        },
+        {
+          "id": "scatter",
+          "renderer": "svg",
+          "types": [
+            "scatter"
+          ]
+        }
+      ],
+      "trendZeroBaseline": true
+    },
+    {
+      "name": "keyboard filters and URL reload/back/forward",
+      "passed": true,
+      "counts": {
+        "trend": 1,
+        "compare": 3,
+        "composition": 2,
+        "distribution": 1,
+        "relationship": 1,
+        "all": 8
+      },
+      "preservedOtherQueryAndHash": true
+    },
+    {
+      "name": "all eight plots match current deterministic data; keyboard data tables",
+      "passed": true,
+      "sample": "B",
+      "range": 7,
+      "tableRows": {
+        "trend": 7,
+        "emotion": 6,
+        "risk": 3,
+        "appointment": 7,
+        "channel": 6,
+        "heatmap": 28,
+        "histogram": 8,
+        "scatter": 8
+      }
+    },
+    {
+      "name": "current overview and row counts across six states",
+      "passed": true,
+      "overview": [
+        {
+          "sample": "A",
+          "range": 7,
+          "total": 121,
+          "average": "17.3",
+          "heatMaximum": 7,
+          "minimumHeatLabelContrast": 13.052711309307366
+        },
+        {
+          "sample": "A",
+          "range": 14,
+          "total": 233,
+          "average": "16.6",
+          "heatMaximum": 13,
+          "minimumHeatLabelContrast": 13.052711309307366
+        },
+        {
+          "sample": "A",
+          "range": 30,
+          "total": 495,
+          "average": "16.5",
+          "heatMaximum": 25,
+          "minimumHeatLabelContrast": 13.052711309307366
+        },
+        {
+          "sample": "B",
+          "range": 7,
+          "total": 120,
+          "average": "17.1",
+          "heatMaximum": 7,
+          "minimumHeatLabelContrast": 13.052711309307366
+        },
+        {
+          "sample": "B",
+          "range": 14,
+          "total": 248,
+          "average": "17.7",
+          "heatMaximum": 13,
+          "minimumHeatLabelContrast": 13.052711309307366
+        },
+        {
+          "sample": "B",
+          "range": 30,
+          "total": 527,
+          "average": "17.6",
+          "heatMaximum": 25,
+          "minimumHeatLabelContrast": 13.052711309307366
+        }
+      ]
+    },
+    {
+      "name": "Data numeric heat scale, histogram boundaries and inspectable definitions",
+      "passed": true,
+      "states": 6,
+      "heatScale": "0 to current maximum, continuous, visible",
+      "histogramBounds": [
+        0,
+        80
+      ],
+      "binWidth": 10,
+      "preservedBinRows": 8,
+      "countsAreNotPeople": true,
+      "samplesAreNotExperimentGroups": true
+    },
+    {
+      "name": "grayscale and deuteranopia simulation captures",
+      "passed": true,
+      "emulations": [
+        "achromatopsia",
+        "deuteranopia"
+      ],
+      "exactValuesAndTableRemainAvailable": true
+    },
+    {
+      "name": "eight actual SVG downloads",
+      "passed": true,
+      "currentStateInFilenameAndContent": true,
+      "count": 8
+    },
+    {
+      "name": "invalid query safe defaults",
+      "passed": true,
+      "range": 14,
+      "sample": "A",
+      "use": "all"
+    },
+    {
+      "name": "390 and 320 pixel mobile layouts",
+      "passed": true,
+      "noHorizontalOverflow": true,
+      "allEightCardsWithinViewport": true,
+      "dataTableVisible": true
+    },
+    {
+      "name": "chart lifecycle event handlers and reload",
+      "passed": true,
+      "persistedEventsRetain": 8,
+      "nonPersistedRelease": 0,
+      "noResurrectionAfterDispose": true,
+      "reloadRestores": 8
+    },
+    {
+      "name": "existing asset detail and real download",
+      "passed": true,
+      "asset": "avatar-teacher-01-48-webp",
+      "manifestHashMatches": true
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "blockedRequests": [],
+  "downloads": [
+    {
+      "id": "trend",
+      "filename": "chart-trend-B-7d.svg",
+      "bytes": 8592,
+      "sha256": "e8f12d2d1b85c18e9ff86ab6641180c50eaa760245ec4134d9bd9a638b59f24e",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "emotion",
+      "filename": "chart-emotion-B-7d.svg",
+      "bytes": 5262,
+      "sha256": "3e241bc68ace5be47c60ae3a3b1e5216b96c839915f7d7ff4ce389321e208137",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "risk",
+      "filename": "chart-risk-B-7d.svg",
+      "bytes": 5603,
+      "sha256": "e1be0f64fdf38bd2a1e42adece8b3d4bc4bf05a1550c528b39f302a848225701",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "appointment",
+      "filename": "chart-appointment-B-7d.svg",
+      "bytes": 12395,
+      "sha256": "c50b6d7baf9f6793daccb70573da74d58aaeb2900904eed6eaf8b93e7a746905",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "channel",
+      "filename": "chart-channel-B-7d.svg",
+      "bytes": 7723,
+      "sha256": "461171228e68d9f5239d739123090d3c0e3cbe6cd83000a7bd8ac90510e19b27",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "heatmap",
+      "filename": "chart-heatmap-B-7d.svg",
+      "bytes": 31079,
+      "sha256": "649a932692c1e235d1be469394d67b79b193fe64910e1ef36a3069ef34c3b21f",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "histogram",
+      "filename": "chart-histogram-B-7d.svg",
+      "bytes": 8254,
+      "sha256": "eb81b29afa459830d1f4a1c4acead1510c94fabca5fa1e91471a57fa3ef74eb1",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "scatter",
+      "filename": "chart-scatter-B-7d.svg",
+      "bytes": 10037,
+      "sha256": "bbc955298a56c96473c7b357c074a512723ccd61911b8b53695184f6a8318d66",
+      "dimensions": [
+        920,
+        550
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "desktop.webp",
+      "bytes": 74972,
+      "sha256": "d5fb7eeb7b66eccc43bfb9870986349664ab5aa827448f89d353a0c64350b1ca"
+    },
+    {
+      "file": "gallery.webp",
+      "bytes": 242656,
+      "sha256": "1b52ac7a3b763e9b1710e02ac23628844313aa69a4bbd782c0041be2c741c406"
+    },
+    {
+      "file": "desktop-table.webp",
+      "bytes": 38104,
+      "sha256": "cf42908adb16cb24395fe76344168adcda83f7f94d21d33bed9316f93bf4526c"
+    },
+    {
+      "file": "source-details.webp",
+      "bytes": 44202,
+      "sha256": "cbc149217686b986ef978ef659b828e8824e701abe542262b19e9ee83b241550"
+    },
+    {
+      "file": "histogram-desktop.webp",
+      "bytes": 23032,
+      "sha256": "b53eab2fefcce772d9aeb15be475b4e26e9468378c57ee9e299c1b8a7845a8e6"
+    },
+    {
+      "file": "heatmap-achromatopsia.webp",
+      "bytes": 21338,
+      "sha256": "92b2c072b66cff5e248c95fd51dd2d2c9c9f296aea93d75847477a1074e5efdf"
+    },
+    {
+      "file": "heatmap-deuteranopia.webp",
+      "bytes": 23672,
+      "sha256": "137a988cccb38dd594e05783ab9fc276ec18bf1f25db89be00efccc5f9eb29c4"
+    },
+    {
+      "file": "export-emotion.webp",
+      "bytes": 33464,
+      "sha256": "c75a5f96ad22aeb6fc6fb58fbc7f982d429d78ce7a4ec412d7d508dd5d190031"
+    },
+    {
+      "file": "export-heatmap.webp",
+      "bytes": 29978,
+      "sha256": "949f92464ae7bab413805422dc5bfae5ad24f1c3f6a297cb1521d9cf300c8d65"
+    },
+    {
+      "file": "export-histogram.webp",
+      "bytes": 28396,
+      "sha256": "9b9d23a454d4600129c58b60be73312dfd0eb7cd4ba5dec9f7c797902fc3786b"
+    },
+    {
+      "file": "mobile-trend.webp",
+      "bytes": 27890,
+      "sha256": "6f661e679bfc4e0a7f462717c2a238f49b9a0726fd6be29a4d99ec474ce64402"
+    },
+    {
+      "file": "mobile-heatmap.webp",
+      "bytes": 35546,
+      "sha256": "b882a3985bff8afa5a499d80391031e34df5ab78dd1731626540b410f3e544d1"
+    },
+    {
+      "file": "mobile-scatter.webp",
+      "bytes": 41152,
+      "sha256": "ebe1b5faaab545c385db61237b9b259070f6287ab4055f3d1aea14a468bc2fe8"
+    },
+    {
+      "file": "mobile-data.webp",
+      "bytes": 29832,
+      "sha256": "086746a278c31da16ffa48c6049ecca34f594e114cbcac88cff736693bafb1c2"
+    }
+  ],
+  "status": "passed",
+  "browser": "155.0.4283.62"
+}

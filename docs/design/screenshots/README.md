@@ -1,6 +1,6 @@
 # 截图与浏览器验证
 
-> owner: A / E04 ｜ version: 1.3 ｜ status: 定稿 ｜ updated: 2026-10-21
+> owner: A / E04 ｜ version: 1.4 ｜ status: 定稿 ｜ updated: 2026-10-21
 
 ## 当前前端基线
 
@@ -63,10 +63,25 @@
 
 复现使用 `node scripts/check-chart-gallery.mjs`，环境参数与范围见[图表验收记录](../图表验收记录.md)。默认输出到 `tmp/chart-gallery-qa/`，显式设置 `CHART_QA_OUTPUT` 才会写正式证据目录。脚本在全新隔离上下文验证固定合成数据，无需后端或账号。截图只做PNG到WebP编码转换，没有重绘或修改画面内容。
 
-## 当前数据视觉精修
+## 数据视觉精修基线（048507f）
 
-[data-polish/qa.json](data-polish/qa.json) 为本轮实际浏览器记录，10组验证通过；新增六组合概览/行数同步、文字字段不拆词、窄屏局部滚动可读性，并回归全部八图、表格、真实下载、URL、键盘与生命周期。使用Edge155，1440×1000及390/320×844；error、warning、坏图、外部/API请求均0。
+[data-polish/qa.json](data-polish/qa.json) 为048507f历史浏览器记录，10组验证通过；新增六组合概览/行数同步、文字字段不拆词、窄屏局部滚动可读性，并回归全部八图、表格、真实下载、URL、键盘与生命周期。使用Edge155，1440×1000及390/320×844；error、warning、坏图、外部/API请求均0。
 
 图像入口：[桌面概览](data-polish/desktop.webp)、[八图全览](data-polish/gallery.webp)、[展开情绪数据](data-polish/desktop-table.webp)、[手机趋势](data-polish/mobile-trend.webp)、[手机热力](data-polish/mobile-heatmap.webp)、[手机散点](data-polish/mobile-scatter.webp)、[手机数据表](data-polish/mobile-data.webp)、[真实导出预览](data-polish/export-emotion.webp)。八图扩充的原证据保留，不把旧图冒充新界面。
 
 本轮指定 `CHART_QA_OUTPUT=docs/design/screenshots/data-polish` 与 `CHART_QA_BASE_COMMIT=8c93e03`；仍使用固定合成数据与隔离浏览器。详见[数据视觉精修验收](../数据视觉精修方案.md)。全部截图为原生捕获后仅转WebP编码，没有修改画面内容。
+
+## 当前Data专业可视化改进
+
+[data-analysis/qa.json](data-analysis/qa.json) 保存12组正式浏览器检查：当前六组合的数值色标、直方分箱和8项动态口径逐值核对；保留8图/表、8份真实SVG下载、URL/键盘/生命周期与旧素材回归。168个热力标签相对自身实色底对比均13.0527:1。运行使用Edge155，1440×1000及390/320×844；异常、console error/warning、坏图、外部/API请求均0。
+
+| 图像 | 内容 |
+| --- | --- |
+| [桌面](data-analysis/desktop.webp)、[全览](data-analysis/gallery.webp) | 八图与来源说明入口 |
+| [情绪数据](data-analysis/desktop-table.webp)、[来源口径](data-analysis/source-details.webp) | 原生表格及8项独立粒度/分母 |
+| [桌面直方](data-analysis/histogram-desktop.webp) | 水平数值边界与完整8箱 |
+| [灰阶热力](data-analysis/heatmap-achromatopsia.webp)、[绿色弱热力](data-analysis/heatmap-deuteranopia.webp) | 浏览器CDP色觉模拟，所有单元直接标值；不是全面无障碍认证 |
+| [情绪SVG](data-analysis/export-emotion.webp)、[热力SVG](data-analysis/export-heatmap.webp)、[直方SVG](data-analysis/export-histogram.webp) | 本次实际下载文件的原生渲染 |
+| [手机趋势](data-analysis/mobile-trend.webp)、[手机热力](data-analysis/mobile-heatmap.webp)、[手机散点](data-analysis/mobile-scatter.webp)、[手机表格](data-analysis/mobile-data.webp) | 局部图例、标尺和数据阅读 |
+
+Lead实际查看桌面、手机热力、直方、展开来源、灰阶/绿色弱及两份新SVG画面；D1 Luna独立复核源数据/代码并只读审阅QA，未亲自运行或查看该浏览器会话。报告字段已区分Browser插件未列出与Playwright驱动Edge，运行结果及图像哈希未改写。指定 `CHART_QA_OUTPUT=docs/design/screenshots/data-analysis`、`CHART_QA_BASE_COMMIT=048507f`；14张图仅原生PNG转WebP编码。固定数据、历史截图及旧QA不变，完整证据见[本轮方案与验收](../数据视觉精修方案.md#data插件专业改进)。

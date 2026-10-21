@@ -17,7 +17,13 @@ const preview = `${origin}/docs/design/library-preview.html`;
 const ids = ['trend', 'emotion', 'risk', 'appointment', 'channel', 'heatmap', 'histogram', 'scatter'];
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const sum = values => values.reduce((total, value) => total + value, 0);
-const report = { task: 'Chart browser QA', checkedAt: new Date().toISOString(), baseCommit: process.env.CHART_QA_BASE_COMMIT || '612f8cf', environment: { baseUrl: preview, browserAvailability: 'absent', reason: 'Browser plugin not available', viewports: [[1440, 1000], [390, 844], [320, 844]] }, tests: [], errors: [], warnings: [], blockedRequests: [], downloads: [], screenshots: [] };
+const luminance = color => {
+  assert.match(color, /^#[a-f\d]{6}$/i);
+  const channels = color.match(/[a-f\d]{2}/gi).map(part => Number.parseInt(part, 16) / 255).map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+  return channels.reduce((total, value, index) => total + value * [0.2126, 0.7152, 0.0722][index], 0);
+};
+const contrast = (first, second) => (Math.max(luminance(first), luminance(second)) + 0.05) / (Math.min(luminance(first), luminance(second)) + 0.05);
+const report = { task: 'Chart browser QA', checkedAt: new Date().toISOString(), baseCommit: process.env.CHART_QA_BASE_COMMIT || '612f8cf', environment: { baseUrl: preview, browserPluginAvailability: 'absent', automation: 'Playwright with installed Edge/Chromium', reason: 'Browser plugin not available; local browser driven by Playwright', viewports: [[1440, 1000], [390, 844], [320, 844]] }, tests: [], errors: [], warnings: [], blockedRequests: [], downloads: [], screenshots: [] };
 await fs.mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true, ...(process.env.BASELINE_EXECUTABLE_PATH ? { executablePath: process.env.BASELINE_EXECUTABLE_PATH } : { channel: process.env.BASELINE_BROWSER_CHANNEL || 'msedge' }) });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block', reducedMotion: 'reduce', acceptDownloads: true });
@@ -47,7 +53,7 @@ async function options() {
     return ids.map(id => {
       const chart = echarts.getInstanceByDom(document.getElementById(`chart-${id}`));
       const option = chart.getOption();
-      return { id, renderer: chart.getZr().painter.getType(), animation: option.animation, xAxis: option.xAxis, yAxis: option.yAxis, series: option.series.map(series => ({ type: series.type, data: series.data })) };
+      return { id, renderer: chart.getZr().painter.getType(), animation: option.animation, xAxis: option.xAxis, yAxis: option.yAxis, visualMap: option.visualMap, series: option.series.map(series => ({ type: series.type, data: series.data, label: series.label })) };
     });
   }, ids);
 }
@@ -104,7 +110,11 @@ try {
   assert.deepEqual(plotted.find(item => item.id === 'appointment').series.map(item => item.data), [data.appointments.map(item => item.planned), data.appointments.map(item => item.completed)]);
   assert.deepEqual(plotted.find(item => item.id === 'channel').series.map(item => item.data), [0, 1, 2].map(index => data.channels.map(group => group.percentages[index])));
   assert.equal(sum(plotted.find(item => item.id === 'heatmap').series[0].data.map(item => item.value[2])), sum(data.appointments.map(item => item.planned)));
-  assert.deepEqual(plotted.find(item => item.id === 'histogram').series[0].data, data.histogram.map(item => item.value));
+  const histogram = plotted.find(item => item.id === 'histogram');
+  assert.deepEqual(histogram.series[0].data, data.histogram.map(item => [item.min, item.max, item.value]));
+  assert.equal(histogram.xAxis[0].type, 'value');
+  assert.deepEqual([histogram.xAxis[0].min, histogram.xAxis[0].max, histogram.xAxis[0].interval], [0, 80, 10]);
+  assert.equal(Number(histogram.xAxis[0].axisLabel.rotate || 0), 0);
   assert.deepEqual(plotted.find(item => item.id === 'scatter').series[0].data.map(item => item.value), data.resources.map(item => [item.views, item.saves]));
   const rows = {};
   for (const id of ids) {
@@ -149,7 +159,27 @@ try {
     assert.equal(await page.locator('[data-chart-overview="average"]').innerText(), (total / range).toFixed(1));
     assert.equal((await page.locator('[data-chart-period]').innerText()).replaceAll('.', '-'), fixture.period);
     for (const id of ids) assert.equal(await page.locator(`#chart-data-${id} [data-chart-row-count]`).innerText(), `${await page.locator(`#chart-data-${id} tbody tr`).count()} 行`);
-    overview.push({ sample, range, total, average: (total / range).toFixed(1) });
+    const sources = await page.locator('[data-chart-source-definitions] > div').evaluateAll(elements => Object.fromEntries(elements.map(element => [element.querySelector('dt').textContent, element.querySelector('dd').textContent])));
+    assert.equal(Object.keys(sources).length, 8);
+    assert.ok(sources['支持记录'].includes(`${total.toLocaleString('zh-CN')}次`));
+    assert.ok(sources['情绪组成'].includes(`${sum(fixture.emotions.map(item => item.value)).toLocaleString('zh-CN')}条`));
+    assert.ok(sources['分级记录'].includes(`${sum(fixture.risks.map(item => item.value)).toLocaleString('zh-CN')}条`));
+    assert.ok(sources['渠道组成'].includes(`工作日${fixture.daily.filter(day => day.weekday < 5).length}天`));
+    for (const channel of fixture.channels) assert.ok(sources['渠道组成'].includes(`分母${channel.total.toLocaleString('zh-CN')}次`));
+    assert.ok(sources['时长分布'].includes(`${fixture.durations.length.toLocaleString('zh-CN')}个`));
+    assert.match(sources['资源散点'], /8份/);
+    assert.ok((await page.locator('[data-chart-source-period]').textContent()).includes(fixture.period));
+    const rendered = await options();
+    const heat = rendered.find(item => item.id === 'heatmap');
+    const heatMax = Math.max(...fixture.heatmap.map(item => item.value));
+    assert.equal(heat.visualMap[0].show, true);
+    assert.deepEqual([heat.visualMap[0].min, heat.visualMap[0].max, heat.visualMap[0].dimension], [0, heatMax, 2]);
+    assert.equal(heat.visualMap[0].inRange.color.length, 2);
+    assert.ok(heat.series[0].data.every(item => !item.itemStyle?.color), 'Heat cells use the numeric scale without manual color overrides');
+    const labelContrasts = heat.series[0].data.map(item => contrast(item.label?.color || heat.series[0].label.color, item.label?.backgroundColor || heat.series[0].label.backgroundColor));
+    assert.ok(labelContrasts.every(value => value >= 4.5), 'Every heat label has a readable actual local background');
+    assert.deepEqual(rendered.find(item => item.id === 'histogram').series[0].data, fixture.histogram.map(item => [item.min, item.max, item.value]));
+    overview.push({ sample, range, total, average: (total / range).toFixed(1), heatMaximum: heatMax, minimumHeatLabelContrast: Math.min(...labelContrasts) });
   }
   await page.locator('#chart-range').selectOption('7');
   await page.locator('#chart-sample').selectOption('B');
@@ -157,6 +187,35 @@ try {
   await shot('desktop-table.webp', page.locator('[data-chart-id="emotion"]'));
   await page.locator('#chart-data-emotion > summary').click();
   pass('current overview and row counts across six states', { overview });
+
+  stage = 'Data source inspection and chart meaning';
+  const sourceDetails = page.locator('#chart-source-details');
+  await sourceDetails.locator(':scope > summary').focus();
+  await page.keyboard.press('Enter');
+  assert.ok(await sourceDetails.evaluate(element => element.open));
+  assert.match(await sourceDetails.innerText(), /确定性合成样例.*不是试验分组/s);
+  assert.match(await sourceDetails.innerText(), /UTC/);
+  assert.match(await sourceDetails.innerText(), /非去重人数/);
+  assert.equal(await sourceDetails.locator('a').getAttribute('href'), './chart-demo-data.js');
+  await shot('source-details.webp', sourceDetails);
+  await sourceDetails.locator(':scope > summary').click();
+  assert.match(await page.locator('#chart-note-scatter').innerText(), /8份.*统计相关/s);
+  await shot('histogram-desktop.webp', page.locator('[data-chart-id="histogram"]'));
+  pass('Data numeric heat scale, histogram boundaries and inspectable definitions', { states: 6, heatScale: '0 to current maximum, continuous, visible', histogramBounds: [0, 80], binWidth: 10, preservedBinRows: 8, countsAreNotPeople: true, samplesAreNotExperimentGroups: true });
+
+  stage = 'color vision simulation captures';
+  const cdp = await context.newCDPSession(page);
+  try {
+    for (const deficiency of ['achromatopsia', 'deuteranopia']) {
+      await cdp.send('Emulation.setEmulatedVisionDeficiency', { type: deficiency });
+      await shot(`heatmap-${deficiency}.webp`, page.locator('[data-chart-id="heatmap"]'));
+      assert.equal(await page.locator('#chart-data-heatmap tbody tr').count(), 28);
+    }
+  } finally {
+    await cdp.send('Emulation.setEmulatedVisionDeficiency', { type: 'none' });
+    await cdp.detach();
+  }
+  pass('grayscale and deuteranopia simulation captures', { emulations: ['achromatopsia', 'deuteranopia'], exactValuesAndTableRemainAvailable: true });
 
   stage = 'actual SVG exports';
   for (const id of ids) {
@@ -174,12 +233,12 @@ try {
     const dimensions = await sharp(bytes).metadata();
     assert.deepEqual([dimensions.width, dimensions.height], [920, 550]);
     report.downloads.push({ id, filename: download.suggestedFilename(), bytes: bytes.length, sha256: sha(bytes), dimensions: [dimensions.width, dimensions.height] });
-    if (id === 'emotion') {
+    if (['emotion', 'heatmap', 'histogram'].includes(id)) {
       const exported = await context.newPage();
       await exported.setViewportSize({ width: 936, height: 566 });
       await exported.setContent(svg);
       assert.equal(await exported.locator('parsererror').count(), 0);
-      await shot('export-emotion.webp', exported);
+      await shot(`export-${id}.webp`, exported);
       await exported.close();
     }
   }
