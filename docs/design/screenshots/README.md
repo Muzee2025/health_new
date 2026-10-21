@@ -1,6 +1,6 @@
 # 截图与浏览器验证
 
-> owner: A / E04 ｜ version: 1.2 ｜ status: 定稿 ｜ updated: 2026-10-21
+> owner: A / E04 ｜ version: 1.3 ｜ status: 定稿 ｜ updated: 2026-10-21
 
 ## 当前前端基线
 
@@ -47,7 +47,7 @@
 
 图像入口：[桌面](refinement/desktop.webp)、[品牌比较](refinement/brand-comparison.webp)、[素材浏览](refinement/asset-browser.webp)、[手机](refinement/mobile.webp)、[手机详情](refinement/mobile-detail.webp)、[手机情绪图](refinement/mobile-emotion.webp)、[Figma原生导出](refinement/figma-brand-board.png)。具体命令与边界见[优化验收](../优化验收记录.md)。
 
-## 当前八图展台
+## 八图扩充基线（8c93e03）
 
 [charts/qa.json](charts/qa.json) 记录1440×1000桌面以及390/320×844窄屏检查，八组浏览器验证全部通过：八个SVG绘图、用途键盘筛选和URL刷新/前进/后退、当前图形及原生表格数值一致、八份920×550真实SVG下载、非法参数回退、窄屏布局、生命周期事件与重新加载、旧素材详情与下载哈希回归。error、warning、坏图、外部/后端请求均0。
 
@@ -62,3 +62,11 @@
 | [手机数据表](charts/mobile-data.webp) | 展开的原生表格与上下文 |
 
 复现使用 `node scripts/check-chart-gallery.mjs`，环境参数与范围见[图表验收记录](../图表验收记录.md)。默认输出到 `tmp/chart-gallery-qa/`，显式设置 `CHART_QA_OUTPUT` 才会写正式证据目录。脚本在全新隔离上下文验证固定合成数据，无需后端或账号。截图只做PNG到WebP编码转换，没有重绘或修改画面内容。
+
+## 当前数据视觉精修
+
+[data-polish/qa.json](data-polish/qa.json) 为本轮实际浏览器记录，10组验证通过；新增六组合概览/行数同步、文字字段不拆词、窄屏局部滚动可读性，并回归全部八图、表格、真实下载、URL、键盘与生命周期。使用Edge155，1440×1000及390/320×844；error、warning、坏图、外部/API请求均0。
+
+图像入口：[桌面概览](data-polish/desktop.webp)、[八图全览](data-polish/gallery.webp)、[展开情绪数据](data-polish/desktop-table.webp)、[手机趋势](data-polish/mobile-trend.webp)、[手机热力](data-polish/mobile-heatmap.webp)、[手机散点](data-polish/mobile-scatter.webp)、[手机数据表](data-polish/mobile-data.webp)、[真实导出预览](data-polish/export-emotion.webp)。八图扩充的原证据保留，不把旧图冒充新界面。
+
+本轮指定 `CHART_QA_OUTPUT=docs/design/screenshots/data-polish` 与 `CHART_QA_BASE_COMMIT=8c93e03`；仍使用固定合成数据与隔离浏览器。详见[数据视觉精修验收](../数据视觉精修方案.md)。全部截图为原生捕获后仅转WebP编码，没有修改画面内容。

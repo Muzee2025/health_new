@@ -1,0 +1,16 @@
+{
+  "task": "W1 data visual polish",
+  "checkedAt": "2026-10-21T10:50:31.758860+00:00",
+  "baseCommit": "8c93e038b87c4974d3f8dbb276846a92a366f797",
+  "branch": "codex/w1-data-polish",
+  "protectedExistingFiles": 339,
+  "protectedModified": [],
+  "demoDataUnchanged": true,
+  "businessSourcesAndDependenciesUnchanged": true,
+  "historicalEvidenceUnchanged": true,
+  "markdownChecked": 36,
+  "newMarkdownChecked": 1,
+  "brokenLinks": [],
+  "screenshots": 8,
+  "errors": []
+}

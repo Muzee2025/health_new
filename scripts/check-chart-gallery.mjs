@@ -17,7 +17,7 @@ const preview = `${origin}/docs/design/library-preview.html`;
 const ids = ['trend', 'emotion', 'risk', 'appointment', 'channel', 'heatmap', 'histogram', 'scatter'];
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const sum = values => values.reduce((total, value) => total + value, 0);
-const report = { task: 'C3 chart browser QA', checkedAt: new Date().toISOString(), baseCommit: '612f8cf', tests: [], errors: [], warnings: [], blockedRequests: [], downloads: [], screenshots: [] };
+const report = { task: 'Chart browser QA', checkedAt: new Date().toISOString(), baseCommit: process.env.CHART_QA_BASE_COMMIT || '612f8cf', environment: { baseUrl: preview, browserAvailability: 'absent', reason: 'Browser plugin not available', viewports: [[1440, 1000], [390, 844], [320, 844]] }, tests: [], errors: [], warnings: [], blockedRequests: [], downloads: [], screenshots: [] };
 await fs.mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true, ...(process.env.BASELINE_EXECUTABLE_PATH ? { executablePath: process.env.BASELINE_EXECUTABLE_PATH } : { channel: process.env.BASELINE_BROWSER_CHANNEL || 'msedge' }) });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, serviceWorkers: 'block', reducedMotion: 'reduce', acceptDownloads: true });
@@ -55,6 +55,10 @@ let stage = 'initial load';
 try {
   await page.goto(`${preview}?qa=keep#charts`, { waitUntil: 'networkidle' });
   await page.waitForFunction(() => document.querySelectorAll('[data-chart-id] [data-rendered=true] svg').length === 8);
+  assert.equal(await page.title(), '心域智链 · 素材工作台');
+  assert.equal(await page.locator('vite-error-overlay').count(), 0);
+  assert.ok((await page.locator('#charts-title').innerText()).trim().length > 0);
+  pass('page identity, meaningful content and no framework overlay', { title: await page.title(), pathname: new URL(page.url()).pathname });
   assert.equal(await page.locator('[data-chart-id]:visible').count(), 8);
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), 1440);
   const initial = await options();
@@ -119,6 +123,9 @@ try {
   assert.equal(rows.heatmap.length, 28);
   assert.equal(rows.histogram.length, 8);
   assert.equal(rows.scatter.length, 8);
+  assert.equal(Number((await page.locator('[data-chart-overview="total"]').innerText()).replaceAll(',', '')), sum(data.daily.map(day => day.support)));
+  assert.equal(await page.locator('[data-chart-overview="average"]').innerText(), (sum(data.daily.map(day => day.support)) / data.range).toFixed(1));
+  assert.equal((await page.locator('[data-chart-period]').innerText()).replaceAll('.', '-'), data.period);
   const asText = values => values.map(row => row.map(String));
   assert.deepEqual(rows.trend, asText(data.daily.map(day => [day.date, day.support])));
   assert.deepEqual(rows.emotion.map(row => row.slice(0, 3)), asText(data.emotions.map(row => [row.name, row.field, row.value])));
@@ -130,6 +137,26 @@ try {
   assert.deepEqual(rows.histogram, asText(data.histogram.map(bin => [`[${bin.min}, ${bin.max})`, bin.value])));
   assert.deepEqual(rows.scatter, asText(data.resources.map(row => [row.name, row.views, row.saves])));
   pass('all eight plots match current deterministic data; keyboard data tables', { sample: 'B', range: 7, tableRows: Object.fromEntries(Object.entries(rows).map(([id, values]) => [id, values.length])) });
+
+  stage = 'current overview and table polish';
+  const overview = [];
+  for (const sample of ['A', 'B']) for (const range of [7, 14, 30]) {
+    await page.locator('#chart-range').selectOption(String(range));
+    await page.locator('#chart-sample').selectOption(sample);
+    const fixture = getChartDemoData({ sample, range });
+    const total = sum(fixture.daily.map(day => day.support));
+    assert.equal(Number((await page.locator('[data-chart-overview="total"]').innerText()).replaceAll(',', '')), total);
+    assert.equal(await page.locator('[data-chart-overview="average"]').innerText(), (total / range).toFixed(1));
+    assert.equal((await page.locator('[data-chart-period]').innerText()).replaceAll('.', '-'), fixture.period);
+    for (const id of ids) assert.equal(await page.locator(`#chart-data-${id} [data-chart-row-count]`).innerText(), `${await page.locator(`#chart-data-${id} tbody tr`).count()} 行`);
+    overview.push({ sample, range, total, average: (total / range).toFixed(1) });
+  }
+  await page.locator('#chart-range').selectOption('7');
+  await page.locator('#chart-sample').selectOption('B');
+  await page.locator('#chart-data-emotion > summary').click();
+  await shot('desktop-table.webp', page.locator('[data-chart-id="emotion"]'));
+  await page.locator('#chart-data-emotion > summary').click();
+  pass('current overview and row counts across six states', { overview });
 
   stage = 'actual SVG exports';
   for (const id of ids) {
@@ -173,6 +200,24 @@ try {
       const rect = await page.locator(`[data-chart-id="${id}"]`).boundingBox();
       assert.ok(rect.x >= 0 && rect.x + rect.width <= width + 0.5, `${id} overflows at ${width}`);
     }
+    await page.locator('#chart-data-emotion > summary').click();
+    const tableReadability = await page.locator('#chart-data-emotion').evaluate(details => {
+      const region = details.querySelector('.chart-table-wrap');
+      const singleLineFields = [...details.querySelectorAll('tbody tr td:first-of-type')].every(cell => {
+        const range = document.createRange();
+        range.selectNodeContents(cell);
+        return range.getClientRects().length <= 1;
+      });
+      region.scrollLeft = region.scrollWidth;
+      const last = details.querySelector('tbody tr td:last-child').getBoundingClientRect();
+      const bounds = region.getBoundingClientRect();
+      const lastColumnReadable = last.left >= bounds.left - 1 && last.right <= bounds.right + 1;
+      region.scrollLeft = 0;
+      return { singleLineFields, lastColumnReadable };
+    });
+    assert.equal(tableReadability.singleLineFields, true, `Field words split at ${width}px`);
+    assert.equal(tableReadability.lastColumnReadable, true, `Last data column unreachable at ${width}px`);
+    await page.locator('#chart-data-emotion > summary').click();
     if (width === 390) {
       await page.locator('[data-chart-id="trend"]').scrollIntoViewIfNeeded();
       await shot('mobile-trend.webp');
@@ -182,7 +227,8 @@ try {
       await page.locator('#chart-data-channel > summary').click();
       assert.ok(await page.locator('#chart-data-channel table').isVisible());
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
-      await shot('mobile-data.webp', page.locator('[data-chart-id="channel"]'));
+      await page.locator('#chart-data-channel').scrollIntoViewIfNeeded();
+      await shot('mobile-data.webp');
       await page.locator('#chart-data-channel > summary').click();
     }
   }
