@@ -1,6 +1,6 @@
 # 截图与浏览器验证
 
-> owner: A / E04 ｜ version: 1.4 ｜ status: 定稿 ｜ updated: 2026-10-21
+> owner: A / E04 ｜ version: 1.5 ｜ status: 定稿 ｜ updated: 2026-10-21
 
 ## 当前前端基线
 
@@ -71,7 +71,7 @@
 
 本轮指定 `CHART_QA_OUTPUT=docs/design/screenshots/data-polish` 与 `CHART_QA_BASE_COMMIT=8c93e03`；仍使用固定合成数据与隔离浏览器。详见[数据视觉精修验收](../数据视觉精修方案.md)。全部截图为原生捕获后仅转WebP编码，没有修改画面内容。
 
-## 当前Data专业可视化改进
+## Data专业可视化基线（cacbff4）
 
 [data-analysis/qa.json](data-analysis/qa.json) 保存12组正式浏览器检查：当前六组合的数值色标、直方分箱和8项动态口径逐值核对；保留8图/表、8份真实SVG下载、URL/键盘/生命周期与旧素材回归。168个热力标签相对自身实色底对比均13.0527:1。运行使用Edge155，1440×1000及390/320×844；异常、console error/warning、坏图、外部/API请求均0。
 
@@ -85,3 +85,20 @@
 | [手机趋势](data-analysis/mobile-trend.webp)、[手机热力](data-analysis/mobile-heatmap.webp)、[手机散点](data-analysis/mobile-scatter.webp)、[手机表格](data-analysis/mobile-data.webp) | 局部图例、标尺和数据阅读 |
 
 Lead实际查看桌面、手机热力、直方、展开来源、灰阶/绿色弱及两份新SVG画面；D1 Luna独立复核源数据/代码并只读审阅QA，未亲自运行或查看该浏览器会话。报告字段已区分Browser插件未列出与Playwright驱动Edge，运行结果及图像哈希未改写。指定 `CHART_QA_OUTPUT=docs/design/screenshots/data-analysis`、`CHART_QA_BASE_COMMIT=048507f`；14张图仅原生PNG转WebP编码。固定数据、历史截图及旧QA不变，完整证据见[本轮方案与验收](../数据视觉精修方案.md#data插件专业改进)。
+
+## 当前科研色卡与UI
+
+[scientific-palette/qa.json](scientific-palette/qa.json)保存Lead正式浏览器结果：13组、18截图、8实际920×550 SVG与科研色卡JSON下载通过；使用Edge155，1440×1000与390/320×844，异常/console error/warning/外部与API请求均0。复制成功、拒绝手动后备、pending禁用及dispose迟到结果使用隔离mock，不改系统剪贴板。三段渠道百分比对比达到5.96/4.94/5.45；7色带明度单调，168热力数值标签11.67。
+
+| 入口 | 观察范围 |
+| --- | --- |
+| [桌面](scientific-palette/desktop.webp)、[图库全览](scientific-palette/gallery.webp) | 单一蓝绿/暖杏、八图UI与原数据契约 |
+| [科研色卡](scientific-palette/scientific-palette.webp)、[手机色卡](scientific-palette/mobile-palette.webp) | 分类/顺序/分级角色、复制色值与JSON下载 |
+| [手机热力](scientific-palette/mobile-heatmap.webp)、[手机趋势](scientific-palette/mobile-trend.webp)、[手机明细](scientific-palette/mobile-data.webp) | 标值/标尺、单位、局部表格滚动 |
+| [情绪绿色弱](scientific-palette/emotion-deuteranopia.webp)、[风险灰阶](scientific-palette/risk-achromatopsia.webp)、[热力绿色弱](scientific-palette/heatmap-deuteranopia.webp) | 浏览器色觉模拟；保留文字索引与原生表格，不作全面无障碍认证 |
+| [情绪SVG](scientific-palette/export-emotion.webp)、[热力SVG](scientific-palette/export-heatmap.webp)、[直方SVG](scientific-palette/export-histogram.webp) | 当前真实下载文件的原生浏览器渲染 |
+| [静态彩色总览](scientific-palette/scientific-overview.webp)、[静态灰度总览](scientific-palette/scientific-overview-grayscale.webp) | Python真实生成的14/A与30/B四面板，仅PNG转WebP，无改图或缩放 |
+
+[静态导出证据](scientific-palette/scientific-export-qa.json)另存两次原始manifest与预览哈希，原SVG/PDF/300dpi PNG和灰度PNG共40文件在忽略的tmp目录，按[脚本说明](../科研绘图脚本说明.md)重现。实际为Matplotlib内置样式，SciencePlots缺失时明确回退；没有安装新依赖或声明期刊合规。
+
+Lead实际看过最终色卡、手机色卡/热力、绿色弱情绪、14/A彩色与30/B灰度科研图；S4独立检查数据、源码、静态导出文件及哈希并只读审阅浏览器报告，未亲跑浏览器。正式重跑前曾检出青绿段文字仅4.28对比，改为共享色卡1.0.1的4.94后通过，旧临时与历史证据保留。当前输出设置为 `CHART_QA_OUTPUT=docs/design/screenshots/scientific-palette`、`CHART_QA_BASE_COMMIT=cacbff4`；详情见[方案与验收](../科研色卡与UI方案.md)。

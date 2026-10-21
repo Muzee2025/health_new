@@ -1,0 +1,29 @@
+{
+  "task": "W1 scientific palette and figure script",
+  "checkedAt": "2026-10-21T12:57:35.944817+00:00",
+  "baseCommit": "cacbff43138344b803e396fa8cd46da7976373b9",
+  "branch": "codex/w1-scientific-palette",
+  "protectedExistingFiles": 366,
+  "protectedModified": [],
+  "allowedExistingChanges": [
+    "docs/README.md",
+    "docs/design/chart-library.css",
+    "docs/design/chart-library.js",
+    "docs/design/library-preview.html",
+    "docs/design/screenshots/README.md",
+    "docs/team/决策记录.md",
+    "docs/team/进度看板.md",
+    "docs/team/门禁记录.md",
+    "scripts/check-chart-gallery.mjs"
+  ],
+  "demoDataUnchanged": true,
+  "businessSourcesAndDependenciesUnchanged": true,
+  "historicalEvidenceUnchanged": true,
+  "markdownChecked": 39,
+  "newMarkdownChecked": 3,
+  "brokenLinks": [],
+  "screenshots": 18,
+  "staticRuns": 2,
+  "staticPreviews": 2,
+  "errors": []
+}

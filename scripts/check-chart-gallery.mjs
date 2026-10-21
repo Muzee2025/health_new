@@ -17,6 +17,7 @@ const preview = `${origin}/docs/design/library-preview.html`;
 const ids = ['trend', 'emotion', 'risk', 'appointment', 'channel', 'heatmap', 'histogram', 'scatter'];
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const sum = values => values.reduce((total, value) => total + value, 0);
+const palette = JSON.parse(await fs.readFile(path.join(root, 'docs/design/chart-palette.json'), 'utf8'));
 const luminance = color => {
   assert.match(color, /^#[a-f\d]{6}$/i);
   const channels = color.match(/[a-f\d]{2}/gi).map(part => Number.parseInt(part, 16) / 255).map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
@@ -53,7 +54,7 @@ async function options() {
     return ids.map(id => {
       const chart = echarts.getInstanceByDom(document.getElementById(`chart-${id}`));
       const option = chart.getOption();
-      return { id, renderer: chart.getZr().painter.getType(), animation: option.animation, xAxis: option.xAxis, yAxis: option.yAxis, visualMap: option.visualMap, series: option.series.map(series => ({ type: series.type, data: series.data, label: series.label })) };
+      return { id, renderer: chart.getZr().painter.getType(), animation: option.animation, xAxis: option.xAxis, yAxis: option.yAxis, visualMap: option.visualMap, series: option.series.map(series => ({ type: series.type, data: series.data, label: series.label, itemStyle: series.itemStyle, lineStyle: series.lineStyle })) };
     });
   }, ids);
 }
@@ -70,10 +71,52 @@ try {
   const initial = await options();
   assert.ok(initial.every(item => item.renderer === 'svg' && item.animation === false));
   assert.equal(initial.find(item => item.id === 'trend').yAxis[0].min, 0);
+  assert.equal(initial.find(item => item.id === 'trend').series[0].lineStyle.color, palette.colors.primary);
+  assert.deepEqual(initial.find(item => item.id === 'emotion').series[0].data.map(item => item.itemStyle.color), getChartDemoData({ sample: 'A', range: 14 }).emotions.map(item => palette.emotions[item.field]));
+  assert.deepEqual(initial.find(item => item.id === 'risk').series[0].data.map(item => item.itemStyle.color), getChartDemoData({ sample: 'A', range: 14 }).risks.map(item => palette.risks[item.field]));
+  for (const series of initial.find(item => item.id === 'channel').series) assert.ok(contrast(series.label.color, series.itemStyle.color) >= 4.5);
   pass('eight SVG charts and reduced motion', { charts: initial.map(item => ({ id: item.id, renderer: item.renderer, types: item.series.map(series => series.type) })), trendZeroBaseline: true });
   await page.locator('#charts').scrollIntoViewIfNeeded();
   await shot('desktop.webp');
   await shot('gallery.webp', page.locator('#charts'));
+
+  stage = 'shared scientific palette and clipboard';
+  assert.equal(await page.locator('.palette-research-link').getAttribute('href'), '#chart-palette');
+  const palettePanel = page.locator('#chart-palette');
+  assert.ok(await palettePanel.isVisible());
+  assert.ok(palette.sequential.slice(1).every((color, index) => luminance(color) < luminance(palette.sequential[index])), 'Sequential palette has strictly decreasing luminance');
+  assert.ok(contrast(palette.colors.text, palette.colors.surface) >= 4.5);
+  assert.ok(contrast(palette.colors.muted, palette.colors.surface) >= 4.5);
+  const validColors = new Set([...Object.values(palette.colors), ...palette.categorical, ...Object.values(palette.risks), ...palette.sequential]);
+  const buttons = palettePanel.locator('[data-chart-color]');
+  assert.ok((await buttons.count()) >= 13);
+  for (const color of await buttons.evaluateAll(elements => elements.map(element => element.dataset.chartColor))) assert.ok(validColors.has(color));
+  await shot('scientific-palette.webp', palettePanel);
+  await page.evaluate(() => {
+    window.__paletteWrites = [];
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async text => { window.__paletteWrites.push(text); } } });
+  });
+  const colorButton = buttons.first();
+  const expectedColor = await colorButton.getAttribute('data-chart-color');
+  await colorButton.focus();
+  await page.keyboard.press('Enter');
+  await page.waitForFunction(() => document.querySelector('#chart-color-status').textContent.includes('已复制'));
+  assert.deepEqual(await page.evaluate(() => window.__paletteWrites), [expectedColor]);
+  await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new Error('Simulated clipboard permission denial'); }; });
+  await colorButton.click();
+  const copyFallback = palettePanel.locator('.research-copy-fallback');
+  assert.ok(await copyFallback.isVisible());
+  assert.equal(await copyFallback.locator('input').inputValue(), expectedColor);
+  await page.evaluate(() => { navigator.clipboard.writeText = text => new Promise(resolve => { window.__palettePendingText = text; window.__resolvePaletteCopy = resolve; }); });
+  await colorButton.click();
+  assert.equal(await buttons.evaluateAll(elements => elements.every(element => element.disabled)), true);
+  await page.evaluate(() => window.__resolvePaletteCopy());
+  await page.waitForFunction(() => [...document.querySelectorAll('#chart-palette [data-chart-color]')].every(element => !element.disabled));
+  assert.ok(!(await copyFallback.isVisible()));
+  const [paletteDownload] = await Promise.all([page.waitForEvent('download'), palettePanel.locator('a[download]').click()]);
+  assert.deepEqual(JSON.parse(await fs.readFile(await paletteDownload.path(), 'utf8')), palette);
+  report.paletteDownload = { filename: paletteDownload.suggestedFilename(), sharedSourceMatches: true };
+  pass('shared scientific palette, keyboard copy and denied/pending clipboard fallbacks', { palette: palette.name, version: palette.version, sequentialLuminance: palette.sequential.map(luminance), textContrast: contrast(palette.colors.text, palette.colors.surface), mutedContrast: contrast(palette.colors.muted, palette.colors.surface), clipboard: 'isolated browser mocks; no system clipboard mutation' });
 
   stage = 'filters and URL';
   const counts = { trend: 1, compare: 3, composition: 2, distribution: 1, relationship: 1, all: 8 };
@@ -174,7 +217,7 @@ try {
     const heatMax = Math.max(...fixture.heatmap.map(item => item.value));
     assert.equal(heat.visualMap[0].show, true);
     assert.deepEqual([heat.visualMap[0].min, heat.visualMap[0].max, heat.visualMap[0].dimension], [0, heatMax, 2]);
-    assert.equal(heat.visualMap[0].inRange.color.length, 2);
+    assert.deepEqual(heat.visualMap[0].inRange.color, palette.sequential);
     assert.ok(heat.series[0].data.every(item => !item.itemStyle?.color), 'Heat cells use the numeric scale without manual color overrides');
     const labelContrasts = heat.series[0].data.map(item => contrast(item.label?.color || heat.series[0].label.color, item.label?.backgroundColor || heat.series[0].label.backgroundColor));
     assert.ok(labelContrasts.every(value => value >= 4.5), 'Every heat label has a readable actual local background');
@@ -210,6 +253,8 @@ try {
       await cdp.send('Emulation.setEmulatedVisionDeficiency', { type: deficiency });
       await shot(`heatmap-${deficiency}.webp`, page.locator('[data-chart-id="heatmap"]'));
       assert.equal(await page.locator('#chart-data-heatmap tbody tr').count(), 28);
+      if (deficiency === 'deuteranopia') await shot('emotion-deuteranopia.webp', page.locator('[data-chart-id="emotion"]'));
+      if (deficiency === 'achromatopsia') await shot('risk-achromatopsia.webp', page.locator('[data-chart-id="risk"]'));
     }
   } finally {
     await cdp.send('Emulation.setEmulatedVisionDeficiency', { type: 'none' });
@@ -227,6 +272,7 @@ try {
     assert.match(svg, /合成示例 B/);
     assert.match(svg, /7天/);
     assert.match(svg, /不代表真实学生/);
+    assert.ok(svg.toLowerCase().includes(palette.colors.text.toLowerCase()), 'Export uses shared scientific text color');
     assert.ok((svg.match(/<path\b/g) || []).length > 5, 'Export contains actual chart geometry');
     assert.doesNotMatch(svg, /var\(--|<parsererror\b|<html\b/i);
     assert.doesNotMatch(svg, /<script\b|<foreignObject\b|\son\w+\s*=|(?:href|src)\s*=\s*["']https?:/i);
@@ -259,6 +305,11 @@ try {
       const rect = await page.locator(`[data-chart-id="${id}"]`).boundingBox();
       assert.ok(rect.x >= 0 && rect.x + rect.width <= width + 0.5, `${id} overflows at ${width}`);
     }
+    const paletteBounds = await palettePanel.boundingBox();
+    assert.ok(paletteBounds.x >= 0 && paletteBounds.x + paletteBounds.width <= width + 0.5, `Palette overflows at ${width}`);
+    const swatchSizes = await buttons.evaluateAll(elements => elements.map(element => ({ width: element.getBoundingClientRect().width, height: element.getBoundingClientRect().height })));
+    assert.ok(swatchSizes.every(size => size.width >= 32 && size.height >= 44), `Palette touch targets too small at ${width}`);
+    if (width === 390) await shot('mobile-palette.webp', palettePanel);
     await page.locator('#chart-data-emotion > summary').click();
     const tableReadability = await page.locator('#chart-data-emotion').evaluate(details => {
       const region = details.querySelector('.chart-table-wrap');
@@ -300,6 +351,9 @@ try {
     return document.querySelectorAll('.chart-canvas svg').length;
   });
   assert.equal(retained, 8);
+  await page.evaluate(() => { navigator.clipboard.writeText = () => new Promise(resolve => { window.__resolveDisposedCopy = resolve; }); });
+  await buttons.first().click();
+  const statusBeforeDispose = await page.locator('#chart-color-status').textContent();
   const released = await page.evaluate(() => {
     window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false }));
     window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false }));
@@ -307,6 +361,8 @@ try {
     return document.querySelectorAll('.chart-canvas svg').length;
   });
   assert.equal(released, 0);
+  await page.evaluate(async () => { window.__resolveDisposedCopy(); await Promise.resolve(); await Promise.resolve(); });
+  assert.equal(await page.locator('#chart-color-status').textContent(), statusBeforeDispose, 'Disposed palette ignores late clipboard results');
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForFunction(() => document.querySelectorAll('.chart-canvas svg').length === 8);
   pass('chart lifecycle event handlers and reload', { persistedEventsRetain: 8, nonPersistedRelease: 0, noResurrectionAfterDispose: true, reloadRestores: 8 });

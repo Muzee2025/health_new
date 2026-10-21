@@ -1,5 +1,5 @@
 import * as echarts from 'echarts';
-import { registerChartTheme, readDesignToken } from '../../src/styles/echarts-theme.js';
+import { palette, CHART_FONT, applyChartPalette, createResearchTheme, labelColor } from './chart-style.js';
 import { getChartDemoData, CHANNEL_NAMES, WEEKDAYS, TIME_SLOTS } from './chart-demo-data.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -37,18 +37,49 @@ const sourceNotes = data => [
 export function initChartLibrary() {
   const gallery = document.querySelector('#chart-gallery');
   if (!gallery) return;
-  const resolveColor = value => {
-    let resolved = value;
-    while (typeof resolved === 'string' && /^var\(--[\w-]+\)$/.test(resolved)) resolved = readDesignToken(resolved.slice(6,-1));
-    return resolved;
-  };
-  const theme = JSON.parse(JSON.stringify(registerChartTheme(echarts),(_,value) => resolveColor(value)));
+  const workbench = document.querySelector('#charts');
+  applyChartPalette(workbench);
+  const theme = createResearchTheme();
   echarts.registerTheme('xinyu-charts',theme);
-  const token = name => resolveColor(readDesignToken(name));
-  const colors = [token('brand-500'),token('accent-sage'),token('accent-apricot')];
-  const text = token('text-primary');
-  const secondary = token('text-secondary');
-  const heatColors = [token('brand-100'),token('brand-500')];
+  const tokenRoles = {'surface':'surface','text-primary':'text','text-secondary':'muted','border':'grid','chart-grid':'grid','brand-100':'primarySoft','brand-500':'primary'};
+  const token = name => name === 'font-sans' ? CHART_FONT : palette.colors[tokenRoles[name] || name];
+  const colors = palette.categorical;
+  const text = palette.colors.text;
+  const secondary = palette.colors.muted;
+  const heatColors = palette.sequential;
+  const palettePanel = document.querySelector('#chart-palette');
+  const swatch = (name,color) => `<button type="button" class="research-swatch" data-chart-color="${color}" aria-label="复制${name}色值${color}"><i style="background:${color}" aria-hidden="true"></i><span>${name}<small>${color}</small></span><span class="research-copy" aria-hidden="true">复制</span></button>`;
+  palettePanel.innerHTML = `<div class="research-palette-heading"><div><h3>清澈相伴</h3><p>蓝绿记录事实，暖杏保留温度。点击色值即可复制。</p></div><a href="./chart-palette.json" download>下载色卡 JSON</a></div><div class="research-palette-grid"><div><h4>分类与比较</h4><div class="research-swatches">${[['主序列',colors[0]],['第二序列',colors[1]],['第三分类',colors[2]]].map(([name,color]) => swatch(name,color)).join('')}</div></div><div class="research-sequential"><h4>数值由浅到深</h4><div class="research-ramp">${heatColors.map((color,index) => `<button type="button" data-chart-color="${color}" style="background:${color};color:${labelColor(color)}" aria-label="复制顺序色${index + 1}色值${color}">${index + 1}</button>`).join('')}</div><p><span>低值</span><span>高值</span></p><small>同一蓝色顺序 · 热力标尺随数据更新</small></div><div><h4>分级与文字同步</h4><div class="research-swatches">${[['低分级',palette.risks.low],['中分级',palette.risks.mid],['高分级',palette.risks.high]].map(([name,color]) => swatch(name,color)).join('')}</div></div></div><p class="research-palette-footnote">分类颜色不表示大小或心情好坏；分级不替代诊断。<a href="./科研色卡与UI方案.md">查看配色与使用规范</a></p><p id="chart-color-status" role="status" aria-live="polite"></p><label class="research-copy-fallback" hidden>自动复制不可用，请手动复制色值<input readonly aria-label="待复制色值" /></label>`;
+  let palettePending = false;
+  const onPaletteCopy = async event => {
+    const button = event.target.closest('[data-chart-color]');
+    if (!button || button.disabled || palettePending || disposed) return;
+    const color = button.dataset.chartColor;
+    const status = palettePanel.querySelector('#chart-color-status');
+    const fallback = palettePanel.querySelector('.research-copy-fallback');
+    palettePending = true;
+    palettePanel.querySelectorAll('[data-chart-color]').forEach(item => { item.disabled = true; });
+    palettePanel.setAttribute('aria-busy','true');
+    status.textContent = `正在复制 ${color}…`;
+    try {
+      await navigator.clipboard.writeText(color);
+      if (disposed) return;
+      status.textContent = `已复制 ${color}`;
+      fallback.hidden = true;
+    } catch {
+      if (disposed) return;
+      status.textContent = `色值 ${color}`;
+      fallback.hidden = false;
+      const input = fallback.querySelector('input'); input.value = color; input.focus(); input.select();
+    } finally {
+      palettePending = false;
+      if (!disposed) {
+        palettePanel.querySelectorAll('[data-chart-color]').forEach(item => { item.disabled = false; });
+        palettePanel.removeAttribute('aria-busy');
+      }
+    }
+  };
+  palettePanel.addEventListener('click',onPaletteCopy);
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const instances = new Map();
   const pending = new Set();
@@ -63,13 +94,13 @@ export function initChartLibrary() {
   const cards = new Map(SPECS.map(spec => [spec.id,gallery.querySelector(`[data-chart-id="${spec.id}"]`)]));
 
   function option(spec, data, exporting = false) {
-    const base = { animation:false, animationDuration:0, animationDurationUpdate:0, backgroundColor:'transparent', aria:{enabled:true,label:{description:`${spec.title}。${spec.unit}。${spec.summary(data)} 合成示例 ${data.sample}，${data.period}。详细数值见查看数据。`}}, textStyle:{fontSize:12,fontFamily:token('font-sans')}, tooltip:{show:false}, grid:{left:42,right:22,top:30,bottom:36,containLabel:false}, xAxis:{type:'category',axisLabel:{fontSize:12,color:secondary,margin:12},axisLine:{lineStyle:{color:token('border')}},axisTick:{show:false}}, yAxis:{type:'value',min:0,minInterval:1,axisLabel:{fontSize:12,color:secondary,margin:12},splitLine:{lineStyle:{color:token('chart-grid'),type:'dashed',opacity:.8}}} };
+    const base = { animation:false, animationDuration:0, animationDurationUpdate:0, backgroundColor:'transparent', aria:{enabled:true,label:{description:`${spec.title}。${spec.unit}。${spec.summary(data)} 合成示例 ${data.sample}，${data.period}。详细数值见查看数据。`}}, textStyle:{fontSize:12,fontFamily:token('font-sans')}, tooltip:{show:false}, grid:{left:42,right:22,top:30,bottom:36,containLabel:false}, xAxis:{type:'category',axisLabel:{fontSize:12,color:secondary,margin:12},axisLine:{lineStyle:{color:token('border')}},axisTick:{show:false}}, yAxis:{type:'value',min:0,minInterval:1,axisLabel:{fontSize:12,color:secondary,margin:12},splitLine:{lineStyle:{color:token('chart-grid'),type:'solid',opacity:.65}}} };
     const label = {show:true,color:text,fontSize:12,position:'top'};
-    if (spec.id === 'trend') return {...base, grid:{left:40,right:data.range === 7 ? 20:56,top:28,bottom:38}, xAxis:{...base.xAxis,boundaryGap:false,data:data.daily.map(day => day.label),axisLabel:{...base.xAxis.axisLabel,interval:data.range === 30 ? 5 : data.range === 14 ? 2 : 0,showMinLabel:true,showMaxLabel:true}}, yAxis:{...base.yAxis,name:'次',nameTextStyle:{fontSize:12,color:secondary}}, series:[{type:'line',name:'支持记录',data:data.daily.map(day => day.support),symbolSize:6,lineStyle:{color:colors[0],width:2.5},itemStyle:{color:token('surface'),borderColor:colors[0],borderWidth:2},areaStyle:{color:token('brand-100'),opacity:.45},label:{...label,show:data.range === 7},endLabel:{show:data.range !== 7,formatter:'{c} 次',fontSize:12,color:colors[0],fontWeight:600},labelLayout:{hideOverlap:true}}]};
+    if (spec.id === 'trend') return {...base, grid:{left:40,right:data.range === 7 ? 20:56,top:28,bottom:38}, xAxis:{...base.xAxis,boundaryGap:false,data:data.daily.map(day => day.label),axisLabel:{...base.xAxis.axisLabel,interval:data.range === 30 ? 5 : data.range === 14 ? 2 : 0,showMinLabel:true,showMaxLabel:true}}, yAxis:{...base.yAxis,name:'次',nameTextStyle:{fontSize:12,color:secondary}}, series:[{type:'line',name:'支持记录',data:data.daily.map(day => day.support),symbolSize:6,lineStyle:{color:colors[0],width:2.5},itemStyle:{color:token('surface'),borderColor:colors[0],borderWidth:2},areaStyle:{color:token('brand-100'),opacity:.55},label:{...label,show:data.range === 7},endLabel:{show:data.range !== 7,formatter:'{c} 次',fontSize:12,color:colors[0],fontWeight:600},labelLayout:{hideOverlap:true}}]};
     if (spec.id === 'emotion') return { ...base,xAxis:undefined,yAxis:undefined,graphic:[{type:'text',left:'center',top:'41%',style:{text:format(sum(data.emotions.map(item => item.value))),font:`600 26px ${token('font-sans')}`,fill:text}},{type:'text',left:'center',top:'56%',style:{text:'条情绪记录',font:`12px ${token('font-sans')}`,fill:secondary}}],series:[{type:'pie',radius:['52%','73%'],center:['50%','50%'],silent:true,label:{show:exporting,fontSize:12,color:text,formatter:'{b} {c}条 ({d}%)'},labelLine:{show:exporting},data:data.emotions.map(item => ({name:item.name,value:item.value,itemStyle:{color:theme.xy.emotions[item.field],borderColor:token('surface'),borderWidth:2}}))}] };
-    if (spec.id === 'risk') return {...base,grid:{left:58,right:65,top:20,bottom:36},xAxis:{...base.yAxis,name:'条',nameTextStyle:{fontSize:12,color:secondary}},yAxis:{type:'category',inverse:true,data:data.risks.map(item => item.name),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:text,fontSize:12}},series:[{type:'bar',barMaxWidth:26,label:{...label,position:'right',formatter:'{c} 条'},data:data.risks.map(item => ({value:item.value,itemStyle:{color:theme.xy.risks[item.field],borderColor:secondary,borderWidth:1,borderRadius:[0,4,4,0]}}))}]};
-    if (spec.id === 'appointment') return {...base,legend:{data:['计划','完成'],top:0,right:0,textStyle:{fontSize:12,color:secondary}},grid:{left:40,right:14,top:40,bottom:32},xAxis:{...base.xAxis,data:WEEKDAYS,axisLabel:{...base.xAxis.axisLabel,interval:0,formatter:value => value.replace('周','')}} ,series:['planned','completed'].map((field,index) => ({name:['计划','完成'][index],type:'bar',barMaxWidth:23,barGap:'20%',label, itemStyle:{color:colors[index],borderRadius:[3,3,0,0],borderColor:index ? secondary:colors[index],borderWidth:index ? 1:0},data:data.appointments.map(item => item[field])}))};
-    if (spec.id === 'channel') return {...base,grid:{left:52,right:18,top:exporting ? 42:22,bottom:36},legend:exporting ? {top:0,textStyle:{fontSize:12,color:secondary}}:undefined,xAxis:{...base.yAxis,max:100,interval:25,axisLabel:{fontSize:12,color:secondary,formatter:'{value}%'}},yAxis:{type:'category',inverse:true,data:data.channels.map(group => group.name),axisLine:{show:false},axisTick:{show:false},axisLabel:{fontSize:12,color:text}},series:CHANNEL_NAMES.map((name,index) => ({name,type:'bar',stack:'total',barMaxWidth:44,label:{show:true,fontSize:12,color:index ? text:token('surface'),formatter:params => `${Number(params.value).toFixed(1)}%`},itemStyle:{color:colors[index],borderColor:token('surface'),borderWidth:1},data:data.channels.map(group => group.percentages[index])}))};
+    if (spec.id === 'risk') return {...base,grid:{left:58,right:65,top:20,bottom:36},xAxis:{...base.yAxis,name:'条',nameTextStyle:{fontSize:12,color:secondary}},yAxis:{type:'category',inverse:true,data:data.risks.map(item => item.name),axisTick:{show:false},axisLine:{show:false},axisLabel:{color:text,fontSize:12}},series:[{type:'bar',barMaxWidth:26,label:{...label,position:'right',formatter:'{c} 条'},data:data.risks.map(item => ({value:item.value,itemStyle:{color:theme.xy.risks[item.field],borderRadius:[0,2,2,0]}}))}]};
+    if (spec.id === 'appointment') return {...base,legend:{data:['计划','完成'],top:0,right:0,textStyle:{fontSize:12,color:secondary}},grid:{left:40,right:14,top:40,bottom:32},xAxis:{...base.xAxis,data:WEEKDAYS,axisLabel:{...base.xAxis.axisLabel,interval:0,formatter:value => value.replace('周','')}} ,series:['planned','completed'].map((field,index) => ({name:['计划','完成'][index],type:'bar',barMaxWidth:23,barGap:'20%',label, itemStyle:{color:index ? colors[1]:palette.colors.primarySoft,borderRadius:[2,2,0,0],borderColor:index ? colors[1]:colors[0],borderWidth:index ? 0:1},data:data.appointments.map(item => item[field])}))};
+    if (spec.id === 'channel') return {...base,grid:{left:52,right:18,top:exporting ? 42:22,bottom:36},legend:exporting ? {top:0,textStyle:{fontSize:12,color:secondary}}:undefined,xAxis:{...base.yAxis,max:100,interval:25,axisLabel:{fontSize:12,color:secondary,formatter:'{value}%'}},yAxis:{type:'category',inverse:true,data:data.channels.map(group => group.name),axisLine:{show:false},axisTick:{show:false},axisLabel:{fontSize:12,color:text}},series:CHANNEL_NAMES.map((name,index) => ({name,type:'bar',stack:'total',barMaxWidth:44,label:{show:true,fontSize:12,color:labelColor(colors[index]),formatter:params => `${Number(params.value).toFixed(1)}%`},itemStyle:{color:colors[index],borderColor:token('surface'),borderWidth:1},data:data.channels.map(group => group.percentages[index])}))};
     if (spec.id === 'heatmap') {
       const max = Math.max(...data.heatmap.map(item => item.value));
       return {...base,grid:{left:76,right:15,top:15,bottom:76},visualMap:{type:'continuous',show:true,min:0,max,dimension:2,orient:'horizontal',left:'center',bottom:0,itemWidth:10,itemHeight:100,calculable:false,precision:0,text:[`${max} 次`,'0 次'],textGap:9,textStyle:{fontSize:12,color:secondary},inRange:{color:heatColors}},xAxis:{type:'category',data:WEEKDAYS,axisLabel:{interval:0,fontSize:12,color:secondary,formatter:value => value.replace('周','')},splitArea:{show:false},axisLine:{show:false},axisTick:{show:false}},yAxis:{type:'category',inverse:true,data:TIME_SLOTS,axisLabel:{fontSize:12,color:secondary},axisLine:{show:false},axisTick:{show:false}},series:[{type:'heatmap',data:data.heatmap.map(item => ({value:[item.weekday,item.time,item.value],itemStyle:{borderWidth:2,borderColor:token('surface')}})),label:{show:true,fontSize:12,color:text,backgroundColor:token('surface'),padding:[1,2],borderRadius:2},emphasis:{disabled:true}}]};
@@ -77,7 +108,7 @@ export function initChartLibrary() {
     if (spec.id === 'histogram') return {...base,grid:{left:40,right:14,top:25,bottom:36},xAxis:{...base.xAxis,type:'value',min:0,max:80,interval:10,axisLabel:{...base.xAxis.axisLabel,hideOverlap:false,showMinLabel:true,showMaxLabel:true},splitLine:{show:false}},series:[{type:'custom',encode:{x:[0,1],y:2},data:data.histogram.map(item => [item.min,item.max,item.value]),renderItem:(params,api) => {
       const start = api.coord([api.value(0),api.value(2)]);
       const end = api.coord([api.value(1),0]);
-      return {type:'group',children:[{type:'rect',shape:{x:start[0] + .75,y:start[1],width:Math.max(0,end[0] - start[0] - 1.5),height:Math.max(0,end[1] - start[1])},style:{fill:colors[1],stroke:secondary,lineWidth:1}},{type:'text',style:{text:String(api.value(2)),x:(start[0] + end[0]) / 2,y:start[1] - 8,align:'center',verticalAlign:'bottom',fill:text,fontSize:12,fontFamily:token('font-sans')}}]};
+      return {type:'group',children:[{type:'rect',shape:{x:start[0] + .75,y:start[1],width:Math.max(0,end[0] - start[0] - 1.5),height:Math.max(0,end[1] - start[1])},style:{fill:colors[1],stroke:token('surface'),lineWidth:1}},{type:'text',style:{text:String(api.value(2)),x:(start[0] + end[0]) / 2,y:start[1] - 8,align:'center',verticalAlign:'bottom',fill:text,fontSize:12,fontFamily:token('font-sans')}}]};
     }}]};
     return {...base,grid:{left:48,right:28,top:35,bottom:48},xAxis:{...base.yAxis,name:'浏览（次）',nameLocation:'middle',nameGap:29,nameTextStyle:{color:secondary,fontSize:12}},yAxis:{...base.yAxis,name:'收藏（次）',nameTextStyle:{color:secondary,fontSize:12}},series:[{type:'scatter',symbolSize:11,itemStyle:{color:colors[0],opacity:1,borderColor:token('surface'),borderWidth:1},label:{show:true,position:'top',distance:7,color:text,fontSize:12,formatter:params => exporting ? params.data.name:String(params.data.rank)},data:data.resources.map((item,index) => ({name:item.name,rank:index + 1,value:[item.views,item.saves]}))}]};
   }
@@ -208,6 +239,7 @@ export function initChartLibrary() {
     document.querySelector('#chart-range').removeEventListener('change',onRange);
     document.querySelector('#chart-sample').removeEventListener('change',onSample);
     gallery.removeEventListener('click',onExport);
+    palettePanel.removeEventListener('click',onPaletteCopy);
   }
   window.addEventListener('pagehide',onPageHide);
   window.addEventListener('pageshow',onPageShow);

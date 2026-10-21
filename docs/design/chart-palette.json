@@ -1,0 +1,34 @@
+{
+  "version": "1.0.1",
+  "name": "清澈相伴 · Research companion",
+  "colors": {
+    "background": "#F6F8F9",
+    "surface": "#FFFFFF",
+    "text": "#243B4A",
+    "muted": "#617580",
+    "grid": "#DFE7EB",
+    "primary": "#276A8B",
+    "secondary": "#2B7C76",
+    "comparison": "#B77A36",
+    "primarySoft": "#EAF2F6",
+    "secondarySoft": "#EAF4F1",
+    "warmSoft": "#FBF3E8",
+    "focus": "#19465F"
+  },
+  "categorical": ["#276A8B", "#2B7C76", "#D6AA68", "#84749A", "#A86155", "#809399"],
+  "emotions": {
+    "joy": "#D6AA68",
+    "sadness": "#276A8B",
+    "neutral": "#809399",
+    "fear": "#84749A",
+    "anxiety": "#2B7C76",
+    "anger": "#A86155"
+  },
+  "risks": { "low": "#2B7C76", "mid": "#B77A36", "high": "#A54B4B" },
+  "sequential": ["#F0F6F7", "#DAE9EC", "#B5D0D8", "#83AFBE", "#51899F", "#2E667F", "#19465F"],
+  "sources": [
+    { "title": "Project original palette", "note": "原创蓝绿与暖杏组合；分类无数值顺序，情绪不表示好坏；分级文字与颜色同时展示。图表局部使用，不改变品牌token。" },
+    { "title": "Apache ECharts style concepts", "url": "https://echarts.apache.org/handbook/en/concepts/style/", "note": "参考调色板、系列和组件样式的职责划分，未复制示例图片。" },
+    { "title": "Nature research figure guide", "url": "https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/", "note": "参考清晰文字、单位、简洁背景和色键原则；网页文字最低12px，不宣称符合任何期刊认证。" }
+  ]
+}

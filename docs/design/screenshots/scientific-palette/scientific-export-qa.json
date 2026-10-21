@@ -1,0 +1,1014 @@
+{
+  "task": "Scientific figure export evidence",
+  "checkedAt": "2026-10-21T12:54:29.122966+00:00",
+  "synthetic": true,
+  "lead_visual_review": [
+    "14/A color overview",
+    "30/B grayscale overview"
+  ],
+  "browser_report": "qa.json",
+  "status": "passed",
+  "runs": [
+    {
+      "source_manifest": "tmp/scientific-figures/20261021T125055008736Z-14d-A/manifest.json",
+      "executed_by": "S3 gpt-6.1-sol",
+      "independently_audited_by": "S4 Luna",
+      "manifest": {
+        "schema": "xinyu-scientific-export-v1",
+        "created_utc": "2026-10-21T12:50:59.168094+00:00",
+        "synthetic": true,
+        "range_days": 14,
+        "sample": "A",
+        "source_date_range_utc": [
+          "2026-10-08",
+          "2026-10-21"
+        ],
+        "input": {
+          "kind": "node-imported-existing-generator",
+          "path": "input-data.json",
+          "sha256": "f77e61a940eeaacde2d76445a0b8015627710a123b5da4dcee0039c3f6674b42",
+          "canonical_data_sha256": "554d35ec42e88bcbfc83a5629e8006c9beaa2e4728ffced800fddf535056f0a8",
+          "external_input_sha256": null,
+          "generator": "docs/design/chart-demo-data.js",
+          "generator_sha256": "c21874ee67bdc5cc9c9aa7b85f05793ddeaf9c7da4f1d6f824cc010b5d36a622",
+          "generator_import_sha256": "002f12751fe6b94bef94e7dd4a31f6bf0eb1c0344ac94e61ae76accba76ccd00"
+        },
+        "shared_palette": {
+          "path": "C:\\University\\Code_total\\health_new_muzee2025\\docs\\design\\chart-palette.json",
+          "sha256": "0236e3f8c28bde65a4c437b1ca018dbbfeeefd37c8ba1d0b377b40bbe58df135",
+          "name": "清澈相伴 · Research companion",
+          "version": "1.0.1"
+        },
+        "method": {
+          "description": "Direct daily sums and counts; raw-record arithmetic mean; no fitted model, error bars or p-values.",
+          "histogram": "8 bins [0,10),...,[70,80), counted from raw session durations.",
+          "heatmap": "28 weekday/time-slot sums; shared sequential palette; scale 0 to snapshot maximum.",
+          "denominators": "Support activities, risk observations, planned appointments and duration records are distinct counts, not unique people.",
+          "style": {
+            "requested": "builtin",
+            "effective": "matplotlib-builtin",
+            "scienceplots": "unavailable",
+            "fallback_reason": null
+          },
+          "font": "DejaVu Sans",
+          "minimum_text_size_pt": 7.2,
+          "latex": false
+        },
+        "runtime": {
+          "python": "3.14.2",
+          "matplotlib": "3.11.0",
+          "numpy": "2.4.6",
+          "Pillow": "12.2.0",
+          "node": "v24.14.0"
+        },
+        "export_script_sha256": "127ea88950c6599f101699d415336eeb02cacbc34cd6c177309e0e10f2ab9a5f",
+        "selected_checks": {
+          "range": 14,
+          "sample": "A",
+          "utc_start": "2026-10-08",
+          "utc_end": "2026-10-21",
+          "support_count": 233,
+          "daily_support_min_max": [
+            11,
+            23
+          ],
+          "risk_observation_count": 245,
+          "heatmap_total": 177,
+          "duration_record_count": 233,
+          "histogram_bins": [
+            13,
+            34,
+            34,
+            32,
+            37,
+            31,
+            38,
+            14
+          ],
+          "raw_duration_min_max_minutes": [
+            6,
+            74
+          ],
+          "raw_duration_mean_minutes": 39.9656652360515,
+          "all_eight_aggregates": "passed"
+        },
+        "six_fixture_checks": [
+          {
+            "range": 7,
+            "sample": "A",
+            "utc_start": "2026-10-15",
+            "utc_end": "2026-10-21",
+            "support_count": 121,
+            "daily_support_min_max": [
+              14,
+              23
+            ],
+            "risk_observation_count": 124,
+            "heatmap_total": 90,
+            "duration_record_count": 121,
+            "histogram_bins": [
+              7,
+              17,
+              18,
+              16,
+              20,
+              17,
+              19,
+              7
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.0,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 7,
+            "sample": "B",
+            "utc_start": "2026-10-15",
+            "utc_end": "2026-10-21",
+            "support_count": 120,
+            "daily_support_min_max": [
+              13,
+              24
+            ],
+            "risk_observation_count": 128,
+            "heatmap_total": 86,
+            "duration_record_count": 120,
+            "histogram_bins": [
+              6,
+              20,
+              16,
+              16,
+              17,
+              15,
+              21,
+              9
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.53333333333333,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 14,
+            "sample": "A",
+            "utc_start": "2026-10-08",
+            "utc_end": "2026-10-21",
+            "support_count": 233,
+            "daily_support_min_max": [
+              11,
+              23
+            ],
+            "risk_observation_count": 245,
+            "heatmap_total": 177,
+            "duration_record_count": 233,
+            "histogram_bins": [
+              13,
+              34,
+              34,
+              32,
+              37,
+              31,
+              38,
+              14
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 39.9656652360515,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 14,
+            "sample": "B",
+            "utc_start": "2026-10-08",
+            "utc_end": "2026-10-21",
+            "support_count": 248,
+            "daily_support_min_max": [
+              13,
+              24
+            ],
+            "risk_observation_count": 259,
+            "heatmap_total": 174,
+            "duration_record_count": 248,
+            "histogram_bins": [
+              12,
+              40,
+              33,
+              36,
+              36,
+              34,
+              39,
+              18
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.24596774193548,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 30,
+            "sample": "A",
+            "utc_start": "2026-09-22",
+            "utc_end": "2026-10-21",
+            "support_count": 495,
+            "daily_support_min_max": [
+              10,
+              23
+            ],
+            "risk_observation_count": 520,
+            "heatmap_total": 373,
+            "duration_record_count": 495,
+            "histogram_bins": [
+              27,
+              75,
+              70,
+              74,
+              72,
+              70,
+              74,
+              33
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 39.85050505050505,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 30,
+            "sample": "B",
+            "utc_start": "2026-09-22",
+            "utc_end": "2026-10-21",
+            "support_count": 527,
+            "daily_support_min_max": [
+              12,
+              24
+            ],
+            "risk_observation_count": 558,
+            "heatmap_total": 375,
+            "duration_record_count": 527,
+            "histogram_bins": [
+              26,
+              82,
+              70,
+              79,
+              75,
+              77,
+              79,
+              39
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.37950664136623,
+            "all_eight_aggregates": "passed"
+          }
+        ],
+        "figures": [
+          {
+            "basename": "trend",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "trend.svg",
+                "sha256": "20e90cffc36a8c9121afd51fd1ba56ec25e860962da97c5bd2bf191b226b6f5c",
+                "bytes": 11125
+              },
+              {
+                "path": "trend.pdf",
+                "sha256": "b6f1b477ac9dfead77cf7c2be949d54325b46571b0f0a64538349eb8b0c32d9b",
+                "bytes": 73606
+              },
+              {
+                "path": "trend.png",
+                "sha256": "87518c44b17a3f247e14349f9320e7aa7951e16450e016029db00eccc268e330",
+                "bytes": 131274
+              },
+              {
+                "path": "trend-grayscale.png",
+                "sha256": "fb61c19cd832b76c6d48175c40643db75fcbdf19cdf240624eb78949ec24d8c1",
+                "bytes": 59204
+              }
+            ]
+          },
+          {
+            "basename": "risk",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "risk.svg",
+                "sha256": "d3f3b04263ee5b3290f821b608df238fa403e57722ba554062ce0cf9c7051e6d",
+                "bytes": 11140
+              },
+              {
+                "path": "risk.pdf",
+                "sha256": "e476fd40733adee853ff8d33e6154eded06ff7e6ee269a621717c748139f468f",
+                "bytes": 75257
+              },
+              {
+                "path": "risk.png",
+                "sha256": "7d6ba7167b86d2e9d36c2a1e5b62f8702e470bb132aa3b89bede63018277026f",
+                "bytes": 108846
+              },
+              {
+                "path": "risk-grayscale.png",
+                "sha256": "bb5c1b0121f6c35178ead87e2003930dc080d2e0c00536db920487cb4c2c89ea",
+                "bytes": 51421
+              }
+            ]
+          },
+          {
+            "basename": "heatmap",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "heatmap.svg",
+                "sha256": "e420b91ddea06ca6b12fb9da7c7d4fd251b0b1920b283536210d45f0d6472f6e",
+                "bytes": 68882
+              },
+              {
+                "path": "heatmap.pdf",
+                "sha256": "67de5cd34b833a33fd55859d77b21dc1cc45e359f7178f5b4142c4175584f07a",
+                "bytes": 86400
+              },
+              {
+                "path": "heatmap.png",
+                "sha256": "5062a45145e07a930f405b6b661877728a7efe9914fdb0baa4968fcf9d65c591",
+                "bytes": 140409
+              },
+              {
+                "path": "heatmap-grayscale.png",
+                "sha256": "0e48b4dd1c196468aada6b3e7a72d48143d615dcb602e0c312632d9990902432",
+                "bytes": 63011
+              }
+            ]
+          },
+          {
+            "basename": "histogram",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "histogram.svg",
+                "sha256": "2848abd5cf3bde41434eb40a917460db22932d278ad6d46ceeadac5ba92eaa92",
+                "bytes": 12520
+              },
+              {
+                "path": "histogram.pdf",
+                "sha256": "1a39e8d374d0b13271628723aa703338714cc1ca9d9f6c1e5e0dc938c7bf816f",
+                "bytes": 74402
+              },
+              {
+                "path": "histogram.png",
+                "sha256": "acb8b7220333df185ffb99a8fc3b9f1760b41e72862005933f038f23ed633307",
+                "bytes": 110927
+              },
+              {
+                "path": "histogram-grayscale.png",
+                "sha256": "82456b4357118f21f3ee848c6eaefcbd225105b7c6ac5e0b7784ab75f8796034",
+                "bytes": 51284
+              }
+            ]
+          },
+          {
+            "basename": "overview",
+            "size_inches": [
+              10.0,
+              8.0
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              3000,
+              2400
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "overview.svg",
+                "sha256": "cd81d0c70b3962d2822190107c6638924e3a5c35526bfcedbe56f0aa530570a3",
+                "bytes": 104483
+              },
+              {
+                "path": "overview.pdf",
+                "sha256": "2952751bca571ceb1e0c4c0ce1844b60c49558625d794275269170617028283f",
+                "bytes": 120973
+              },
+              {
+                "path": "overview.png",
+                "sha256": "95b125e55e7027cf4ff30ecfba9cba1966d00f1dec1f9522ed8191658d0ae882",
+                "bytes": 340781
+              },
+              {
+                "path": "overview-grayscale.png",
+                "sha256": "bbc56c570b2ea15a4c48e95b1db52d30eba68b081e89013e7adea94a3abda7a4",
+                "bytes": 152819
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "Synthetic display fixtures support no population, treatment, significance or causal conclusions.",
+          "Generic scientific presentation; no universal SCI template or journal compliance claim.",
+          "Shared sequential color ramp is not certified perceptually uniform; values and colorbar remain explicit.",
+          "SVG text stays editable and needs the named font; PDF embeds TrueType.",
+          "Automatic checks cover file integrity, glyph warnings and canvas bounds; visual review remains necessary."
+        ]
+      },
+      "preview": {
+        "file": "scientific-overview.webp",
+        "bytes": 212792,
+        "sha256": "0962ab8196e618edec5e1b340dcfde125ba99c059eda29b76626bb02b816f696",
+        "source_png_sha256": "95b125e55e7027cf4ff30ecfba9cba1966d00f1dec1f9522ed8191658d0ae882",
+        "conversion": "PNG to WebP only; no resize or content editing"
+      }
+    },
+    {
+      "source_manifest": "tmp/scientific-figures/20261021T125100614523Z-30d-B/manifest.json",
+      "executed_by": "S3 gpt-6.1-sol",
+      "independently_audited_by": "S4 Luna",
+      "manifest": {
+        "schema": "xinyu-scientific-export-v1",
+        "created_utc": "2026-10-21T12:51:05.197592+00:00",
+        "synthetic": true,
+        "range_days": 30,
+        "sample": "B",
+        "source_date_range_utc": [
+          "2026-09-22",
+          "2026-10-21"
+        ],
+        "input": {
+          "kind": "node-imported-existing-generator",
+          "path": "input-data.json",
+          "sha256": "9c3d4e729fd2f0837a9a175ec59816d02a01a92bf71822dda6f3f30ccbdfdc58",
+          "canonical_data_sha256": "1ac19792ead6a7b916ca0629a92d1ea475408bdb4a5d7be8e0639138a9c88484",
+          "external_input_sha256": null,
+          "generator": "docs/design/chart-demo-data.js",
+          "generator_sha256": "c21874ee67bdc5cc9c9aa7b85f05793ddeaf9c7da4f1d6f824cc010b5d36a622",
+          "generator_import_sha256": "002f12751fe6b94bef94e7dd4a31f6bf0eb1c0344ac94e61ae76accba76ccd00"
+        },
+        "shared_palette": {
+          "path": "C:\\University\\Code_total\\health_new_muzee2025\\docs\\design\\chart-palette.json",
+          "sha256": "0236e3f8c28bde65a4c437b1ca018dbbfeeefd37c8ba1d0b377b40bbe58df135",
+          "name": "清澈相伴 · Research companion",
+          "version": "1.0.1"
+        },
+        "method": {
+          "description": "Direct daily sums and counts; raw-record arithmetic mean; no fitted model, error bars or p-values.",
+          "histogram": "8 bins [0,10),...,[70,80), counted from raw session durations.",
+          "heatmap": "28 weekday/time-slot sums; shared sequential palette; scale 0 to snapshot maximum.",
+          "denominators": "Support activities, risk observations, planned appointments and duration records are distinct counts, not unique people.",
+          "style": {
+            "requested": "science",
+            "effective": "matplotlib-builtin",
+            "scienceplots": "unavailable",
+            "fallback_reason": "ModuleNotFoundError: SciencePlots unavailable; built-in style used."
+          },
+          "font": "DejaVu Sans",
+          "minimum_text_size_pt": 7.2,
+          "latex": false
+        },
+        "runtime": {
+          "python": "3.14.2",
+          "matplotlib": "3.11.0",
+          "numpy": "2.4.6",
+          "Pillow": "12.2.0",
+          "node": "v24.14.0"
+        },
+        "export_script_sha256": "127ea88950c6599f101699d415336eeb02cacbc34cd6c177309e0e10f2ab9a5f",
+        "selected_checks": {
+          "range": 30,
+          "sample": "B",
+          "utc_start": "2026-09-22",
+          "utc_end": "2026-10-21",
+          "support_count": 527,
+          "daily_support_min_max": [
+            12,
+            24
+          ],
+          "risk_observation_count": 558,
+          "heatmap_total": 375,
+          "duration_record_count": 527,
+          "histogram_bins": [
+            26,
+            82,
+            70,
+            79,
+            75,
+            77,
+            79,
+            39
+          ],
+          "raw_duration_min_max_minutes": [
+            6,
+            74
+          ],
+          "raw_duration_mean_minutes": 40.37950664136623,
+          "all_eight_aggregates": "passed"
+        },
+        "six_fixture_checks": [
+          {
+            "range": 7,
+            "sample": "A",
+            "utc_start": "2026-10-15",
+            "utc_end": "2026-10-21",
+            "support_count": 121,
+            "daily_support_min_max": [
+              14,
+              23
+            ],
+            "risk_observation_count": 124,
+            "heatmap_total": 90,
+            "duration_record_count": 121,
+            "histogram_bins": [
+              7,
+              17,
+              18,
+              16,
+              20,
+              17,
+              19,
+              7
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.0,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 7,
+            "sample": "B",
+            "utc_start": "2026-10-15",
+            "utc_end": "2026-10-21",
+            "support_count": 120,
+            "daily_support_min_max": [
+              13,
+              24
+            ],
+            "risk_observation_count": 128,
+            "heatmap_total": 86,
+            "duration_record_count": 120,
+            "histogram_bins": [
+              6,
+              20,
+              16,
+              16,
+              17,
+              15,
+              21,
+              9
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.53333333333333,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 14,
+            "sample": "A",
+            "utc_start": "2026-10-08",
+            "utc_end": "2026-10-21",
+            "support_count": 233,
+            "daily_support_min_max": [
+              11,
+              23
+            ],
+            "risk_observation_count": 245,
+            "heatmap_total": 177,
+            "duration_record_count": 233,
+            "histogram_bins": [
+              13,
+              34,
+              34,
+              32,
+              37,
+              31,
+              38,
+              14
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 39.9656652360515,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 14,
+            "sample": "B",
+            "utc_start": "2026-10-08",
+            "utc_end": "2026-10-21",
+            "support_count": 248,
+            "daily_support_min_max": [
+              13,
+              24
+            ],
+            "risk_observation_count": 259,
+            "heatmap_total": 174,
+            "duration_record_count": 248,
+            "histogram_bins": [
+              12,
+              40,
+              33,
+              36,
+              36,
+              34,
+              39,
+              18
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.24596774193548,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 30,
+            "sample": "A",
+            "utc_start": "2026-09-22",
+            "utc_end": "2026-10-21",
+            "support_count": 495,
+            "daily_support_min_max": [
+              10,
+              23
+            ],
+            "risk_observation_count": 520,
+            "heatmap_total": 373,
+            "duration_record_count": 495,
+            "histogram_bins": [
+              27,
+              75,
+              70,
+              74,
+              72,
+              70,
+              74,
+              33
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 39.85050505050505,
+            "all_eight_aggregates": "passed"
+          },
+          {
+            "range": 30,
+            "sample": "B",
+            "utc_start": "2026-09-22",
+            "utc_end": "2026-10-21",
+            "support_count": 527,
+            "daily_support_min_max": [
+              12,
+              24
+            ],
+            "risk_observation_count": 558,
+            "heatmap_total": 375,
+            "duration_record_count": 527,
+            "histogram_bins": [
+              26,
+              82,
+              70,
+              79,
+              75,
+              77,
+              79,
+              39
+            ],
+            "raw_duration_min_max_minutes": [
+              6,
+              74
+            ],
+            "raw_duration_mean_minutes": 40.37950664136623,
+            "all_eight_aggregates": "passed"
+          }
+        ],
+        "figures": [
+          {
+            "basename": "trend",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "trend.svg",
+                "sha256": "f28bee0a4236bca20cbf65a9873da0002a5510b4f6903b1f4d11f5f251435abf",
+                "bytes": 13493
+              },
+              {
+                "path": "trend.pdf",
+                "sha256": "7a0e4d4d8d4b5cf221d7166e10067581e8abba4893dc8b6aafa7aa6e7d8be109",
+                "bytes": 74010
+              },
+              {
+                "path": "trend.png",
+                "sha256": "a9b4225bfabd018b7bbdc7a86ada1d8d17783b2d3ff0258f88e326ac6713ea33",
+                "bytes": 148698
+              },
+              {
+                "path": "trend-grayscale.png",
+                "sha256": "e9f67a6f0c0445a736da68463e44dad815e714ca5e820a85012d4c45bcc80737",
+                "bytes": 70042
+              }
+            ]
+          },
+          {
+            "basename": "risk",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "risk.svg",
+                "sha256": "5ea92cd452b80850b86abad931260f77bf291cdda6baebf63b5984a517eec2af",
+                "bytes": 11142
+              },
+              {
+                "path": "risk.pdf",
+                "sha256": "c8021ddc9908b78c18afff479e366976e09fc565e34b95ddad048648c3b63852",
+                "bytes": 75741
+              },
+              {
+                "path": "risk.png",
+                "sha256": "cfe70f2fed4d933cad3b80c27eb9fdb4be1c9f4f62f69aebd87b26995b7224b2",
+                "bytes": 111253
+              },
+              {
+                "path": "risk-grayscale.png",
+                "sha256": "b45ea9029ab99ac6f453a959404b2efd68058e4ddb46a9cd7b083a6b460e7cf8",
+                "bytes": 52014
+              }
+            ]
+          },
+          {
+            "basename": "heatmap",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "heatmap.svg",
+                "sha256": "3f05f8d419419bf4b92f349d7d7687070611203fc92692514d658ca01b25faf2",
+                "bytes": 68894
+              },
+              {
+                "path": "heatmap.pdf",
+                "sha256": "87559bd72f7726c23a1ed8a37be7828ac0f4927110ac56d8db14b0beea633b0c",
+                "bytes": 86610
+              },
+              {
+                "path": "heatmap.png",
+                "sha256": "c1f97fca2e65fdfba37cb956093723124afc12a4d1f954c8bfd25feff8ceed4c",
+                "bytes": 147724
+              },
+              {
+                "path": "heatmap-grayscale.png",
+                "sha256": "e9b073bdb1ae77e59b5ebb63265df9743b7a70b263bbfb2e6fdf3258a567ec27",
+                "bytes": 66113
+              }
+            ]
+          },
+          {
+            "basename": "histogram",
+            "size_inches": [
+              7.2,
+              4.8
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              2160,
+              1440
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "histogram.svg",
+                "sha256": "87534243f54f2462d7c2f902a272bd3d76d5a37c73ff9af0c3879aa0e25447f7",
+                "bytes": 13154
+              },
+              {
+                "path": "histogram.pdf",
+                "sha256": "97d785f3f64a784d21fbe9ab318d2371d6a0443e4e9f47790c5532f90259aaa8",
+                "bytes": 74582
+              },
+              {
+                "path": "histogram.png",
+                "sha256": "ea15e82c324492e76ab98e2325eb9c94186cf135cb28d6afbb27c0686f11d41f",
+                "bytes": 112937
+              },
+              {
+                "path": "histogram-grayscale.png",
+                "sha256": "13a438612b05c11b59e727a9cc848af00a30f8cd609bc920379c0f90925613b6",
+                "bytes": 52216
+              }
+            ]
+          },
+          {
+            "basename": "overview",
+            "size_inches": [
+              10.0,
+              8.0
+            ],
+            "dpi": 300,
+            "png_pixels": [
+              3000,
+              2400
+            ],
+            "png_embedded_dpi": [
+              299.9994,
+              299.9994
+            ],
+            "text_within_canvas": true,
+            "missing_glyph_warnings": 0,
+            "svg_vector_paths": true,
+            "svg_embedded_raster": false,
+            "pdf_truetype_embedded": true,
+            "files": [
+              {
+                "path": "overview.svg",
+                "sha256": "b5f23b5515429d5e7501b577c156b00236168a240947cd0d8d3f7b355796ed10",
+                "bytes": 106413
+              },
+              {
+                "path": "overview.pdf",
+                "sha256": "0d53a7742659d96545271a04bc0c9e8d86beb4db8ec96b7ec3d615db8dd99400",
+                "bytes": 121406
+              },
+              {
+                "path": "overview.png",
+                "sha256": "daf4e8be3616e8c795813a2a97e1c71429dcdb402bc3456e9eecfc32adbe4214",
+                "bytes": 358364
+              },
+              {
+                "path": "overview-grayscale.png",
+                "sha256": "18449371bae341b06c6be3311c410f171e24e7f1a66887adae1ebb125c2db1b8",
+                "bytes": 161785
+              }
+            ]
+          }
+        ],
+        "limitations": [
+          "Synthetic display fixtures support no population, treatment, significance or causal conclusions.",
+          "Generic scientific presentation; no universal SCI template or journal compliance claim.",
+          "Shared sequential color ramp is not certified perceptually uniform; values and colorbar remain explicit.",
+          "SVG text stays editable and needs the named font; PDF embeds TrueType.",
+          "Automatic checks cover file integrity, glyph warnings and canvas bounds; visual review remains necessary."
+        ]
+      },
+      "preview": {
+        "file": "scientific-overview-grayscale.webp",
+        "bytes": 170532,
+        "sha256": "e5b968caba6d861ba778c2c99363fe3d40e22de0afd9fa6c9f99262c62dbb70c",
+        "source_png_sha256": "18449371bae341b06c6be3311c410f171e24e7f1a66887adae1ebb125c2db1b8",
+        "conversion": "PNG to WebP only; no resize or content editing"
+      }
+    }
+  ],
+  "limitations": [
+    "Full SVG/PDF/300dpi PNG outputs remain in ignored tmp/scientific-figures; rerun the versioned script to reproduce.",
+    "SciencePlots is not installed; requested science style used the recorded Matplotlib fallback.",
+    "No universal SCI or journal compliance claim."
+  ]
+}
