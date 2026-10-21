@@ -1,0 +1,71 @@
+/* Chart workbench only; business pages and global tokens are untouched. */
+.chart-workbench .section-heading{align-items:start;margin-bottom:24px}
+.chart-workbench .section-heading p{max-width:630px}
+.chart-section-note{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--brand-600);white-space:nowrap;padding-top:8px}
+.chart-section-note::before{content:'';width:7px;height:7px;background:var(--accent-sage);border-radius:50%}
+.chart-toolbar{border-block:1px solid var(--border);display:flex;justify-content:space-between;gap:14px;padding:13px 0;align-items:center}
+.chart-use-filters{display:flex;flex-wrap:wrap;gap:4px}
+.chart-use-filters button{min-height:44px;min-width:44px;border:0;border-radius:5px;padding:10px 13px;background:transparent;color:var(--text-secondary);font-size:13px;cursor:pointer}
+.chart-use-filters button[aria-pressed=true]{background:var(--brand-100);color:var(--brand-600);font-weight:600}
+.chart-view-controls{display:flex;gap:12px;flex-shrink:0}
+.chart-view-controls label{display:flex;align-items:center;gap:8px;color:var(--text-secondary);font-size:12px}
+.chart-view-controls select{min-height:44px;border:1px solid var(--border);border-radius:5px;background:var(--surface);color:var(--text-primary);font-size:13px;padding:9px 26px 9px 10px;cursor:pointer}
+.chart-context{display:flex;justify-content:space-between;gap:18px;padding:15px 0 24px;font-size:12px;color:var(--text-secondary);line-height:1.8}
+.chart-context p{margin:0!important}
+.chart-gallery{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;align-items:start}
+.chart-exhibit{grid-column:span 6;min-width:0;padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.chart-exhibit[hidden]{display:none!important}
+.chart-exhibit-trend{grid-column:span 8;border-top:3px solid var(--brand-500);padding-top:22px}
+.chart-exhibit-emotion{grid-column:span 4;background:var(--surface-warm);border-top:3px solid var(--accent-apricot);padding-top:22px}
+.chart-kind{font-size:12px;color:var(--brand-600);display:block;margin-bottom:7px}
+.xy-design .chart-exhibit h3{font-size:18px;line-height:1.6;font-weight:600;letter-spacing:0}
+.chart-unit{font-size:12px;color:var(--text-secondary);margin-top:6px!important}
+.chart-takeaway{font-size:13px;line-height:1.8;margin:18px 0 4px!important;color:var(--text-primary);min-height:47px}
+.chart-exhibit-trend .chart-takeaway{font-size:16px;min-height:47px;color:var(--brand-600)}
+.chart-canvas{width:100%;height:250px;min-width:0}
+.chart-exhibit-trend .chart-canvas{height:330px}
+.chart-exhibit-emotion .chart-canvas{height:206px}
+.chart-inline-key{display:flex;gap:10px 18px;flex-wrap:wrap;font-size:12px;color:var(--text-secondary);line-height:1.6}
+.chart-inline-key:empty{display:none}
+.chart-inline-key span{display:flex;align-items:center;gap:6px;min-width:0}
+.chart-inline-key i{display:inline-block;width:10px;height:10px;flex:none;border:1px solid var(--text-secondary);border-radius:2px}
+.chart-inline-key b{font-weight:550;color:var(--text-primary);margin-left:auto}
+.chart-inline-key small{font-size:12px;color:var(--text-secondary)}
+.chart-exhibit-emotion .chart-inline-key{display:grid;grid-template-columns:1fr;gap:7px;margin:3px 0 17px}
+.chart-exhibit-emotion .chart-inline-key span{display:grid;grid-template-columns:10px 1fr auto auto;gap:7px}
+.chart-exhibit-emotion .chart-inline-key small{min-width:44px;text-align:right}
+.chart-exhibit-scatter .chart-inline-key{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-top:4px}
+.chart-exhibit-scatter .chart-inline-key>span{align-items:start;gap:8px}
+.chart-exhibit-scatter .chart-inline-key>span>b{margin:0;color:var(--brand-600);min-width:10px}
+.chart-exhibit-scatter .chart-inline-key>span>span{display:block;color:var(--text-primary)}
+.chart-exhibit-scatter .chart-inline-key small{display:block;line-height:1.8}
+.chart-note{font-size:12px;line-height:1.8;color:var(--text-secondary);margin:15px 0 12px!important}
+.chart-exhibit-footer{display:flex;justify-content:space-between;align-items:start;gap:14px;border-top:1px solid var(--border);position:relative}
+.chart-data{min-width:0;flex:1;font-size:12px;color:var(--text-secondary)}
+.chart-data>summary{min-height:44px;display:list-item;padding:11px 0;color:var(--brand-600);font-size:12px}
+.chart-data[open]{width:100%}
+.chart-data[open]~.chart-export{position:absolute;right:0;top:0}
+.chart-data[open]>summary{padding-right:105px}
+.chart-workbench .chart-export{flex:none;border:0;background:transparent;color:var(--brand-600);min-height:44px;padding:10px 0 10px 12px;cursor:pointer;font-size:12px}
+.chart-export:hover,.chart-data>summary:hover{text-decoration:underline;text-underline-offset:4px}
+.chart-export:disabled{cursor:wait;opacity:.6}
+.chart-table-wrap{max-height:360px;overflow:auto;max-width:100%;margin:5px 0 14px;overscroll-behavior:contain}
+.chart-table-wrap table{border-collapse:collapse;width:100%;font-size:12px;line-height:1.6;text-align:left}
+.chart-table-wrap caption{text-align:left;padding:0 0 12px;line-height:1.8;overflow-wrap:anywhere}
+.chart-table-wrap th,.chart-table-wrap td{padding:10px 8px;border-bottom:1px solid var(--border);font-weight:400;overflow-wrap:anywhere}
+.chart-table-wrap thead th{background:var(--surface-subtle);color:var(--text-primary);font-weight:600;position:sticky;top:0}
+.chart-table-wrap th:first-child,.chart-table-wrap td:first-child{padding-left:2px}
+.chart-table-wrap td{text-align:right;font-variant-numeric:tabular-nums}
+.chart-raw-data{margin:0 0 14px}
+.chart-raw-data p{font-size:12px;line-height:1.9;overflow-wrap:anywhere;max-height:180px;overflow:auto}
+.chart-source{font-size:12px;line-height:1.7;color:var(--text-secondary);margin-top:5px!important}
+.chart-export-status{font-size:12px;line-height:1.8;color:var(--brand-600);min-height:24px;margin-top:16px!important}
+.chart-workbench button:focus-visible,.chart-workbench select:focus-visible,.chart-workbench summary:focus-visible,.chart-table-wrap:focus-visible{outline:2px solid var(--focus-ring);outline-offset:3px}
+.chart-gallery:has(.chart-exhibit[hidden]) .chart-exhibit{grid-column:span 6}
+.chart-gallery:has(.chart-exhibit[hidden]) .chart-exhibit-trend{grid-column:span 12}
+@media(min-width:1350px){.chart-exhibit-emotion .chart-inline-key{grid-template-columns:1fr}}
+@media(max-width:1250px){.chart-toolbar{align-items:start;flex-direction:column;gap:8px}.chart-view-controls{align-self:flex-end}.chart-exhibit{padding:20px}.chart-exhibit-trend{grid-column:span 7}.chart-exhibit-emotion{grid-column:span 5}.chart-gallery{gap:18px}}
+@media(max-width:1050px){.chart-exhibit-trend,.chart-exhibit-emotion{grid-column:span 12}.chart-exhibit-emotion{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}.chart-exhibit-emotion header,.chart-exhibit-emotion .chart-takeaway,.chart-exhibit-emotion .chart-note,.chart-exhibit-emotion .chart-exhibit-footer,.chart-exhibit-emotion .chart-source{grid-column:1/-1}.chart-exhibit-emotion .chart-inline-key{align-content:center}.chart-exhibit-emotion .chart-canvas{height:220px}.chart-exhibit-emotion .chart-takeaway{min-height:0}.chart-exhibit .chart-canvas{height:270px}}
+@media(max-width:760px){.chart-exhibit{grid-column:span 12!important}.chart-exhibit-emotion{display:block}.chart-exhibit-emotion .chart-inline-key{grid-template-columns:1fr 1fr;gap:9px 16px}.chart-exhibit-emotion .chart-inline-key span{grid-template-columns:10px 1fr auto}.chart-exhibit-emotion .chart-inline-key small{grid-column:2/-1;text-align:left}.chart-exhibit-trend .chart-canvas{height:290px}.chart-exhibit-emotion .chart-canvas{height:220px}.chart-context{flex-direction:column;gap:3px}.chart-section-note{display:none}.chart-takeaway{min-height:0}.chart-view-controls{align-self:stretch;justify-content:space-between}}
+@media(max-width:420px){.chart-exhibit{padding:19px 14px}.chart-gallery{gap:18px}.xy-design .chart-exhibit h3{font-size:17px}.chart-use-filters{gap:0;width:100%;justify-content:space-between}.chart-use-filters button{padding:9px 7px;font-size:12px}.chart-view-controls{gap:8px}.chart-view-controls label{gap:6px}.chart-view-controls select{padding-left:8px;padding-right:20px;font-size:12px}.chart-exhibit-trend .chart-takeaway{font-size:14px}.chart-exhibit-emotion .chart-inline-key{gap:9px 13px}.chart-canvas{height:260px!important}.chart-exhibit-emotion .chart-canvas{height:210px!important}}
+@media(prefers-reduced-motion:reduce){.chart-workbench *,.chart-workbench *::before,.chart-workbench *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

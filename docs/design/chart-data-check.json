@@ -1,0 +1,68 @@
+{
+  "task": "C3 chart data invariants",
+  "checkedAt": "2026-10-21T00:21:08.780Z",
+  "cases": [
+    {
+      "sample": "A",
+      "range": 7,
+      "supportRecords": 121,
+      "emotionRecords": 199,
+      "plannedAppointments": 90,
+      "heatmapCells": 28,
+      "resourcePoints": 8,
+      "passed": true
+    },
+    {
+      "sample": "A",
+      "range": 14,
+      "supportRecords": 233,
+      "emotionRecords": 398,
+      "plannedAppointments": 177,
+      "heatmapCells": 28,
+      "resourcePoints": 8,
+      "passed": true
+    },
+    {
+      "sample": "A",
+      "range": 30,
+      "supportRecords": 495,
+      "emotionRecords": 853,
+      "plannedAppointments": 373,
+      "heatmapCells": 28,
+      "resourcePoints": 8,
+      "passed": true
+    },
+    {
+      "sample": "B",
+      "range": 7,
+      "supportRecords": 120,
+      "emotionRecords": 215,
+      "plannedAppointments": 86,
+      "heatmapCells": 28,
+      "resourcePoints": 8,
+      "passed": true
+    },
+    {
+      "sample": "B",
+      "range": 14,
+      "supportRecords": 248,
+      "emotionRecords": 430,
+      "plannedAppointments": 174,
+      "heatmapCells": 28,
+      "resourcePoints": 8,
+      "passed": true
+    },
+    {
+      "sample": "B",
+      "range": 30,
+      "supportRecords": 527,
+      "emotionRecords": 924,
+      "plannedAppointments": 375,
+      "heatmapCells": 28,
+      "resourcePoints": 8,
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "status": "passed"
+}

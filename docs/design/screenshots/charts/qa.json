@@ -1,0 +1,260 @@
+{
+  "task": "C3 chart browser QA",
+  "checkedAt": "2026-10-21T00:23:23.152Z",
+  "baseCommit": "612f8cf",
+  "tests": [
+    {
+      "name": "eight SVG charts and reduced motion",
+      "passed": true,
+      "charts": [
+        {
+          "id": "trend",
+          "renderer": "svg",
+          "types": [
+            "line"
+          ]
+        },
+        {
+          "id": "emotion",
+          "renderer": "svg",
+          "types": [
+            "pie"
+          ]
+        },
+        {
+          "id": "risk",
+          "renderer": "svg",
+          "types": [
+            "bar"
+          ]
+        },
+        {
+          "id": "appointment",
+          "renderer": "svg",
+          "types": [
+            "bar",
+            "bar"
+          ]
+        },
+        {
+          "id": "channel",
+          "renderer": "svg",
+          "types": [
+            "bar",
+            "bar",
+            "bar"
+          ]
+        },
+        {
+          "id": "heatmap",
+          "renderer": "svg",
+          "types": [
+            "heatmap"
+          ]
+        },
+        {
+          "id": "histogram",
+          "renderer": "svg",
+          "types": [
+            "bar"
+          ]
+        },
+        {
+          "id": "scatter",
+          "renderer": "svg",
+          "types": [
+            "scatter"
+          ]
+        }
+      ],
+      "trendZeroBaseline": true
+    },
+    {
+      "name": "keyboard filters and URL reload/back/forward",
+      "passed": true,
+      "counts": {
+        "trend": 1,
+        "compare": 3,
+        "composition": 2,
+        "distribution": 1,
+        "relationship": 1,
+        "all": 8
+      },
+      "preservedOtherQueryAndHash": true
+    },
+    {
+      "name": "all eight plots match current deterministic data; keyboard data tables",
+      "passed": true,
+      "sample": "B",
+      "range": 7,
+      "tableRows": {
+        "trend": 7,
+        "emotion": 6,
+        "risk": 3,
+        "appointment": 7,
+        "channel": 6,
+        "heatmap": 28,
+        "histogram": 8,
+        "scatter": 8
+      }
+    },
+    {
+      "name": "eight actual SVG downloads",
+      "passed": true,
+      "currentStateInFilenameAndContent": true,
+      "count": 8
+    },
+    {
+      "name": "invalid query safe defaults",
+      "passed": true,
+      "range": 14,
+      "sample": "A",
+      "use": "all"
+    },
+    {
+      "name": "390 and 320 pixel mobile layouts",
+      "passed": true,
+      "noHorizontalOverflow": true,
+      "allEightCardsWithinViewport": true,
+      "dataTableVisible": true
+    },
+    {
+      "name": "chart lifecycle event handlers and reload",
+      "passed": true,
+      "persistedEventsRetain": 8,
+      "nonPersistedRelease": 0,
+      "noResurrectionAfterDispose": true,
+      "reloadRestores": 8
+    },
+    {
+      "name": "existing asset detail and real download",
+      "passed": true,
+      "asset": "avatar-teacher-01-48-webp",
+      "manifestHashMatches": true
+    }
+  ],
+  "errors": [],
+  "warnings": [],
+  "blockedRequests": [],
+  "downloads": [
+    {
+      "id": "trend",
+      "filename": "chart-trend-B-7d.svg",
+      "bytes": 7920,
+      "sha256": "077d839e935dc57f7b2a4ab4c9db52a07b10acb3ac25dc89d4757755ee88bc65",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "emotion",
+      "filename": "chart-emotion-B-7d.svg",
+      "bytes": 5211,
+      "sha256": "d3e8cef4bf063dfa602ddc0d61a8bcf9ecfac8fd16c3b0116923fad7ab513da7",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "risk",
+      "filename": "chart-risk-B-7d.svg",
+      "bytes": 5288,
+      "sha256": "95fdcd7a6ea9895c18065bb63455272b68f73725f96c7cdfd88440a45d8a384f",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "appointment",
+      "filename": "chart-appointment-B-7d.svg",
+      "bytes": 12036,
+      "sha256": "be9b18bfd240af27b238946adaf0ffc6cea50899f1b3feea719e061835ec86b2",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "channel",
+      "filename": "chart-channel-B-7d.svg",
+      "bytes": 7452,
+      "sha256": "af3419dcc6dffc754ddddd0aefaf3a380bb321107931e46015d35238c27e8cea",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "heatmap",
+      "filename": "chart-heatmap-B-7d.svg",
+      "bytes": 13461,
+      "sha256": "70e9cc4a3804a8cbcc7f3e550192f7c98c1a9cfe9ecb582157e1f958ab794241",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "histogram",
+      "filename": "chart-histogram-B-7d.svg",
+      "bytes": 7899,
+      "sha256": "179b366aae4422c9dd7523e46b64fc25300eae35556fb471baf393047500f51d",
+      "dimensions": [
+        920,
+        550
+      ]
+    },
+    {
+      "id": "scatter",
+      "filename": "chart-scatter-B-7d.svg",
+      "bytes": 9326,
+      "sha256": "82541dcfb47634cba5b9118e7ad11911b7c9cda5ee3671db35258325de3219f0",
+      "dimensions": [
+        920,
+        550
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "desktop.webp",
+      "bytes": 79062,
+      "sha256": "9d3834fa731d8b205068a671cbc7d83f683955d1691e9c0b6b5e57787c27f986"
+    },
+    {
+      "file": "gallery.webp",
+      "bytes": 203586,
+      "sha256": "fcc45fc64de2cf2449dfb1baa7b2871637e45557936cebbe007c7ca726dc8034"
+    },
+    {
+      "file": "export-emotion.webp",
+      "bytes": 31304,
+      "sha256": "08065ed4d16b96a49ee8ca6cf24212ab141d694445920fca4054dd31aa7fa72e"
+    },
+    {
+      "file": "mobile-trend.webp",
+      "bytes": 30564,
+      "sha256": "ee3e60f0717e3bf134815ccc9af25632105bb6f037879b9f99cc8bd7d1fbb54e"
+    },
+    {
+      "file": "mobile-heatmap.webp",
+      "bytes": 30320,
+      "sha256": "f141c6ab2aa713d14ac3c209bf823a5c60c7251d0749a0b9dd6dc59652d7fc1b"
+    },
+    {
+      "file": "mobile-scatter.webp",
+      "bytes": 35284,
+      "sha256": "b19c7b0124308b4b6b312a5de48fcf5eac6c898448d19d77c7c3c7be3991849d"
+    },
+    {
+      "file": "mobile-data.webp",
+      "bytes": 32428,
+      "sha256": "008e48d30ca645a57baf2f7aa926463205837d95bb2be2add3f4bf47984aed7d"
+    }
+  ],
+  "status": "passed",
+  "browser": "155.0.4283.62"
+}

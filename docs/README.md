@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 0.3 ｜ status: 评审 ｜ updated: 2026-10-21
+> owner: A ｜ version: 0.4 ｜ status: 评审 ｜ updated: 2026-10-21
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -19,7 +19,7 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001 名称；ADR-002 部署目标；ADR-003 素材库与业务迁移边界 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001至005：名称、部署、W1边界、品牌优化与八图展台 |
 | [进度看板](team/进度看板.md) | 定稿 | W0/W1任务、阻塞与W2入口 |
 | [门禁记录](team/门禁记录.md) | 定稿 | G0技术项、G1素材库技术项通过，真人签字待补 |
 
@@ -31,6 +31,8 @@
 | [素材库规范](design/素材库规范.md) | 定稿 | token、主题、命名、来源、生成及使用规则 |
 | [品牌升级方案](design/品牌升级方案.md) | 定稿 | 相伴/拥光/知音、人文色彩、源文件与可复建规则 |
 | [工作台升级方案](design/展示页升级方案.md) | 定稿 | 搜索筛选、详情规格、复制下载和执行验证 |
+| [图表升级方案](design/图表升级方案.md) | 定稿 | 8种图表、用途筛选、合成样例、数据与SVG导出 |
+| [图表验收记录](design/图表验收记录.md) | 定稿 | 当前图表UI扩充的命令、浏览器与独立复核 |
 | [资源与Skill调研](design/资源与Skill调研.md) | 调研完成 | 官方来源、许可、固定版本与实际采用记录 |
 | [素材来源与许可](../src/assets/LICENSES.md) | 定稿 | 124项approved与7项待核实遗留素材；自制/MIT/CC0分别记录 |
 | [设计优化验收](design/优化验收记录.md) | 定稿 | 当前工作台的实际下载、浏览器、Figma与独立复核 |
@@ -39,7 +41,7 @@
 | [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
 | [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
 
-其他入口：[素材工作台](design/library-preview.html)、[素材清单](../src/assets/manifest.json)、[当前QA](design/screenshots/refinement/qa.json)、[Figma交接](design/figma-refinement.json)、[初始14页基线](design/screenshots/before/baseline.json)、[历史展示页QA](design/screenshots/library-preview-qa.json)。展示页通过Vite开发服务器访问。
+其他入口：[素材工作台](design/library-preview.html)、[素材清单](../src/assets/manifest.json)、[当前图表QA](design/screenshots/charts/qa.json)、[品牌优化QA](design/screenshots/refinement/qa.json)、[Figma交接](design/figma-refinement.json)、[初始14页基线](design/screenshots/before/baseline.json)、[历史展示页QA](design/screenshots/library-preview-qa.json)。展示页通过Vite开发服务器访问。
 
 ## 基线与测试
 
@@ -76,4 +78,6 @@
 | [后端隔离基线](../scripts/run-backend-baseline.py) | 从仓库根目录运行 `.\.venv\Scripts\python.exe scripts/run-backend-baseline.py`；需要先安装 pytest，使用临时数据库并阻止外部网络。 |
 | [素材构建](../scripts/build-design-assets.mjs) | `npm run assets:build`，使用已有sharp；模块定位参数见素材库规范。 |
 | [素材校验](../scripts/check-assets.mjs) | `npm run assets:check` 或添加 `-- --json`，仅使用Node内置模块。 |
+| [图表数据检查](../scripts/check-chart-data.mjs) | `node scripts/check-chart-data.mjs`，验证6组固定合成数据的分母、分箱与跨图总量。 |
+| [图表浏览器检查](../scripts/check-chart-gallery.mjs) | `node scripts/check-chart-gallery.mjs`，验证8图、URL、表格、实际SVG下载与手机布局；模块和输出参数见图表验收记录。 |
 | [合成界面基线](../scripts/capture-ui-baseline.mjs) | `node scripts/capture-ui-baseline.mjs`，隔离后端/外部请求；参数见截图说明。 |

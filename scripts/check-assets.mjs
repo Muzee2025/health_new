@@ -198,7 +198,7 @@ if (manifest) {
 
 // Check local executable resources in the new library and PPT kit; old application pages are W2 debt.
 const scanRoots = ['src/styles', 'src/assets', 'docs/design/ppt-kit'].map((p) => path.join(root, p));
-const previewFiles = walk(path.join(root, 'docs/design')).filter((f) => /^library-preview\.(?:html|css|js|mjs)$/.test(path.basename(f)));
+const previewFiles = walk(path.join(root, 'docs/design')).filter((f) => /^(?:library-preview|chart-[a-z0-9-]+)\.(?:html|css|js|mjs)$/.test(path.basename(f)));
 const remoteRe = /(?:https?:)?\/\/[^\s"')<>]+/gi;
 const isStandardXmlns = (content, url, index) => {
   const prefix = content.slice(Math.max(0, index - 160), index);

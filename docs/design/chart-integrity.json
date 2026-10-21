@@ -1,0 +1,16 @@
+{
+  "task": "W1 chart gallery",
+  "checkedAt": "2026-10-21T00:25:03.057336+00:00",
+  "baseCommit": "612f8cf6be2217ec41a52f777d4df6a5c8cf6ff8",
+  "branch": "codex/w1-chart-gallery",
+  "protectedExistingFiles": 321,
+  "protectedModified": [],
+  "businessSourcesUnchanged": true,
+  "packageAndLockUnchanged": true,
+  "historicalEvidenceUnchanged": true,
+  "markdownChecked": 35,
+  "newMarkdownChecked": 2,
+  "brokenLinks": [],
+  "chartBrowserScreenshots": 7,
+  "errors": []
+}

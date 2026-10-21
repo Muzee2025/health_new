@@ -1,6 +1,6 @@
 # 截图与浏览器验证
 
-> owner: A / E04 ｜ version: 1.1 ｜ status: 定稿 ｜ updated: 2026-10-21
+> owner: A / E04 ｜ version: 1.2 ｜ status: 定稿 ｜ updated: 2026-10-21
 
 ## 当前前端基线
 
@@ -43,6 +43,22 @@
 
 ## 设计优化后的工作台
 
-当前验证为[refinement/qa.json](refinement/qa.json)：桌面1440×1000、手机390×844，三候选九版本、搜索筛选、真实两尺寸下载哈希、复制成功/失败、Esc焦点与三图更新均通过；控制台error/warning、坏图、外部/后端请求均0。
+品牌优化验证为[refinement/qa.json](refinement/qa.json)：桌面1440×1000、手机390×844，三候选九版本、搜索筛选、真实两尺寸下载哈希、复制成功/失败、Esc焦点与当时三图更新均通过；控制台error/warning、坏图、外部/后端请求均0。三图部分现为历史记录，当前八图证据见下方。
 
 图像入口：[桌面](refinement/desktop.webp)、[品牌比较](refinement/brand-comparison.webp)、[素材浏览](refinement/asset-browser.webp)、[手机](refinement/mobile.webp)、[手机详情](refinement/mobile-detail.webp)、[手机情绪图](refinement/mobile-emotion.webp)、[Figma原生导出](refinement/figma-brand-board.png)。具体命令与边界见[优化验收](../优化验收记录.md)。
+
+## 当前八图展台
+
+[charts/qa.json](charts/qa.json) 记录1440×1000桌面以及390/320×844窄屏检查，八组浏览器验证全部通过：八个SVG绘图、用途键盘筛选和URL刷新/前进/后退、当前图形及原生表格数值一致、八份920×550真实SVG下载、非法参数回退、窄屏布局、生命周期事件与重新加载、旧素材详情与下载哈希回归。error、warning、坏图、外部/后端请求均0。
+
+| 图像 | 内容 |
+| --- | --- |
+| [桌面](charts/desktop.webp) | 趋势与情绪的主次布局，完整末端标签 |
+| [八图全览](charts/gallery.webp) | 全部八种类型与数据口径 |
+| [SVG导出预览](charts/export-emotion.webp) | 实际下载文件的原生浏览器渲染，包含标题、单位与合成标识 |
+| [手机趋势](charts/mobile-trend.webp) | 390px单列与数值概览 |
+| [手机热力](charts/mobile-heatmap.webp) | 28格直接数值，无需悬停 |
+| [手机散点](charts/mobile-scatter.webp) | 编号与资源名称/浏览/收藏索引 |
+| [手机数据表](charts/mobile-data.webp) | 展开的原生表格与上下文 |
+
+复现使用 `node scripts/check-chart-gallery.mjs`，环境参数与范围见[图表验收记录](../图表验收记录.md)。默认输出到 `tmp/chart-gallery-qa/`，显式设置 `CHART_QA_OUTPUT` 才会写正式证据目录。脚本在全新隔离上下文验证固定合成数据，无需后端或账号。截图只做PNG到WebP编码转换，没有重绘或修改画面内容。

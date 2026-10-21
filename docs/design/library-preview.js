@@ -1,5 +1,5 @@
-import * as echarts from 'echarts';
-import { registerChartTheme, readDesignToken, EMOTION_FIELDS } from '../../src/styles/echarts-theme.js';
+import { readDesignToken, EMOTION_FIELDS } from '../../src/styles/echarts-theme.js';
+import { initChartLibrary } from './chart-library.js';
 import manifest from '../../src/assets/manifest.json';
 
 const $ = selector => document.querySelector(selector);
@@ -257,28 +257,5 @@ const observer = new IntersectionObserver(entries => {
 }, { rootMargin:'-8% 0px -55% 0px', threshold:[0,.1,.3] });
 document.querySelectorAll('main > section[id]').forEach(section => observer.observe(section));
 
-const theme = registerChartTheme(echarts);
-const charts = Object.fromEntries(['trend','emotion','risk'].map(id => [id,echarts.init($(`#${id}`),'xinyu')]));
-const motion = matchMedia('(prefers-reduced-motion: reduce)');
-let datasetB = false;
-function emotionLayout() {
-  return { radius:['27%','46%'], center:['50%','48%'], label:{ fontSize:12, formatter:'{b}\n{c}%', alignTo:'edge', edgeDistance:4, distanceToLabelLine:2 }, labelLine:{ length:7,length2:5 } };
-}
-function renderCharts() {
-  const trend = datasetB ? [8,11,9,14,13,16,15] : [5,8,7,12,10,14,12];
-  const emotion = datasetB ? [20,10,35,8,20,7] : [26,12,32,6,18,6];
-  const risk = datasetB ? [72,22,6] : [80,16,4];
-  const common = { aria:{enabled:true}, animation:!motion.matches, backgroundColor:'transparent' };
-  charts.trend.setOption({ ...common, tooltip:{trigger:'axis'}, grid:{left:32,right:12,top:30,bottom:30}, xAxis:{type:'category',data:['一','二','三','四','五','六','日']},yAxis:{type:'value',minInterval:1},series:[{name:'支持记录（合成）',type:'line',data:trend,itemStyle:{color:theme.color[0]}}] });
-  charts.emotion.setOption({ ...common, tooltip:{trigger:'item'},series:[{name:'情绪（合成）',type:'pie',...emotionLayout(),data:EMOTION_FIELDS.map((key,index) => ({name:emotionNames[key],value:emotion[index],itemStyle:{color:theme.xy.emotions[key],borderColor:readDesignToken('text-secondary'),borderWidth:1}}))}] });
-  charts.risk.setOption({ ...common,tooltip:{trigger:'axis'},grid:{left:32,right:12,top:30,bottom:30},xAxis:{type:'category',data:['低','中','高']},yAxis:{type:'value',minInterval:1},series:[{name:'风险（合成）',type:'bar',barMaxWidth:35,label:{show:true,position:'top',color:readDesignToken('text-primary'),formatter:'{c}%'},data:['low','mid','high'].map((key,index) => ({value:risk[index],itemStyle:{color:theme.xy.risks[key],borderColor:readDesignToken('text-secondary'),borderWidth:1}}))}] });
-  $('#dataset-status').textContent = `当前为合成示例 ${datasetB ? 'B' : 'A'}。支持记录：${trend.join('、')}；六类情绪：${EMOTION_FIELDS.map((key,index) => `${emotionNames[key]} (${key}) ${emotion[index]}%`).join('、')}；低/中/高风险：${risk.join('/')}%。`;
-  Object.entries(charts).forEach(([key,chart]) => $(`#${key}`).setAttribute('aria-label',chart.getOption().aria?.[0]?.description || `合成示例${datasetB ? 'B':'A'}${{trend:'支持记录趋势',emotion:'六类情绪分布',risk:'低中高风险分布'}[key]}，详细数值见下方图表数据`));
-  $('#dataset-toggle').textContent = `切换到示例 ${datasetB ? 'A':'B'}`;
-  $('#dataset-toggle').setAttribute('aria-pressed',String(datasetB));
-}
-$('#dataset-toggle').addEventListener('click', () => { datasetB = !datasetB; renderCharts(); });
-motion.addEventListener('change',renderCharts);
-new ResizeObserver(() => { Object.values(charts).forEach(chart => chart.resize()); charts.emotion.setOption({series:[emotionLayout()]}); }).observe($('.chart-row'));
-window.addEventListener('pagehide', () => { Object.values(charts).forEach(chart => chart.dispose()); observer.disconnect(); }, {once:true});
-renderLibrary(); renderBrand(); renderPalette(); renderCharts();
+window.addEventListener('pagehide', event => { if (!event.persisted) observer.disconnect(); });
+renderLibrary(); renderBrand(); renderPalette(); initChartLibrary();
