@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 0.9 ｜ status: 评审 ｜ updated: 2026-10-22
+> owner: A ｜ version: 1.0 ｜ status: 评审 ｜ updated: 2026-10-22
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -19,7 +19,7 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001至012：W0/W1历史、W2权限/依赖/显式数据操作与素材唯一来源 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001至013：W0/W1历史、W2权限/依赖/素材与本机数据库认证服务 |
 | [进度看板](team/进度看板.md) | 定稿 | W0/W1任务、阻塞与W2入口 |
 | [门禁记录](team/门禁记录.md) | 定稿 | G0/G1技术项和W2本轮身份/权限/页面技术项通过；整体验收未放行 |
 
@@ -59,10 +59,14 @@
 | [素材引用独立复核](test/素材引用独立复核.md) | 独立复核通过 | Luna独立来源门禁及7负例、131素材校验和三份浏览器QA交叉核对 |
 | [W2业务页面改造](design/W2业务页面改造.md) | 评审 | 既有品牌、科研配色、真实数据空态、XSS与跨账号缓存修复 |
 | [W2开发与隔离验证](ops/W2开发与隔离验证.md) | 评审 | 新运行依赖、显式配置/初始化、隔离命令与尚未执行的发布工作 |
+| [本地数据库与登录](ops/本地数据库部署与登录.md) | 本机技术通过 | SQLite私有副本/一致性备份、独立18080、启动与认证验证；历史孤儿记录保留 |
+| [本地数据库独立复核](test/本地数据库与登录独立复核.md) | 独立复核 | Luna16项隔离测试与Lead部署/浏览器证据交叉核对，未使用真实账号 |
 
 本轮机器证据：[W2验证摘要](test/w2-verification.json)、[客户端隔离](test/w2-client-qa.json)、[36业务页面状态](design/screenshots/w2-business/qa.json)、[升级后八图库回归](design/screenshots/w2-gallery/qa.json)。全部截图和API样例均为合成数据。
 
 素材统一来源追加证据：[机器摘要](test/library-source-verification.json)、[36开发场景](design/screenshots/library-source/dev/qa.json)、[10打包场景](design/screenshots/library-source/production/qa.json)、[图库13项](design/screenshots/library-source/gallery/qa.json)。历史截图保持原样。
+
+本机登录追加证据：[数据库与认证机器摘要](test/local-db-login-verification.json)，包含60组合成响应与两视口真实临时SQLite认证结果；没有真实用户密码或截图。
 
 ## 历史归档
 
@@ -90,6 +94,8 @@
 | [仓库静态检查](../scripts/check-repo.py) | 从仓库根目录运行 `py -3.12 scripts/check-repo.py`，检查跟踪文件、路径和仓库卫生；不会打印文件内容或密钥。 |
 | [环境诊断](../scripts/check-env.ps1) | 从仓库根目录运行 `powershell -ExecutionPolicy Bypass -File scripts/check-env.ps1`；报告工具版本、依赖目录及环境变量是否设置，不输出变量值。 |
 | [后端隔离基线](../scripts/run-backend-baseline.py) | 从仓库根目录运行 `.\.venv\Scripts\python.exe scripts/run-backend-baseline.py`；需要先安装 pytest，使用临时数据库并阻止外部网络。 |
+| [本地数据库准备](../backend/scripts/prepare-local-database.py) | 只读源备份到新私有目录或新空库；拒绝覆盖及缺列旧schema，命令见本机部署说明。 |
+| [本机后端启动](../scripts/start-local-backend.ps1) | 独立loopback18080隐藏进程，拒绝占用端口；读取Git忽略的current.json或显式部署目录。 |
 | [素材构建](../scripts/build-design-assets.mjs) | `npm run assets:build`，使用已有sharp；模块定位参数见素材库规范。 |
 | [素材校验](../scripts/check-assets.mjs) | `npm run assets:check` 或添加 `-- --json`，仅使用Node内置模块。 |
 | [视觉来源门禁](../scripts/check-design-sources.mjs) | `npm run assets:source-check`；已集成素材校验。`npm run assets:source-test`运行7项隔离正/负例，不读取真实数据库。 |

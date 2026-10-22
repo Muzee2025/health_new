@@ -14,7 +14,7 @@ validate_security_configuration()
 
 from app.database import engine
 from app import models
-from app.routers import auth, student, teacher, advanced_chat, advanced_teacher, report_v1, assistant_v1, llm_gateway, websocket
+from app.routers import auth, student, teacher, advanced_chat, advanced_teacher, report_v1, assistant_v1, llm_gateway, websocket, health
 from app.services.multi_model_orchestrator import orchestrator
 
 # 创建数据库表
@@ -71,6 +71,7 @@ app.include_router(report_v1.router)
 app.include_router(assistant_v1.router)
 app.include_router(llm_gateway.router)
 app.include_router(websocket.router, prefix="/api", tags=["websocket"])
+app.include_router(health.router)
 
 
 @app.on_event("startup")

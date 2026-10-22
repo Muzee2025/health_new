@@ -34,6 +34,7 @@ uploads/
 backend/uploads/
 backend/temp/
 backend/diagnostics_output/
+backend/runtime/
 tmp/
 *.log
 

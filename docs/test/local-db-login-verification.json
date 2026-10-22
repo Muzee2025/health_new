@@ -1,0 +1,852 @@
+{
+  "schemaVersion": 1,
+  "owner": "Lead",
+  "task": "W2-LOCAL-DB-AUTH",
+  "checkedAt": "2026-10-22T07:48:16.036Z",
+  "baseCommit": "e8a7cc9",
+  "branch": "codex/local-db-login",
+  "status": "local-database-and-auth-ready-with-preexisting-data-issue",
+  "cause": {
+    "oldProxyPort": 8000,
+    "oldPortWasDifferentProject": true,
+    "wrongServiceLoginAndRegisterAbsent": true,
+    "newBackend": "http://127.0.0.1:18080",
+    "frontend": "http://127.0.0.1:5173",
+    "serviceIdentity": "health-new",
+    "schemaReady": true,
+    "oldProjectStopped": false
+  },
+  "deployment": {
+    "database": "sqlite",
+    "nativeWindowsLoopbackService": true,
+    "operatingSystemServiceInstalled": false,
+    "sourceAccess": "read-only consistent backup API",
+    "schemaVersion": 1,
+    "status": "prepared",
+    "expectedTables": 22,
+    "copiedExistingTables": 21,
+    "newTables": [
+      "teacher_student_assignments"
+    ],
+    "existingTableDataPreserved": true,
+    "sourceChanged": false,
+    "assignmentRowsPreserved": 0,
+    "createdAssignments": 0,
+    "settingsFile": ".env",
+    "backupCreated": true,
+    "settingsContentsIncluded": false,
+    "providerCredentialsCopied": false,
+    "privateDirectoryAcl": "current Windows user and SYSTEM",
+    "selectionFile": "backend/runtime/current.json (ignored)"
+  },
+  "databaseAudit": {
+    "currentModelTables": 22,
+    "schemaDifferences": [],
+    "quickCheckPassed": true,
+    "foreignKeyIntegrityPassed": false,
+    "originalFilesPreserved": true,
+    "originalFilesChecked": 8,
+    "nonexistentLoginStatus": 401
+  },
+  "legacyDataIssue": {
+    "violationsByTable": {
+      "backup": {
+        "psychological_reports": 1
+      },
+      "active": {
+        "psychological_reports": 1
+      }
+    },
+    "preexistingOnly": true
+  },
+  "preservation": {
+    "originalFilesChecked": 8,
+    "originalFilesUnchanged": true,
+    "protectedSourcePaths": [
+      "src/assets",
+      "docs/design",
+      "package.json",
+      "package-lock.json"
+    ],
+    "sourceDiffEmpty": true,
+    "existingRowsPreservedBeforeActivation": true,
+    "newAssignments": 0,
+    "oldEnvOverwritten": false,
+    "privateRuntimeTracked": false
+  },
+  "checks": {
+    "independentToolsAndHealth": {
+      "passed": 16,
+      "warnings": 2,
+      "exitCode": 0,
+      "seconds": 7.22
+    },
+    "completeBackend": {
+      "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py",
+      "passed": 86,
+      "warnings": 24,
+      "seconds": 42.66,
+      "exitCode": 0
+    },
+    "frontendUnit": {
+      "files": 6,
+      "passed": 17,
+      "exitCode": 0
+    },
+    "assets": {
+      "total": 131,
+      "approved": 124,
+      "legacyUnverified": 7,
+      "exitCode": 0
+    },
+    "build": {
+      "modules": 2441,
+      "seconds": 13.97,
+      "exitCode": 0,
+      "largeChunkWarning": true
+    },
+    "proxyConstraints": {
+      "passed": 5
+    },
+    "powershellSyntax": true,
+    "occupiedPortRefusedWithoutStoppingService": true
+  },
+  "frontendMockRegression": {
+    "status": "passed",
+    "base": "http://127.0.0.1:5173",
+    "viewports": [
+      1440,
+      390
+    ],
+    "syntheticOnly": true,
+    "results": [
+      {
+        "case": "login-empty",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-empty",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-long-name",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-weak-password",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-byte-limit",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-401",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-422",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-429",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-404",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-503",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-400",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-422",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-429",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-404",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-503",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-network",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-network",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-malformed",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-malformed",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-teacher-rejected",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-student-redirect",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-role-redirect-blocked",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-external-redirect-blocked",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-backslash-redirect-blocked",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-encoded-redirect-blocked",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-teacher",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-auto-login",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-repeat-submit",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-repeat-submit",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-leave-pending",
+        "width": 1440,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-empty",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-empty",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-long-name",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-weak-password",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-byte-limit",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 0,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-401",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-422",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-429",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-404",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-503",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-400",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-422",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-429",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-404",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-503",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-network",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-network",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-malformed",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-malformed",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-teacher-rejected",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-student-redirect",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-role-redirect-blocked",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-external-redirect-blocked",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-backslash-redirect-blocked",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-encoded-redirect-blocked",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-teacher",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-auto-login",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-repeat-submit",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "register-repeat-submit",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      },
+      {
+        "case": "login-leave-pending",
+        "width": 390,
+        "status": "passed",
+        "authRequests": 1,
+        "pageErrors": [],
+        "unexpectedWarnings": [],
+        "overflow": false
+      }
+    ]
+  },
+  "actualSqliteBrowserRegression": {
+    "status": "passed",
+    "backend": "http://127.0.0.1:18081",
+    "frontend": "http://127.0.0.1:5175",
+    "database": "new disposable SQLite, no existing users",
+    "apiResponsesMocked": false,
+    "providerCalls": false,
+    "browser": "Playwright/installed Edge; Browser plugin not available",
+    "records": [
+      {
+        "width": 1440,
+        "status": "passed",
+        "registrationDatabaseWrite": true,
+        "automaticStudentLogin": true,
+        "meRead": true,
+        "logoutClearsSession": true,
+        "invalidPassword401": true,
+        "reloginAndReload": true,
+        "pageErrors": [],
+        "overflow": false,
+        "api": [
+          {
+            "path": "/api/register",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/red_energy",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/treehole_words",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/latest_scores",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/appointment_stats",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/emotion_trend",
+            "status": 200
+          },
+          {
+            "path": "/api/login",
+            "status": 401
+          },
+          {
+            "path": "/api/login",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/red_energy",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/latest_scores",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/treehole_words",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/appointment_stats",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/emotion_trend",
+            "status": 200
+          }
+        ],
+        "screenshots": [
+          "tmp/auth-sqlite-e2e/login-error-1440.png",
+          "tmp/auth-sqlite-e2e/dashboard-1440.png"
+        ]
+      },
+      {
+        "width": 390,
+        "status": "passed",
+        "registrationDatabaseWrite": true,
+        "automaticStudentLogin": true,
+        "meRead": true,
+        "logoutClearsSession": true,
+        "invalidPassword401": true,
+        "reloginAndReload": true,
+        "pageErrors": [],
+        "overflow": false,
+        "api": [
+          {
+            "path": "/api/register",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/red_energy",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/treehole_words",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/latest_scores",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/appointment_stats",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/emotion_trend",
+            "status": 200
+          },
+          {
+            "path": "/api/login",
+            "status": 401
+          },
+          {
+            "path": "/api/login",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/latest_scores",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/red_energy",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/latest_scores",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/treehole_words",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/appointment_stats",
+            "status": 200
+          },
+          {
+            "path": "/api/student/dashboard/emotion_trend",
+            "status": 200
+          }
+        ],
+        "screenshots": [
+          "tmp/auth-sqlite-e2e/login-error-390.png",
+          "tmp/auth-sqlite-e2e/dashboard-390.png"
+        ]
+      }
+    ]
+  },
+  "review": {
+    "record": "docs/test/本地数据库与登录独立复核.md",
+    "reviewer": "Luna",
+    "independentOwnTests": true,
+    "actualServiceAndBrowserRecordsCrossCheckedOnly": true
+  },
+  "cleanup": {
+    "qaBackend18081Stopped": true,
+    "qaFrontend5175Stopped": true,
+    "actual18080Retained": true,
+    "frontend5173Retained": true
+  },
+  "limitations": [
+    "One existing psychological_reports orphan FK is present in both backup and active copy; no attribution guessed or record deleted",
+    "Readiness checks tables/columns; the separate schema audit also compares definitions and constraints",
+    "Existing user passwords and real teacher/student assignments were not exercised",
+    "Provider configuration, production Docker/TLS, full recovery rehearsal and production readiness remain pending",
+    "Browser screenshots and temporary QA scripts remain local ignored artifacts; no real user screenshot captured"
+  ],
+  "recoveryTag": "local-db-auth-20261022",
+  "hygiene": {
+    "stagedFiles": 21,
+    "trackedFiles": 581,
+    "forbidden": 0,
+    "ignoredTracked": 0,
+    "unexpectedPaths": 0,
+    "missing": 0,
+    "oversized": 0,
+    "markdownFiles": 47,
+    "brokenLocalLinks": 0,
+    "stagedDiffCheckExitCode": 0
+  }
+}

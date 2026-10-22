@@ -6,6 +6,14 @@ import { fileURLToPath, URL } from 'node:url'
 
 
 
+const configuredBackend = new URL(process.env.HEALTH_BACKEND_TARGET || 'http://127.0.0.1:18080')
+if (configuredBackend.protocol !== 'http:' || configuredBackend.hostname !== '127.0.0.1'
+    || !['18080', '18081'].includes(configuredBackend.port) || configuredBackend.username || configuredBackend.password
+    || configuredBackend.pathname !== '/' || configuredBackend.search || configuredBackend.hash) {
+  throw new Error('HEALTH_BACKEND_TARGET must be this project loopback service on port 18080, or isolated QA on 18081')
+}
+const backendTarget = configuredBackend.origin
+
 export default defineConfig({
 
   plugins: [vue()],
@@ -29,12 +37,12 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: backendTarget,
         changeOrigin: true,
         ws: true,
       },
       '/static': {
-        target: 'http://127.0.0.1:8000',
+        target: backendTarget,
         changeOrigin: true,
       },
     },
