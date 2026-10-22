@@ -357,6 +357,7 @@
 </template>
 
 <script setup>
+import { businessAlpha, businessColor, businessPalette } from '../../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import axios from "axios"
 import * as echarts from "echarts"
@@ -616,7 +617,7 @@ const initChart = (container, chart) => {
   if (!container) return null
   if (chart && !chart.isDisposed?.()) return chart
   const renderer = window.matchMedia("print").matches ? "svg" : "canvas"
-  return echarts.init(container, null, { renderer })
+  return echarts.init(container, 'xinyu-business', { renderer })
 }
 
 const renderBar = () => {
@@ -630,7 +631,7 @@ const renderBar = () => {
     tooltip: { trigger: "axis" },
     xAxis: { type: "category", data: x },
     yAxis: { type: "value", max: 100 },
-    series: [{ type: "bar", barWidth: "48%", data: y, itemStyle: { color: "#4F46E5" } }],
+    series: [{ type: "bar", barWidth: "48%", data: y, itemStyle: { color: businessColor('data-primary') } }],
   })
 }
 
@@ -652,7 +653,7 @@ const renderPie = () => {
       type: "pie",
       radius: ["35%", "68%"],
       label: { formatter: "{b}: {d}%" },
-      data: Object.entries(bucket).map(([name, value]) => ({ name, value: Number(value.toFixed(2)) })),
+      data: Object.entries(bucket).map(([name, value]) => ({ name, value: Number(value.toFixed(2)), itemStyle: { color: businessPalette.emotions[name] } })),
     }],
   })
 }
@@ -672,7 +673,7 @@ const renderHeatmap = () => {
     tooltip: { position: "top" },
     xAxis: { type: "category", data: heat.map((x) => x.date.slice(5)) },
     yAxis: { type: "category", data: ["抑郁", "焦虑", "自杀"] },
-    visualMap: { min: 0, max: 100, calculable: true, orient: "horizontal", left: "center", bottom: 0 },
+    visualMap: { min: 0, max: 100, inRange: { color: businessPalette.sequential }, calculable: true, orient: "horizontal", left: "center", bottom: 0 },
     series: [{ type: "heatmap", data: values }],
   })
 }
@@ -721,8 +722,8 @@ const renderNetwork = () => {
       label: { show: true },
       data: nodes,
       links,
-      lineStyle: { color: "#9CA3AF", width: 1.5 },
-      itemStyle: { color: "#4F46E5" },
+      lineStyle: { color: businessColor('text-secondary'), width: 1.5 },
+      itemStyle: { color: businessColor('data-primary') },
     }],
   })
 }
@@ -743,7 +744,7 @@ const renderHistogram = () => {
     tooltip: { trigger: "axis" },
     xAxis: { type: "category", data: ["0-20", "20-40", "40-60", "60-80", "80-100"] },
     yAxis: { type: "value" },
-    series: [{ type: "bar", data: bins, itemStyle: { color: "#6366F1" } }],
+    series: [{ type: "bar", data: bins, itemStyle: { color: businessColor('data-primary') } }],
   })
 }
 
@@ -781,7 +782,7 @@ const safeExportChart = (chart) => {
     return chart.getDataURL({
       type: "png",
       pixelRatio: 2.5,
-      backgroundColor: "#ffffff",
+      backgroundColor: businessColor('surface'),
       excludeComponents: ["toolbox"],
     })
   } catch {
@@ -855,10 +856,10 @@ const renderCollabFlow = () => {
   if (!collabFlowChart) return
   const statusMap = new Map(collabSteps.value.map((x) => [x.model, x.status]))
   const colorByStatus = (s) => {
-    if (s === "done") return "#16a34a"
-    if (s === "running") return "#f59e0b"
-    if (s === "error") return "#dc2626"
-    return "#94a3b8"
+    if (s === "done") return businessColor('data-risk-low')
+    if (s === "running") return businessColor('data-risk-mid')
+    if (s === "error") return businessColor('data-risk-high')
+    return businessColor('text-secondary')
   }
   const nodes = MODEL_CHAIN.value.map((x, i) => ({
     id: x.model,
@@ -867,12 +868,12 @@ const renderCollabFlow = () => {
     y: 120 + (i % 2) * 50,
     symbolSize: 46,
     itemStyle: { color: colorByStatus(statusMap.get(x.model)) },
-    label: { show: true, fontSize: 11, formatter: x.model.replace("-2026-03-15", "") },
+    label: { show: true, fontSize: 12, formatter: x.model.replace("-2026-03-15", "") },
   }))
   const links = MODEL_CHAIN.value.slice(0, -1).map((x, i) => ({
     source: x.model,
     target: MODEL_CHAIN.value[i + 1].model,
-    lineStyle: { color: "#64748b", width: 1.4 },
+    lineStyle: { color: businessColor('text-secondary'), width: 1.4 },
   }))
   collabFlowChart.setOption({
     animationDurationUpdate: 250,
@@ -908,7 +909,7 @@ const renderCollabConfidence = () => {
       labels,
       datasets: [{
         data: values,
-        backgroundColor: "#165DFF",
+        backgroundColor: businessColor('data-primary'),
         borderRadius: 6,
         barThickness: 28,
       }],
@@ -938,7 +939,7 @@ const renderCollabConfidence = () => {
           ticks: {
             maxRotation: 0,
             minRotation: 0,
-            color: "#475569",
+            color: businessColor('text-secondary'),
             font: { size: 11 },
             callback: (_, index) => wrapLabel(labels[index]),
           },
@@ -952,7 +953,7 @@ const renderCollabConfidence = () => {
         const { ctx } = chart
         const meta = chart.getDatasetMeta(0)
         ctx.save()
-        ctx.fillStyle = "#334155"
+        ctx.fillStyle = businessColor('text-primary')
         ctx.font = "12px sans-serif"
         ctx.textAlign = "center"
         meta.data.forEach((bar, index) => {
@@ -980,12 +981,12 @@ const renderModelCompare = () => {
       radar: {
         radius: "62%",
         indicator: rows.map((x) => ({ name: x.model, max: 1 })),
-        axisName: { color: "#475569", fontSize: 11 },
+        axisName: { color: businessColor('text-secondary'), fontSize: 12 },
       },
       series: [{
         type: "radar",
-        areaStyle: { color: "rgba(59,130,246,0.2)" },
-        lineStyle: { color: "#2563eb", width: 2 },
+        areaStyle: { color: businessAlpha('data-primary', 0.2) },
+        lineStyle: { color: businessColor('data-primary'), width: 2 },
         data: [{ value: rows.map((x) => x.confidence || 0), name: "置信度" }],
       }],
     }, true)
@@ -1003,15 +1004,15 @@ const renderModelCompare = () => {
     xAxis: {
       type: "category",
       data: rows.map((x) => x.model),
-      axisLabel: { rotate: 15, color: "#64748b", fontSize: 11 },
+      axisLabel: { rotate: 15, color: businessColor('text-secondary'), fontSize: 12 },
     },
     yAxis: { type: "value", min: 0, max: 1 },
     series: [{
       type: "bar",
       data: rows.map((x) => x.confidence || 0),
       barWidth: "50%",
-      itemStyle: { color: "#3b82f6", borderRadius: [6, 6, 0, 0] },
-      emphasis: { itemStyle: { color: "#1d4ed8" } },
+      itemStyle: { color: businessColor('data-primary'), borderRadius: [6, 6, 0, 0] },
+      emphasis: { itemStyle: { color: businessColor('data-primary') } },
     }],
   }, true)
 }
@@ -1070,7 +1071,7 @@ const startCollaborativeAnalysis = async () => {
   if (collabAbort) collabAbort.abort()
   collabAbort = new AbortController()
   try {
-    const submitRes = await fetch("/api/v1/report/analysis/collab/submit", {
+    const submitRes = await fetch(axios.getUri({ url: "/api/v1/report/analysis/collab/submit" }), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1083,7 +1084,7 @@ const startCollaborativeAnalysis = async () => {
     const submitPayload = await submitRes.json()
     collabTaskId.value = submitPayload.taskId
 
-    const streamRes = await fetch(`/api/v1/report/analysis/collab/stream/${collabTaskId.value}?_t=${Date.now()}`, {
+    const streamRes = await fetch(axios.getUri({ url: `/api/v1/report/analysis/collab/stream/${collabTaskId.value}?_t=${Date.now()}` }), {
       method: "GET",
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -1296,32 +1297,32 @@ onBeforeUnmount(() => {
 .header-container { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .page-title { margin: 0; font-size: 24px; }
-.page-desc { margin: 6px 0 0; color: #6b7280; }
-.summary-card, .chart-card { border-radius: 12px; box-shadow: 0 4px 12px 0 rgba(0,0,0,0.08); }
+.page-desc { margin: 6px 0 0; color: var(--text-secondary); }
+.summary-card, .chart-card { border-radius: 12px; box-shadow: 0 4px 12px 0 color-mix(in srgb, var(--gray-900) 8%, transparent); }
 .charts-grid { display: grid; grid-template-columns: repeat(2, minmax(320px, 1fr)); gap: 12px; }
 .chart-box { width: 100%; height: 320px; }
 .flow-box { height: 160px; }
 .model-compare-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .model-compare-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.chart-ai { margin: 10px 0 0; color: #4b5563; line-height: 1.5; font-size: 13px; background: #f8fafc; border-radius: 8px; padding: 8px 10px; }
-.risk-low { color: #059669; }
-.risk-medium { color: #d97706; }
-.risk-high { color: #dc2626; }
+.chart-ai { margin: 10px 0 0; color: var(--text-secondary); line-height: 1.5; font-size: 13px; background: var(--surface-subtle); border-radius: 8px; padding: 8px 10px; }
+.risk-low { color: var(--success-text); }
+.risk-medium { color: var(--warning-text); }
+.risk-high { color: var(--danger-text); }
 .collab-top { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
-.collab-meta { display: flex; gap: 12px; flex-wrap: wrap; color: #475569; font-size: 12px; line-height: 1.4; }
+.collab-meta { display: flex; gap: 12px; flex-wrap: wrap; color: var(--text-secondary); font-size: 12px; line-height: 1.4; }
 .collab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .collab-flow-card { grid-column: 1 / -1; }
 .collab-step-list { max-height: 122px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
 .collab-step-row { display: grid; grid-template-columns: 70px 1fr 170px; gap: 6px; align-items: center; }
-.collab-step-model { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: #334155; }
-.collab-step-stage { font-size: 11px; color: #64748b; }
+.collab-step-model { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--text-primary); }
+.collab-step-stage { font-size: 12px; color: var(--text-secondary); }
 .middle-list { max-height: 122px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
-.middle-row { background: #f8fafc; border-radius: 8px; padding: 6px 8px; }
-.middle-row p { margin: 4px 0 0; color: #475569; font-size: 12px; line-height: 1.4; }
+.middle-row { background: var(--surface-subtle); border-radius: 8px; padding: 6px 8px; }
+.middle-row p { margin: 4px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 1.4; }
 .collab-dialog { transition: opacity .4s ease, transform .4s ease; opacity: 1; }
 .collab-dialog.is-fading { opacity: 0; transform: translateY(8px); }
 .report-dialog-body {
-  background: #ffffff;
+  background: var(--surface);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -1342,16 +1343,16 @@ onBeforeUnmount(() => {
   gap: 20px;
 }
 .modern-card {
-  border: 1px solid #e5e6eb;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(22, 93, 255, 0.08);
+  background: var(--surface);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--brand-500) 8%, transparent);
   padding: 16px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .modern-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(22, 93, 255, 0.12);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--brand-500) 12%, transparent);
 }
 .metric-card {
   display: flex;
@@ -1361,12 +1362,12 @@ onBeforeUnmount(() => {
 }
 .metric-label {
   font-size: 13px;
-  color: #4e5969;
+  color: var(--text-secondary);
 }
 .metric-value {
   font-size: 24px;
   font-weight: 600;
-  color: #1d2129;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 .metric-time {
@@ -1380,13 +1381,13 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 8px;
   border-radius: 999px;
-  background: #e8f3ff;
+  background: var(--brand-50);
   overflow: hidden;
 }
 .metric-progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #165dff, #4080ff);
+  background: linear-gradient(90deg, var(--brand-600), var(--brand-600));
 }
 .report-section {
   min-height: 220px;
@@ -1394,7 +1395,7 @@ onBeforeUnmount(() => {
 .section-title {
   margin: 0 0 12px;
   font-size: 16px;
-  color: #1d2129;
+  color: var(--text-primary);
   font-weight: 600;
 }
 .summary-list {
@@ -1409,8 +1410,8 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
   border-radius: 8px;
-  background: #fff1f0;
-  border: 1px solid #ffccc7;
+  background: var(--danger-100);
+  border: 1px solid var(--danger-100);
   padding: 8px 10px;
   margin-bottom: 12px;
 }
@@ -1419,11 +1420,11 @@ onBeforeUnmount(() => {
 }
 .summary-alert-text {
   font-size: 13px;
-  color: #ff4d4f;
+  color: var(--danger-text);
   font-weight: 600;
 }
 .summary-list li {
-  color: #4e5969;
+  color: var(--text-secondary);
   line-height: 1.65;
   font-size: 14px;
 }
@@ -1433,8 +1434,8 @@ onBeforeUnmount(() => {
   gap: 10px;
   padding: 12px;
   border-radius: 8px;
-  background: #fff7e8;
-  border: 1px solid #ffe7ba;
+  background: var(--warning-100);
+  border: 1px solid var(--warning-100);
 }
 .warn-icon {
   width: 20px;
@@ -1442,15 +1443,15 @@ onBeforeUnmount(() => {
   line-height: 20px;
   text-align: center;
   border-radius: 50%;
-  background: #ff7d00;
-  color: #fff;
+  background: var(--warning-text);
+  color: var(--surface);
   font-size: 13px;
   flex-shrink: 0;
   margin-top: 1px;
 }
 .report-paragraph {
   margin: 0;
-  color: #4e5969;
+  color: var(--text-secondary);
   line-height: 1.65;
   font-size: 14px;
 }
@@ -1467,13 +1468,13 @@ onBeforeUnmount(() => {
   gap: 10px;
 }
 .core-detail-item {
-  border: 1px solid #e5e6eb;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
   transition: background-color 0.2s ease;
 }
 .core-detail-item:hover {
-  background: #f2f7ff;
+  background: var(--brand-50);
 }
 .core-detail-top {
   display: flex;
@@ -1483,7 +1484,7 @@ onBeforeUnmount(() => {
   margin-bottom: 8px;
 }
 .model-cell {
-  color: #1d2129;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 13px;
   line-height: 1.4;
@@ -1493,7 +1494,7 @@ onBeforeUnmount(() => {
   line-height: 1.5;
   white-space: normal;
   word-break: break-word;
-  color: #4e5969;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 .table-progress-row {
@@ -1505,7 +1506,7 @@ onBeforeUnmount(() => {
 }
 .table-progress-label {
   min-width: 40px;
-  color: #165dff;
+  color: var(--brand-600);
   font-weight: 600;
 }
 .table-progress-track {
@@ -1513,12 +1514,12 @@ onBeforeUnmount(() => {
   height: 6px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e8f3ff;
+  background: var(--brand-50);
 }
 .table-progress-fill {
   height: 100%;
   border-radius: 999px;
-  background: #165dff;
+  background: var(--brand-600);
 }
 .diag-section {
   min-height: 170px;
@@ -1527,8 +1528,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  border: 1px solid #ffe7ba;
-  background: #fff7e8;
+  border: 1px solid var(--warning-100);
+  background: var(--warning-100);
   border-radius: 8px;
   padding: 10px 12px;
   margin-bottom: 12px;
@@ -1539,12 +1540,12 @@ onBeforeUnmount(() => {
 }
 .diag-warning-text strong {
   display: block;
-  color: #ad6800;
+  color: var(--warning-text);
   font-size: 13px;
 }
 .diag-warning-text p {
   margin: 4px 0 0;
-  color: #ad6800;
+  color: var(--warning-text);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -1558,30 +1559,30 @@ onBeforeUnmount(() => {
   grid-template-columns: 220px 1fr 1fr;
   gap: 12px;
   align-items: center;
-  border: 1px solid #e5e6eb;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
-  background: #fff;
+  background: var(--surface);
   transition: background-color 0.2s ease;
 }
 .diag-row:hover {
-  background: #f7f8fa;
+  background: var(--surface-subtle);
 }
 .diag-model {
   font-size: 12px;
   font-weight: 600;
-  color: #ff4d4f;
-  background: #fff1f0;
-  border: 1px solid #ffccc7;
+  color: var(--danger-text);
+  background: var(--danger-100);
+  border: 1px solid var(--danger-100);
   border-radius: 999px;
   padding: 4px 10px;
   width: fit-content;
 }
-.diag-reason { color: #4e5969; font-size: 12px; line-height: 1.5; }
-.diag-fix { color: #165dff; font-size: 12px; line-height: 1.5; }
+.diag-reason { color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+.diag-fix { color: var(--brand-600); font-size: 12px; line-height: 1.5; }
 .diag-empty {
   margin: 2px 0 0;
-  color: #86909c;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 .emotion-tag-row {
@@ -1601,47 +1602,47 @@ onBeforeUnmount(() => {
   border: 1px solid transparent;
 }
 .emotion-sep {
-  color: #c9cdd4;
+  color: var(--border);
   font-size: 12px;
 }
-.chip-neutral { background: #f2f3f5; color: #4e5969; border-color: #e5e6eb; }
-.chip-anxiety { background: #fff1f0; color: #f53f3f; border-color: #ffccc7; }
-.chip-sadness { background: #fff7e8; color: #fa8c16; border-color: #ffd591; }
-.chip-fear { background: #f9f0ff; color: #722ed1; border-color: #efdbff; }
-.chip-anger { background: #fff0f6; color: #c41d7f; border-color: #ffadd2; }
-.chip-joy { background: #f6ffed; color: #389e0d; border-color: #b7eb8f; }
+.chip-neutral { background: var(--surface-subtle); color: var(--text-secondary); border-color: var(--border); }
+.chip-anxiety { background: var(--danger-100); color: var(--danger-text); border-color: var(--danger-100); }
+.chip-sadness { background: var(--warning-100); color: var(--warning-text); border-color: var(--warning-100); }
+.chip-fear { background: var(--brand-50); color: var(--brand-600); border-color: var(--brand-100); }
+.chip-anger { background: var(--brand-50); color: var(--brand-600); border-color: var(--brand-100); }
+.chip-joy { background: var(--accent-sage-soft); color: var(--success-text); border-color: var(--accent-sage-soft); }
 .print-report { display: none; }
-.print-header h1 { margin: 0; font-size: 22px; color: #0f172a; letter-spacing: .3px; }
-.print-header p { margin: 6px 0 0; font-size: 13px; color: #334155; }
+.print-header h1 { margin: 0; font-size: 22px; color: var(--text-primary); letter-spacing: .3px; }
+.print-header p { margin: 6px 0 0; font-size: 13px; color: var(--text-primary); }
 .print-section { margin-top: 14px; }
 .print-section h2 {
   margin: 0 0 8px;
   padding-left: 8px;
-  border-left: 3px solid #4f46e5;
-  color: #1e293b;
+  border-left: 3px solid var(--brand-600);
+  color: var(--text-primary);
   font-size: 16px;
 }
-.print-paragraph { margin: 6px 0; color: #1f2937; font-size: 13px; line-height: 1.7; text-align: justify; }
+.print-paragraph { margin: 6px 0; color: var(--text-primary); font-size: 13px; line-height: 1.7; text-align: justify; }
 .print-indicator-grid { display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)); gap: 6px; }
-.print-indicator-item { border: 1px solid #dbe2ea; border-radius: 8px; padding: 8px; background: #f8fafc; }
-.print-indicator-label { display: block; font-size: 12px; color: #64748b; }
-.print-indicator-value { display: block; margin-top: 4px; font-size: 14px; color: #0f172a; }
-.print-chart-card { margin-top: 12px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; break-inside: avoid; page-break-inside: avoid; }
-.print-chart-card h3 { margin: 0; font-size: 14px; color: #0f172a; }
-.print-caption { margin: 6px 0; color: #475569; font-size: 12px; line-height: 1.5; }
+.print-indicator-item { border: 1px solid var(--border); border-radius: 8px; padding: 8px; background: var(--surface-subtle); }
+.print-indicator-label { display: block; font-size: 12px; color: var(--text-secondary); }
+.print-indicator-value { display: block; margin-top: 4px; font-size: 14px; color: var(--text-primary); }
+.print-chart-card { margin-top: 12px; border: 1px solid var(--border); border-radius: 10px; padding: 10px; break-inside: avoid; page-break-inside: avoid; }
+.print-chart-card h3 { margin: 0; font-size: 14px; color: var(--text-primary); }
+.print-caption { margin: 6px 0; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
 .print-chart-image {
   width: 100%;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: 8px;
   object-fit: contain;
-  background: #fff;
+  background: var(--surface);
 }
-.print-chart-missing { margin: 8px 0 0; font-size: 12px; color: #9a3412; }
-.print-analysis { margin: 8px 0 0; font-size: 12.5px; color: #1f2937; line-height: 1.65; text-align: justify; }
+.print-chart-missing { margin: 8px 0 0; font-size: 12px; color: var(--warning-text); }
+.print-analysis { margin: 8px 0 0; font-size: 12.5px; color: var(--text-primary); line-height: 1.65; text-align: justify; }
 .preview-shell {
   max-height: calc(88vh - 140px);
   overflow: auto;
-  background: #e2e8f0;
+  background: var(--border);
   border-radius: 10px;
   padding: 14px;
 }
@@ -1652,8 +1653,8 @@ onBeforeUnmount(() => {
   margin: 0 auto;
   padding: 5mm;
   box-sizing: border-box;
-  background: #fff;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
+  background: var(--surface);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--brand-500) 15%, transparent);
 }
 .preview-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
@@ -1673,7 +1674,7 @@ onBeforeUnmount(() => {
   height: 100vh !important;
   margin: 0 !important;
   padding: 0 !important;
-  background: #fff !important;
+  background: var(--surface) !important;
   z-index: 2147483647 !important;
 }
 
@@ -1685,7 +1686,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--surface);
 }
 
 :deep(.report-dialog .el-dialog__header) {
@@ -1695,14 +1696,14 @@ onBeforeUnmount(() => {
   margin-right: 0;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #f2f3f5;
-  background: #fff;
+  border-bottom: 1px solid var(--surface-subtle);
+  background: var(--surface);
 }
 
 :deep(.report-dialog .el-dialog__title) {
   font-size: 18px;
   font-weight: 600;
-  color: #1d2129;
+  color: var(--text-primary);
 }
 
 :deep(.report-dialog .el-dialog__body) {
@@ -1710,7 +1711,7 @@ onBeforeUnmount(() => {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background: #fff;
+  background: var(--surface);
   scrollbar-gutter: stable;
 }
 
@@ -1720,11 +1721,11 @@ onBeforeUnmount(() => {
 
 :deep(.report-dialog .el-dialog__body::-webkit-scrollbar-thumb) {
   border-radius: 999px;
-  background: rgba(22, 93, 255, 0.35);
+  background: color-mix(in srgb, var(--brand-500) 35%, transparent);
 }
 
 :deep(.report-dialog .el-dialog__body::-webkit-scrollbar-track) {
-  background: #f7f8fa;
+  background: var(--surface-subtle);
 }
 
 :deep(.collab-dialog .el-dialog) {
@@ -1791,8 +1792,8 @@ onBeforeUnmount(() => {
     display: block;
     padding: 0;
     margin: 0;
-    color: #0f172a;
-    background: #fff;
+    color: var(--text-primary);
+    background: var(--surface);
   }
   .report-container > *:not(.print-report) { display: none !important; }
   .print-report {

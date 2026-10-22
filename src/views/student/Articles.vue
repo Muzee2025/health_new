@@ -5,8 +5,8 @@
         <h2 class="page-title">心理科普精选</h2>
         <div class="category-filter">
           <el-radio-group v-model="selectedCategory" size="default" @change="filterArticles">
-            <el-radio-button label="全部">全部</el-radio-button>
-            <el-radio-button v-for="cat in categories" :key="cat" :label="cat">{{ cat }}</el-radio-button>
+            <el-radio-button value="全部">全部</el-radio-button>
+            <el-radio-button v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</el-radio-button>
           </el-radio-group>
         </div>
       </div>
@@ -15,7 +15,7 @@
         <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="article in filteredArticles" :key="article.id">
           <el-card shadow="hover" class="article-card" @click="showArticle(article)" :body-style="{ padding: '0px' }">
             <div class="image-wrapper">
-              <img :src="article.cover_url || 'https://picsum.photos/300/200?random=1'" class="image" @error="handleImageError" />
+              <img :src="article.cover_url || articleFallback" class="image" :alt="article.title" width="300" height="200" @error="handleImageError" />
               <el-tag v-if="article.category" class="category-tag" effect="dark" size="small">{{ article.category }}</el-tag>
             </div>
             <div style="padding: 14px">
@@ -40,6 +40,7 @@
 </template>
 
 <script setup>
+import articleFallback from '../../assets/illustrations/open-doodles/illu-open-doodles-reading-side.svg'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -52,39 +53,7 @@ const articles = ref([])
 const filteredArticles = ref([])
 const categories = ref([])
 const selectedCategory = ref('全部')
-const LOCAL_VIEW_SEED_KEY = 'article_view_seed_map_v1'
-
-const readLocalViewSeedMap = () => {
-  try {
-    const raw = localStorage.getItem(LOCAL_VIEW_SEED_KEY)
-    const parsed = raw ? JSON.parse(raw) : {}
-    return parsed && typeof parsed === 'object' ? parsed : {}
-  } catch {
-    return {}
-  }
-}
-
-const writeLocalViewSeedMap = (map) => {
-  localStorage.setItem(LOCAL_VIEW_SEED_KEY, JSON.stringify(map))
-}
-
-const getFallbackViews = (articleId) => {
-  const key = String(articleId)
-  const map = readLocalViewSeedMap()
-  if (Number(map[key]) >= 50 && Number(map[key]) <= 200) return Number(map[key])
-  const value = Math.floor(Math.random() * 151) + 50
-  map[key] = value
-  writeLocalViewSeedMap(map)
-  return value
-}
-
-const normalizeArticleViews = (rows) => {
-  return (rows || []).map((item) => {
-    const raw = Number(item?.views || 0)
-    if (raw >= 50) return { ...item, views: raw }
-    return { ...item, views: getFallbackViews(item.id) }
-  })
-}
+const normalizeArticleViews = (rows) => (rows || []).map(item => ({ ...item, views: Number.isFinite(Number(item.views)) ? Math.max(0, Number(item.views)) : 0 }))
 
 onMounted(() => {
   fetchArticles()
@@ -122,7 +91,7 @@ const handleArticleViewUpdated = (event) => {
   const detail = event?.detail || {}
   const articleId = Number(detail.articleId || 0)
   const views = Number(detail.views || 0)
-  if (!articleId || !Number.isFinite(views) || views < 50) return
+  if (!articleId || !Number.isFinite(views) || views < 0) return
   const updateRows = (rows) => rows.map((item) => {
     if (Number(item.id) !== articleId) return item
     return { ...item, views }
@@ -142,14 +111,15 @@ const openSource = (url) => {
 }
 
 const handleImageError = (e) => {
-  e.target.src = 'https://picsum.photos/300/200?random=error'
+  e.target.onerror = null
+  e.target.src = articleFallback
 }
 </script>
 
 <style scoped>
 .page-title {
   font-size: 24px;
-  color: #1F2937;
+  color: var(--text-primary);
   margin: 0;
 }
 .flex-between {
@@ -162,8 +132,8 @@ const handleImageError = (e) => {
 .mb-20 { margin-bottom: 20px; }
 .mr-10 { margin-right: 10px; }
 .text-xs { font-size: 12px; }
-.text-gray-500 { color: #6B7280; }
-.text-blue-500 { color: #3B82F6; }
+.text-gray-500 { color: var(--text-secondary); }
+.text-blue-500 { color: var(--brand-600); }
 .cursor-pointer { cursor: pointer; }
 
 .article-card {
@@ -175,7 +145,7 @@ const handleImageError = (e) => {
 }
 .article-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--gray-900) 10%, transparent);
 }
 .image-wrapper {
   position: relative;
@@ -200,11 +170,11 @@ const handleImageError = (e) => {
   margin-top: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
 }
 .summary {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--text-secondary);
   margin: 10px 0;
   height: 38px;
   line-height: 1.4;
@@ -218,7 +188,7 @@ const handleImageError = (e) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #F3F4F6;
+  border-top: 1px solid var(--surface-warm);
   padding-top: 10px;
 }
 .source-tag, .views {
@@ -236,7 +206,7 @@ const handleImageError = (e) => {
 .article-content {
   line-height: 1.8;
   font-size: 16px;
-  color: #374151;
+  color: var(--text-primary);
 }
 :deep(.article-content p) {
   margin-bottom: 1em;

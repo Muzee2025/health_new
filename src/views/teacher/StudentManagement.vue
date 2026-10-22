@@ -96,6 +96,9 @@
         <el-form-item label="学号/工号" prop="student_id">
           <el-input v-model="addStudentForm.student_id" placeholder="请输入学号/工号" />
         </el-form-item>
+        <el-form-item label="初始密码" prop="initial_password">
+          <el-input v-model="addStudentForm.initial_password" type="password" show-password autocomplete="new-password" placeholder="至少8个字符，包含字母和数字" aria-label="初始密码" />
+        </el-form-item>
         <el-form-item label="班级/年级" prop="class_name">
           <el-input v-model="addStudentForm.class_name" placeholder="请输入班级或年级" />
         </el-form-item>
@@ -124,6 +127,8 @@
 </template>
 
 <script setup>
+import { passwordPolicyError } from '../../utils/passwordPolicy'
+import { businessColor } from '../../styles/business-theme.js'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import axios from 'axios'
@@ -143,6 +148,7 @@ const addStudentFormRef = ref(null)
 const addStudentForm = ref({
   name: '',
   student_id: '',
+  initial_password: '',
   class_name: '',
   gender: '',
   parent_phone: '',
@@ -150,7 +156,8 @@ const addStudentForm = ref({
 })
 const addStudentRules = {
   name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
-  student_id: [{ required: true, message: '学号不能为空', trigger: 'blur' }]
+  student_id: [{ required: true, message: '学号不能为空', trigger: 'blur' }],
+  initial_password: [{ validator: (_rule, value, callback) => { const error = passwordPolicyError(value); callback(error ? new Error(error) : undefined) }, trigger: 'blur' }]
 }
 let pollTimer = null
 
@@ -158,7 +165,7 @@ const fetchStudents = async () => {
   loading.value = true
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get('http://127.0.0.1:8000/api/teacher/students', {
+    const res = await axios.get('/api/teacher/students', {
       headers: { Authorization: `Bearer ${token}` }
     })
     students.value = res.data
@@ -197,7 +204,7 @@ const formatDate = (dateString) => {
 }
 
 const getAvatarColor = (name) => {
-  const colors = ['#BFDBFE', '#BBF7D0', '#FFEDD5', '#FED7AA', '#E9D5FF', '#A7F3D0'];
+  const colors = [businessColor('brand-100'), businessColor('accent-sage-soft'), businessColor('warning-100'), businessColor('warning-100'), businessColor('brand-100'), businessColor('accent-sage-soft')];
   const charCode = name ? name.charCodeAt(0) : 0;
   return colors[charCode % colors.length];
 }
@@ -235,6 +242,7 @@ const resetStudentForm = () => {
   addStudentForm.value = {
     name: '',
     student_id: '',
+  initial_password: '',
     class_name: '',
     gender: '',
     parent_phone: '',
@@ -243,11 +251,13 @@ const resetStudentForm = () => {
 }
 
 const submitAddStudent = async () => {
-  await addStudentFormRef.value?.validate()
+  if (submitting.value) return
+  const valid = await addStudentFormRef.value?.validate().catch(() => false)
+  if (!valid) { addStudentForm.value.initial_password = ''; return }
   submitting.value = true
   try {
     const token = localStorage.getItem('token')
-    await axios.post('http://127.0.0.1:8000/api/teacher/students', addStudentForm.value, {
+    await axios.post('/api/teacher/students', addStudentForm.value, {
       headers: { Authorization: `Bearer ${token}` }
     })
     ElMessage.success('学生添加成功')
@@ -267,6 +277,7 @@ const submitAddStudent = async () => {
       ElMessage.error('添加学生失败')
     }
   } finally {
+    addStudentForm.value.initial_password = ''
     submitting.value = false
   }
 }
@@ -289,12 +300,12 @@ onUnmounted(() => {
 }
 
 .filter-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
   display: flex;
   gap: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
   align-items: center;
 }
 
@@ -311,10 +322,10 @@ onUnmounted(() => {
 }
 
 .table-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .pagination-wrapper {
@@ -331,12 +342,12 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
   font-size: 14px;
 }
 
 .crisis-mark {
-  color: #ef4444;
+  color: var(--danger-text);
   font-size: 16px;
   font-weight: bold;
   line-height: 1;

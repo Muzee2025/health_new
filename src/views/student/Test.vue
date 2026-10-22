@@ -76,7 +76,7 @@
           </div>
           
           <div class="desc-display mt-20 text-gray-600 text-left">
-            <p v-html="testResult.desc"></p>
+            <p class="result-description">{{ testResult.desc }}</p>
           </div>
         </div>
 
@@ -306,7 +306,7 @@ const calculateAndSubmit = async () => {
     score = 100 // dummy score
     result_level = typeStr
     risk_level = 'green'
-    desc = `您的性格倾向是 <strong>${typeStr}</strong>。<br>MBTI仅作为自我了解的参考工具，帮助您发现自己的优势与潜在的职业倾向。`
+    desc = `您的性格倾向是 ${typeStr}。\nMBTI仅作为自我了解的参考工具，帮助您发现自己的优势与潜在的职业倾向。`
   } else if (type === 'MentalAge') {
     score = userAnswers.value.reduce((a, b) => a + b, 0)
     if (score <= 25) {
@@ -397,11 +397,11 @@ onBeforeUnmount(() => {
 <style scoped>
 .page-title {
   font-size: 24px;
-  color: #1F2937;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 .page-desc {
-  color: #6B7280;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 .mt-30 { margin-top: 30px; }
@@ -412,11 +412,11 @@ onBeforeUnmount(() => {
 .w-full { width: 100%; }
 .text-center { text-align: center; }
 .text-left { text-align: left; }
-.text-blue { color: #3B82F6; }
-.text-purple { color: #8B5CF6; }
-.text-green { color: #10B981; }
-.text-yellow { color: #F59E0B; }
-.text-red { color: #EF4444; }
+.text-blue { color: var(--brand-600); }
+.text-purple { color: var(--brand-600); }
+.text-green { color: var(--success-text); }
+.text-yellow { color: var(--warning-text); }
+.text-red { color: var(--danger-text); }
 
 .flex-between {
   display: flex;
@@ -444,19 +444,19 @@ onBeforeUnmount(() => {
 }
 .test-title {
   font-size: 18px;
-  color: #1F2937;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 .test-desc {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--text-secondary);
   margin-bottom: auto;
   height: 60px;
 }
 .test-meta {
   font-size: 12px;
-  color: #9CA3AF;
-  background-color: #F3F4F6;
+  color: var(--text-secondary);
+  background-color: var(--surface-warm);
   display: inline-block;
   padding: 4px 12px;
   border-radius: 12px;
@@ -472,11 +472,11 @@ onBeforeUnmount(() => {
 }
 .progress {
   font-size: 14px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
 }
 .progress-wrap {
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
 }
@@ -484,18 +484,18 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #4b5563;
+  color: var(--text-secondary);
   font-size: 13px;
   margin-bottom: 8px;
 }
 .q-title {
   font-size: 20px;
-  color: #1F2937;
+  color: var(--text-primary);
   margin-bottom: 10px;
   line-height: 1.4;
 }
 .q-tip {
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 13px;
   margin: 0 0 22px;
 }
@@ -506,22 +506,22 @@ onBeforeUnmount(() => {
 }
 .option-item {
   padding: 16px 20px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--border);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s;
   font-size: 16px;
-  color: #4B5563;
+  color: var(--text-secondary);
 }
 .option-item:hover {
-  background-color: #EFF6FF;
-  border-color: #3B82F6;
-  color: #1D4ED8;
+  background-color: var(--brand-50);
+  border-color: var(--brand-600);
+  color: var(--brand-600);
 }
 .option-item.is-selected {
-  background-color: #dbeafe;
-  border-color: #2563eb;
-  color: #1d4ed8;
+  background-color: var(--brand-100);
+  border-color: var(--brand-600);
+  color: var(--brand-600);
   font-weight: 600;
 }
 .question-actions {
@@ -533,7 +533,7 @@ onBeforeUnmount(() => {
 }
 .question-hint {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 /* Result Area */
@@ -556,7 +556,7 @@ onBeforeUnmount(() => {
 }
 .score-display {
   font-size: 18px;
-  background: #F9FAFB;
+  background: var(--surface-subtle);
   padding: 15px;
   border-radius: 8px;
 }
@@ -566,7 +566,7 @@ onBeforeUnmount(() => {
 }
 .desc-display {
   line-height: 1.6;
-  background: #F3F4F6;
+  background: var(--surface-warm);
   padding: 15px;
   border-radius: 8px;
 }
@@ -578,11 +578,11 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
 }
 .ai-analysis-box {
-  background: linear-gradient(180deg, #f8fbff 0%, #f2f7ff 100%);
-  border: 1px solid #dbeafe;
+  background: linear-gradient(180deg, var(--brand-50) 0%, var(--brand-50) 100%);
+  border: 1px solid var(--brand-100);
   border-radius: 12px;
   padding: 16px 18px;
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.12);
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand-500) 12%, transparent);
 }
 .ai-analysis-head {
   display: flex;
@@ -603,21 +603,21 @@ onBeforeUnmount(() => {
   width: 24px;
   height: 24px;
   border-radius: 999px;
-  background: #2563eb;
-  color: #fff;
+  background: var(--brand-600);
+  color: var(--surface);
   font-size: 12px;
   font-weight: 700;
 }
 .ai-analysis-box h4 {
   margin: 0;
   font-size: 15px;
-  color: #1f2937;
+  color: var(--text-primary);
 }
 .ai-model-tag {
   font-size: 12px;
-  color: #1d4ed8;
-  background: #dbeafe;
-  border: 1px solid #bfdbfe;
+  color: var(--brand-600);
+  background: var(--brand-100);
+  border: 1px solid var(--brand-100);
   border-radius: 999px;
   padding: 2px 10px;
   white-space: nowrap;
@@ -630,12 +630,12 @@ onBeforeUnmount(() => {
 .ai-analysis-box p {
   margin: 0;
   font-size: 13.5px;
-  color: #334155;
+  color: var(--text-primary);
   line-height: 1.75;
-  background: rgba(255, 255, 255, 0.65);
+  background: color-mix(in srgb, var(--surface) 65%, transparent);
   border-radius: 8px;
   padding: 10px 12px;
-  border: 1px solid #e5edff;
+  border: 1px solid var(--brand-50);
 }
 
 @keyframes float {

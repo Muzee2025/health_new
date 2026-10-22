@@ -12,6 +12,8 @@
                 class="teacher-avatar-img"
                 :src="teacher.avatar"
                 :alt="PSYCH_TEACHER_AVATAR_ALT"
+                width="64"
+                height="64"
                 loading="lazy"
                 decoding="async"
                 @error="handleTeacherAvatarError"
@@ -30,13 +32,15 @@
           
           <el-divider border-style="dashed" />
           <div class="slots-header">可预约时间段</div>
+          <p v-if="!teacher.can_book" class="booking-note" :id="`booking-note-${teacher.id}`">需先由学校分配咨询老师</p>
           <div class="time-slots">
             <el-button 
               v-for="(slot, index) in teacher.time_slots" 
               :key="index"
               :type="teacher.booked_slots.includes(slot) ? 'info' : 'primary'"
               :plain="!teacher.booked_slots.includes(slot)"
-              :disabled="teacher.booked_slots.includes(slot)"
+              :disabled="!teacher.can_book || teacher.booked_slots.includes(slot)"
+              :aria-describedby="!teacher.can_book ? `booking-note-${teacher.id}` : undefined"
               size="small"
               class="slot-btn"
               @click="confirmAppointment(teacher, slot)"
@@ -113,6 +117,9 @@ const fetchTeachers = async () => {
     teachers.value = rows.map((teacher) => ({
       ...teacher,
       avatar: resolveTeacherAvatar(teacher),
+      can_book: teacher.can_book === true,
+      time_slots: Array.isArray(teacher.time_slots) ? teacher.time_slots : [],
+      booked_slots: Array.isArray(teacher.booked_slots) ? teacher.booked_slots : [],
     }))
   } catch (error) {
     ElMessage.error('获取老师列表失败')
@@ -129,6 +136,7 @@ const fetchAppointments = async () => {
 }
 
 const confirmAppointment = (teacher, slot) => {
+  if (!teacher.can_book) { ElMessage.warning('需先由学校分配咨询老师'); return }
   ElMessageBox.confirm(
     `确定要预约 ${teacher.name} 老师的 [${slot}] 吗？`,
     '确认预约',
@@ -179,11 +187,11 @@ const cancelAppointment = (appointment) => {
 <style scoped>
 .page-title {
   font-size: 24px;
-  color: #1F2937;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 .page-desc {
-  color: #6B7280;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 .mt-30 {
@@ -204,7 +212,7 @@ const cancelAppointment = (appointment) => {
 .teacher-avatar {
   width: 64px;
   height: 64px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid var(--border);
   border-radius: 50%;
   overflow: hidden;
   margin-right: 16px;
@@ -221,13 +229,13 @@ const cancelAppointment = (appointment) => {
 .name {
   font-size: 18px;
   font-weight: bold;
-  color: #1F2937;
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 .title {
   font-size: 13px;
-  color: #3B82F6;
-  background-color: #EFF6FF;
+  color: var(--brand-600);
+  background-color: var(--brand-50);
   display: inline-block;
   padding: 2px 8px;
   border-radius: 12px;
@@ -238,14 +246,14 @@ const cancelAppointment = (appointment) => {
 }
 .location {
   font-size: 12px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 4px;
 }
 .teacher-intro {
   font-size: 13px;
-  color: #4B5563;
+  color: var(--text-secondary);
   line-height: 1.5;
   height: 40px;
   overflow: hidden;
@@ -257,7 +265,7 @@ const cancelAppointment = (appointment) => {
 .slots-header {
   font-size: 14px;
   font-weight: bold;
-  color: #4B5563;
+  color: var(--text-secondary);
   margin-bottom: 12px;
 }
 .time-slots {
@@ -271,9 +279,10 @@ const cancelAppointment = (appointment) => {
 }
 .no-slots {
   font-size: 13px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   font-style: italic;
 }
+.booking-note { color: var(--warning-text); background: var(--warning-100); border-radius: var(--radius-md); padding: 8px 10px; margin: 0 0 12px; font-size: 13px; }
 
 .table-card {
   border-radius: 16px;
@@ -281,7 +290,7 @@ const cancelAppointment = (appointment) => {
 }
 .table-card h3 {
   font-size: 16px;
-  color: #374151;
+  color: var(--text-primary);
   margin-bottom: 20px;
 }
 </style>

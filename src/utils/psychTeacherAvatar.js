@@ -1,6 +1,6 @@
-import teacherAvatar1 from '../assets/avatars/teachers/psych-teacher-1.png'
-import teacherAvatar2 from '../assets/avatars/teachers/psych-teacher-2.png'
-import teacherAvatar3 from '../assets/avatars/teachers/psych-teacher-3.png'
+import teacherAvatar1 from '../assets/avatars/teachers/avatar-teacher-01-256.webp'
+import teacherAvatar2 from '../assets/avatars/teachers/avatar-teacher-02-256.webp'
+import teacherAvatar3 from '../assets/avatars/teachers/avatar-teacher-03-256.webp'
 
 export const PSYCH_TEACHER_AVATAR_ALT = '心理教师卡通形象'
 

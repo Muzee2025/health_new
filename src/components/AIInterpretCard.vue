@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .ai-interpret-card {
   border-radius: 12px;
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px 0 color-mix(in srgb, var(--gray-900) 8%, transparent);
 }
 
 .card-header {

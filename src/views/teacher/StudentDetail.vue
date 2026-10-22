@@ -172,7 +172,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick, computed, shallowRef } from 'vue'
+import { businessColor } from '../../styles/business-theme.js'
+import { ref, onMounted, onUnmounted, nextTick, computed, markRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import { Monitor, Flag, Document } from '@element-plus/icons-vue'
 import axios from 'axios'
@@ -208,7 +209,7 @@ const exportWord = async () => {
 }
 
 const getAvatarColor = (name) => {
-  const colors = ['#BFDBFE', '#BBF7D0', '#FFEDD5', '#FED7AA', '#E9D5FF', '#A7F3D0'];
+  const colors = [businessColor('brand-100'), businessColor('accent-sage-soft'), businessColor('warning-100'), businessColor('warning-100'), businessColor('brand-100'), businessColor('accent-sage-soft')];
   const charCode = name ? name.charCodeAt(0) : 0;
   return colors[charCode % colors.length];
 }
@@ -225,15 +226,15 @@ const riskTimelineData = computed(() => {
   // Add test results
   if (studentData.value.test_history) {
     studentData.value.test_history.forEach(test => {
-      let color = '#10B981'
+      let color = businessColor('data-risk-low')
       let type = 'success'
       let title = '心理测评 (健康)'
       if (test.risk_level === 'red' || test.score >= 60) {
-        color = '#EF4444'
+        color = businessColor('data-risk-high')
         type = 'danger'
         title = '心理测评 (高风险)'
       } else if (test.risk_level === 'yellow' || test.score >= 50) {
-        color = '#F59E0B'
+        color = businessColor('data-risk-mid')
         type = 'warning'
         title = '心理测评 (亚健康)'
       }
@@ -256,8 +257,8 @@ const riskTimelineData = computed(() => {
         id: `rec_${rec.id}`,
         date: rec.created_at,
         type: 'primary',
-        color: '#3B82F6',
-        icon: shallowRef(Flag),
+        color: businessColor('data-primary'),
+        icon: markRaw(Flag),
         title: '教师干预: ' + rec.notes.substring(0, 15) + '...',
         score: null
       })
@@ -272,7 +273,7 @@ const fetchStudentDetail = async () => {
   const id = route.params.id
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get(`http://127.0.0.1:8000/api/teacher/student/${id}`, {
+    const res = await axios.get(`/api/teacher/student/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     studentData.value = res.data
@@ -289,7 +290,7 @@ const submitIntervention = async () => {
   try {
     const token = localStorage.getItem('token')
     const today = new Date().toISOString().split('T')[0]
-    await axios.post('http://127.0.0.1:8000/api/teacher/interventions', {
+    await axios.post('/api/teacher/interventions', {
       student_id: studentData.value.student_info.id,
       record_date: today,
       notes: newRecordText.value
@@ -327,32 +328,32 @@ const initChart = () => {
   const dates = history.map(item => new Date(item.created_at).toLocaleDateString())
   const scores = history.map(item => item.score)
   
-  chartInstance = echarts.init(chartRef.value)
+  chartInstance = echarts.init(chartRef.value, 'xinyu-business')
   const option = {
     tooltip: { trigger: 'axis' },
     grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
     xAxis: {
       type: 'category',
       data: dates,
-      axisLine: { lineStyle: { color: '#E5E7EB' } },
-      axisLabel: { color: '#6B7280' }
+      axisLine: { lineStyle: { color: businessColor('border') } },
+      axisLabel: { color: businessColor('text-secondary') }
     },
     yAxis: {
       type: 'value',
       max: 100, // Assume 100 max for general tests
       axisLine: { show: false },
       axisTick: { show: false },
-      splitLine: { lineStyle: { color: '#E5E7EB', type: 'dashed' } },
-      axisLabel: { color: '#6B7280' }
+      splitLine: { lineStyle: { color: businessColor('border'), type: 'dashed' } },
+      axisLabel: { color: businessColor('text-secondary') }
     },
     visualMap: {
       show: false,
       pieces: [
-        { gt: 0, lte: 40, color: '#10B981' }, // Green
-        { gt: 40, lte: 60, color: '#F59E0B' }, // Yellow
-        { gt: 60, lte: 100, color: '#EF4444' }  // Red
+        { gt: 0, lte: 40, color: businessColor('data-risk-low') }, // Green
+        { gt: 40, lte: 60, color: businessColor('data-risk-mid') }, // Yellow
+        { gt: 60, lte: 100, color: businessColor('data-risk-high') }  // Red
       ],
-      outOfRange: { color: '#9CA3AF' }
+      outOfRange: { color: businessColor('text-secondary') }
     },
     series: [
       {
@@ -363,7 +364,7 @@ const initChart = () => {
         symbolSize: 8,
         markLine: {
           silent: true,
-          lineStyle: { color: '#9CA3AF', type: 'dashed' },
+          lineStyle: { color: businessColor('text-secondary'), type: 'dashed' },
           data: [
             { yAxis: 40, label: { formatter: '轻度分界' } },
             { yAxis: 60, label: { formatter: '重度分界' } }
@@ -399,10 +400,10 @@ onUnmounted(() => {
 }
 
 .header-card {
-  background: #FFFFFF;
+  background: var(--surface);
   padding: 20px 24px;
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--gray-900) 5%, transparent);
 }
 
 .header-title-wrapper {
@@ -419,14 +420,14 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
   font-size: 20px;
 }
 
 .header-title {
   font-size: 20px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .content-grid {
@@ -443,16 +444,16 @@ onUnmounted(() => {
 }
 
 .info-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 8px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--gray-900) 5%, transparent);
 }
 
 .card-title {
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0 0 20px 0;
   display: flex;
   align-items: center;
@@ -470,7 +471,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding-bottom: 12px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--surface-warm);
 }
 .info-item:last-child {
   border-bottom: none;
@@ -478,22 +479,22 @@ onUnmounted(() => {
 }
 
 .label {
-  color: #6B7280;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
 .value {
-  color: #111827;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 14px;
 }
 
 .ai-card {
-  background: linear-gradient(to right, #FEF2F2, #FFF1F2);
-  border: 1px solid #FCA5A5;
+  background: linear-gradient(to right, var(--danger-100), var(--danger-100));
+  border: 1px solid var(--danger-100);
 }
 .ai-text {
-  color: #991B1B;
+  color: var(--danger-text);
   font-size: 14px;
   line-height: 1.6;
   margin: 0;
@@ -513,13 +514,13 @@ onUnmounted(() => {
 
 .timeline-title {
   font-size: 14px;
-  color: #374151;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .timeline-score {
   font-size: 12px;
-  color: #6B7280;
+  color: var(--text-secondary);
 }
 
 .intervention-add {
@@ -535,13 +536,13 @@ onUnmounted(() => {
 
 .record-content p {
   margin: 0 0 8px 0;
-  color: #374151;
+  color: var(--text-primary);
   font-size: 14px;
   line-height: 1.5;
 }
 
 .record-date {
-  color: #9CA3AF;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 
@@ -575,12 +576,12 @@ onUnmounted(() => {
 
 .tag-label {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--text-secondary);
 }
 
 .no-tags {
   font-size: 13px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   font-style: italic;
 }
 
@@ -602,7 +603,7 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 12px;
   padding: 10px;
-  background-color: #f9fafb;
+  background-color: var(--surface-subtle);
   border-radius: 8px;
 }
 
@@ -625,7 +626,7 @@ onUnmounted(() => {
 
 .msg-header {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--text-secondary);
   display: flex;
   gap: 8px;
 }
@@ -638,20 +639,20 @@ onUnmounted(() => {
 }
 
 .msg-user .msg-content {
-  background-color: #3b82f6;
-  color: white;
+  background-color: var(--brand-600);
+  color: var(--surface);
   border-bottom-right-radius: 2px;
 }
 
 .msg-ai .msg-content {
-  background-color: white;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+  background-color: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
   border-bottom-left-radius: 2px;
 }
 
 .text-red {
-  color: #ef4444 !important;
+  color: var(--danger-text) !important;
   font-weight: 500;
 }
 </style>

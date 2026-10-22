@@ -2,12 +2,9 @@
   <div class="app-layout">
     <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="logo-area">
-        <el-icon class="logo-icon"><Platform /></el-icon>
-        <span class="logo-text">心域智链</span>
-      </div>
+      <router-link to="/teacher" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
 
-      <nav class="nav-menu">
+      <nav class="nav-menu" aria-label="教师导航">
         <router-link to="/teacher/advanced-dashboard" class="nav-item" active-class="active">
           <el-icon><Monitor /></el-icon> <span class="nav-text">AI大屏与审计</span>
         </router-link>
@@ -16,7 +13,7 @@
         </router-link>
         <router-link to="/teacher/appointments" class="nav-item" active-class="active">
           <el-icon><Calendar /></el-icon> <span class="nav-text">预约管理</span>
-          <span class="badge">new</span>
+
         </router-link>
         <router-link to="/teacher/content" class="nav-item" active-class="active">
           <el-icon><Reading /></el-icon> <span class="nav-text">内容管理</span>
@@ -24,21 +21,19 @@
         <router-link to="/teacher/interventions" class="nav-item" active-class="active">
           <el-icon><Document /></el-icon> <span class="nav-text">干预记录</span>
         </router-link>
-        
+
         <div class="nav-divider"></div>
-        
-        <div class="nav-item" @click="logout">
+
+        <button type="button" class="nav-item" @click="logout">
           <el-icon><SwitchButton /></el-icon> <span class="nav-text">退出登录</span>
-        </div>
+        </button>
       </nav>
 
       <div class="user-profile">
-        <div class="teacher-avatar">
-          <i class="fa-solid fa-user-graduate"></i>
-        </div>
+        <el-avatar :size="40" :src="profileAvatar" alt="教师头像" />
         <div class="user-info">
           <div class="user-name">{{ user.name || user.username }} 老师</div>
-          <div class="user-email">{{ user.username }}@edu.cn</div>
+          <div class="user-email">教师工作台</div>
         </div>
       </div>
     </aside>
@@ -47,23 +42,13 @@
     <div class="main-content">
       <header class="top-header">
         <h1 class="page-title">{{ pageTitle }}</h1>
-        
-        <div class="search-box">
-          <el-icon class="search-icon"><Search /></el-icon>
-          <input type="text" placeholder="Search" />
-        </div>
 
         <div class="header-right">
-          <el-icon class="icon-btn"><Bell /></el-icon>
-          <el-icon class="icon-btn"><Calendar /></el-icon>
-          <div class="avatar-group">
-            <el-avatar :size="32" src="https://api.dicebear.com/7.x/avataaars/svg?seed=A" class="overlap-avatar" />
-            <div class="avatar-count">+24</div>
-          </div>
+
           <button class="primary-btn" @click="openInterventionDialog()">添加干预</button>
         </div>
       </header>
-      
+
       <div class="page-wrapper">
         <router-view />
       </div>
@@ -156,11 +141,13 @@
 </template>
 
 <script setup>
+import brandLogo from '../../assets/brand/brand-logo-horizontal.svg'
+import profileAvatar from '../../assets/avatars/teachers/avatar-teacher-01-96.webp'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { 
-  Platform, DataAnalysis, Calendar, Reading, 
-  Document, SwitchButton, Search, Bell 
+import {
+  Platform, DataAnalysis, Calendar, Reading,
+  Document, SwitchButton, Search, Bell
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
@@ -265,7 +252,7 @@ const handleStudentChange = (studentId) => {
 const fetchStudents = async () => {
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get('http://127.0.0.1:8000/api/teacher/students', {
+    const res = await axios.get('/api/teacher/students', {
       headers: { Authorization: `Bearer ${token}` }
     })
     students.value = Array.isArray(res.data) ? res.data : []
@@ -298,7 +285,7 @@ const submitIntervention = async () => {
     ].join('\n')
 
     const token = localStorage.getItem('token')
-    await axios.post('http://127.0.0.1:8000/api/teacher/interventions', {
+    await axios.post('/api/teacher/interventions', {
       student_id: stu.id,
       record_date: startDate || new Date().toISOString().split('T')[0],
       notes
@@ -318,7 +305,7 @@ const submitIntervention = async () => {
 onMounted(() => {
   const userInfo = localStorage.getItem('user')
   if (userInfo) {
-    user.value = JSON.parse(userInfo)
+    try { user.value = JSON.parse(userInfo) || {} } catch { user.value = {} }
   }
   fetchStudents()
   openInterventionHandler = (event) => {
@@ -334,22 +321,22 @@ onUnmounted(() => {
 })
 
 const logout = () => {
-  localStorage.clear()
+  for (const key of ['token', 'access_token', 'role', 'user']) localStorage.removeItem(key)
   router.push('/login')
 }
 </script>
 
 <style scoped>
 .app-layout {
-  --ui-primary: #6B9AC4;
-  --ui-primary-hover: #5A89B3;
-  --ui-bg: #FAFAFA;
-  --ui-card: #FFFFFF;
-  --ui-text: #111827;
-  --ui-muted: #6B7280;
-  --ui-border: #E5E7EB;
+  --ui-primary: var(--brand-600);
+  --ui-primary-hover: var(--brand-600);
+  --ui-bg: var(--surface-warm);
+  --ui-card: var(--surface);
+  --ui-text: var(--text-primary);
+  --ui-muted: var(--text-secondary);
+  --ui-border: var(--border);
   --ui-radius: 12px;
-  --ui-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --ui-shadow: 0 2px 8px color-mix(in srgb, var(--gray-900) 6%, transparent);
   display: flex;
   min-height: 100vh;
   background-color: var(--ui-bg);
@@ -373,7 +360,7 @@ const logout = () => {
   margin-bottom: 40px;
   font-size: 18px;
   font-weight: bold;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .logo-icon {
@@ -393,7 +380,7 @@ const logout = () => {
   padding: 12px 20px;
   margin: 0 10px;
   border-radius: var(--ui-radius);
-  color: #4B5563;
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 14px;
   transition: all 0.2s;
@@ -404,7 +391,7 @@ const logout = () => {
 .nav-item .el-icon {
   font-size: 18px;
   margin-right: 15px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
 }
 
 .nav-item:hover, .nav-item.active {
@@ -413,7 +400,7 @@ const logout = () => {
 }
 
 .nav-item.active {
-  background-color: rgba(107, 154, 196, 0.14);
+  background-color: color-mix(in srgb, var(--brand-500) 14%, transparent);
   color: var(--ui-primary);
 }
 
@@ -422,8 +409,8 @@ const logout = () => {
 }
 
 .badge {
-  background-color: #34D399;
-  color: #FFFFFF;
+  background-color: var(--success-text);
+  color: var(--surface);
   font-size: 10px;
   padding: 2px 6px;
   border-radius: 10px;
@@ -434,7 +421,7 @@ const logout = () => {
 
 .nav-divider {
   height: 1px;
-  background-color: rgba(0,0,0,0.05);
+  background-color: color-mix(in srgb, var(--gray-900) 5%, transparent);
   margin: 20px 30px;
 }
 
@@ -455,7 +442,7 @@ const logout = () => {
   height: 40px;
   border-radius: 50%;
   background-color: var(--ui-primary);
-  color: #FFFFFF;
+  color: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -466,12 +453,12 @@ const logout = () => {
 .user-name {
   font-size: 14px;
   font-weight: bold;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .user-email {
   font-size: 12px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   margin-top: 2px;
 }
 
@@ -494,7 +481,7 @@ const logout = () => {
 .page-title {
   font-size: 24px;
   font-weight: bold;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -512,7 +499,7 @@ const logout = () => {
 }
 
 .search-icon {
-  color: #9CA3AF;
+  color: var(--text-secondary);
   margin-right: 10px;
   font-size: 18px;
 }
@@ -523,7 +510,7 @@ const logout = () => {
   background: transparent;
   width: 100%;
   font-size: 14px;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .header-right {
@@ -560,19 +547,19 @@ const logout = () => {
 }
 
 .overlap-avatar {
-  border: 2px solid #FFFFFF;
+  border: 2px solid var(--surface);
 }
 
 .avatar-count {
   font-size: 13px;
   font-weight: bold;
   margin-left: 8px;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .primary-btn {
   background-color: var(--ui-primary);
-  color: #FFFFFF;
+  color: var(--surface);
   border: none;
   padding: 10px 20px;
   border-radius: var(--ui-radius);
@@ -591,8 +578,8 @@ const logout = () => {
   border: 1px solid var(--ui-border);
   border-radius: var(--ui-radius);
   padding: 8px 12px;
-  background: #f9fafb;
-  color: #374151;
+  background: var(--surface-subtle);
+  color: var(--text-primary);
 }
 
 /* Page Wrapper */
@@ -625,7 +612,7 @@ const logout = () => {
 }
 
 .page-wrapper :deep(.el-table th.el-table__cell) {
-  background: #f8fafc;
+  background: var(--surface-subtle);
 }
 
 .page-wrapper :deep(.el-input__wrapper),

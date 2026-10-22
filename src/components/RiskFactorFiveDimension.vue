@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+import { businessAlpha, businessColor } from '../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
 import axios from "axios"
 import * as echarts from "echarts"
@@ -54,7 +55,7 @@ const isValidData = (data) => {
 const renderChart = async () => {
   if (!hasData.value || !radarRef.value) return
   await nextTick()
-  if (!radarChart) radarChart = echarts.init(radarRef.value)
+  if (!radarChart) radarChart = echarts.init(radarRef.value, 'xinyu-business')
   radarChart.setOption({
     tooltip: { trigger: "item" },
     radar: {
@@ -65,7 +66,7 @@ const renderChart = async () => {
         { name: "情绪", max: 100 },
         { name: "身体", max: 100 },
       ],
-      axisName: { color: "#4F46E5" },
+      axisName: { color: businessColor('data-primary') },
     },
     series: [
       {
@@ -79,9 +80,9 @@ const renderChart = async () => {
               riskData.value.emotion,
               riskData.value.physical,
             ],
-            areaStyle: { color: "rgba(79,70,229,0.2)" },
-            lineStyle: { color: "#4F46E5" },
-            itemStyle: { color: "#4F46E5" },
+            areaStyle: { color: businessAlpha('data-primary', 0.2) },
+            lineStyle: { color: businessColor('data-primary') },
+            itemStyle: { color: businessColor('data-primary') },
           },
         ],
       },
@@ -125,7 +126,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .risk-card {
   border-radius: 12px;
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px 0 color-mix(in srgb, var(--gray-900) 8%, transparent);
 }
 
 .risk-header {

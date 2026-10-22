@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <!-- 头部：大盘数据与导出功能 -->
     <div class="header-actions">
-      <h2>全校心理健康实时大屏与干预审计工作台</h2>
+      <h2>已分配学生概览与干预审计</h2>
       <div class="export-btns">
         <el-button type="warning" plain :loading="exporting" @click="exportComplianceReport">
           <el-icon><Document /></el-icon> 导出合规审计报告 (Word)
@@ -10,55 +10,59 @@
       </div>
     </div>
 
+    <el-alert :title="metrics?.data_status === 'empty' ? '当前尚未分配学生，请由学校完成分配。' : '仅统计明确分配给您的学生'" type="info" :closable="false" show-icon />
+    <el-alert v-if="metricsError" title="统计数据加载失败，请刷新重试。" type="error" :closable="false" show-icon class="mt-20" />
     <!-- 第一排：核心指标卡片 -->
     <el-row :gutter="20" class="mt-20" v-if="metrics">
-      <el-col :span="6">
+      <el-col :xs="12" :md="6">
         <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">今日独立访客 (UV)</div>
+          <div class="stat-title">已分配学生（人）</div>
           <div class="stat-value text-blue">{{ metrics.realtime_stats.uv }}</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="12" :md="6">
         <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">人均会话轮次</div>
+          <div class="stat-title">每会话用户消息数</div>
           <div class="stat-value">{{ metrics.realtime_stats.avg_session_rounds }}</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="12" :md="6">
         <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">触发红色警报 (次)</div>
+          <div class="stat-title">待处理预警（条）</div>
           <div class="stat-value text-red">{{ metrics.realtime_stats.crisis_alerts }}</div>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :xs="12" :md="6">
         <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">干预成功率</div>
-          <div class="stat-value text-green">85.0%</div>
+          <div class="stat-title">对话消息（条）</div>
+          <div class="stat-value text-green">{{ metrics.realtime_stats.pv }}</div>
         </el-card>
       </el-col>
     </el-row>
 
     <!-- 第二排：图表可视化 (ECharts) -->
-    <el-row :gutter="20" class="mt-20">
-      <!-- 漏斗图：干预流程 -->
-      <el-col :span="8">
+    <el-row :gutter="20" class="mt-20" v-if="metrics">
+      <!-- 原漏斗字段现为真实学生计数，各组不假定互为转化子集。 -->
+      <el-col :xs="24" :lg="8">
         <el-card shadow="hover" class="chart-card">
-          <template #header>干预转化漏斗图</template>
+          <template #header>学生状态计数</template>
           <div ref="funnelChartRef" class="chart-box"></div>
         </el-card>
       </el-col>
       <!-- 折线图：7日情绪趋势 -->
-      <el-col :span="8">
+      <el-col :xs="24" :lg="8">
         <el-card shadow="hover" class="chart-card">
-          <template #header>近7日情绪强度波动 (移动平均)</template>
-          <div ref="lineChartRef" class="chart-box"></div>
+          <template #header>近7日情绪均值</template>
+          <el-empty v-if="!hasEmotionSamples" description="近7日暂无有效情绪样本" :image-size="76" class="chart-empty" />
+          <div v-show="hasEmotionSamples" ref="lineChartRef" class="chart-box"></div>
         </el-card>
       </el-col>
-      <!-- 模拟 GIS 宿舍热力图 -->
-      <el-col :span="8">
+      <!-- 没有可信楼栋字段时明确留空。 -->
+      <el-col :xs="24" :lg="8">
         <el-card shadow="hover" class="chart-card">
-          <template #header>校园 GIS 楼栋风险热力图</template>
-          <div ref="heatmapChartRef" class="chart-box"></div>
+          <template #header>楼栋风险密度</template>
+          <el-empty v-if="!metrics.campus_heatmap?.length" description="尚无可用楼宇数据" :image-size="76" class="chart-empty" />
+          <div v-show="metrics.campus_heatmap?.length" ref="heatmapChartRef" class="chart-box"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -67,7 +71,7 @@
     <el-card shadow="hover" class="mt-20 warning-card" :class="{'has-unread': pendingCount > 0}">
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: bold; color: #EF4444; display: flex; align-items: center;">
+          <span style="font-weight: bold; color: var(--danger-text); display: flex; align-items: center;">
             <el-icon class="mr-5"><Warning /></el-icon> 待审核危机预警记录
             <el-badge v-if="pendingCount > 0" :value="pendingCount" class="ml-10" />
           </span>
@@ -80,7 +84,7 @@
         <el-table-column label="学生信息" width="170">
           <template #default="{row}">
             <div><strong>{{ row.studentName || '未知' }}</strong></div>
-            <div style="color: #6B7280; font-size: 12px;">学号: {{ row.studentId || '-' }} / {{ row.className || '-' }}</div>
+            <div style="color: var(--text-secondary); font-size: 12px;">学号: {{ row.studentId || '-' }} / {{ row.className || '-' }}</div>
           </template>
         </el-table-column>
         <el-table-column label="风险等级" width="100">
@@ -107,7 +111,7 @@
               <el-button size="small" type="success" @click="handleReview(row, 'pass')">通过</el-button>
               <el-button size="small" type="warning" @click="handleReview(row, 'reject')">驳回校正</el-button>
               <el-button size="small" type="danger" @click="handleReview(row, 'escalate')">升级处理</el-button>
-              <el-button size="small" type="primary" @click="contactStudent(row)">一键联系</el-button>
+              <el-button size="small" type="primary" @click="contactStudent(row)">联络说明</el-button>
             </div>
           </template>
         </el-table-column>
@@ -117,17 +121,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { businessColor, businessPalette } from '../../styles/business-theme.js'
+import { ref, onMounted, onUnmounted, computed, nextTick, shallowRef } from 'vue'
 import { Document, Warning } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import * as echarts from 'echarts'
 import axios from 'axios'
 
 const metrics = ref(null)
+const metricsError = ref(false)
+const hasEmotionSamples = computed(() => ['joy', 'anxiety'].some(field => metrics.value?.emotion_trends_7d?.[field]?.some(value => typeof value === 'number' && Number.isFinite(value))))
 const pendingList = ref([])
 const loadingPending = ref(false)
 const ws = ref(null)
 let pendingPollTimer = null
+let reconnectTimer = null
+let unmounted = false
+const resizeCharts = () => Object.values(chartInstances.value).forEach(chart => chart?.resize())
 
 const pendingCount = computed(() => pendingList.value.length)
 
@@ -135,7 +145,7 @@ const funnelChartRef = ref(null)
 const lineChartRef = ref(null)
 const heatmapChartRef = ref(null)
 const exporting = ref(false)
-const chartInstances = ref({
+const chartInstances = shallowRef({
   funnel: null,
   line: null,
   heatmap: null
@@ -178,9 +188,9 @@ const handleReview = async (row, action) => {
 }
 
 const contactStudent = (row) => {
-  ElMessageBox.alert(`已为您调出【${row.studentName || '该学生'}】的档案，并准备好紧急联络渠道（辅导员电话/家长电话），请确认是否拨打。`, '一键联系', {
-    confirmButtonText: '立即联系',
-    type: 'warning'
+  ElMessageBox.alert('当前预警记录未提供可拨打的联络方式。请在学生管理中核实档案与校内联络流程。', '联络说明', {
+    confirmButtonText: '知道了',
+    type: 'info'
   })
 }
 
@@ -199,14 +209,16 @@ const normalizeWsWarning = (payload) => {
 }
 
 const initWebSocket = () => {
-  const token = localStorage.getItem('token')
+  const token = (localStorage.getItem('token') || localStorage.getItem('access_token') || '').trim().replace(/^bearer\s+/i, '').trim()
   if (!token) return
-  const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/ws?token=${token}`
-  ws.value = new WebSocket(wsUrl)
+  const wsUrl = new URL(axios.getUri({ url: '/api/ws' }), window.location.href)
+  wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+  ws.value = new WebSocket(wsUrl.href, ['access_token', token])
   ws.value.onopen = () => {
     console.log('Teacher WS connected')
   }
   ws.value.onmessage = (event) => {
+    if (unmounted) return
     try {
       const msg = JSON.parse(event.data)
       if (msg.type === 'new_warning') {
@@ -224,9 +236,9 @@ const initWebSocket = () => {
       }
     } catch (e) {}
   }
-  ws.value.onclose = () => {
+  ws.value.onclose = (event) => {
     console.log('Teacher WS disconnected, retrying...')
-    setTimeout(initWebSocket, 5000)
+    if (!unmounted && event.code !== 1008) reconnectTimer = setTimeout(initWebSocket, 5000)
   }
 }
 
@@ -250,14 +262,21 @@ const playAlertSound = () => {
 }
 
 onMounted(async () => {
+  window.addEventListener('resize', resizeCharts)
   await fetchMetrics()
   await fetchPendingList()
+  await nextTick()
+  if (unmounted) return
   initCharts()
   initWebSocket()
   pendingPollTimer = setInterval(fetchPendingList, 8000)
 })
 
 onUnmounted(() => {
+  unmounted = true
+  clearTimeout(reconnectTimer)
+  window.removeEventListener('resize', resizeCharts)
+  Object.values(chartInstances.value).forEach(chart => chart?.dispose())
   if (ws.value) {
     ws.value.close()
   }
@@ -267,11 +286,12 @@ onUnmounted(() => {
 })
 
 const fetchMetrics = async () => {
+  metricsError.value = false
   try {
     const res = await axios.get('/api/advanced-teacher/dashboard/metrics')
     metrics.value = res.data
   } catch (error) {
-    console.error(error)
+    metricsError.value = true
   }
 }
 
@@ -279,9 +299,9 @@ const exportComplianceReport = async () => {
   exporting.value = true
   try {
     const snapshots = [
-      { key: 'funnel', title: '干预转化漏斗图' },
-      { key: 'line', title: '近7日情绪强度波动 (移动平均)' },
-      { key: 'heatmap', title: '校园 GIS 楼栋风险热力图' }
+      { key: 'funnel', title: '学生状态计数' },
+      { key: 'line', title: '近7日情绪均值' },
+      { key: 'heatmap', title: '楼栋风险密度' }
     ]
       .map(({ key, title }) => {
         const chart = chartInstances.value[key]
@@ -291,7 +311,7 @@ const exportComplianceReport = async () => {
           image_data_url: chart.getDataURL({
             type: 'png',
             pixelRatio: 3,
-            backgroundColor: '#ffffff'
+            backgroundColor: businessColor('surface')
           })
         }
       })
@@ -327,90 +347,84 @@ const exportComplianceReport = async () => {
 const initCharts = () => {
   if (!metrics.value) return
 
-  // 1. 漏斗图
-  const funnelChart = echarts.init(funnelChartRef.value)
+  // 1. Actual category counts, without an assumed conversion denominator.
+  Object.values(chartInstances.value).forEach(chart => chart?.dispose())
+  chartInstances.value = { funnel: null, line: null, heatmap: null }
+  const funnelChart = echarts.init(funnelChartRef.value, 'xinyu-business')
   chartInstances.value.funnel = funnelChart
   funnelChart.setOption({
-    textStyle: { fontFamily: 'Microsoft YaHei, SimSun, Arial, sans-serif' },
-    tooltip: { trigger: 'item', formatter: '{b} : {c}%' },
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: 10, right: 28, top: 16, bottom: 16, containLabel: true },
+    xAxis: { type: 'value', min: 0, minInterval: 1 },
+    yAxis: { type: 'category', inverse: true, data: metrics.value.funnel_data.map(item => item.name) },
     series: [{
-      type: 'funnel',
-      left: '10%', top: 20, bottom: 20, width: '80%',
-      min: 0, max: 100, minSize: '0%', maxSize: '100%',
-      sort: 'desc', gap: 2,
-      label: { show: true, position: 'inside' },
-      data: metrics.value.funnel_data
+      name: '学生数', type: 'bar', barMaxWidth: 24,
+      label: { show: true, position: 'right', fontSize: 12, color: businessColor('text-secondary') },
+      itemStyle: { color: businessColor('data-primary'), borderRadius: [0, 4, 4, 0] },
+      data: metrics.value.funnel_data.map(item => item.value),
     }],
-    color: ['#EF4444', '#F59E0B', '#3B82F6', '#10B981', '#059669']
   })
 
-  // 2. 情绪折线图 (带数据缩放)
-  const lineChart = echarts.init(lineChartRef.value)
-  chartInstances.value.line = lineChart
-  lineChart.setOption({
-    textStyle: { fontFamily: 'Microsoft YaHei, SimSun, Arial, sans-serif' },
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['愉悦强度', '焦虑强度'] },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: { type: 'category', boundaryGap: false, data: metrics.value.emotion_trends_7d.dates },
-    yAxis: { type: 'value', max: 1.0 },
-    series: [
-      { name: '愉悦强度', type: 'line', smooth: true, data: metrics.value.emotion_trends_7d.joy, itemStyle: { color: '#10B981' } },
-      { name: '焦虑强度', type: 'line', smooth: true, data: metrics.value.emotion_trends_7d.anxiety, itemStyle: { color: '#EF4444' },
-        markLine: { data: [{ type: 'average', name: 'Avg' }] }
-      }
-    ]
-  })
+  // 2. Null days remain gaps; no sample never becomes a zero emotion score.
+  if (hasEmotionSamples.value) {
+    const trend = metrics.value.emotion_trends_7d
+    const lineChart = echarts.init(lineChartRef.value, 'xinyu-business')
+    chartInstances.value.line = lineChart
+    lineChart.setOption({
+      tooltip: {
+        trigger: 'axis', renderMode: 'richText',
+        formatter: params => {
+          const index = params[0]?.dataIndex ?? 0
+          return [trend.dates[index], `有效样本：${trend.sample_counts?.[index] ?? '未提供'}`, ...params.map(item => `${item.seriesName}：${item.value == null ? '暂无样本' : item.value}`)].join('\n')
+        },
+      },
+      legend: { data: ['愉悦强度', '焦虑强度'], top: 0, bottom: 'auto' },
+      grid: { left: 12, right: 16, top: 44, bottom: 20, containLabel: true },
+      xAxis: { type: 'category', boundaryGap: false, data: trend.dates, axisLabel: { formatter: value => value.length >= 10 ? value.slice(5) : value } },
+      yAxis: { type: 'value', min: 0, max: 1.0 },
+      series: [
+        { name: '愉悦强度', type: 'line', connectNulls: false, data: trend.joy, itemStyle: { color: businessPalette.emotions.joy } },
+        { name: '焦虑强度', type: 'line', connectNulls: false, data: trend.anxiety, itemStyle: { color: businessPalette.emotions.anxiety } },
+      ],
+    })
+  }
 
-  // 3. 模拟热力图 (这里用散点图+涟漪特效模拟 GIS 热力)
-  const heatChart = echarts.init(heatmapChartRef.value)
-  chartInstances.value.heatmap = heatChart
-  const heatData = metrics.value.campus_heatmap.map((item, i) => [i * 20 + 20, Math.random() * 50 + 20, item.risk_density * 100, item.building])
-  heatChart.setOption({
-    textStyle: { fontFamily: 'Microsoft YaHei, SimSun, Arial, sans-serif' },
-    tooltip: { formatter: p => `${p.data[3]}<br/>危险密度指数: ${p.data[2].toFixed(1)}` },
-    xAxis: { show: false, min: 0, max: 100 },
-    yAxis: { show: false, min: 0, max: 100 },
-    series: [{
-      type: 'effectScatter',
-      symbolSize: function (val) { return val[2] / 2; },
-      data: heatData,
-      itemStyle: {
-        color: function(params) {
-          return params.data[2] > 80 ? 'rgba(239, 68, 68, 0.8)' : 'rgba(245, 158, 11, 0.8)'
-        }
-      }
-    }]
-  })
-
-  window.addEventListener('resize', () => {
-    funnelChart.resize()
-    lineChart.resize()
-    heatChart.resize()
-  })
+  // Display the returned density by building; no invented geographic coordinates.
+  if (metrics.value.campus_heatmap?.length) {
+    const heatChart = echarts.init(heatmapChartRef.value, 'xinyu-business')
+    chartInstances.value.heatmap = heatChart
+    heatChart.setOption({
+      tooltip: { trigger: 'axis' },
+      grid: { left: 12, right: 24, top: 16, bottom: 16, containLabel: true },
+      xAxis: { type: 'value', min: 0, max: 1, name: '密度' },
+      yAxis: { type: 'category', data: metrics.value.campus_heatmap.map(item => item.building) },
+      series: [{ type: 'bar', barMaxWidth: 24, data: metrics.value.campus_heatmap.map(item => item.risk_density), itemStyle: { color: businessColor('data-primary') } }],
+    })
+  }
 }
 </script>
 
 <style scoped>
-.dashboard-container { padding: 20px; background: #F3F4F6; min-height: calc(100vh - 60px); }
+.dashboard-container { padding: 20px; background: var(--surface-warm); min-height: calc(100vh - 60px); }
 .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.header-actions h2 { margin: 0; color: #111827; }
+.header-actions h2 { margin: 0; color: var(--text-primary); }
 
 .stat-card { text-align: center; border-radius: 12px; }
-.stat-title { font-size: 14px; color: #6B7280; margin-bottom: 10px; }
+.stat-title { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
 .stat-value { font-size: 28px; font-weight: bold; }
-.text-blue { color: #3B82F6; }
-.text-red { color: #EF4444; }
-.text-green { color: #10B981; }
+.text-blue { color: var(--brand-600); }
+.text-red { color: var(--danger-text); }
+.text-green { color: var(--success-text); }
 
 .chart-card { border-radius: 12px; }
 .chart-box { height: 250px; width: 100%; }
+.chart-empty { min-height: 250px; }
 
-.audit-msg { font-size: 14px; color: #374151; background: #F9FAFB; padding: 10px; border-radius: 6px; }
-.audit-reply { font-size: 13px; color: #4B5563; border-left: 3px solid #3B82F6; padding-left: 10px; }
+.audit-msg { font-size: 14px; color: var(--text-primary); background: var(--surface-subtle); padding: 10px; border-radius: 6px; }
+.audit-reply { font-size: 13px; color: var(--text-secondary); border-left: 3px solid var(--brand-600); padding-left: 10px; }
 
 .slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 8px; }
-.slider-row span { width: 80px; font-size: 12px; color: #4B5563; }
+.slider-row span { width: 80px; font-size: 12px; color: var(--text-secondary); }
 .slider-row :deep(.el-progress) { flex: 1; }
 
 .mt-10 { margin-top: 10px; }
@@ -428,14 +442,14 @@ const initCharts = () => {
 }
 
 .warning-card.has-unread {
-  border: 1px solid #EF4444;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+  border: 1px solid var(--danger-text);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--danger-text) 20%, transparent);
 }
 
 :deep(.warning-row-unread) {
-  background-color: #FEF2F2 !important;
+  background-color: var(--danger-100) !important;
 }
 :deep(.warning-row-unread:hover > td) {
-  background-color: #FEE2E2 !important;
+  background-color: var(--danger-100) !important;
 }
 </style>

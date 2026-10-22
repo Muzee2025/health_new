@@ -86,7 +86,7 @@
                   ]"
                 >
                   <template v-if="msg.role === 'ai'">
-                    <span v-html="formatAiMessage(msg.content)" />
+                    <span class="ai-message-text">{{ msg.content }}</span>
                   </template>
                   <template v-else>
                     {{ msg.content }}
@@ -131,7 +131,7 @@
               <el-button text @click="refreshRiskRadar">重试</el-button>
             </div>
             <div ref="radarRef" class="radar-box"></div>
-            <p class="risk-result" :class="riskClass">当前风险等级：{{ riskLevelText }}</p>
+            <p v-if="latestEmotion" class="risk-result" :class="riskClass">当前风险等级：{{ riskLevelText }}</p><p v-else class="risk-result">暂无会话分析数据</p>
           </div>
         </aside>
       </div>
@@ -170,20 +170,28 @@
 </template>
 
 <script setup>
+import userAvatar from '../../assets/avatars/students/avatar-student-01-96.webp'
+import anonymousAvatar from '../../assets/avatars/students/avatar-student-02-96.webp'
+import { businessAlpha, businessColor } from '../../styles/business-theme.js'
 import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { Message, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import * as echarts from 'echarts'
-import {
-  deleteConversationLocal,
-  getAllConversations,
-  getUiState,
-  listMessages,
-  putMessage,
-  saveUiState,
-  upsertConversation,
-} from '@/services/chatIndexedDb'
+import { createChatStorage } from '@/services/chatIndexedDb'
+import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
+
+const sessionAbort = new AbortController()
+const chatSession = createPrivateChatSession(storedSessionToken(), storedSessionToken, sessionAbort.signal)
+const { deleteConversationLocal, getAllConversations, getUiState, listMessages, putMessage, saveUiState, upsertConversation } = createChatStorage(chatSession)
+const sessionRequest = (method, url, data, config = {}) => chatSession.run(() => axios.request({ ...config, method, url, data, signal: sessionAbort.signal }))
+const sessionHttp = {
+  get: (url, config) => sessionRequest('get', url, undefined, config),
+  post: (url, data, config) => sessionRequest('post', url, data, config),
+  patch: (url, data, config) => sessionRequest('patch', url, data, config),
+  delete: (url, config) => sessionRequest('delete', url, undefined, config),
+}
+let wsReconnectTimer = null
 
 const inputText = ref('')
 const isTyping = ref(false)
@@ -224,8 +232,6 @@ let crisisBannerTimer = null
 const radarRef = ref(null)
 let radarChart = null
 
-const userAvatar = 'https://api.dicebear.com/7.x/avataaars/svg?seed=student1'
-const anonymousAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
 
 const filteredSessions = computed(() => {
   const base = sessions.value.filter((s) => !s.archived)
@@ -256,13 +262,15 @@ const ws = ref(null)
 
 const initWebSocket = () => {
   const token = getStoredToken()
-  if (!token) return
-  const wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/api/ws?token=${token}`
-  ws.value = new WebSocket(wsUrl)
+  if (!token || !chatSession.isActive()) return
+  const wsUrl = new URL(axios.getUri({ url: '/api/ws' }), window.location.href)
+  wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+  ws.value = new WebSocket(wsUrl.href, ['access_token', token])
   ws.value.onopen = () => {
     console.log('Student WS connected')
   }
   ws.value.onmessage = (event) => {
+    if (!chatSession.isActive()) return
     try {
       const msg = JSON.parse(event.data)
       if (msg.type === 'warning_processed') {
@@ -272,11 +280,12 @@ const initWebSocket = () => {
           showClose: true
         })
       }
-    } catch (e) {}
+    } catch (e) {
+      if (!chatSession.isActive()) return
+    }
   }
-  ws.value.onclose = () => {
-    console.log('Student WS disconnected, retrying...')
-    setTimeout(initWebSocket, 5000)
+  ws.value.onclose = (event) => {
+    if (chatSession.isActive() && event.code !== 1008) wsReconnectTimer = setTimeout(initWebSocket, 5000)
   }
 }
 
@@ -286,20 +295,26 @@ onMounted(async () => {
     normalReplyAvgChars.value = Number(localStorage.getItem(NORMAL_REPLY_AVG_KEY) || '0')
     normalReplyCount.value = Number(localStorage.getItem(NORMAL_REPLY_COUNT_KEY) || '0')
   } catch {
+    if (!chatSession.isActive()) return
     deepThinkEnabled.value = false
     normalReplyAvgChars.value = 0
     normalReplyCount.value = 0
   }
   await loadSessionsFromLocal()
+  if (!chatSession.isActive()) return
   await syncSessionsFromServer()
+  if (!chatSession.isActive()) return
   if (sessions.value.length > 0) await loadSession(sessions.value[0].id)
   else await createNewChat('daily')
+  if (!chatSession.isActive()) return
   initRadar()
   window.addEventListener('resize', resizeRadar)
   initWebSocket()
 })
 
 onBeforeUnmount(() => {
+  sessionAbort.abort()
+  clearTimeout(wsReconnectTimer)
   if (radarChart) radarChart.dispose()
   if (crisisBannerTimer) clearTimeout(crisisBannerTimer)
   window.removeEventListener('resize', resizeRadar)
@@ -339,7 +354,7 @@ const fetchSessions = async () => {
   loadingSessions.value = true
   try {
     const res = await withApiRetry(
-      () => axios.get('/api/advanced-ai/sessions'),
+      () => sessionHttp.get('/api/advanced-ai/sessions'),
       'fetchSessions',
       3
     )
@@ -374,6 +389,7 @@ const syncSessionsFromServer = async () => {
     await fetchSessions()
     return true
   } catch (err) {
+    if (!chatSession.isActive()) return
     console.warn('[AdvancedAiChat] syncSessionsFromServer failed', {
       status: err?.response?.status || err?.status,
       url: err?.response?.config?.url,
@@ -399,6 +415,7 @@ const loadSessionsFromLocal = async () => {
       }))
       .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')))
   } catch {
+    if (!chatSession.isActive()) return
     sessions.value = []
   } finally {
     loadingSessions.value = false
@@ -406,7 +423,7 @@ const loadSessionsFromLocal = async () => {
 }
 
 const persistUiState = async () => {
-  if (!currentSessionId.value) return
+  if (!chatSession.isActive() || !currentSessionId.value) return
   await saveUiState(currentSessionId.value, {
     draft: inputText.value,
     scrollTop: chatScrollRef.value?.scrollTop || 0,
@@ -416,6 +433,7 @@ const persistUiState = async () => {
 
 const restoreUiState = async (sessionId) => {
   const state = await getUiState(sessionId)
+  chatSession.assertActive()
   inputText.value = state?.draft || ''
   await nextTick()
   if (chatScrollRef.value) {
@@ -448,6 +466,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 const isRetryableHttpError = (err) => {
   const status = err?.response?.status || err?.status || 0
+  if (err?.name === 'AbortError' || !chatSession.isActive()) return false
   if (!status) return true
   return status >= 500 || status === 429
 }
@@ -458,6 +477,7 @@ const withApiRetry = async (fn, label, retries = 2) => {
     try {
       return await fn()
     } catch (err) {
+      if (!chatSession.isActive()) return
       lastErr = err
       if (!isRetryableHttpError(err) || attempt === retries) break
       const waitMs = 400 * (attempt + 1)
@@ -477,6 +497,7 @@ const safeParseJson = (text) => {
   try {
     return JSON.parse(text)
   } catch {
+    if (!chatSession.isActive()) return
     return null
   }
 }
@@ -500,9 +521,12 @@ const createTimeoutController = (ms) => {
 
 const streamDeepThinkReply = async (payload, aiLocal) => {
   const token = getStoredToken()
+  chatSession.assertActive()
   const { controller, timer } = createTimeoutController(70000)
+  const abortStream = () => controller.abort()
+  sessionAbort.signal.addEventListener('abort', abortStream, { once: true })
   try {
-    const res = await fetch('/api/advanced-ai/chat/stream', {
+    const res = await fetch(axios.getUri({ url: '/api/advanced-ai/chat/stream' }), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -523,6 +547,7 @@ const streamDeepThinkReply = async (payload, aiLocal) => {
 
     while (true) {
       const { done, value } = await reader.read()
+      chatSession.assertActive()
       if (done) break
       buffer += decoder.decode(value, { stream: true })
       const packets = buffer.split('\n\n')
@@ -553,6 +578,7 @@ const streamDeepThinkReply = async (payload, aiLocal) => {
     return finalPayload
   } finally {
     clearTimeout(timer)
+    sessionAbort.signal.removeEventListener('abort', abortStream)
   }
 }
 
@@ -576,7 +602,7 @@ const createNewChat = async (mode) => {
   latestEmotion.value = null
   crisisBannerVisible.value = false
   try {
-    const res = await axios.post('/api/advanced-ai/sessions', { mode, conversation_id: conversationId })
+    const res = await sessionHttp.post('/api/advanced-ai/sessions', { mode, conversation_id: conversationId })
     currentSessionId.value = res.data.session_id
     currentMode.value = mode
     const initial = { id: `${conversationId}-ai-init`, role: 'ai', content: res.data.initial_message, timestamp: now }
@@ -596,6 +622,7 @@ const createNewChat = async (mode) => {
     await loadSessionsFromLocal()
     await restoreUiState(conversationId)
   } catch {
+    if (!chatSession.isActive()) return
     await deleteConversationLocal(conversationId)
     await loadSessionsFromLocal()
     ElMessage.error('创建会话失败')
@@ -622,7 +649,7 @@ const loadSession = async (id) => {
       }))
     }
     const res = await withApiRetry(
-      () => axios.get(`/api/advanced-ai/sessions/${id}/messages`),
+      () => sessionHttp.get(`/api/advanced-ai/sessions/${id}/messages`),
       'loadSessionMessages',
       2
     )
@@ -644,6 +671,7 @@ const loadSession = async (id) => {
     latestEmotion.value = lastAiMsg ? lastAiMsg.emotion_tags : null
     await restoreUiState(id)
   } catch (error) {
+    if (!chatSession.isActive()) return
     const status = error?.response?.status
     if (status === 401 || status === 403) {
       ElMessage.error('登录状态已失效，请重新登录后继续')
@@ -683,6 +711,7 @@ const loadSession = async (id) => {
 }
 
 const sendMessage = async () => {
+  if (!chatSession.isActive()) return
   if (!inputText.value.trim() || isTyping.value || (!isAnonymous.value && !currentSessionId.value)) return
   const userMsg = inputText.value.trim()
   inputText.value = ''
@@ -748,9 +777,10 @@ const sendMessage = async () => {
       data = await streamDeepThinkReply(buildPayload(true), streamAiLocal)
       streamAiLocal.content = data.reply || streamAiLocal.content
     } else {
-      data = (await axios.post('/api/advanced-ai/chat', buildPayload(false))).data
+      data = (await sessionHttp.post('/api/advanced-ai/chat', buildPayload(false))).data
     }
   } catch (error) {
+    if (!chatSession.isActive()) return
     if (streamAiLocal) {
       const idx = chatHistory.value.findIndex((x) => x.id === streamAiLocal.id)
       if (idx >= 0) chatHistory.value.splice(idx, 1)
@@ -772,7 +802,7 @@ const sendMessage = async () => {
   }
 
   try {
-    if (!data) return
+    if (!data || !chatSession.isActive()) return
     const currentReply = data.reply || ''
     const currentChars = currentReply.replace(/\s+/g, '').length
     lastReplyChars.value = currentChars
@@ -788,6 +818,7 @@ const sendMessage = async () => {
         localStorage.setItem(NORMAL_REPLY_AVG_KEY, String(normalReplyAvgChars.value))
         localStorage.setItem(NORMAL_REPLY_COUNT_KEY, String(normalReplyCount.value))
       } catch {
+        if (!chatSession.isActive()) return
         // 本地存储不可用时仅忽略，不影响主流程
       }
     }
@@ -850,7 +881,7 @@ const sendMessage = async () => {
     isTyping.value = false
     instantFeedback.value = ''
     await scrollToBottom()
-    if (!isAnonymous.value) {
+    if (!isAnonymous.value && chatSession.isActive()) {
       await persistUiState()
     }
   }
@@ -869,6 +900,7 @@ const toggleDeepThink = () => {
     }
     ElMessage.success(next ? '已开启深度思考模式' : '已关闭深度思考模式')
   } catch {
+    if (!chatSession.isActive()) return
     ElMessage.error('无法保存深度思考设置，请检查浏览器存储权限')
   }
 }
@@ -892,15 +924,16 @@ const renameSession = async (session) => {
     archived: Boolean(session.archived),
   })
   try {
-    await axios.patch(`/api/advanced-ai/sessions/${session.id}`, { title })
+    await sessionHttp.patch(`/api/advanced-ai/sessions/${session.id}`, { title })
   } catch {
+    if (!chatSession.isActive()) return
     ElMessage.warning('服务端重命名失败，已保留本地名称')
   }
   await loadSessionsFromLocal()
 }
 
 const verifySessionRemovedOnServer = async (sessionId) => {
-  const res = await axios.get('/api/advanced-ai/sessions')
+  const res = await sessionHttp.get('/api/advanced-ai/sessions')
   const list = res?.data?.data || []
   return !list.some((row) => row.id === sessionId)
 }
@@ -909,11 +942,12 @@ const deleteSessionRemoteWithRetry = async (sessionId, maxRetries = 2) => {
   let lastError = null
   for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
     try {
-      await axios.delete(`/api/advanced-ai/sessions/${sessionId}`)
+      await sessionHttp.delete(`/api/advanced-ai/sessions/${sessionId}`)
       const verified = await verifySessionRemovedOnServer(sessionId)
       if (!verified) throw new Error('verify_failed')
       return { ok: true, state: 'deleted', attempt: attempt + 1 }
     } catch (error) {
+      if (!chatSession.isActive()) return
       lastError = error
       const status = error?.response?.status
       if (status === 404) {
@@ -978,6 +1012,7 @@ const handleSessionCommand = async (cmd, session) => {
     if (cmd === 'rename') await renameSession(session)
     if (cmd === 'delete') await deleteSession(session)
   } catch {
+    if (!chatSession.isActive()) return
     // 用户取消
   }
 }
@@ -990,12 +1025,10 @@ const triggerCrisisBanner = () => {
   }, 10000)
 }
 
-const formatAiMessage = (text) => (text || '').replace(/\n/g, '<br/>')
-
 const getHeatmapStyle = (tokenObj) => {
   if (!tokenObj.weight || tokenObj.weight <= 0) return {}
   return {
-    backgroundColor: `rgba(229, 115, 115, ${Math.min(tokenObj.weight * 0.8, 1)})`,
+    backgroundColor: businessAlpha('data-risk-high', Math.min(tokenObj.weight * 0.8, 1)),
     borderRadius: '4px',
     padding: '0 2px'
   }
@@ -1005,8 +1038,8 @@ const isDangerText = (text) => /跳楼|自杀|轻生|不想活|结束生命/.tes
 
 const initRadar = () => {
   if (!radarRef.value) return
-  radarChart = echarts.init(radarRef.value)
-  drawRadar([45, 40, 35, 50, 38])
+  radarChart = echarts.init(radarRef.value, 'xinyu-business')
+  drawRadar([])
 }
 
 const resizeRadar = () => {
@@ -1019,9 +1052,9 @@ const drawRadar = (vals) => {
     radar: {
       radius: '65%',
       splitNumber: 4,
-      axisName: { color: '#64748B', fontSize: 11 },
-      splitLine: { lineStyle: { color: '#E5E7EB' } },
-      splitArea: { areaStyle: { color: ['#fff', '#fafafa'] } },
+      axisName: { color: businessColor('text-secondary'), fontSize: 12 },
+      splitLine: { lineStyle: { color: businessColor('border') } },
+      splitArea: { areaStyle: { color: [businessColor('surface'), businessColor('surface-warm')] } },
       indicator: [
         { name: '学业', max: 100 },
         { name: '人际', max: 100 },
@@ -1036,9 +1069,9 @@ const drawRadar = (vals) => {
         data: [
           {
             value: vals,
-            areaStyle: { color: 'rgba(229,115,115,0.24)' },
-            lineStyle: { color: '#E57373', width: 2 },
-            itemStyle: { color: '#E57373' }
+            areaStyle: { color: businessAlpha('data-primary', 0.24) },
+            lineStyle: { color: businessColor('data-risk-high'), width: 2 },
+            itemStyle: { color: businessColor('data-risk-high') }
           }
         ]
       }
@@ -1072,15 +1105,15 @@ const scrollToBottom = async () => {
 </script>
 
 <style scoped>
-:root {
-  --primary: #6b9ac4;
-  --warm: #f5ebe0;
-  --mint: #d6e8db;
-  --danger: #e57373;
-  --bg: #fafafa;
-  --card: #ffffff;
+.chat-page {
+  --primary: var(--brand-600);
+  --warm: var(--warning-100);
+  --mint: var(--accent-sage-soft);
+  --danger: var(--danger-text);
+  --bg: var(--surface-warm);
+  --card: var(--surface);
   --radius: 12px;
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow: 0 2px 8px color-mix(in srgb, var(--gray-900) 6%, transparent);
 }
 
 .chat-page {
@@ -1093,7 +1126,7 @@ const scrollToBottom = async () => {
 .session-panel {
   width: 280px;
   background: var(--card);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   display: flex;
@@ -1119,7 +1152,7 @@ const scrollToBottom = async () => {
 .session-search :deep(.el-input__wrapper) {
   border-radius: var(--radius);
   box-shadow: none;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
 }
 
 .session-list {
@@ -1137,11 +1170,11 @@ const scrollToBottom = async () => {
 }
 
 .session-item:hover {
-  background: #f7f9fc;
+  background: var(--surface-subtle);
 }
 
 .session-item.active {
-  background: #eef4fa;
+  background: var(--brand-50);
 }
 
 .session-top {
@@ -1151,15 +1184,15 @@ const scrollToBottom = async () => {
 }
 
 .session-archived {
-  font-size: 11px;
-  color: #64748b;
-  background: #eef2f7;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--surface-subtle);
   border-radius: 999px;
   padding: 1px 6px;
 }
 
 .session-more {
-  color: #94a3b8;
+  color: var(--text-secondary);
   cursor: pointer;
   user-select: none;
   padding: 0 4px;
@@ -1176,13 +1209,13 @@ const scrollToBottom = async () => {
 }
 
 .dot-counsel {
-  background: #7ab997;
+  background: var(--success-text);
 }
 
 .session-name {
   flex: 1;
   font-size: 13px;
-  color: #334155;
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1190,20 +1223,20 @@ const scrollToBottom = async () => {
 
 .session-time {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-secondary);
 }
 
 .session-preview {
   margin-top: 6px;
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-secondary);
 }
 
 .chat-main-wrap {
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   background: var(--card);
@@ -1212,7 +1245,7 @@ const scrollToBottom = async () => {
 
 .chat-top-bar {
   padding: 12px 16px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1230,21 +1263,21 @@ const scrollToBottom = async () => {
   border-radius: 999px;
   padding: 8px 14px;
   font-size: 13px;
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .mode-pill.active {
   background: var(--primary);
-  color: #fff;
+  color: var(--surface);
 }
 
 .voice-tag {
   border-radius: 999px;
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   padding: 5px 10px;
   font-size: 12px;
 }
@@ -1254,7 +1287,7 @@ const scrollToBottom = async () => {
   align-items: center;
   gap: 10px;
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .chat-content {
@@ -1277,8 +1310,8 @@ const scrollToBottom = async () => {
   margin-bottom: 14px;
   border-radius: var(--radius);
   padding: 10px 12px;
-  background: linear-gradient(90deg, #e57373, #ef9a9a);
-  color: #fff;
+  background: var(--danger-100);
+  color: var(--danger-text);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1322,29 +1355,30 @@ const scrollToBottom = async () => {
 }
 
 .bubble-ai {
-  background: linear-gradient(135deg, #eff4f9 0%, var(--warm) 100%);
-  color: #334155;
+  background: linear-gradient(135deg, var(--surface-subtle) 0%, var(--warm) 100%);
+  color: var(--text-primary);
 }
+.ai-message-text { white-space: pre-wrap; overflow-wrap: anywhere; }
 
 .bubble-user {
-  background: linear-gradient(135deg, #5f8fb9 0%, #6b9ac4 100%);
-  color: #ffffff !important;
+  background: linear-gradient(135deg, var(--brand-600) 0%, var(--brand-600) 100%);
+  color: var(--surface) !important;
   font-weight: 500;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  text-shadow: 0 1px 0 color-mix(in srgb, var(--gray-900) 8%, transparent);
 }
 
 .bubble-user span {
-  color: #ffffff !important;
+  color: var(--surface) !important;
 }
 
 .bubble-danger {
   border: 1px solid var(--danger);
-  background: #fdecec;
-  color: #7f1d1d;
+  background: var(--danger-100);
+  color: var(--danger-text);
 }
 
 .kw-mark {
-  background: #fde68a;
+  background: var(--warning-100);
   border-radius: 4px;
   padding: 0 2px;
 }
@@ -1354,7 +1388,7 @@ const scrollToBottom = async () => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #94a3b8;
+  background: var(--text-secondary);
   margin-right: 3px;
   animation: dot 1.2s infinite ease-in-out;
 }
@@ -1369,8 +1403,8 @@ const scrollToBottom = async () => {
 
 .thinking-panel {
   margin: 2px 0 14px;
-  border: 1px dashed #cbd5e1;
-  background: rgba(241, 245, 249, 0.78);
+  border: 1px dashed var(--border);
+  background: color-mix(in srgb, var(--brand-500) 78%, transparent);
   border-radius: 10px;
   padding: 10px 12px;
 }
@@ -1382,11 +1416,11 @@ const scrollToBottom = async () => {
   gap: 10px;
   margin-bottom: 6px;
   font-size: 12px;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .thinking-phase {
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 
@@ -1397,22 +1431,22 @@ const scrollToBottom = async () => {
 }
 
 .thinking-line {
-  color: #475569;
+  color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.5;
 }
 
 .analysis-panel {
   width: 340px;
-  border-left: 1px solid #e5e7eb;
-  background: #fcfcfd;
+  border-left: 1px solid var(--border);
+  background: var(--surface-warm);
   padding: 16px;
   overflow-y: auto;
 }
 
 .panel-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 14px;
@@ -1428,12 +1462,12 @@ const scrollToBottom = async () => {
 .panel-title-row h4 {
   margin: 0;
   font-size: 14px;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .panel-hint {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-secondary);
 }
 
 .radar-box {
@@ -1447,11 +1481,11 @@ const scrollToBottom = async () => {
 }
 
 .risk-low {
-  color: #16a34a;
+  color: var(--success-text);
 }
 
 .risk-mid {
-  color: #d97706;
+  color: var(--warning-text);
 }
 
 .risk-high {
@@ -1459,8 +1493,8 @@ const scrollToBottom = async () => {
 }
 
 .input-bar {
-  border-top: 1px solid #e5e7eb;
-  background: #fff;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
   padding: 12px 16px;
   display: flex;
   align-items: flex-end;
@@ -1470,24 +1504,24 @@ const scrollToBottom = async () => {
 .deep-think-toggle {
   width: 120px;
   height: 60px;
-  border: 1px solid #dbe4ef;
+  border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .deep-think-toggle.active {
-  background: #ecfdf3;
-  border-color: #16a34a;
-  color: #166534;
+  background: var(--accent-sage-soft);
+  border-color: var(--success-text);
+  color: var(--success-text);
 }
 
 .reply-stats {
   margin-top: 8px;
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 12px;
 }
 
@@ -1495,7 +1529,7 @@ const scrollToBottom = async () => {
   min-height: 60px !important;
   border-radius: var(--radius);
   box-shadow: none;
-  border: 1px solid #dbe4ef;
+  border: 1px solid var(--border);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -1506,7 +1540,7 @@ const scrollToBottom = async () => {
   border: none;
   border-radius: var(--radius);
   background: var(--primary);
-  color: #fff;
+  color: var(--surface);
   font-size: 14px;
   cursor: pointer;
 }
@@ -1559,7 +1593,7 @@ const scrollToBottom = async () => {
   .analysis-panel {
     width: 100%;
     border-left: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--border);
   }
 }
 </style>

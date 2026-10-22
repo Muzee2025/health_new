@@ -9,7 +9,7 @@
         <el-tag type="danger" effect="dark" round size="large">红色能量: {{ redEnergy }}</el-tag>
       </div>
     </div>
-    
+
     <div class="post-card glass-card">
       <el-input
         v-model="newPost"
@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="action-buttons">
-          <span class="emoji-btn">😊</span>
+
           <button class="publish-btn" @click="submitPost" :disabled="loading || selectedTags.length > 2">
             发布
           </button>
@@ -49,7 +49,7 @@
       <el-tab-pane label="我的发布" name="my"></el-tab-pane>
       <el-tab-pane label="我的收藏" name="favorites"></el-tab-pane>
     </el-tabs>
-    
+
     <div class="filter-tags" v-if="activeTab === 'home'">
       <div class="tags-scroll">
         <el-tag
@@ -73,7 +73,7 @@
 
     <div class="post-list">
       <el-empty v-if="posts.length === 0" description="这里静悄悄的，快来发布第一条树洞吧！" />
-      
+
       <div v-for="post in posts" :key="post.id" class="post-item glass-card">
         <div class="post-item-header">
           <div class="author-info">
@@ -85,32 +85,32 @@
           </div>
           <el-tag v-if="post.is_deep" type="warning" effect="light" round size="small">✨深度好文</el-tag>
         </div>
-        
+
         <div class="post-content">{{ post.content }}</div>
-        
+
         <div class="post-tags" v-if="post.tags">
           <el-tag v-for="t in post.tags.split(',')" :key="t" size="small" class="mr-2" type="info">{{ t }}</el-tag>
         </div>
-        
+
         <div v-if="post.reply_tip" class="reply-tip mt-10">
           <el-icon><Microphone /></el-icon> <strong>心晴小助手：</strong> {{ post.reply_tip }}
         </div>
-        
+
         <div class="post-footer">
-          <div class="interaction-btn" :class="{ active: post.is_liked }" @click="toggleLike(post)">
-            <el-icon><i class="fas fa-heart" v-if="post.is_liked"></i><i class="far fa-heart" v-else></i></el-icon>
+          <button type="button" class="interaction-btn" :class="{ active: post.is_liked }" @click="toggleLike(post)">
+            <el-icon><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4 4.6 13.3C1.8 10.6 1.8 6.6 4.2 4.6c2.3-1.9 5.4-1 7.8 1.6 2.4-2.6 5.5-3.5 7.8-1.6 2.4 2 2.4 6-.4 8.7L12 20.4Z" :fill="post.is_liked ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg></el-icon>
             <span>{{ post.likes_count || '点赞' }}</span>
-          </div>
-          <div class="interaction-btn" @click="openComments(post)">
-            <el-icon><i class="far fa-comment"></i></el-icon>
+          </button>
+          <button type="button" class="interaction-btn" @click="openComments(post)">
+            <el-icon><ChatDotRound /></el-icon>
             <span>{{ post.comments_count || '评论' }}</span>
-          </div>
-          <div class="interaction-btn" :class="{ active: post.is_favorited }" @click="toggleFavorite(post)">
-            <el-icon><i class="fas fa-star" v-if="post.is_favorited"></i><i class="far fa-star" v-else></i></el-icon>
+          </button>
+          <button type="button" class="interaction-btn" :class="{ active: post.is_favorited }" @click="toggleFavorite(post)">
+            <el-icon><StarFilled v-if="post.is_favorited" /><Star v-else /></el-icon>
             <span>{{ post.favorites_count || '收藏' }}</span>
-          </div>
+          </button>
         </div>
-        
+
         <!-- Comments Section -->
         <div v-if="activeCommentPostId === post.id" class="comments-section">
           <el-divider border-style="dashed" />
@@ -118,7 +118,7 @@
             <el-input v-model="newComment" placeholder="写下你的评论..." size="small" @keyup.enter="submitComment(post)" />
             <el-button type="primary" size="small" @click="submitComment(post)" :disabled="!newComment.trim()">发送</el-button>
           </div>
-          
+
           <div class="comments-list mt-10">
             <div v-for="comment in postComments" :key="comment.id" class="comment-item" :class="{ 'sub-comment': comment.parent_id }">
               <div class="comment-author">
@@ -164,15 +164,6 @@ const postComments = ref([])
 onMounted(() => {
   fetchDashboardStats()
   fetchPosts()
-  
-  // Inject FontAwesome if not present
-  if (!document.getElementById('font-awesome')) {
-    const link = document.createElement('link')
-    link.id = 'font-awesome'
-    link.rel = 'stylesheet'
-    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
-    document.head.appendChild(link)
-  }
 })
 
 const fetchDashboardStats = async () => {
@@ -222,14 +213,14 @@ const submitPost = async () => {
     ElMessage.warning('内容不能为空')
     return
   }
-  
+
   loading.value = true
   try {
-    const res = await axios.post('/api/student/treehole/post', { 
+    const res = await axios.post('/api/student/treehole/post', {
       content: newPost.value,
       tags: selectedTags.value
     })
-    
+
     if (res.data.is_deep) {
       ElMessageBox.alert('感谢你的深度分享！+5红色能量积分', '能量到账', {
         confirmButtonText: '收下',
@@ -239,14 +230,14 @@ const submitPost = async () => {
     } else {
       ElMessage.success('发布成功')
     }
-    
+
     newPost.value = ''
     selectedTags.value = []
-    
+
     if (activeTab.value === 'home' || activeTab.value === 'my') {
       fetchPosts() // refresh to get updated counts
     }
-    
+
     if (res.data.reply_tip) {
       setTimeout(() => {
         ElMessage({
@@ -317,7 +308,7 @@ const fetchComments = async (postId) => {
 
 const submitComment = async (post) => {
   if (!newComment.value.trim()) return
-  
+
   try {
     let content = newComment.value
     if (replyParentId.value) {
@@ -327,12 +318,12 @@ const submitComment = async (post) => {
         content = content.substring(match[0].length)
       }
     }
-    
+
     await axios.post(`/api/student/treehole/${post.id}/comment`, {
       content: content,
       parent_id: replyParentId.value
     })
-    
+
     post.comments_count++
     newComment.value = ''
     replyParentId.value = null
@@ -358,7 +349,7 @@ const getParentAuthor = (parentId) => {
 <style scoped>
 .treehole-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #F9FAFB 0%, #E0E7FF 100%);
+  background: linear-gradient(135deg, var(--surface-subtle) 0%, var(--brand-50) 100%);
   padding: 20px;
   border-radius: 16px;
 }
@@ -369,23 +360,23 @@ const getParentAuthor = (parentId) => {
   align-items: center;
   margin-bottom: 20px;
 }
-.treehole-header h2 { margin: 0 0 8px 0; color: #1F2937; }
-.desc { color: #6B7280; font-size: 14px; margin: 0; }
+.treehole-header h2 { margin: 0 0 8px 0; color: var(--text-primary); }
+.desc { color: var(--text-secondary); font-size: 14px; margin: 0; }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid color-mix(in srgb, var(--surface) 50%, transparent);
   border-radius: 24px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--gray-900) 5%, transparent);
   padding: 20px;
   margin-bottom: 20px;
 }
 
 .custom-textarea :deep(.el-textarea__inner) {
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid #E5E7EB;
+  background: color-mix(in srgb, var(--surface) 50%, transparent);
+  border: 1px solid var(--border);
   border-radius: 16px;
   font-size: 15px;
   padding: 15px;
@@ -402,7 +393,7 @@ const getParentAuthor = (parentId) => {
   flex: 1;
   overflow: hidden;
 }
-.tags-label { font-size: 13px; color: #6B7280; margin-bottom: 5px; display: block; }
+.tags-label { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; display: block; }
 .tags-scroll {
   display: flex;
   overflow-x: auto;
@@ -410,7 +401,7 @@ const getParentAuthor = (parentId) => {
   padding-bottom: 5px;
 }
 .tags-scroll::-webkit-scrollbar { height: 4px; }
-.tags-scroll::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+.tags-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
 .selectable-tag {
   cursor: pointer;
@@ -429,19 +420,19 @@ const getParentAuthor = (parentId) => {
 .emoji-btn:hover { transform: scale(1.2); }
 
 .publish-btn {
-  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--brand-600) 0%, var(--brand-600) 100%);
+  color: var(--surface);
   border: none;
   padding: 10px 24px;
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--brand-500) 30%, transparent);
 }
 .publish-btn:hover:not(:disabled) {
   transform: scale(1.05);
-  box-shadow: 0 6px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 6px 15px color-mix(in srgb, var(--brand-500) 40%, transparent);
 }
 .publish-btn:disabled {
   opacity: 0.6;
@@ -449,7 +440,7 @@ const getParentAuthor = (parentId) => {
   transform: none;
 }
 
-.custom-tabs :deep(.el-tabs__nav-wrap::after) { height: 1px; background-color: rgba(0,0,0,0.05); }
+.custom-tabs :deep(.el-tabs__nav-wrap::after) { height: 1px; background-color: color-mix(in srgb, var(--gray-900) 5%, transparent); }
 .custom-tabs :deep(.el-tabs__item) { font-size: 16px; font-weight: 500; }
 
 .filter-tags { margin-bottom: 20px; }
@@ -464,17 +455,17 @@ const getParentAuthor = (parentId) => {
   margin-bottom: 12px;
 }
 .author-info { display: flex; align-items: center; gap: 10px; }
-.anonymous-avatar { background: linear-gradient(135deg, #93C5FD, #C4B5FD); color: white; font-weight: bold; }
+.anonymous-avatar { background: var(--brand-100); color: var(--brand-600); font-weight: bold; }
 .author-details { display: flex; flex-direction: column; }
-.author-name { font-weight: 600; color: #374151; }
-.post-time { font-size: 12px; color: #9CA3AF; }
+.author-name { font-weight: 600; color: var(--text-primary); }
+.post-time { font-size: 12px; color: var(--text-secondary); }
 
-.post-content { font-size: 15px; color: #1F2937; line-height: 1.6; margin-bottom: 15px; white-space: pre-wrap; }
+.post-content { font-size: 15px; color: var(--text-primary); line-height: 1.6; margin-bottom: 15px; white-space: pre-wrap; }
 .post-tags { margin-bottom: 15px; }
 
 .reply-tip {
-  background: rgba(254, 243, 199, 0.5);
-  color: #D97706;
+  background: var(--warning-100);
+  color: var(--warning-text);
   padding: 10px 15px;
   border-radius: 12px;
   font-size: 13px;
@@ -484,7 +475,7 @@ const getParentAuthor = (parentId) => {
 .post-footer {
   display: flex;
   gap: 30px;
-  border-top: 1px solid rgba(0,0,0,0.05);
+  border-top: 1px solid color-mix(in srgb, var(--gray-900) 5%, transparent);
   padding-top: 12px;
 }
 
@@ -492,30 +483,30 @@ const getParentAuthor = (parentId) => {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #6B7280;
+  color: var(--text-secondary);
   cursor: pointer;
   transition: color 0.2s;
 }
-.interaction-btn:hover { color: #3B82F6; }
-.interaction-btn.active { color: #EF4444; }
+.interaction-btn:hover { color: var(--brand-600); }
+.interaction-btn.active { color: var(--danger-text); }
 
 .comments-section {
   margin-top: 10px;
-  background: rgba(255, 255, 255, 0.4);
+  background: color-mix(in srgb, var(--surface) 40%, transparent);
   border-radius: 12px;
   padding: 15px;
 }
 .comment-input-box { display: flex; gap: 10px; }
 .comments-list { display: flex; flex-direction: column; gap: 12px; }
-.comment-item { padding-bottom: 10px; border-bottom: 1px dashed rgba(0,0,0,0.05); }
+.comment-item { padding-bottom: 10px; border-bottom: 1px dashed color-mix(in srgb, var(--gray-900) 5%, transparent); }
 .comment-item:last-child { border-bottom: none; padding-bottom: 0; }
-.sub-comment { margin-left: 30px; padding-left: 10px; border-left: 2px solid rgba(0,0,0,0.05); }
+.sub-comment { margin-left: 30px; padding-left: 10px; border-left: 2px solid color-mix(in srgb, var(--gray-900) 5%, transparent); }
 .comment-author { display: flex; justify-content: space-between; margin-bottom: 4px; }
-.c-name { font-weight: 600; font-size: 13px; color: #4B5563; }
-.c-time { font-size: 12px; color: #9CA3AF; }
-.c-content { font-size: 14px; color: #374151; margin-bottom: 4px; }
-.reply-to { color: #3B82F6; font-weight: 500; }
+.c-name { font-weight: 600; font-size: 13px; color: var(--text-secondary); }
+.c-time { font-size: 12px; color: var(--text-secondary); }
+.c-content { font-size: 14px; color: var(--text-primary); margin-bottom: 4px; }
+.reply-to { color: var(--brand-600); font-weight: 500; }
 .c-actions { display: flex; justify-content: flex-end; }
-.reply-btn { font-size: 12px; color: #6B7280; cursor: pointer; }
-.reply-btn:hover { color: #3B82F6; }
+.reply-btn { font-size: 12px; color: var(--text-secondary); cursor: pointer; }
+.reply-btn:hover { color: var(--brand-600); }
 </style>

@@ -5,12 +5,19 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import axios from 'axios'
 import App from './App.vue'
+import './styles/tokens.css'
+import './styles/business.css'
+import * as echarts from 'echarts'
+import { installBusinessCharts } from './styles/business-theme'
+
+document.body.classList.add('xy-business')
+installBusinessCharts(echarts)
 import router from './router'
 
 const rawBaseURL = String(import.meta.env.VITE_API_BASE_URL || '').trim()
 const normalizedBaseURL = rawBaseURL.replace(/\/+$/, '')
 // Avoid '/api/api/*' when request URLs already include '/api/*'.
-axios.defaults.baseURL = normalizedBaseURL === '/api' ? '' : normalizedBaseURL
+axios.defaults.baseURL = normalizedBaseURL.replace(/\/api$/, '')
 
 function getStoredToken() {
   const raw = localStorage.getItem('token') || localStorage.getItem('access_token') || ''
@@ -36,7 +43,8 @@ axios.interceptors.response.use(
   (error) => {
     const status = error.response?.status
     const reqUrl = String(error.config?.url || '')
-    if (status === 401 && !reqUrl.includes('/api/login')) {
+    const requestToken = String(error.config?.headers?.Authorization || '').replace(/^bearer\s+/i, '').trim()
+    if (status === 401 && !reqUrl.includes('/api/login') && requestToken === getStoredToken()) {
       localStorage.removeItem('token')
       localStorage.removeItem('access_token')
       localStorage.removeItem('role')

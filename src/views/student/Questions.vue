@@ -85,7 +85,7 @@ const submitQuestion = async () => {
 
 <style scoped>
 .desc {
-  color: #666;
+  color: var(--text-secondary);
 }
 .mt-20 {
   margin-top: 20px;
@@ -99,7 +99,7 @@ const submitQuestion = async () => {
   margin-bottom: 10px;
 }
 .time {
-  color: #999;
+  color: var(--text-secondary);
   font-size: 14px;
 }
 .q-text {
@@ -107,10 +107,10 @@ const submitQuestion = async () => {
   line-height: 1.5;
 }
 .a-text {
-  background-color: #f4f4f5;
+  background-color: var(--surface-warm);
   padding: 10px;
   border-radius: 4px;
   margin-top: 10px;
-  color: #67c23a;
+  color: var(--success-text);
 }
 </style>

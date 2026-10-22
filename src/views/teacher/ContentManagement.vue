@@ -28,14 +28,14 @@
       <!-- Teacher Management Tab -->
       <el-tab-pane label="心理老师管理" name="teachers">
         <div class="action-bar">
-          <el-button type="primary" @click="openTeacherDialog(null)">新增/编辑老师档案</el-button>
+          <el-button type="primary" @click="openTeacherDialog(null)">编辑我的老师档案</el-button>
         </div>
         
         <el-table :data="teachers" style="width: 100%" v-loading="loadingTeachers" stripe>
           <el-table-column label="头像" width="80">
             <template #default>
               <div class="teacher-avatar-small">
-                <i class="fa-solid fa-user-graduate"></i>
+                <el-icon><User /></el-icon>
               </div>
             </template>
           </el-table-column>
@@ -45,8 +45,7 @@
           <el-table-column prop="location" label="办公地点" min-width="150" />
           <el-table-column label="操作" width="150" align="right">
             <template #default="scope">
-              <el-button link type="primary" @click="openTeacherDialog(scope.row)">编辑</el-button>
-              <el-button link type="danger" @click="deleteTeacher(scope.row.user_id)">删除</el-button>
+              <el-button v-if="String(scope.row.user_id) === String(currentTeacherId)" link type="primary" @click="openTeacherDialog(scope.row)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -74,15 +73,17 @@
         <el-form-item label="正文" required>
           <el-upload
             class="upload-demo"
-            action="http://127.0.0.1:8000/api/teacher/upload"
+            :action="uploadUrl"
+            accept="image/png,image/jpeg,image/webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            :on-error="handleUploadError"
             :headers="uploadHeaders"
             :on-success="handleUploadSuccess"
             :before-upload="beforeUpload"
             :show-file-list="false"
           >
-            <el-button type="success" size="small" plain style="margin-bottom: 10px;">上传 Word/PDF 生成正文链接</el-button>
+            <el-button type="success" size="small" plain style="margin-bottom: 10px;">上传PDF / DOCX附件或图片</el-button>
           </el-upload>
-          <el-input v-model="articleForm.content" type="textarea" :rows="6" placeholder="可手动输入正文，或上传文件获取访问链接" />
+          <el-input v-model="articleForm.content" type="textarea" :rows="6" placeholder="请输入文章正文" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -97,8 +98,8 @@
     <el-dialog v-model="teacherDialogVisible" title="编辑老师档案" width="600px">
       <el-form :model="teacherForm" label-width="100px">
         <el-form-item label="绑定用户ID" required>
-          <el-input-number v-model="teacherForm.user_id" :min="1" />
-          <span class="help-text">请填写已有教师角色的User ID</span>
+          <el-input-number v-model="teacherForm.user_id" :min="1" disabled />
+          <span class="help-text">当前登录的教师账号</span>
         </el-form-item>
         <el-form-item label="职称">
           <el-input v-model="teacherForm.title" />
@@ -129,26 +130,34 @@ import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+const currentTeacherId = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}').id } catch { return null } })()
 const activeTab = ref('articles')
+const uploadUrl = axios.getUri({ url: '/api/teacher/upload' })
+const handleUploadError = () => ElMessage.error('文件上传失败，请检查格式或稍后重试')
 
 const uploadHeaders = computed(() => {
   return { Authorization: `Bearer ${localStorage.getItem('token')}` }
 })
 
 const beforeUpload = (file) => {
-  const isDoc = file.name.endsWith('.doc') || file.name.endsWith('.docx') || file.name.endsWith('.pdf')
-  if (!isDoc) {
-    ElMessage.error('只能上传 Word 或 PDF 文件!')
+  const accepted = /\.(pdf|docx|png|jpe?g|webp)$/i.test(file.name)
+  if (!accepted || file.size > 5 * 1024 * 1024) {
+    ElMessage.error('请选择不超过5MiB的PDF、DOCX、PNG、JPEG或WebP文件')
+    return false
   }
-  return isDoc
+  return true
 }
 
 const handleUploadSuccess = (res, file) => {
-  if (res.url) {
-    ElMessage.success('文件上传成功')
-    // Simply append link or convert to iframe/embed HTML
-    articleForm.value.content += `\n<br><a href="${res.url}" target="_blank">查看附件：${file.name}</a>`
+  const url = res.url || res.image_url
+  if (!url) { ElMessage.error('上传响应缺少文件地址'); return }
+  if (/\.(pdf|docx)$/i.test(file.name)) {
+    const name = file.name.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
+    articleForm.value.content += '\n<br><a href="' + url + '">下载附件：' + name + '</a>'
+  } else {
+    articleForm.value.cover_url = url
   }
+  ElMessage.success('文件上传成功')
 }
 
 // Articles
@@ -168,7 +177,7 @@ const fetchArticles = async () => {
   loadingArticles.value = true
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get('http://127.0.0.1:8000/api/teacher/articles', {
+    const res = await axios.get('/api/teacher/articles', {
       headers: { Authorization: `Bearer ${token}` }
     })
     articles.value = res.data
@@ -198,7 +207,7 @@ const submitArticle = async () => {
   }
   try {
     const token = localStorage.getItem('token')
-    await axios.post('http://127.0.0.1:8000/api/teacher/articles', articleForm.value, {
+    await axios.post('/api/teacher/articles', articleForm.value, {
       headers: { Authorization: `Bearer ${token}` }
     })
     ElMessage.success('保存成功')
@@ -213,7 +222,7 @@ const deleteArticle = async (id) => {
   try {
     await ElMessageBox.confirm('确定要删除这篇文章吗？', '警告', { type: 'warning' })
     const token = localStorage.getItem('token')
-    await axios.delete(`http://127.0.0.1:8000/api/teacher/articles/${id}`, {
+    await axios.delete(`/api/teacher/articles/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     ElMessage.success('删除成功')
@@ -239,7 +248,7 @@ const fetchTeachers = async () => {
   loadingTeachers.value = true
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get('http://127.0.0.1:8000/api/teacher/teachers_profiles', {
+    const res = await axios.get('/api/teacher/teachers_profiles', {
       headers: { Authorization: `Bearer ${token}` }
     })
     teachers.value = res.data
@@ -251,6 +260,7 @@ const fetchTeachers = async () => {
 }
 
 const openTeacherDialog = (row) => {
+  if (!currentTeacherId || (row && String(row.user_id) !== String(currentTeacherId))) { ElMessage.error('仅可编辑本人档案'); return }
   if (row) {
     teacherForm.value = {
       user_id: row.user_id,
@@ -261,7 +271,7 @@ const openTeacherDialog = (row) => {
     }
   } else {
     teacherForm.value = {
-      user_id: 1,
+      user_id: currentTeacherId,
       title: '',
       intro: '',
       location: '',
@@ -290,7 +300,7 @@ const submitTeacher = async () => {
       time_slots: timeSlots
     }
     
-    await axios.post('http://127.0.0.1:8000/api/teacher/teachers_profiles', payload, {
+    await axios.post('/api/teacher/teachers_profiles', payload, {
       headers: { Authorization: `Bearer ${token}` }
     })
     ElMessage.success('保存成功')
@@ -298,20 +308,6 @@ const submitTeacher = async () => {
     fetchTeachers()
   } catch (error) {
     ElMessage.error('保存失败')
-  }
-}
-
-const deleteTeacher = async (id) => {
-  try {
-    await ElMessageBox.confirm('确定要删除该老师账号及档案吗？', '警告', { type: 'warning' })
-    const token = localStorage.getItem('token')
-    await axios.delete(`http://127.0.0.1:8000/api/teacher/teachers_profiles/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    ElMessage.success('删除成功')
-    fetchTeachers()
-  } catch (error) {
-    if (error !== 'cancel') ElMessage.error('删除失败')
   }
 }
 
@@ -329,10 +325,10 @@ onMounted(() => {
 
 <style scoped>
 .content-container {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
   min-height: calc(100vh - 140px);
 }
 
@@ -348,7 +344,7 @@ onMounted(() => {
 
 .help-text {
   font-size: 12px;
-  color: #9CA3AF;
+  color: var(--text-secondary);
   margin-left: 10px;
   line-height: 1.2;
 }
@@ -357,8 +353,8 @@ onMounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #3B82F6;
-  color: #FFFFFF;
+  background-color: var(--brand-600);
+  color: var(--surface);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -97,7 +97,7 @@ const fetchAppointments = async () => {
   loading.value = true
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get('http://127.0.0.1:8000/api/teacher/appointments', {
+    const res = await axios.get('/api/teacher/appointments', {
       headers: { Authorization: `Bearer ${token}` }
     })
     appointments.value = res.data
@@ -111,7 +111,7 @@ const fetchAppointments = async () => {
 const handleStatusChange = async (id, status) => {
   try {
     const token = localStorage.getItem('token')
-    await axios.post(`http://127.0.0.1:8000/api/teacher/appointments/${id}/status?status=${status}`, {}, {
+    await axios.post(`/api/teacher/appointments/${id}/status?status=${status}`, {}, {
       headers: { Authorization: `Bearer ${token}` }
     })
     ElMessage.success('状态修改成功')
@@ -155,12 +155,12 @@ onMounted(() => {
 }
 
 .filter-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
   display: flex;
   gap: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .filter-select {
@@ -168,10 +168,10 @@ onMounted(() => {
 }
 
 .table-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .pagination-wrapper {
@@ -184,7 +184,7 @@ onMounted(() => {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #dbe7ff;
+  border: 1px solid var(--brand-100);
   object-fit: cover;
 }
 </style>

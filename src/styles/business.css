@@ -1,0 +1,116 @@
+/* Business-only bridge. The independent W1 gallery does not import this file. */
+.xy-business {
+  --el-color-primary: var(--brand-600);
+  --el-color-primary-light-3: var(--brand-500);
+  --el-color-primary-light-5: var(--accent-sage);
+  --el-color-primary-light-7: var(--brand-100);
+  --el-color-primary-light-8: var(--brand-100);
+  --el-color-primary-light-9: var(--brand-50);
+  --el-color-primary-dark-2: var(--brand-700);
+  --el-color-success: var(--success-text);
+  --el-color-warning: var(--warning-text);
+  --el-color-danger: var(--danger-text);
+  --el-text-color-primary: var(--text-primary);
+  --el-text-color-regular: var(--text-secondary);
+  --el-border-color: var(--border);
+  --el-border-color-light: var(--border);
+  --el-border-color-lighter: var(--gray-100);
+  --el-fill-color-blank: var(--surface);
+  --el-bg-color: var(--surface);
+  --el-font-family: var(--font-sans);
+  --el-border-radius-base: var(--radius-md);
+  --el-box-shadow-light: var(--shadow-sm);
+  min-height: 100vh;
+  color: var(--text-primary);
+  background: var(--surface-warm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+body { margin: 0; }
+.xy-business *, .xy-business *::before, .xy-business *::after { box-sizing: border-box; }
+.xy-business button, .xy-business input, .xy-business textarea, .xy-business select { font-family: inherit; font-size: 14px; }
+.xy-business :focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.xy-business .el-card { border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+.xy-business .el-card__header { font-weight: 600; }
+.xy-business .el-button { min-height: 36px; }
+.xy-business .el-button--small { min-height: 32px; }
+.xy-business .el-input__wrapper, .xy-business .el-select__wrapper { min-height: 40px; }
+.xy-business .el-empty__description p { color: var(--text-secondary); }
+.xy-business .el-table { --el-table-header-bg-color: var(--surface-subtle); --el-table-header-text-color: var(--text-secondary); }
+.xy-business .el-dialog { max-width: calc(100vw - 32px); }
+.xy-business .el-row { row-gap: 16px; }
+.xy-business .el-col, .xy-business .el-card, .xy-business .main-content { min-width: 0; }
+.xy-business h1, .xy-business h2, .xy-business h3 { line-height: 1.5; }
+.xy-business .business-brand { width: 152px; height: 52px; object-fit: contain; object-position: left; }
+.xy-business .app-layout { background: var(--surface-warm); font-family: var(--font-sans); }
+.xy-business .app-layout .sidebar { width: 228px; flex: 0 0 228px; background: var(--surface); padding-top: 24px; }
+.xy-business .app-layout .logo-area { padding: 0 24px; margin-bottom: 30px; }
+.xy-business .app-layout .nav-item { min-height: 46px; border: 0; font-family: inherit; text-align: left; background: transparent; }
+.xy-business .app-layout .nav-item.active { background: var(--brand-50); color: var(--brand-600); }
+.xy-business .app-layout .nav-item.active .el-icon { color: var(--brand-600); }
+.xy-business .app-layout .nav-item.active::before { background: var(--accent-apricot); }
+.xy-business .app-layout .user-profile { gap: 12px; padding: 20px; }
+.xy-business .app-layout .user-info { min-width: 0; margin-left: 0; }
+.xy-business .app-layout .user-name { overflow-wrap: anywhere; }
+.xy-business .app-layout .user-email { color: var(--text-secondary); }
+.xy-business .app-layout .top-header { padding: 28px 32px 24px; flex-wrap: wrap; }
+.xy-business .app-layout .page-title { font-size: 22px; letter-spacing: 0; text-transform: none; }
+.xy-business .app-layout .page-wrapper { padding: 0 32px 32px; }
+.xy-business .app-layout .primary-btn { min-height: 44px; background: var(--brand-600); box-shadow: none; }
+.xy-business .app-layout .primary-btn:hover { background: var(--brand-700); }
+.xy-business .dashboard-container { background: transparent; padding: 0; }
+.xy-business .dashboard-container .header-actions { gap: 16px; flex-wrap: wrap; }
+.xy-business .dashboard-container .header-actions h2 { font-size: 20px; }
+.xy-business .dashboard-container .chart-card { border: 1px solid var(--border); box-shadow: none; }
+.xy-business .dashboard-container .stat-card { border-top: 3px solid var(--accent-sage); }
+.xy-business .auth-page { min-height: 100svh; display: grid; grid-template-columns: minmax(260px, 1fr) minmax(360px, 1fr); background: var(--surface-warm); }
+.xy-business .auth-story { padding: 48px clamp(32px, 7vw, 110px); display: flex; flex-direction: column; justify-content: space-between; background: url('../assets/backgrounds/bg-login-1440.webp') center / cover; }
+.xy-business .auth-story h1 { font: 400 clamp(28px, 3.2vw, 44px)/1.6 var(--font-editorial); color: var(--brand-700); max-width: 420px; }
+.xy-business .auth-story p { max-width: 380px; color: var(--text-secondary); }
+.xy-business .auth-illustration { width: min(100%, 300px); height: 220px; object-fit: contain; align-self: center; }
+.xy-business .auth-form-region { padding: 48px 32px; display: flex; align-items: center; justify-content: center; }
+.xy-business .auth-form { width: min(100%, 400px); }
+.xy-business .auth-form h2 { font-size: 28px; margin: 0 0 28px; }
+.xy-business .auth-form .el-form-item { margin-bottom: 22px; }
+.xy-business .auth-form .el-form-item__label { color: var(--text-primary); padding-bottom: 6px; line-height: 1.5; }
+.xy-business .auth-form .el-input__wrapper, .xy-business .auth-form .el-select__wrapper { min-height: 46px; }
+.xy-business .auth-form .auth-submit { width: 100%; min-height: 46px; margin-top: 4px; }
+.xy-business .auth-links { margin-top: 24px; text-align: center; }
+.xy-business .auth-links a { color: var(--brand-600); text-underline-offset: 4px; }
+.xy-business .interaction-btn { border: 0; background: transparent; font-family: inherit; }
+.xy-business .auth-mobile-brand { display: none; }
+.xy-business .data-empty { min-height: 220px; display: grid; place-items: center; text-align: center; color: var(--text-secondary); }
+.xy-business .data-error { margin-bottom: 20px; }
+.xy-business .result-description { white-space: pre-wrap; }
+@media (max-width: 1100px) {
+  .xy-business .app-layout .sidebar { width: 200px; flex-basis: 200px; }
+  .xy-business .app-layout .top-header { padding: 24px; }
+  .xy-business .app-layout .page-wrapper { padding: 0 24px 24px; }
+}
+@media (max-width: 760px) {
+  .xy-business .app-layout { flex-direction: column; }
+  .xy-business .app-layout .sidebar { width: 100%; flex-basis: auto; padding: 16px 0 0; border-right: 0; border-bottom: 1px solid var(--border); }
+  .xy-business .app-layout .logo-area { padding: 0 20px; margin: 0 0 12px; }
+  .xy-business .app-layout .business-brand { height: 40px; width: 130px; }
+  .xy-business .app-layout .nav-menu { flex-direction: row; overflow-x: auto; padding: 0 12px 12px; gap: 4px; }
+  .xy-business .app-layout .nav-item { flex: 0 0 auto; padding: 10px 12px; margin: 0; border-radius: 8px; white-space: nowrap; }
+  .xy-business .app-layout .nav-item .el-icon { margin-right: 6px; }
+  .xy-business .app-layout .nav-item.active::before, .xy-business .app-layout .nav-divider, .xy-business .app-layout .user-profile { display: none; }
+  .xy-business .app-layout .top-header { padding: 20px 16px; gap: 12px; }
+  .xy-business .app-layout .top-header .page-title { font-size: 20px; }
+  .xy-business .app-layout .header-right { margin-left: auto; }
+  .xy-business .app-layout .page-wrapper { padding: 0 16px 24px; }
+  .xy-business .app-layout .primary-btn { padding: 8px 12px; }
+  .xy-business .auth-page { grid-template-columns: 1fr; }
+  .xy-business .auth-story { display: none; }
+  .xy-business .auth-mobile-brand { display: block; margin-bottom: 32px; }
+  .xy-business .auth-form-region { padding: 32px 24px; }
+  .xy-business .trend-header, .xy-business .trend-tools { flex-wrap: wrap; }
+  .xy-business .el-card__body { padding: 16px; }
+  .xy-business .el-dialog { width: calc(100vw - 32px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xy-business *, .xy-business *::before, .xy-business *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

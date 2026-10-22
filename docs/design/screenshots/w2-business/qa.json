@@ -1,0 +1,2314 @@
+{
+  "schemaVersion": 1,
+  "owner": "Lead",
+  "task": "W2-QA-UI",
+  "status": "synthetic-business-regression",
+  "generatedAt": "2026-10-22T01:35:58.641Z",
+  "fixtureTime": "2026-10-22T01:00:00.000Z",
+  "baselineLabel": "合成数据 · W2业务验收",
+  "source": "W2业务页面；所有 API 均由本脚本在浏览器路由层合成响应。真实后端、真实账号、真实学生数据均未使用。",
+  "app": "http://127.0.0.1:5173",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "timezone": "Asia/Shanghai",
+  "browser": {
+    "engine": "Chromium",
+    "channel": "msedge",
+    "executablePathConfigured": false,
+    "headless": true,
+    "browserPluginAvailable": false,
+    "fallbackReason": "Browser plugin not available; isolation requires per-request Playwright routing and synthetic API fulfillment."
+  },
+  "artifactFormat": "WebP",
+  "maxBytes": 307200,
+  "pages": [
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "login",
+      "path": "/login",
+      "url": "http://127.0.0.1:5173/login",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 69,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/illustrations/open-doodles/illu-open-doodles-loving.svg",
+          "complete": true,
+          "naturalWidth": 1024,
+          "naturalHeight": 768
+        },
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "login-1440.webp",
+        "bytes": 23076,
+        "sha256": "75398ed8d1a2d4751fa7ad2bef8f4886b631f0c9be9414752c2b56edce89051d"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "login",
+      "path": "/login",
+      "url": "http://127.0.0.1:5173/login",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 23,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/illustrations/open-doodles/illu-open-doodles-loving.svg",
+          "complete": true,
+          "naturalWidth": 1024,
+          "naturalHeight": 768
+        },
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "login-390.webp",
+        "bytes": 8050,
+        "sha256": "5fd247d7cd3112e482b277e9c1c3b68f21453b40280aff55ed4d4c53d2153f9f"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "register",
+      "path": "/register",
+      "url": "http://127.0.0.1:5173/register",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 83,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/illustrations/open-doodles/illu-open-doodles-loving.svg",
+          "complete": true,
+          "naturalWidth": 1024,
+          "naturalHeight": 768
+        },
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "register-1440.webp",
+        "bytes": 26920,
+        "sha256": "250d512463ba21b51137be42fb11f1998931b4837aaa61f3881860fca1bdd026"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "register",
+      "path": "/register",
+      "url": "http://127.0.0.1:5173/register",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 37,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/illustrations/open-doodles/illu-open-doodles-loving.svg",
+          "complete": true,
+          "naturalWidth": 1024,
+          "naturalHeight": 768
+        },
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "register-390.webp",
+        "bytes": 11948,
+        "sha256": "4b24681c7e9b8f8b65caf9c52780132fa1e050f9aea63c2d6d3647b96a716fe0"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": {
+        "xssExecuted": false,
+        "scripts": 0,
+        "eventAttributes": 0,
+        "dangerousLinks": 0,
+        "preservedHeading": true,
+        "preservedStrong": true,
+        "preservedAttachment": true
+      },
+      "layout": {
+        "overflow": false
+      },
+      "name": "article-safe-html",
+      "path": "/article/1",
+      "url": "http://127.0.0.1:5173/article/1",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 97,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 1,
+      "screenshot": {
+        "file": "article-safe-html-1440.webp",
+        "bytes": 19198,
+        "sha256": "7025ba0d490dd31bb541c699dd4057a3e32960934b1b519c60448ddb9adacf3a"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/articles/1",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/student/articles/1/view",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": {
+        "xssExecuted": false,
+        "scripts": 0,
+        "eventAttributes": 0,
+        "dangerousLinks": 0,
+        "preservedHeading": true,
+        "preservedStrong": true,
+        "preservedAttachment": true
+      },
+      "layout": {
+        "overflow": false
+      },
+      "name": "article-safe-html",
+      "path": "/article/1",
+      "url": "http://127.0.0.1:5173/article/1",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 97,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 1,
+      "screenshot": {
+        "file": "article-safe-html-390.webp",
+        "bytes": 16904,
+        "sha256": "a06638b8092dcc312d74083a767cc40601fa8827b03606349b211584d1e84d74"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/articles/1",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/student/articles/1/view",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "not-found",
+      "path": "/does-not-exist",
+      "url": "http://127.0.0.1:5173/does-not-exist",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 33,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgMzIwIDE4MCIgcm9sZT0iaW1nIj48dGl0bGU+6aG16Z2i5pyq5om+5Yiw77ya6L+U5Zue5Y+v55So5YWl5Y+jPC90aXRsZT48cGF0aCBkPSJNNDUgMTU0SDI3NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQ0ZENkNFIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTcyIDE1MEM5NiAxMjYgMTA5IDEwOSA5NiA5MUM3OSA2OSAxMTEgNTIgMTQxIDQ3QzE3MyA0MiAxOTkgNTMgMjEzIDMyIiBmaWxsPSJub25lIiBzdHJva2U9IiNGN0U3RDgiIHN0cm9rZS13aWR0aD0iMjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik03MiAxNTBDOTYgMTI2IDEwOSAxMDkgOTYgOTFDNzkgNjkgMTExIDUyIDE0MSA0N0MxNzMgNDIgMTk5IDUzIDIxMyAzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRThCMTg1IiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA2Ii8+PHBhdGggZD0iTTE4MiA3OFYxNTMiIHN0cm9rZT0iIzYwNDM3MiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTQ4IDY5SDIxN0wyMzAgODNMMjE3IDk3SDE0OFoiIGZpbGw9IiNFRUU3RjIiIHN0cm9rZT0iIzYwNDM3MiIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48dGV4dCB4PSIxODMiIHk9Ijg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzYwNDM3MiI+NDA0PC90ZXh0PjxwYXRoIGQ9Ik0yNDUgMTUyVjEyNEMyNDUgMTEzIDI1MSAxMDQgMjYwIDk5QzI2MyAxMTQgMjU5IDEyNiAyNDUgMTMzTTI0NSAxNDFDMjM1IDEzNCAyMzEgMTI2IDIzMSAxMTdDMjQxIDEyMiAyNDcgMTMxIDI0NSAxNDEiIGZpbGw9IiM4QkE2OTYiLz48cGF0aCBkPSJNMTI2IDE0OUwxMzkgMTI4TDE1MSAxNDkiIGZpbGw9IiNFOEYwRUEiIHN0cm9rZT0iIzhCQTY5NiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48L3N2Zz4=",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 180
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "not-found-1440.webp",
+        "bytes": 10356,
+        "sha256": "2650b9c84c27f26fc72f57d514b9ec97c0cc8bf542d11daadc6b2a155cf0e2d5"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "not-found",
+      "path": "/does-not-exist",
+      "url": "http://127.0.0.1:5173/does-not-exist",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 33,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMjAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgMzIwIDE4MCIgcm9sZT0iaW1nIj48dGl0bGU+6aG16Z2i5pyq5om+5Yiw77ya6L+U5Zue5Y+v55So5YWl5Y+jPC90aXRsZT48cGF0aCBkPSJNNDUgMTU0SDI3NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQ0ZENkNFIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTcyIDE1MEM5NiAxMjYgMTA5IDEwOSA5NiA5MUM3OSA2OSAxMTEgNTIgMTQxIDQ3QzE3MyA0MiAxOTkgNTMgMjEzIDMyIiBmaWxsPSJub25lIiBzdHJva2U9IiNGN0U3RDgiIHN0cm9rZS13aWR0aD0iMjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik03MiAxNTBDOTYgMTI2IDEwOSAxMDkgOTYgOTFDNzkgNjkgMTExIDUyIDE0MSA0N0MxNzMgNDIgMTk5IDUzIDIxMyAzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRThCMTg1IiBzdHJva2Utd2lkdGg9IjEuNiIgc3Ryb2tlLWRhc2hhcnJheT0iNCA2Ii8+PHBhdGggZD0iTTE4MiA3OFYxNTMiIHN0cm9rZT0iIzYwNDM3MiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTQ4IDY5SDIxN0wyMzAgODNMMjE3IDk3SDE0OFoiIGZpbGw9IiNFRUU3RjIiIHN0cm9rZT0iIzYwNDM3MiIgc3Ryb2tlLXdpZHRoPSIyLjQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48dGV4dCB4PSIxODMiIHk9Ijg5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNyIgZm9udC13ZWlnaHQ9IjYwMCIgZmlsbD0iIzYwNDM3MiI+NDA0PC90ZXh0PjxwYXRoIGQ9Ik0yNDUgMTUyVjEyNEMyNDUgMTEzIDI1MSAxMDQgMjYwIDk5QzI2MyAxMTQgMjU5IDEyNiAyNDUgMTMzTTI0NSAxNDFDMjM1IDEzNCAyMzEgMTI2IDIzMSAxMTdDMjQxIDEyMiAyNDcgMTMxIDI0NSAxNDEiIGZpbGw9IiM4QkE2OTYiLz48cGF0aCBkPSJNMTI2IDE0OUwxMzkgMTI4TDE1MSAxNDkiIGZpbGw9IiNFOEYwRUEiIHN0cm9rZT0iIzhCQTY5NiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48L3N2Zz4=",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 180
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "not-found-390.webp",
+        "bytes": 8778,
+        "sha256": "b80b441ede8d32d576c4a92346a005109b7601b1325f58328b1edb7c35ef0e50"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-dashboard",
+      "path": "/student/dashboard",
+      "url": "http://127.0.0.1:5173/student/dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 164,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-dashboard-1440.webp",
+        "bytes": 43914,
+        "sha256": "d6d246fe6759f2f25e314df2d0a6066f2e4a3047620e3b55d1614d1a70162eb0"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 7,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/latest_scores",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/red_energy",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/treehole_words",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/appointment_stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-dashboard",
+      "path": "/student/dashboard",
+      "url": "http://127.0.0.1:5173/student/dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 154,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-dashboard-390.webp",
+        "bytes": 16876,
+        "sha256": "6b021b03ad22d057ba1a5bac9e63ab36e5462f8ab477db39b9a890a1ec72bb8b"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 7,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/latest_scores",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/red_energy",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/treehole_words",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/appointment_stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-test",
+      "path": "/student/test",
+      "url": "http://127.0.0.1:5173/student/test",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 306,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-test-1440.webp",
+        "bytes": 35504,
+        "sha256": "125097d2b91eae258846a26f1c7d814cafe513f7d747bc148941d2a9ac743023"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-test",
+      "path": "/student/test",
+      "url": "http://127.0.0.1:5173/student/test",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 296,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-test-390.webp",
+        "bytes": 19268,
+        "sha256": "3a24bfddcc6e7f707791f0566b25d4660abd60de1723a376f5d86be8ca3ac658"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-appointments",
+      "path": "/student/appointments",
+      "url": "http://127.0.0.1:5173/student/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 291,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-03-256.webp",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-appointments-1440.webp",
+        "bytes": 32924,
+        "sha256": "f215ad6690af994f2ae6e0872994ec4dc3f8751f6c1f9851c5c93553b9ff2137"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/teachers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/appointments",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-appointments",
+      "path": "/student/appointments",
+      "url": "http://127.0.0.1:5173/student/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 281,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-03-256.webp",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-appointments-390.webp",
+        "bytes": 21222,
+        "sha256": "2669702ddde8c3ae686c341761d034f0620839aa56983d548133e4051d5010d7"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/teachers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/appointments",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-articles",
+      "path": "/student/articles",
+      "url": "http://127.0.0.1:5173/student/articles",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 186,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 1,
+      "screenshot": {
+        "file": "student-articles-1440.webp",
+        "bytes": 28876,
+        "sha256": "5bcb3ae186314fb410cf9bf703324b97997da562c18616a9e7c418bb641ad6ad"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 1,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/articles",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-articles",
+      "path": "/student/articles",
+      "url": "http://127.0.0.1:5173/student/articles",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 176,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        },
+        {
+          "src": "http://127.0.0.1:5173/__synthetic__/cover.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 200
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 1,
+      "screenshot": {
+        "file": "student-articles-390.webp",
+        "bytes": 18194,
+        "sha256": "0fee1ebd9cc0b39f6f001ba603eaad7935090dd72d8f0c1e2218c3aabe3c7cd3"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 1,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/articles",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-advanced-chat",
+      "path": "/student/advanced-chat",
+      "url": "http://127.0.0.1:5173/student/advanced-chat",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 142,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-advanced-chat-1440.webp",
+        "bytes": 25312,
+        "sha256": "fc56f32f4b582424e2fd22716dcae2e203f734a1b076f7545c89d154d5584580"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 2,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-advanced-chat",
+      "path": "/student/advanced-chat",
+      "url": "http://127.0.0.1:5173/student/advanced-chat",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 132,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-advanced-chat-390.webp",
+        "bytes": 15154,
+        "sha256": "155f3d4a83c6e9d9ef53e7bac43c062cb261fccf1029ab71df96f5b19bae523f"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 2,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-report",
+      "path": "/student/report",
+      "url": "http://127.0.0.1:5173/student/report",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 615,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-report-1440.webp",
+        "bytes": 45178,
+        "sha256": "dd4624adc8c65f59229e10a2d21a205299c0d060434e695dba6c58ef167040d5"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/model/current",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/report/analysis/latest",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-report",
+      "path": "/student/report",
+      "url": "http://127.0.0.1:5173/student/report",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 605,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-report-390.webp",
+        "bytes": 24280,
+        "sha256": "de99b89fbfe5e51268540aeacede8eea2e9fa3dcf9d6fe98cd7caf203d41b4d6"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/model/current",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/report/analysis/latest",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-treehole",
+      "path": "/student/treehole",
+      "url": "http://127.0.0.1:5173/student/treehole",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 368,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-treehole-1440.webp",
+        "bytes": 40010,
+        "sha256": "99f391ea5a8ac63065eec815ee3c1556c43799cf038cf9f194d777319694a801"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/treehole/posts",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-treehole",
+      "path": "/student/treehole",
+      "url": "http://127.0.0.1:5173/student/treehole",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 358,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-treehole-390.webp",
+        "bytes": 24792,
+        "sha256": "f81b7aa0c23035bf879c62bb2a2c51427c8d2011757242e8d7dd15c0315da40c"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/treehole/posts",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-questions",
+      "path": "/student/questions",
+      "url": "http://127.0.0.1:5173/student/questions",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 149,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-questions-1440.webp",
+        "bytes": 23340,
+        "sha256": "667ad3ce69b3e8a21d909922c9658f0f26f5decf3085b416800505350ec4a944"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 1,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/questions",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-questions",
+      "path": "/student/questions",
+      "url": "http://127.0.0.1:5173/student/questions",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 139,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/students/avatar-student-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-questions-390.webp",
+        "bytes": 16824,
+        "sha256": "a1d1e8132aa0c057c40a8d2cafba8b7c83d0be8abf0c05ff60d3fcbba49e2cb3"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 1,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/questions",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-advanced-dashboard",
+      "path": "/teacher/advanced-dashboard",
+      "url": "http://127.0.0.1:5173/teacher/advanced-dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 243,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-advanced-dashboard-1440.webp",
+        "bytes": 38950,
+        "sha256": "1305d82f882ca7be1b1d6dd7947e52b5ecab8b6840f86f158b26e5534a8c66a0"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/dashboard/metrics",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/crisis/pending",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 2,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-advanced-dashboard",
+      "path": "/teacher/advanced-dashboard",
+      "url": "http://127.0.0.1:5173/teacher/advanced-dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 229,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-advanced-dashboard-390.webp",
+        "bytes": 19092,
+        "sha256": "6b381c6605088ba16d60875e28e08a21b759f54a3de99ccf320df219155bb35a"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/dashboard/metrics",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/crisis/pending",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 2,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-students",
+      "path": "/teacher/students",
+      "url": "http://127.0.0.1:5173/teacher/students",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 213,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-students-1440.webp",
+        "bytes": 24032,
+        "sha256": "5449823dad30568036b90350d9afc6732616f8fac88c97040ea24197a6c0c41d"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-students",
+      "path": "/teacher/students",
+      "url": "http://127.0.0.1:5173/teacher/students",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 199,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-students-390.webp",
+        "bytes": 11950,
+        "sha256": "52c758f68a10ce3f49bc4d216c2098fe141fcc49248a2ab4ecb77c98a10e6d1d"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-student-900001",
+      "path": "/teacher/student/900001",
+      "url": "http://127.0.0.1:5173/teacher/student/900001",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 393,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-student-900001-1440.webp",
+        "bytes": 38484,
+        "sha256": "eee453f0d7c3bacfca8ff4f7e2c617a1edbbe2e45fd3009037e7b2f75964deea"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/student/900001",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-student-900001",
+      "path": "/teacher/student/900001",
+      "url": "http://127.0.0.1:5173/teacher/student/900001",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 379,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-student-900001-390.webp",
+        "bytes": 20420,
+        "sha256": "1a740933fec2d5c34e63005f32ea26cbc75c7b98ce8719d6a5a5429058d439cf"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/student/900001",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-appointments",
+      "path": "/teacher/appointments",
+      "url": "http://127.0.0.1:5173/teacher/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 162,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-256.webp",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-appointments-1440.webp",
+        "bytes": 20024,
+        "sha256": "e8fc19f3b40f78268b6ff796573fe29a984b9bea394f749c96dbe18e1a7fea0f"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/appointments",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-appointments",
+      "path": "/teacher/appointments",
+      "url": "http://127.0.0.1:5173/teacher/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 148,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-256.webp",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-appointments-390.webp",
+        "bytes": 11002,
+        "sha256": "1bad1c9a3ecbf20cb99d307f0f1f53cd7be739cd4d52498c0c4c6c4881b4a9d3"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/appointments",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-content",
+      "path": "/teacher/content",
+      "url": "http://127.0.0.1:5173/teacher/content",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 157,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-content-1440.webp",
+        "bytes": 19224,
+        "sha256": "b6a1ba4d16e4dc75ab4521571733f364e8c5ee0b1a49e0b7dd0626b6cd2f49a0"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/articles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/teachers_profiles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-content",
+      "path": "/teacher/content",
+      "url": "http://127.0.0.1:5173/teacher/content",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 143,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-content-390.webp",
+        "bytes": 10954,
+        "sha256": "fff99aafdaca05ef596c7340015d86efb57c6bc3cdc41599c16fdc8399cc9ee2"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/articles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/teachers_profiles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-interventions",
+      "path": "/teacher/interventions",
+      "url": "http://127.0.0.1:5173/teacher/interventions",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 171,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-interventions-1440.webp",
+        "bytes": 22216,
+        "sha256": "ebc33ecf7da8840a50584af47d04d5f00b364208bf5e86a4f7f4a1e8fa3838d4"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/interventions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-interventions",
+      "path": "/teacher/interventions",
+      "url": "http://127.0.0.1:5173/teacher/interventions",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 157,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "nullimage/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iOTYiIHZpZXdCb3g9IjAgMCAzMDAgOTYiIHJvbGU9ImltZyI+PHRpdGxlPuW/g+Wfn+aZuumTvmhvcml6b250YWzmoIflv5c8L3RpdGxlPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIgMCkiPjxwYXRoIGQ9Ik0xNCAxOUMzMSAxOSA0NSAzMCA0NSA0OVY3OUMyOCA3NSAxNCA2MiAxNCA0NFoiIGZpbGw9IiM2MDQzNzIiLz48cGF0aCBkPSJNNTQgNzlWNDlDNTQgMzEgNjcgMjAgODIgMTdWNDFDODIgNjEgNzIgNzQgNTQgNzlaIiBmaWxsPSIjRThCMTg1Ii8+PHBhdGggZD0iTTI2IDM1QzMzIDQwIDM2IDQ3IDM2IDU3IiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuNSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L2c+PHRleHQgeD0iMTEwIiB5PSI0OCIgdGV4dC1hbmNob3I9InN0YXJ0IiBmb250LWZhbWlseT0iTWljcm9zb2Z0IFlhSGVpLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iNjAwIiBsZXR0ZXItc3BhY2luZz0iMiIgZmlsbD0iIzYwNDM3MiI+5b+D5Z+f5pm66ZO+PC90ZXh0Pjx0ZXh0IHg9IjExMSIgeT0iNzMiIHRleHQtYW5jaG9yPSJzdGFydCIgZm9udC1mYW1pbHk9Ik1pY3Jvc29mdCBZYUhlaSxzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZXR0ZXItc3BhY2luZz0iMSIgZmlsbD0iIzYwNDM3MiI+6K6p5q+P5LiA5Lu95b+D5LqL77yM5pyJ5aSE5a6J5pS+PC90ZXh0Pjwvc3ZnPg==",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:5173/src/assets/avatars/teachers/avatar-teacher-01-96.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-interventions-390.webp",
+        "bytes": 11320,
+        "sha256": "5b8c9d046e1e05907334ae182a47ee6ae312bc631d01642686dbfe72b2724b9d"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/interventions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    }
+  ],
+  "interactions": [
+    {
+      "interaction": "student-dashboard-trend-range",
+      "observed": true,
+      "from": "近30天",
+      "to": "近90天"
+    },
+    {
+      "interaction": "student-dashboard-trend-range",
+      "observed": true,
+      "from": "近30天",
+      "to": "近90天"
+    }
+  ],
+  "totals": {
+    "expectedPages": 36,
+    "capturedPages": 36,
+    "unknownApiCount": 0,
+    "pageErrorCount": 0,
+    "imageLoadFailureCount": 0,
+    "pagesOverLimit": []
+  }
+}

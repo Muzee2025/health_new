@@ -1,36 +1,12 @@
-const CACHE_NAME = 'report-api-cache-v1';
-const API_URLS = ['/api/student/report/analysis'];
-
+// Retire only the old shared report cache. Private API responses stay on network.
+const RETIRED_REPORT_CACHES = ['report-api-cache-v1'];
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  event.waitUntil(self.skipWaiting());
 });
-
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil((async () => {
+    await Promise.all(RETIRED_REPORT_CACHES.map(name => caches.delete(name)));
+    await self.clients.claim();
+  })());
 });
-
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-  
-  if (event.request.method === 'GET' && 
-      API_URLS.some(api => url.pathname.endsWith(api)) && 
-      !url.pathname.includes('/refresh')) {
-    
-    event.respondWith(
-      caches.open(CACHE_NAME).then(async (cache) => {
-        const cachedResponse = await cache.match(event.request);
-        
-        const fetchPromise = fetch(event.request).then((networkResponse) => {
-          if (networkResponse.ok) {
-            cache.put(event.request, networkResponse.clone());
-          }
-          return networkResponse;
-        }).catch(() => {
-          // fallback
-        });
-
-        return cachedResponse || fetchPromise;
-      })
-    );
-  }
-});
+// No fetch handler: never cache or replay authenticated reports across users.

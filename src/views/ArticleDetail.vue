@@ -18,26 +18,31 @@
       </div>
       
       <div v-if="article.cover_url" class="article-cover-wrapper">
-        <img :src="article.cover_url" class="article-cover" />
+        <img :src="article.cover_url" class="article-cover" :alt="article.title" />
       </div>
       
-      <div class="article-content" v-html="article.content"></div>
+      <div class="article-content" v-html="safeArticleContent" @click="handleArticleContentClick"></div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, onMounted } from 'vue'
+import { ref, computed, onBeforeUnmount, onMounted } from 'vue'
+import DOMPurify from 'dompurify'
+import { downloadArticleDocument } from '../utils/articleDocuments'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
+const handleArticleContentClick = async (event) => {
+  try { await downloadArticleDocument(event) } catch { ElMessage.error('附件下载失败，请重新登录或稍后重试') }
+}
 const route = useRoute()
 const router = useRouter()
 const article = ref(null)
+const safeArticleContent = computed(() => DOMPurify.sanitize(article.value?.content || '', { USE_PROFILES: { html: true } }))
 const VIEW_DEDUP_WINDOW_MS = 5 * 60 * 1000
 const VIEW_RETRY_QUEUE_KEY = 'article_view_retry_queue_v1'
-const LOCAL_VIEW_SEED_KEY = 'article_view_seed_map_v1'
 let retryTimer = null
 
 const goBack = () => {
@@ -88,27 +93,6 @@ const writeRetryQueue = (queue) => {
   localStorage.setItem(VIEW_RETRY_QUEUE_KEY, JSON.stringify(queue))
 }
 
-const readLocalViewSeedMap = () => {
-  try {
-    const raw = localStorage.getItem(LOCAL_VIEW_SEED_KEY)
-    const parsed = raw ? JSON.parse(raw) : {}
-    return parsed && typeof parsed === 'object' ? parsed : {}
-  } catch {
-    return {}
-  }
-}
-
-const getFallbackViews = (articleId) => {
-  const map = readLocalViewSeedMap()
-  const key = String(articleId)
-  const existing = Number(map[key] || 0)
-  if (existing >= 50 && existing <= 200) return existing
-  const value = Math.floor(Math.random() * 151) + 50
-  map[key] = value
-  localStorage.setItem(LOCAL_VIEW_SEED_KEY, JSON.stringify(map))
-  return value
-}
-
 const enqueueRetryTask = (task) => {
   const queue = readRetryQueue()
   const deduped = queue.filter((x) => !(Number(x.articleId) === Number(task.articleId) && String(x.viewerId) === String(task.viewerId)))
@@ -128,9 +112,9 @@ const flushRetryQueue = async () => {
     const res = await axios.post(`/api/student/articles/${task.articleId}/view`, { viewer_id: task.viewerId }, { timeout: 5000 })
     const nextViews = Number(res?.data?.views || 0)
     if (article.value && Number(article.value.id) === Number(task.articleId) && Number.isFinite(nextViews)) {
-      article.value.views = nextViews >= 50 ? nextViews : getFallbackViews(task.articleId)
+      article.value.views = Math.max(0, nextViews)
     }
-    dispatchArticleViewUpdated(task.articleId, nextViews >= 50 ? nextViews : getFallbackViews(task.articleId))
+    dispatchArticleViewUpdated(task.articleId, Math.max(0, nextViews))
     writeRetryQueue(rest)
   } catch {
     const retryCount = Number(task.retryCount || 0) + 1
@@ -151,7 +135,7 @@ const trackArticleView = async (articleId) => {
     const res = await axios.post(`/api/student/articles/${articleId}/view`, { viewer_id: viewerId }, { timeout: 5000 })
     const nextViews = Number(res?.data?.views || 0)
     if (Number.isFinite(nextViews) && article.value) {
-      const syncedViews = nextViews >= 50 ? nextViews : getFallbackViews(articleId)
+      const syncedViews = Math.max(0, nextViews)
       article.value.views = syncedViews
       dispatchArticleViewUpdated(articleId, syncedViews)
     }
@@ -167,9 +151,7 @@ const fetchArticle = async () => {
   try {
     const res = await axios.get(`/api/student/articles/${id}`)
     article.value = res.data
-    if (!(Number(article.value?.views || 0) >= 50)) {
-      article.value.views = getFallbackViews(id)
-    }
+    article.value.views = Math.max(0, Number(article.value.views) || 0)
     await trackArticleView(id)
   } catch (error) {
     ElMessage.error('获取文章失败')
@@ -203,10 +185,10 @@ onBeforeUnmount(() => {
 }
 
 .header-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .page-header {
@@ -216,20 +198,20 @@ onBeforeUnmount(() => {
 .header-title {
   font-size: 18px;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .content-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .article-title {
   font-size: 28px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin-top: 0;
   margin-bottom: 20px;
   text-align: center;
@@ -240,11 +222,11 @@ onBeforeUnmount(() => {
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
-  color: #6B7280;
+  color: var(--text-secondary);
   font-size: 14px;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--surface-warm);
 }
 
 .article-cover-wrapper {
@@ -263,7 +245,7 @@ onBeforeUnmount(() => {
 .article-content {
   font-size: 16px;
   line-height: 1.8;
-  color: #374151;
+  color: var(--text-primary);
 }
 
 /* Add some styles for rich text content */
@@ -276,7 +258,7 @@ onBeforeUnmount(() => {
   border-radius: 4px;
 }
 :deep(.article-content h2, .article-content h3) {
-  color: #111827;
+  color: var(--text-primary);
   margin-top: 1.5em;
   margin-bottom: 0.5em;
 }

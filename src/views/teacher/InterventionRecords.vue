@@ -71,7 +71,7 @@ const fetchRecords = async () => {
   loading.value = true
   try {
     const token = localStorage.getItem('token')
-    const res = await axios.get('http://127.0.0.1:8000/api/teacher/interventions', {
+    const res = await axios.get('/api/teacher/interventions', {
       headers: { Authorization: `Bearer ${token}` }
     })
     records.value = res.data
@@ -128,12 +128,12 @@ onUnmounted(() => {
 }
 
 .filter-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
   display: flex;
   gap: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .search-input {
@@ -145,10 +145,10 @@ onUnmounted(() => {
 }
 
 .table-card {
-  background: #FFFFFF;
+  background: var(--surface);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
 .notes-content {

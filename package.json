@@ -16,16 +16,16 @@
     "@element-plus/icons-vue": "^2.3.1",
     "axios": "^1.6.8",
     "chart.js": "^4.5.1",
-    "echarts": "^5.6.0",
-    "echarts-wordcloud": "^2.1.0",
+    "dompurify": "3.4.17",
+    "echarts": "6.1.0",
     "element-plus": "^2.6.3",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
-    "@vitest/coverage-v8": "^4.1.4",
-    "vite": "^5.2.8",
-    "vitest": "^4.1.4"
+    "@vitejs/plugin-vue": "6.0.10",
+    "@vitest/coverage-v8": "5.0.5",
+    "vite": "7.3.7",
+    "vitest": "5.0.5"
   }
 }

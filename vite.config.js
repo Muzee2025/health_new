@@ -10,6 +10,10 @@ export default defineConfig({
 
   plugins: [vue()],
 
+  test: {
+    include: ['src/**/*.test.{js,ts}'],
+  },
+
   resolve: {
 
     alias: {
@@ -21,10 +25,15 @@ export default defineConfig({
   },
 
   server: {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 5173,
     proxy: {
       '/api': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        ws: true,
+      },
+      '/static': {
         target: 'http://127.0.0.1:8000',
         changeOrigin: true,
       },

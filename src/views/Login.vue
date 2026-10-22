@@ -1,76 +1,53 @@
 <template>
-  <div class="login-container">
-    <el-card class="login-box">
-      <h2>心域智链 - 登录</h2>
-      <el-form :model="form" @submit.prevent="handleLogin">
-        <el-form-item>
-          <el-input v-model="form.username" placeholder="用户名" :prefix-icon="User" />
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="form.password" type="password" placeholder="密码" :prefix-icon="Lock" show-password />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" native-type="submit" class="w-full">登录</el-button>
-        </el-form-item>
-        <div class="text-right">
-          <el-link type="primary" @click="$router.push('/register')">没有账号？去注册</el-link>
-        </div>
-      </el-form>
-    </el-card>
-  </div>
+  <AuthShell>
+    <h2>欢迎回来</h2>
+    <el-form :model="form" label-position="top" @submit.prevent="handleLogin">
+      <el-form-item label="用户名"><el-input v-model="form.username" placeholder="请输入用户名" autocomplete="username" aria-label="用户名" /></el-form-item>
+      <el-form-item label="密码"><el-input v-model="form.password" type="password" placeholder="请输入密码" autocomplete="current-password" aria-label="密码" show-password /></el-form-item>
+      <el-button type="primary" native-type="submit" class="auth-submit" :loading="submitting" :disabled="submitting">登录</el-button>
+      <div class="auth-links"><router-link to="/register">没有账号？去注册</router-link></div>
+    </el-form>
+  </AuthShell>
 </template>
-
 <script setup>
 import { ref } from 'vue'
+import AuthShell from '../components/AuthShell.vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { User, Lock } from '@element-plus/icons-vue'
 
 const router = useRouter()
+const submitting = ref(false)
 const form = ref({
   username: '',
   password: ''
 })
 
 const handleLogin = async () => {
+  if (submitting.value) return
+  if (!form.value.username.trim() || !form.value.password) {
+    ElMessage.warning('请填写用户名和密码')
+    return
+  }
+  submitting.value = true
   try {
     const res = await axios.post('/api/login', form.value)
     const { access_token, user } = res.data
     localStorage.setItem('token', access_token)
     localStorage.setItem('role', user.role)
     localStorage.setItem('user', JSON.stringify(user))
-    
+
     ElMessage.success('登录成功')
-    
+
     if (user.role === 'teacher') {
       router.push('/teacher')
     } else {
       router.push('/student')
     }
   } catch (error) {
-    ElMessage.error(error.response?.data?.detail || '登录失败')
+    ElMessage.error(error.message || '登录失败，请稍后重试')
+  } finally {
+    submitting.value = false
   }
 }
 </script>
-
-<style scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f3f4f6;
-}
-.login-box {
-  width: 400px;
-  text-align: center;
-}
-.w-full {
-  width: 100%;
-}
-.text-right {
-  text-align: right;
-  margin-top: 10px;
-}
-</style>
