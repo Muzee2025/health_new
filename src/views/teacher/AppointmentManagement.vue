@@ -67,7 +67,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElSelect, ElOption, ElTable, ElTableColumn, ElTag, ElDropdown, ElButton, ElIcon, ElDropdownMenu, ElDropdownItem, ElPagination, vLoading } from 'element-plus'
 import {
   PSYCH_TEACHER_AVATAR_ALT,
   getPsychTeacherAvatar,

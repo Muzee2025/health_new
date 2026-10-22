@@ -22,14 +22,15 @@ import { setLibraryChartOption } from '../design/chart-registry'
 import { businessAlpha, businessColor } from '../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
 import axios from "axios"
-import * as echarts from "echarts"
-import { ElMessage } from "element-plus"
+import * as echarts from '../design/charts/radar'
+import { ElMessage, ElCard, ElButton } from 'element-plus'
 
 const radarRef = ref(null)
 const loading = ref(false)
 const error = ref(false)
 const riskData = ref(null)
 let radarChart = null
+let unmounted = false
 
 const hasData = computed(() => {
   if (!riskData.value) return false
@@ -56,6 +57,7 @@ const isValidData = (data) => {
 const renderChart = async () => {
   if (!hasData.value || !radarRef.value) return
   await nextTick()
+  if (unmounted || !radarRef.value) return
   if (!radarChart) radarChart = echarts.init(radarRef.value, 'xinyu-business')
   setLibraryChartOption(radarChart, {
     tooltip: { trigger: "item" },
@@ -96,6 +98,7 @@ const loadRiskData = async () => {
   error.value = false
   try {
     const res = await axios.get("/api/v1/assistant/risk-factor")
+    if (unmounted) return
     if (res.status !== 200 || !res.data) {
       throw new Error("invalid data")
     }
@@ -106,6 +109,7 @@ const loadRiskData = async () => {
     riskData.value = normalized
     await renderChart()
   } catch (err) {
+    if (unmounted) return
     error.value = true
     ElMessage.warning("风险因子获取失败或数据异常，请重试")
   } finally {
@@ -115,12 +119,16 @@ const loadRiskData = async () => {
 
 onMounted(() => {
   loadRiskData()
-  window.addEventListener("resize", renderChart)
+  window.addEventListener("resize", resizeChart)
 })
 
+const resizeChart = () => radarChart?.resize()
+
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", renderChart)
+  unmounted = true
+  window.removeEventListener("resize", resizeChart)
   if (radarChart) radarChart.dispose()
+  radarChart = null
 })
 </script>
 

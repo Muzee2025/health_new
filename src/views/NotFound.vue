@@ -7,6 +7,7 @@
   </main>
 </template>
 <script setup>
+import { ElButton } from 'element-plus'
 import { getVisualAsset } from '../design/asset-registry'
 const illustration = getVisualAsset('notFound').url
 

@@ -147,7 +147,7 @@ const profileAvatar = getVisualAsset('teacherAvatar').url
 
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElIcon, ElAvatar, ElDialog, ElForm, ElFormItem, ElSelect, ElOption, ElInput, ElDatePicker, ElButton } from 'element-plus'
 import axios from 'axios'
 
 const router = useRouter()

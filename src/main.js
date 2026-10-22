@@ -1,19 +1,17 @@
-import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
+import { createApp, defineAsyncComponent } from 'vue'
+import { provideGlobalConfig } from 'element-plus'
 import 'element-plus/dist/index.css'
 import LibraryIcon from './design/LibraryIcon.vue'
-import LibraryEmpty from './design/LibraryEmpty.vue'
 import { getVisualAsset } from './design/asset-registry'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import axios from 'axios'
 import App from './App.vue'
 import './styles/tokens.css'
 import './styles/business.css'
-import * as echarts from 'echarts'
-import { installBusinessCharts } from './styles/business-theme'
+import { installBusinessPalette } from './design/chart-registry'
 
 document.body.classList.add('xy-business')
-installBusinessCharts(echarts)
+installBusinessPalette()
 const favicon = document.querySelector('#app-favicon')
 if (favicon) favicon.href = getVisualAsset('favicon').url
 const themeColor = document.querySelector('#app-theme-color')
@@ -79,9 +77,9 @@ axios.interceptors.response.use(
 const app = createApp(App)
 
 app.component('LibraryIcon', LibraryIcon)
-app.component('LibraryEmpty', LibraryEmpty)
+app.component('LibraryEmpty', defineAsyncComponent(() => import('./design/LibraryEmpty.vue')))
 
-app.use(ElementPlus, { locale: zhCn })
+provideGlobalConfig({ locale: zhCn }, app, true)
 app.use(router)
 app.config.globalProperties.$http = axios
 app.mount('#app')

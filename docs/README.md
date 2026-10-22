@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 1.0 ｜ status: 评审 ｜ updated: 2026-10-22
+> owner: A ｜ version: 1.1 ｜ status: 评审 ｜ updated: 2026-10-22
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -19,7 +19,7 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001至013：W0/W1历史、W2权限/依赖/素材与本机数据库认证服务 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001至014：W0/W1历史、W2权限/依赖/素材/本机服务及性能加载门禁 |
 | [进度看板](team/进度看板.md) | 定稿 | W0/W1任务、阻塞与W2入口 |
 | [门禁记录](team/门禁记录.md) | 定稿 | G0/G1技术项和W2本轮身份/权限/页面技术项通过；整体验收未放行 |
 
@@ -30,6 +30,7 @@
 | [设计方案](design/设计方案.md) | 历史W1 | 原始方向；本轮已由品牌升级方案替代 |
 | [素材库规范](design/素材库规范.md) | 定稿 | token、主题、命名、来源、生成及使用规则 |
 | [业务素材统一引用](design/素材库统一引用.md) | 技术验收通过 | 16角色/25图标、空态与图表共享源；动态业务数据边界与生产渲染验证 |
+| [前端分包与加载优化](design/前端分包与加载优化.md) | 技术验收通过 | 冷认证JS减少81.4%、6个profile、EP本地导入、生命周期与可复跑门禁 |
 | [品牌升级方案](design/品牌升级方案.md) | 定稿 | 相伴/拥光/知音、人文色彩、源文件与可复建规则 |
 | [工作台升级方案](design/展示页升级方案.md) | 定稿 | 搜索筛选、详情规格、复制下载和执行验证 |
 | [图表升级方案](design/图表升级方案.md) | 定稿 | 8种图表、用途筛选、合成样例、数据与SVG导出 |
@@ -61,12 +62,15 @@
 | [W2开发与隔离验证](ops/W2开发与隔离验证.md) | 评审 | 新运行依赖、显式配置/初始化、隔离命令与尚未执行的发布工作 |
 | [本地数据库与登录](ops/本地数据库部署与登录.md) | 本机技术通过 | SQLite私有副本/一致性备份、独立18080、启动与认证验证；历史孤儿记录保留 |
 | [本地数据库独立复核](test/本地数据库与登录独立复核.md) | 独立复核 | Luna16项隔离测试与Lead部署/浏览器证据交叉核对，未使用真实账号 |
+| [前端分包独立复核](test/前端分包独立复核.md) | 独立复核通过 | 来源/162标签导入检查、每文件raw/gzip与最终模块map复算；非延迟性能认证 |
 
 本轮机器证据：[W2验证摘要](test/w2-verification.json)、[客户端隔离](test/w2-client-qa.json)、[36业务页面状态](design/screenshots/w2-business/qa.json)、[升级后八图库回归](design/screenshots/w2-gallery/qa.json)。全部截图和API样例均为合成数据。
 
 素材统一来源追加证据：[机器摘要](test/library-source-verification.json)、[36开发场景](design/screenshots/library-source/dev/qa.json)、[10打包场景](design/screenshots/library-source/production/qa.json)、[图库13项](design/screenshots/library-source/gallery/qa.json)。历史截图保持原样。
 
 本机登录追加证据：[数据库与认证机器摘要](test/local-db-login-verification.json)，包含60组合成响应与两视口真实临时SQLite认证结果；没有真实用户密码或截图。
+
+前端性能追加证据：[加载与回归机器摘要](test/frontend-performance-verification.json)，含冻结基线/最终实际JS请求、模块来源与生产回归；截图和临时预览仅合成数据。
 
 ## 历史归档
 
@@ -96,6 +100,9 @@
 | [后端隔离基线](../scripts/run-backend-baseline.py) | 从仓库根目录运行 `.\.venv\Scripts\python.exe scripts/run-backend-baseline.py`；需要先安装 pytest，使用临时数据库并阻止外部网络。 |
 | [本地数据库准备](../backend/scripts/prepare-local-database.py) | 只读源备份到新私有目录或新空库；拒绝覆盖及缺列旧schema，命令见本机部署说明。 |
 | [本机后端启动](../scripts/start-local-backend.ps1) | 独立loopback18080隐藏进程，拒绝占用端口；读取Git忽略的current.json或显式部署目录。 |
+| [性能审计构建](../scripts/build-frontend-audit.mjs) | `npm run perf:build`在新tmp目录编译并生成模块来源；不覆盖旧证据。 |
+| [隔离gzip预览](../scripts/serve-frontend-audit.mjs) | `npm run perf:preview`只读编译产物，API固定503，不连接实际服务。 |
+| [冷加载门禁](../scripts/check-frontend-loading.mjs) | `npm run perf:check`默认要求认证页JS≤250KiB gzip且没有图表引擎；配置与基线模式见分包说明。 |
 | [素材构建](../scripts/build-design-assets.mjs) | `npm run assets:build`，使用已有sharp；模块定位参数见素材库规范。 |
 | [素材校验](../scripts/check-assets.mjs) | `npm run assets:check` 或添加 `-- --json`，仅使用Node内置模块。 |
 | [视觉来源门禁](../scripts/check-design-sources.mjs) | `npm run assets:source-check`；已集成素材校验。`npm run assets:source-test`运行7项隔离正/负例，不读取真实数据库。 |

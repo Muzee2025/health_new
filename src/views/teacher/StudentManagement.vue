@@ -131,7 +131,7 @@ import { passwordPolicyError } from '../../utils/passwordPolicy'
 import { businessColor } from '../../styles/business-theme.js'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElInput, ElIcon, ElSelect, ElOption, ElButton, ElTable, ElTableColumn, ElTag, ElPagination, ElDialog, ElForm, ElFormItem, ElRadioGroup, ElRadio, vLoading } from 'element-plus'
 
 const loading = ref(false)
 const students = ref([])

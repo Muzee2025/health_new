@@ -21,7 +21,7 @@ import AuthShell from '../components/AuthShell.vue'
 import { passwordPolicyError } from '../utils/passwordPolicy'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElForm, ElFormItem, ElInput, ElAlert, ElButton } from 'element-plus'
 
 const router = useRouter()
 const submitting = ref(false)

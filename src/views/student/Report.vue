@@ -361,9 +361,9 @@ import { setLibraryChartOption, createLibraryChartJsConfig, libraryChartFont } f
 import { businessAlpha, businessColor, businessPalette } from '../../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import axios from "axios"
-import * as echarts from "echarts"
-import Chart from "chart.js/auto"
-import { ElMessage } from "element-plus"
+import * as echarts from '../../design/charts/report'
+import Chart from '../../design/charts/confidence'
+import { ElMessage, ElButton, ElSkeleton, ElSkeletonItem, ElCard, ElDialog, ElProgress, ElTag, ElSelect, ElOption, ElSegmented, ElTable, ElTableColumn } from 'element-plus'
 import { computeRenderStrategy, parseSseBlocks } from "@/services/reportStream"
 
 const loading = ref(false)
@@ -392,6 +392,10 @@ let esAbort = null
 let collabAbort = null
 let reportSnapshot = null
 let assistantEventHandler = null
+let unmounted = false
+let processingRetryTimer = null
+let collabFadeTimer = null
+let collabCloseTimer = null
 const collabVisible = ref(false)
 const collabRunning = ref(false)
 const collabFading = ref(false)
@@ -530,6 +534,7 @@ const PRINT_CHART_META = [
 ]
 
 const fetchLatest = async (force = false) => {
+  if (unmounted) return
   loading.value = true
   try {
     const before = reportData.value
@@ -540,9 +545,12 @@ const fetchLatest = async (force = false) => {
       params: { _t: Date.now() }, // 强制绕过浏览器/中间层缓存
       headers: { "Cache-Control": "no-cache" },
     })
+    if (unmounted) return
     if (res.data.status === "processing") {
       await axios.post("/api/v1/report/analysis/trigger")
-      setTimeout(() => fetchLatest(true), 1500)
+      if (unmounted) return
+      clearTimeout(processingRetryTimer)
+      processingRetryTimer = setTimeout(() => fetchLatest(true), 1500)
       return
     }
     reportData.value = res.data.data
@@ -554,6 +562,7 @@ const fetchLatest = async (force = false) => {
     await nextTick()
     renderCharts()
   } catch (error) {
+    if (unmounted) return
     ElMessage.error("报告加载失败")
   } finally {
     loading.value = false
@@ -615,7 +624,7 @@ const scoreFromMessage = (row) => {
 }
 
 const initChart = (container, chart) => {
-  if (!container) return null
+  if (unmounted || !container) return null
   if (chart && !chart.isDisposed?.()) return chart
   const renderer = window.matchMedia("print").matches ? "svg" : "canvas"
   return echarts.init(container, 'xinyu-business', { renderer })
@@ -1059,6 +1068,8 @@ const fetchCurrentModelMeta = async () => {
 
 const startCollaborativeAnalysis = async () => {
   if (collabRunning.value) return
+  clearTimeout(collabFadeTimer)
+  clearTimeout(collabCloseTimer)
   collabVisible.value = true
   collabFading.value = false
   collabRunning.value = true
@@ -1133,10 +1144,12 @@ const startCollaborativeAnalysis = async () => {
           }
           renderModelCompare()
           ElMessage.success("多模型协同分析完成")
-          setTimeout(() => {
+          collabFadeTimer = setTimeout(() => {
+            if (unmounted) return
             collabFading.value = true
           }, 3000)
-          setTimeout(() => {
+          collabCloseTimer = setTimeout(() => {
+            if (unmounted) return
             collabVisible.value = false
             collabFading.value = false
           }, 3400)
@@ -1149,6 +1162,7 @@ const startCollaborativeAnalysis = async () => {
     }
     collabRunning.value = false
   } catch (error) {
+    if (unmounted) return
     collabRunning.value = false
     ElMessage.error("协同分析启动失败")
   }
@@ -1244,7 +1258,9 @@ const shareReport = async () => {
 
 onMounted(async () => {
   await fetchCurrentModelMeta()
+  if (unmounted) return
   await fetchLatest()
+  if (unmounted) return
   assistantEventHandler = () => {
     console.log("[Report] receive assistant-message-saved event")
     fetchLatest(true)
@@ -1273,6 +1289,10 @@ watch(reportVisible, async (visible) => {
 })
 
 onBeforeUnmount(() => {
+  unmounted = true
+  clearTimeout(processingRetryTimer)
+  clearTimeout(collabFadeTimer)
+  clearTimeout(collabCloseTimer)
   if (esAbort) esAbort.abort()
   if (collabAbort) collabAbort.abort()
   if (assistantEventHandler) window.removeEventListener("assistant-message-saved", assistantEventHandler)

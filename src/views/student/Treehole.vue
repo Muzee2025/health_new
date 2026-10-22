@@ -143,7 +143,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElTag, ElInput, ElTabs, ElTabPane, ElAvatar, ElIcon, ElDivider, ElButton } from 'element-plus'
 
 const PRESET_TAGS = ['#人生意义', '#自我成长', '#抗压故事', '#红色精神与我', '#价值观碰撞', '#情绪洞察', '#人际关系', '#未来规划']
 

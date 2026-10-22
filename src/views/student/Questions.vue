@@ -41,7 +41,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElCard, ElForm, ElFormItem, ElInput, ElButton, ElTag, ElDivider } from 'element-plus'
 
 const form = ref({
   question_text: ''

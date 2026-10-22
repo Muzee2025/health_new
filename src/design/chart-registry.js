@@ -1,11 +1,15 @@
 import { palette, applyChartPalette, createResearchTheme } from '../../docs/design/chart-style.js'
 
 /** Business adapter to the actual library implementation, with no second theme. */
-export function installBusinessCharts(echarts) {
+export function installBusinessPalette() {
   const root = document.documentElement
   applyChartPalette(root)
   Object.entries(palette.colors).forEach(([name, value]) => root.style.setProperty(`--data-${name}`, value))
   Object.entries(palette.risks).forEach(([name, value]) => root.style.setProperty(`--data-risk-${name}`, value))
+}
+
+export function installBusinessCharts(echarts) {
+  installBusinessPalette()
   echarts.registerTheme('xinyu-business', createResearchTheme())
 }
 

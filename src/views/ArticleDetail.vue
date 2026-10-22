@@ -32,7 +32,7 @@ import DOMPurify from 'dompurify'
 import { downloadArticleDocument } from '../utils/articleDocuments'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElPageHeader, ElTag } from 'element-plus'
 
 const handleArticleContentClick = async (event) => {
   try { await downloadArticleDocument(event) } catch { ElMessage.error('附件下载失败，请重新登录或稍后重试') }

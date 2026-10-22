@@ -56,7 +56,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElInput, ElIcon, ElDatePicker, ElTable, ElTableColumn, ElPagination, vLoading } from 'element-plus'
 
 const loading = ref(false)
 const records = ref([])

@@ -12,7 +12,10 @@
     "assets:build": "node scripts/build-design-assets.mjs",
     "assets:check": "node scripts/check-assets.mjs",
     "assets:source-check": "node scripts/check-design-sources.mjs",
-    "assets:source-test": "node --test scripts/tests/check-design-sources.test.mjs"
+    "assets:source-test": "node --test scripts/tests/check-design-sources.test.mjs",
+    "perf:build": "node scripts/build-frontend-audit.mjs",
+    "perf:preview": "node scripts/serve-frontend-audit.mjs",
+    "perf:check": "node scripts/check-frontend-loading.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

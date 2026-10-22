@@ -1,0 +1,1450 @@
+{
+  "schemaVersion": 1,
+  "owner": "Lead",
+  "task": "W2-PERF",
+  "checkedAt": "2026-10-22T08:36:54.095Z",
+  "baseCommit": "0d8b4be",
+  "branch": "codex/frontend-performance",
+  "status": "local-technical-verification-passed",
+  "method": {
+    "baseline": "Frozen previous production dist copied before source edits, served on isolated loopback4184",
+    "final": "New production build with module-origin metadata, isolated gzip preview4185",
+    "moduleOriginsAvailableForBaseline": false,
+    "finalEveryScriptMapped": true,
+    "allApiResponsesSynthetic": true,
+    "userAuthenticatedBrowserTouched": false,
+    "metrics": "JavaScript response body raw/gzip only; excludes HTTP headers/HTML/CSS/images and is not latency/FCP/LCP"
+  },
+  "comparison": [
+    {
+      "route": "/login",
+      "width": 1440,
+      "beforeRaw": 2288178,
+      "afterRaw": 405655,
+      "beforeGzip": 755644,
+      "afterGzip": 140577,
+      "gzipReductionPercent": 81.39639830396324,
+      "beforeScriptRequests": 3,
+      "afterScriptRequests": 20
+    },
+    {
+      "route": "/register",
+      "width": 1440,
+      "beforeRaw": 2289329,
+      "afterRaw": 406824,
+      "beforeGzip": 756068,
+      "afterGzip": 140995,
+      "gzipReductionPercent": 81.35154509911807,
+      "beforeScriptRequests": 4,
+      "afterScriptRequests": 21
+    },
+    {
+      "route": "/login",
+      "width": 390,
+      "beforeRaw": 2288178,
+      "afterRaw": 405655,
+      "beforeGzip": 755644,
+      "afterGzip": 140577,
+      "gzipReductionPercent": 81.39639830396324,
+      "beforeScriptRequests": 3,
+      "afterScriptRequests": 20
+    },
+    {
+      "route": "/register",
+      "width": 390,
+      "beforeRaw": 2289329,
+      "afterRaw": 406824,
+      "beforeGzip": 756068,
+      "afterGzip": 140995,
+      "gzipReductionPercent": 81.35154509911807,
+      "beforeScriptRequests": 4,
+      "afterScriptRequests": 21
+    }
+  ],
+  "largestJavaScriptChunk": {
+    "file": "assets/core-Dhfzoica.js",
+    "rawBytes": 492110,
+    "gzipBytes": 168813
+  },
+  "javaScriptChunks": 79,
+  "budgets": {
+    "coldAuthGzipBytes": 256000,
+    "chartEngineModulesInColdAuth": 0,
+    "maxSingleJsRawBytes": 500000,
+    "chunkWarningThresholdRaised": false
+  },
+  "beforeColdLoading": {
+    "schemaVersion": 1,
+    "task": "W2-PERF-COLD-AUTH",
+    "checkedAt": "2026-10-22T08:20:43.357Z",
+    "baseUrl": "http://127.0.0.1:4184",
+    "status": "passed",
+    "method": "Fresh browser context per route/viewport; compiled files only; server gzip Content-Length and local raw/gzip byte totals. Counts exclude headers and HTML/CSS/images; not a network-latency benchmark.",
+    "browser": "Playwright with installed Edge; Browser plugin not available",
+    "apiCallsAllowed": false,
+    "results": [
+      {
+        "route": "/login",
+        "width": 1440,
+        "status": "passed",
+        "scriptCount": 3,
+        "rawJsBytes": 2288178,
+        "gzipJsBytes": 755644,
+        "servedJsBodyBytes": 755644,
+        "scripts": [
+          {
+            "file": "/assets/index-Dxg09rx1.js",
+            "rawBytes": 2284032,
+            "gzipBytes": 753367,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 753367,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/Login-CYmNSFVu.js",
+            "rawBytes": 3131,
+            "gzipBytes": 1631,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1631,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-D2sewBCL.js",
+            "rawBytes": 1015,
+            "gzipBytes": 646,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 646,
+            "moduleKinds": []
+          }
+        ],
+        "moduleMapAvailable": false,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      },
+      {
+        "route": "/register",
+        "width": 1440,
+        "status": "passed",
+        "scriptCount": 4,
+        "rawJsBytes": 2289329,
+        "gzipJsBytes": 756068,
+        "servedJsBodyBytes": 756068,
+        "scripts": [
+          {
+            "file": "/assets/index-Dxg09rx1.js",
+            "rawBytes": 2284032,
+            "gzipBytes": 753367,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 753367,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/Register-Cq1qSJYV.js",
+            "rawBytes": 4042,
+            "gzipBytes": 1811,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1811,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-D2sewBCL.js",
+            "rawBytes": 1015,
+            "gzipBytes": 646,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 646,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/passwordPolicy-C873t99b.js",
+            "rawBytes": 240,
+            "gzipBytes": 244,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 244,
+            "moduleKinds": []
+          }
+        ],
+        "moduleMapAvailable": false,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "status": "passed",
+        "scriptCount": 3,
+        "rawJsBytes": 2288178,
+        "gzipJsBytes": 755644,
+        "servedJsBodyBytes": 755644,
+        "scripts": [
+          {
+            "file": "/assets/index-Dxg09rx1.js",
+            "rawBytes": 2284032,
+            "gzipBytes": 753367,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 753367,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/Login-CYmNSFVu.js",
+            "rawBytes": 3131,
+            "gzipBytes": 1631,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1631,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-D2sewBCL.js",
+            "rawBytes": 1015,
+            "gzipBytes": 646,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 646,
+            "moduleKinds": []
+          }
+        ],
+        "moduleMapAvailable": false,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      },
+      {
+        "route": "/register",
+        "width": 390,
+        "status": "passed",
+        "scriptCount": 4,
+        "rawJsBytes": 2289329,
+        "gzipJsBytes": 756068,
+        "servedJsBodyBytes": 756068,
+        "scripts": [
+          {
+            "file": "/assets/index-Dxg09rx1.js",
+            "rawBytes": 2284032,
+            "gzipBytes": 753367,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 753367,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/Register-Cq1qSJYV.js",
+            "rawBytes": 4042,
+            "gzipBytes": 1811,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1811,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/passwordPolicy-C873t99b.js",
+            "rawBytes": 240,
+            "gzipBytes": 244,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 244,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-D2sewBCL.js",
+            "rawBytes": 1015,
+            "gzipBytes": 646,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 646,
+            "moduleKinds": []
+          }
+        ],
+        "moduleMapAvailable": false,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      }
+    ]
+  },
+  "afterColdLoading": {
+    "schemaVersion": 1,
+    "task": "W2-PERF-COLD-AUTH",
+    "checkedAt": "2026-10-22T08:34:22.288Z",
+    "baseUrl": "http://127.0.0.1:4185",
+    "status": "passed",
+    "method": "Fresh browser context per route/viewport; compiled files only; server gzip Content-Length and local raw/gzip byte totals. Counts exclude headers and HTML/CSS/images; not a network-latency benchmark.",
+    "browser": "Playwright with installed Edge; Browser plugin not available",
+    "apiCallsAllowed": false,
+    "budgetsEnforced": true,
+    "results": [
+      {
+        "route": "/login",
+        "width": 1440,
+        "status": "passed",
+        "scriptCount": 20,
+        "rawJsBytes": 405655,
+        "gzipJsBytes": 140577,
+        "servedJsBodyBytes": 140577,
+        "scripts": [
+          {
+            "file": "/assets/index-1dyiwxwF.js",
+            "rawBytes": 311299,
+            "gzipBytes": 102034,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 102034,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/Login-PTWTOh_J.js",
+            "rawBytes": 3652,
+            "gzipBytes": 1851,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1851,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-dOTIxt8Y.js",
+            "rawBytes": 1015,
+            "gzipBytes": 647,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 647,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-B2HJcbmg.js",
+            "rawBytes": 1995,
+            "gzipBytes": 945,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 945,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/install-zQx848jT.js",
+            "rawBytes": 2729,
+            "gzipBytes": 1376,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1376,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/constants-DuOUReKY.js",
+            "rawBytes": 897,
+            "gzipBytes": 564,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 564,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-common-props-BTFZfLch.js",
+            "rawBytes": 504,
+            "gzipBytes": 316,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 316,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-B7X6AIeq.js",
+            "rawBytes": 27050,
+            "gzipBytes": 9539,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 9539,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/castArray-D_dLFkIS.js",
+            "rawBytes": 137,
+            "gzipBytes": 137,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 137,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/vnode-BSlzwiaK.js",
+            "rawBytes": 836,
+            "gzipBytes": 475,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 475,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/_baseClone-TDsXDLKH.js",
+            "rawBytes": 4751,
+            "gzipBytes": 1941,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1941,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-BZzm7Dn0.js",
+            "rawBytes": 535,
+            "gzipBytes": 388,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 388,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BGmeGZ0G.js",
+            "rawBytes": 6184,
+            "gzipBytes": 2818,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 2818,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DgLu2Vqc.js",
+            "rawBytes": 12898,
+            "gzipBytes": 4714,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 4714,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BB_Ol6Sd.js",
+            "rawBytes": 79,
+            "gzipBytes": 94,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 94,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-zKV915HR.js",
+            "rawBytes": 1196,
+            "gzipBytes": 610,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 610,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-item-DtQkDupO.js",
+            "rawBytes": 1159,
+            "gzipBytes": 673,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 673,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-Cfj8uCvu.js",
+            "rawBytes": 8082,
+            "gzipBytes": 3476,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 3476,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DuckVfxI.js",
+            "rawBytes": 1916,
+            "gzipBytes": 964,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 964,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-C9x_4jUQ.js",
+            "rawBytes": 18741,
+            "gzipBytes": 7015,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 7015,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          }
+        ],
+        "moduleMapAvailable": true,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      },
+      {
+        "route": "/register",
+        "width": 1440,
+        "status": "passed",
+        "scriptCount": 21,
+        "rawJsBytes": 406824,
+        "gzipJsBytes": 140995,
+        "servedJsBodyBytes": 140995,
+        "scripts": [
+          {
+            "file": "/assets/index-1dyiwxwF.js",
+            "rawBytes": 311299,
+            "gzipBytes": 102034,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 102034,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/Register-DWc8Y3aA.js",
+            "rawBytes": 4581,
+            "gzipBytes": 2025,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 2025,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-dOTIxt8Y.js",
+            "rawBytes": 1015,
+            "gzipBytes": 647,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 647,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/passwordPolicy-C873t99b.js",
+            "rawBytes": 240,
+            "gzipBytes": 244,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 244,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-B2HJcbmg.js",
+            "rawBytes": 1995,
+            "gzipBytes": 945,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 945,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/install-zQx848jT.js",
+            "rawBytes": 2729,
+            "gzipBytes": 1376,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1376,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/constants-DuOUReKY.js",
+            "rawBytes": 897,
+            "gzipBytes": 564,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 564,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/vnode-BSlzwiaK.js",
+            "rawBytes": 836,
+            "gzipBytes": 475,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 475,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-common-props-BTFZfLch.js",
+            "rawBytes": 504,
+            "gzipBytes": 316,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 316,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-B7X6AIeq.js",
+            "rawBytes": 27050,
+            "gzipBytes": 9539,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 9539,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/castArray-D_dLFkIS.js",
+            "rawBytes": 137,
+            "gzipBytes": 137,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 137,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/_baseClone-TDsXDLKH.js",
+            "rawBytes": 4751,
+            "gzipBytes": 1941,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1941,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-BZzm7Dn0.js",
+            "rawBytes": 535,
+            "gzipBytes": 388,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 388,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BGmeGZ0G.js",
+            "rawBytes": 6184,
+            "gzipBytes": 2818,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 2818,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DgLu2Vqc.js",
+            "rawBytes": 12898,
+            "gzipBytes": 4714,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 4714,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BB_Ol6Sd.js",
+            "rawBytes": 79,
+            "gzipBytes": 94,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 94,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-zKV915HR.js",
+            "rawBytes": 1196,
+            "gzipBytes": 610,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 610,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-item-DtQkDupO.js",
+            "rawBytes": 1159,
+            "gzipBytes": 673,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 673,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-Cfj8uCvu.js",
+            "rawBytes": 8082,
+            "gzipBytes": 3476,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 3476,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DuckVfxI.js",
+            "rawBytes": 1916,
+            "gzipBytes": 964,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 964,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-C9x_4jUQ.js",
+            "rawBytes": 18741,
+            "gzipBytes": 7015,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 7015,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          }
+        ],
+        "moduleMapAvailable": true,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "status": "passed",
+        "scriptCount": 20,
+        "rawJsBytes": 405655,
+        "gzipJsBytes": 140577,
+        "servedJsBodyBytes": 140577,
+        "scripts": [
+          {
+            "file": "/assets/index-1dyiwxwF.js",
+            "rawBytes": 311299,
+            "gzipBytes": 102034,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 102034,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/Login-PTWTOh_J.js",
+            "rawBytes": 3652,
+            "gzipBytes": 1851,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1851,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-dOTIxt8Y.js",
+            "rawBytes": 1015,
+            "gzipBytes": 647,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 647,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-B2HJcbmg.js",
+            "rawBytes": 1995,
+            "gzipBytes": 945,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 945,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/install-zQx848jT.js",
+            "rawBytes": 2729,
+            "gzipBytes": 1376,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1376,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/constants-DuOUReKY.js",
+            "rawBytes": 897,
+            "gzipBytes": 564,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 564,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/vnode-BSlzwiaK.js",
+            "rawBytes": 836,
+            "gzipBytes": 475,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 475,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-B7X6AIeq.js",
+            "rawBytes": 27050,
+            "gzipBytes": 9539,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 9539,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-common-props-BTFZfLch.js",
+            "rawBytes": 504,
+            "gzipBytes": 316,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 316,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/castArray-D_dLFkIS.js",
+            "rawBytes": 137,
+            "gzipBytes": 137,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 137,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/_baseClone-TDsXDLKH.js",
+            "rawBytes": 4751,
+            "gzipBytes": 1941,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1941,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-BZzm7Dn0.js",
+            "rawBytes": 535,
+            "gzipBytes": 388,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 388,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BB_Ol6Sd.js",
+            "rawBytes": 79,
+            "gzipBytes": 94,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 94,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-zKV915HR.js",
+            "rawBytes": 1196,
+            "gzipBytes": 610,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 610,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-item-DtQkDupO.js",
+            "rawBytes": 1159,
+            "gzipBytes": 673,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 673,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BGmeGZ0G.js",
+            "rawBytes": 6184,
+            "gzipBytes": 2818,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 2818,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DgLu2Vqc.js",
+            "rawBytes": 12898,
+            "gzipBytes": 4714,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 4714,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-Cfj8uCvu.js",
+            "rawBytes": 8082,
+            "gzipBytes": 3476,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 3476,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DuckVfxI.js",
+            "rawBytes": 1916,
+            "gzipBytes": 964,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 964,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-C9x_4jUQ.js",
+            "rawBytes": 18741,
+            "gzipBytes": 7015,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 7015,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          }
+        ],
+        "moduleMapAvailable": true,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      },
+      {
+        "route": "/register",
+        "width": 390,
+        "status": "passed",
+        "scriptCount": 21,
+        "rawJsBytes": 406824,
+        "gzipJsBytes": 140995,
+        "servedJsBodyBytes": 140995,
+        "scripts": [
+          {
+            "file": "/assets/index-1dyiwxwF.js",
+            "rawBytes": 311299,
+            "gzipBytes": 102034,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 102034,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/Register-DWc8Y3aA.js",
+            "rawBytes": 4581,
+            "gzipBytes": 2025,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 2025,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/passwordPolicy-C873t99b.js",
+            "rawBytes": 240,
+            "gzipBytes": 244,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 244,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/AuthShell-dOTIxt8Y.js",
+            "rawBytes": 1015,
+            "gzipBytes": 647,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 647,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-B2HJcbmg.js",
+            "rawBytes": 1995,
+            "gzipBytes": 945,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 945,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/install-zQx848jT.js",
+            "rawBytes": 2729,
+            "gzipBytes": 1376,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1376,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/constants-DuOUReKY.js",
+            "rawBytes": 897,
+            "gzipBytes": 564,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 564,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/vnode-BSlzwiaK.js",
+            "rawBytes": 836,
+            "gzipBytes": 475,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 475,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-common-props-BTFZfLch.js",
+            "rawBytes": 504,
+            "gzipBytes": 316,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 316,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/castArray-D_dLFkIS.js",
+            "rawBytes": 137,
+            "gzipBytes": 137,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 137,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/index-B7X6AIeq.js",
+            "rawBytes": 27050,
+            "gzipBytes": 9539,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 9539,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-BZzm7Dn0.js",
+            "rawBytes": 535,
+            "gzipBytes": 388,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 388,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/_baseClone-TDsXDLKH.js",
+            "rawBytes": 4751,
+            "gzipBytes": 1941,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 1941,
+            "moduleKinds": []
+          },
+          {
+            "file": "/assets/event-BGmeGZ0G.js",
+            "rawBytes": 6184,
+            "gzipBytes": 2818,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 2818,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DgLu2Vqc.js",
+            "rawBytes": 12898,
+            "gzipBytes": 4714,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 4714,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/event-BB_Ol6Sd.js",
+            "rawBytes": 79,
+            "gzipBytes": 94,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 94,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-zKV915HR.js",
+            "rawBytes": 1196,
+            "gzipBytes": 610,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 610,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/use-form-item-DtQkDupO.js",
+            "rawBytes": 1159,
+            "gzipBytes": 673,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 673,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-Cfj8uCvu.js",
+            "rawBytes": 8082,
+            "gzipBytes": 3476,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 3476,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-DuckVfxI.js",
+            "rawBytes": 1916,
+            "gzipBytes": 964,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 964,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          },
+          {
+            "file": "/assets/index-C9x_4jUQ.js",
+            "rawBytes": 18741,
+            "gzipBytes": 7015,
+            "servedEncoding": "gzip",
+            "servedBodyBytes": 7015,
+            "moduleKinds": [
+              "element-plus"
+            ]
+          }
+        ],
+        "moduleMapAvailable": true,
+        "pageErrors": [],
+        "unexpectedConsole": [],
+        "expectedWarnings": [
+          "Service Worker registration blocked by Playwright"
+        ],
+        "blockedRequests": [],
+        "overlay": 0,
+        "overflow": false
+      }
+    ]
+  },
+  "checks": {
+    "frontendUnit": {
+      "files": 6,
+      "passed": 17,
+      "exitCode": 0
+    },
+    "sourceGuardCases": {
+      "passed": 7,
+      "exitCode": 0
+    },
+    "approvedAssets": {
+      "total": 131,
+      "approved": 124,
+      "legacyUnverified": 7,
+      "exitCode": 0
+    },
+    "sourceReferences": {
+      "roles": 16,
+      "icons": 25,
+      "approvedAssetsReferenced": 21,
+      "scannedFiles": 54,
+      "exitCode": 0
+    },
+    "build": {
+      "modules": 2450,
+      "seconds": 8.98,
+      "exitCode": 0,
+      "largeChunkWarnings": 0
+    },
+    "businessProduction": {
+      "expectedPages": 36,
+      "capturedPages": 36,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "libraryIconFailureCount": 0,
+      "pagesOverLimit": [],
+      "unexpectedConsole": 0,
+      "overflows": 0
+    },
+    "authProduction": {
+      "cases": 60,
+      "status": "passed"
+    },
+    "targetProduction": {
+      "status": "passed",
+      "base": "http://127.0.0.1:4185",
+      "results": [
+        {
+          "name": "login",
+          "width": 1440,
+          "production": true,
+          "scripts": [
+            "/assets/index-1dyiwxwF.js",
+            "/assets/Login-PTWTOh_J.js",
+            "/assets/AuthShell-dOTIxt8Y.js",
+            "/assets/index-B2HJcbmg.js",
+            "/assets/install-zQx848jT.js",
+            "/assets/constants-DuOUReKY.js",
+            "/assets/vnode-BSlzwiaK.js",
+            "/assets/index-B7X6AIeq.js",
+            "/assets/use-form-common-props-BTFZfLch.js",
+            "/assets/castArray-D_dLFkIS.js",
+            "/assets/_baseClone-TDsXDLKH.js",
+            "/assets/index-BZzm7Dn0.js",
+            "/assets/event-BGmeGZ0G.js",
+            "/assets/index-DgLu2Vqc.js",
+            "/assets/event-BB_Ol6Sd.js",
+            "/assets/index-zKV915HR.js",
+            "/assets/use-form-item-DtQkDupO.js",
+            "/assets/index-Cfj8uCvu.js",
+            "/assets/index-DuckVfxI.js",
+            "/assets/index-C9x_4jUQ.js"
+          ],
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "dashboard",
+          "width": 1440,
+          "production": true,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "detail",
+          "width": 1440,
+          "production": true,
+          "noUnusedChart": true,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "report",
+          "width": 1440,
+          "production": true,
+          "printImages": 7,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "analytics",
+          "width": 1440,
+          "production": true,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "leave-dashboard",
+          "width": 1440,
+          "production": true,
+          "listeners": {
+            "resize": 0
+          },
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "leave-report",
+          "width": 1440,
+          "production": true,
+          "listeners": {
+            "resize": 0
+          },
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "login",
+          "width": 390,
+          "production": true,
+          "scripts": [
+            "/assets/index-1dyiwxwF.js",
+            "/assets/Login-PTWTOh_J.js",
+            "/assets/AuthShell-dOTIxt8Y.js",
+            "/assets/index-B2HJcbmg.js",
+            "/assets/install-zQx848jT.js",
+            "/assets/constants-DuOUReKY.js",
+            "/assets/vnode-BSlzwiaK.js",
+            "/assets/index-B7X6AIeq.js",
+            "/assets/use-form-common-props-BTFZfLch.js",
+            "/assets/castArray-D_dLFkIS.js",
+            "/assets/_baseClone-TDsXDLKH.js",
+            "/assets/index-BZzm7Dn0.js",
+            "/assets/event-BGmeGZ0G.js",
+            "/assets/index-DgLu2Vqc.js",
+            "/assets/event-BB_Ol6Sd.js",
+            "/assets/index-zKV915HR.js",
+            "/assets/use-form-item-DtQkDupO.js",
+            "/assets/index-Cfj8uCvu.js",
+            "/assets/index-DuckVfxI.js",
+            "/assets/index-C9x_4jUQ.js"
+          ],
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "dashboard",
+          "width": 390,
+          "production": true,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "detail",
+          "width": 390,
+          "production": true,
+          "noUnusedChart": true,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "report",
+          "width": 390,
+          "production": true,
+          "printImages": 7,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "analytics",
+          "width": 390,
+          "production": true,
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "leave-dashboard",
+          "width": 390,
+          "production": true,
+          "listeners": {
+            "resize": 0
+          },
+          "pageErrors": [],
+          "warnings": []
+        },
+        {
+          "name": "leave-report",
+          "width": 390,
+          "production": true,
+          "listeners": {
+            "resize": 0
+          },
+          "pageErrors": [],
+          "warnings": []
+        }
+      ]
+    },
+    "timerProduction": {
+      "status": "passed",
+      "base": "http://127.0.0.1:4185",
+      "results": [
+        {
+          "width": 1440,
+          "captured": {
+            "fade": true,
+            "close": true
+          },
+          "cleared": true,
+          "pageErrors": []
+        },
+        {
+          "width": 390,
+          "captured": {
+            "fade": true,
+            "close": true
+          },
+          "cleared": true,
+          "pageErrors": []
+        }
+      ]
+    },
+    "gallery": {
+      "tests": 13,
+      "svgDownloads": 8,
+      "screenshots": 18,
+      "status": "passed"
+    },
+    "auditToolSyntaxExitCode": 0,
+    "auditPreviewApiStatus": 503,
+    "defaultBudgetRejectsOldUnmappedBuild": true
+  },
+  "preservation": {
+    "protectedSourcePaths": [
+      "backend",
+      "public",
+      "src/assets",
+      "package-lock.json",
+      "src/router",
+      "docs/design/chart-style.js",
+      "docs/design/chart-palette.json",
+      "docs/design/chart-options.js",
+      "docs/design/chart-library.js",
+      "docs/design/chart-library.css",
+      "docs/design/chart-demo-data.js",
+      "docs/design/screenshots"
+    ],
+    "protectedGitDiff": [],
+    "dependencyVersionsChanged": false,
+    "vueStylesUnchanged": 22,
+    "runtimeFilesAccessed": false
+  },
+  "review": {
+    "record": "docs/test/前端分包独立复核.md",
+    "reviewer": "Luna",
+    "ownChecks": "Source check, 162 component-tag import matches, per-file raw/gzip and module-map recalculation",
+    "browserAndBuildRerunByReviewer": false
+  },
+  "limits": [
+    "Requests increase from3/4 to20/21; full Element Plus CSS remains; no end-user timing improvement percentage claimed",
+    "SVG renderer actual initialization/export was covered in development; production print preview produced7 images per viewport",
+    "The audit API deliberately returns503 and never forwards to a backend",
+    "One intermediate Node24/Windows libuv build exited1; unchanged source rerun and final independent build exited0",
+    "Production deployment, backend hardening backlog and existing orphan data issue remain outside this frontend task"
+  ],
+  "recoveryTag": "frontend-performance-20261022",
+  "hygiene": {
+    "stagedFiles": 43,
+    "trackedFiles": 593,
+    "forbidden": 0,
+    "ignoredTracked": 0,
+    "unexpectedPaths": 0,
+    "missing": 0,
+    "oversized": 0,
+    "markdownFiles": 49,
+    "brokenLocalLinks": 0,
+    "stagedDiffCheckExitCode": 0
+  },
+  "cleanup": {
+    "isolated4184Stopped": true,
+    "isolated4185Stopped": true,
+    "actual5173And18080Retained": true
+  }
+}

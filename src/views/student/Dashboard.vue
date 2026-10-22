@@ -96,8 +96,8 @@ import { businessColor } from '../../styles/business-theme.js'
 import { ref, onMounted, nextTick, onBeforeUnmount, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import * as echarts from 'echarts'
-import { ElMessage } from 'element-plus'
+import * as echarts from '../../design/charts/basic'
+import { ElMessage, ElAlert, ElButton, ElSkeleton, ElRow, ElCol, ElCard, ElSelect, ElOption, ElPopover, ElIcon, ElProgress, ElDialog } from 'element-plus'
 
 const router = useRouter()
 const loading = ref(true)
@@ -131,21 +131,28 @@ const sdsLevel = computed(() => sdsScore.value >= 73 ? '重度' : sdsScore.value
 const sdsAdvice = computed(() => sdsScore.value >= 63 ? '建议尽快预约心理咨询，并减少连续高压学习时长。' : sdsScore.value >= 53 ? '建议多进行户外活动，必要时可预约咨询。' : '建议保持规律作息并持续关注情绪波动。')
 const sdsColor = computed(() => sdsScore.value >= 73 ? businessColor('data-risk-high') : sdsScore.value >= 63 ? businessColor('data-risk-mid') : sdsScore.value >= 53 ? businessColor('danger-100') : businessColor('data-risk-low'))
 
+let unmounted = false
 onMounted(async () => {
   await fetchAllData()
+  if (unmounted) return
   loading.value = false
-  nextTick(initCharts)
+  await nextTick()
+  if (unmounted) return
+  initCharts()
   window.addEventListener('resize', resizeCharts)
 })
 onBeforeUnmount(() => {
+  unmounted = true
   window.removeEventListener('resize', resizeCharts)
   trendChart && trendChart.dispose(); scoreChart && scoreChart.dispose(); energyChart && energyChart.dispose(); wordChart && wordChart.dispose(); appointmentChart && appointmentChart.dispose()
+  trendChart = scoreChart = energyChart = wordChart = appointmentChart = null
 })
 const resizeCharts = () => { trendChart && trendChart.resize(); scoreChart && scoreChart.resize(); energyChart && energyChart.resize(); wordChart && wordChart.resize(); appointmentChart && appointmentChart.resize() }
 
 const fetchTrendData = async () => {
   const days = Number.parseInt(trendRange.value, 10)
   const res = await axios.get('/api/student/dashboard/emotion_trend', { params: { days, limit: days } })
+  if (unmounted) return
   emotionTrend.value = Array.isArray(res.data) ? res.data : []
   trendLastUpdatedAt.value = new Date().toLocaleTimeString()
   updateTrendChart()
@@ -155,6 +162,7 @@ const refreshTrendOnly = async () => {
   try {
     await fetchTrendData()
     await nextTick()
+    if (unmounted) return
     if (!trendChart && emotionTrend.value.length) initTrendChart()
     else trendChart?.resize()
   } catch (error) {
@@ -176,11 +184,13 @@ const fetchAllData = async () => {
       axios.get('/api/student/dashboard/appointment_stats')
     ])
     await fetchTrendData()
+    if (unmounted) return
     latestScores.value = scoresRes.data
     redEnergy.value = energyRes.data
     treeholeWords.value = wordsRes.data
     appointmentStats.value = aptRes.data
   } catch {
+    if (unmounted) return
     loadError.value = '数据加载失败，请重新加载。'
   }
 }
@@ -188,12 +198,13 @@ const fetchAllData = async () => {
 const retryDashboard = async () => {
   loading.value = true
   await fetchAllData()
+  if (unmounted) return
   loading.value = false
   await nextTick()
   initCharts()
 }
 
-const initCharts = () => { if (loadError.value) return; emotionTrend.value.length && trendChartRef.value && initTrendChart(); scoreChartRef.value && initScoreChart(); energyChartRef.value && initEnergyChart(); wordChartRef.value && initWordChart(); appointmentChartRef.value && initAppointmentChart() }
+const initCharts = () => { if (unmounted || loadError.value) return; emotionTrend.value.length && trendChartRef.value && initTrendChart(); scoreChartRef.value && initScoreChart(); energyChartRef.value && initEnergyChart(); wordChartRef.value && initWordChart(); appointmentChartRef.value && initAppointmentChart() }
 const buildTrendOption = () => {
   const values = emotionTrend.value.map(i => Number(i.index))
   const markStep = 7

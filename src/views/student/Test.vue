@@ -106,7 +106,7 @@
 <script setup>
 import { computed, onBeforeUnmount, ref } from 'vue'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElRow, ElCol, ElCard, ElButton, ElIcon, ElProgress } from 'element-plus'
 import { testsData } from '@/data/tests'
 const tests = testsData
 

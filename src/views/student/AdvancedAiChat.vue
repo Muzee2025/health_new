@@ -177,9 +177,9 @@ const anonymousAvatar = getVisualAsset('anonymousAvatar').url
 
 import { businessAlpha, businessColor } from '../../styles/business-theme.js'
 import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox, ElButton, ElInput, ElDropdown, ElDropdownMenu, ElDropdownItem, ElSwitch, ElIcon, ElAvatar, vLoading } from 'element-plus'
 import axios from 'axios'
-import * as echarts from 'echarts'
+import * as echarts from '../../design/charts/radar'
 import { createChatStorage } from '@/services/chatIndexedDb'
 import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
 

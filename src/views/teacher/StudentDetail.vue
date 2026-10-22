@@ -172,19 +172,15 @@
 </template>
 
 <script setup>
-import { setLibraryChartOption } from '../../design/chart-registry'
 import { interventionIcon } from '../../design/icon-registry'
 import { businessColor } from '../../styles/business-theme.js'
-import { ref, onMounted, onUnmounted, nextTick, computed, markRaw } from 'vue'
+import { ref, onMounted, onUnmounted, computed, markRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
-import * as echarts from 'echarts'
+import { ElMessage, ElPageHeader, ElButton, ElIcon, ElTimeline, ElTimelineItem, ElInput, ElCollapse, ElCollapseItem, ElTable, ElTableColumn, ElTag } from 'element-plus'
 
 const route = useRoute()
 const studentData = ref(null)
-const chartRef = ref(null)
-let chartInstance = null
 const newRecordText = ref('')
 
 const exportWord = async () => {
@@ -277,11 +273,10 @@ const fetchStudentDetail = async () => {
     const res = await axios.get(`/api/teacher/student/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
+    if (unmounted) return
     studentData.value = res.data
-    nextTick(() => {
-      initChart()
-    })
   } catch (error) {
+    if (unmounted) return
     ElMessage.error('获取学生详情失败')
   }
 }
@@ -322,73 +317,13 @@ const formatDate = (dateString) => {
   return d.toLocaleString()
 }
 
-const initChart = () => {
-  if (!chartRef.value || !studentData.value.test_history) return
-  
-  const history = studentData.value.test_history
-  const dates = history.map(item => new Date(item.created_at).toLocaleDateString())
-  const scores = history.map(item => item.score)
-  
-  chartInstance = echarts.init(chartRef.value, 'xinyu-business')
-  const option = {
-    tooltip: { trigger: 'axis' },
-    grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
-    xAxis: {
-      type: 'category',
-      data: dates,
-      axisLine: { lineStyle: { color: businessColor('border') } },
-      axisLabel: { color: businessColor('text-secondary') }
-    },
-    yAxis: {
-      type: 'value',
-      max: 100, // Assume 100 max for general tests
-      axisLine: { show: false },
-      axisTick: { show: false },
-      splitLine: { lineStyle: { color: businessColor('border'), type: 'dashed' } },
-      axisLabel: { color: businessColor('text-secondary') }
-    },
-    visualMap: {
-      show: false,
-      pieces: [
-        { gt: 0, lte: 40, color: businessColor('data-risk-low') }, // Green
-        { gt: 40, lte: 60, color: businessColor('data-risk-mid') }, // Yellow
-        { gt: 60, lte: 100, color: businessColor('data-risk-high') }  // Red
-      ],
-      outOfRange: { color: businessColor('text-secondary') }
-    },
-    series: [
-      {
-        name: '测评得分',
-        type: 'line',
-        data: scores,
-        smooth: true,
-        symbolSize: 8,
-        markLine: {
-          silent: true,
-          lineStyle: { color: businessColor('text-secondary'), type: 'dashed' },
-          data: [
-            { yAxis: 40, label: { formatter: '轻度分界' } },
-            { yAxis: 60, label: { formatter: '重度分界' } }
-          ]
-        }
-      }
-    ]
-  }
-  setLibraryChartOption(chartInstance, option)
-}
-
-const handleResize = () => {
-  chartInstance?.resize()
-}
-
+let unmounted = false
 onMounted(() => {
   fetchStudentDetail()
-  window.addEventListener('resize', handleResize)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
-  chartInstance?.dispose()
+  unmounted = true
 })
 </script>
 

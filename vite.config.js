@@ -18,6 +18,8 @@ export default defineConfig({
 
   plugins: [vue()],
 
+  build: { manifest: true },
+
   test: {
     include: ['src/**/*.test.{js,ts}'],
   },

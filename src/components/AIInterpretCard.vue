@@ -15,7 +15,7 @@
 
 <script setup>
 import { computed, ref, onBeforeUnmount } from "vue"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElCard, ElButton } from 'element-plus'
 
 const props = defineProps({
   text: { type: String, default: "" },

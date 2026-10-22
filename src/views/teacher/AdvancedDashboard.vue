@@ -124,8 +124,8 @@
 import { setLibraryChartOption } from '../../design/chart-registry'
 import { businessColor, businessPalette } from '../../styles/business-theme.js'
 import { ref, onMounted, onUnmounted, computed, nextTick, shallowRef } from 'vue'
-import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
-import * as echarts from 'echarts'
+import { ElMessage, ElMessageBox, ElNotification, ElButton, ElIcon, ElAlert, ElRow, ElCol, ElCard, ElBadge, ElTag, ElTable, ElTableColumn, vLoading } from 'element-plus'
+import * as echarts from '../../design/charts/analytics'
 import axios from 'axios'
 
 const metrics = ref(null)

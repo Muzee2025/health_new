@@ -15,7 +15,7 @@ import { onBeforeUnmount, ref } from 'vue'
 import AuthShell from '../components/AuthShell.vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElForm, ElFormItem, ElInput, ElAlert, ElButton } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()

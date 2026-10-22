@@ -62,6 +62,7 @@
 </template>
 
 <script setup>
+import { ElIcon, ElAvatar } from 'element-plus'
 import { getVisualAsset } from '../../design/asset-registry'
 const brandLogo = getVisualAsset('brandLogo').url
 const profileAvatar = getVisualAsset('studentAvatar').url
