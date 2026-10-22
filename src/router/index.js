@@ -84,6 +84,11 @@ const routes = [
           component: () => import('../views/teacher/AdvancedDashboard.vue')
         },
         {
+          path: 'support',
+          name: 'TeacherSupportWorkspace',
+          component: () => import('../views/teacher/SupportWorkspace.vue')
+        },
+        {
           path: 'students',
           name: 'StudentManagement',
         component: () => import('../views/teacher/StudentManagement.vue')

@@ -25,6 +25,7 @@
       <el-button type="primary" class="add-student-btn" @click="openAddStudentDialog">
         <LibraryIcon name="add" /> 添加学生
       </el-button>
+      <el-button plain @click="$router.push('/teacher/support')">求助与跟进</el-button>
     </div>
 
     <div class="table-card">

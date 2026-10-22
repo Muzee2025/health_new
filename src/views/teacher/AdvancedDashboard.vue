@@ -112,11 +112,39 @@
               <el-button size="small" type="warning" @click="handleReview(row, 'reject')">驳回校正</el-button>
               <el-button size="small" type="danger" @click="handleReview(row, 'escalate')">升级处理</el-button>
               <el-button size="small" type="primary" @click="contactStudent(row)">联络说明</el-button>
+              <el-button size="small" plain @click="$router.push('/teacher/support')">进入跟进</el-button>
             </div>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
+
+    <el-card shadow="hover" class="mt-20 review-history-card">
+      <template #header>
+        <div class="history-heading"><strong>预警审核历史</strong><el-button text @click="fetchReviewHistory" :loading="loadingReviewHistory">刷新历史</el-button></div>
+      </template>
+      <el-table :data="reviewHistory" style="width: 100%" v-loading="loadingReviewHistory">
+        <el-table-column prop="created_at" label="预警时间" width="170" />
+        <el-table-column prop="student_name" label="学生" width="130" />
+        <el-table-column label="审核结论" width="130">
+          <template #default="{row}"><el-tag v-if="row.latestReview" :type="reviewType(row.latestReview.action)">{{ reviewActionLabel(row.latestReview.action) }}</el-tag><span v-else>历史原因不可追溯</span></template>
+        </el-table-column>
+        <el-table-column label="审核原因" min-width="220">
+          <template #default="{row}">{{ row.latestReview?.reason || '没有可追溯的审核原因' }}</template>
+        </el-table-column>
+        <el-table-column label="跟进" width="120">
+          <template #default><el-button type="primary" @click="$router.push('/teacher/support')">创建跟进</el-button></template>
+        </el-table-column>
+      </el-table>
+      <LibraryEmpty v-if="!loadingReviewHistory && !reviewHistory.length" description="还没有已审核预警记录。" :image-size="72" />
+    </el-card>
+
+    <el-dialog v-model="reviewDialogVisible" title="记录预警审核" width="520px" :close-on-click-modal="false" @closed="resetReviewDialog">
+      <p class="review-dialog-note">选择“{{ reviewActionLabel(currentReview.action) }}”并说明判断依据。保存后会写入审核历史。</p>
+      <el-input v-model="reviewReason" type="textarea" :rows="4" maxlength="1500" show-word-limit placeholder="填写审核原因" :disabled="submittingReview" />
+      <p v-if="reviewError" class="review-error" role="alert">{{ reviewError }}</p>
+      <template #footer><el-button @click="reviewDialogVisible = false">返回</el-button><el-button type="primary" :loading="submittingReview" :disabled="submittingReview" @click="submitReview">保存审核</el-button></template>
+    </el-dialog>
   </div>
 </template>
 
@@ -124,7 +152,7 @@
 import { setLibraryChartOption } from '../../design/chart-registry'
 import { businessColor, businessPalette } from '../../styles/business-theme.js'
 import { ref, onMounted, onUnmounted, computed, nextTick, shallowRef } from 'vue'
-import { ElMessage, ElMessageBox, ElNotification, ElButton, ElIcon, ElAlert, ElRow, ElCol, ElCard, ElBadge, ElTag, ElTable, ElTableColumn, vLoading } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification, ElButton, ElIcon, ElAlert, ElRow, ElCol, ElCard, ElBadge, ElTag, ElTable, ElTableColumn, ElDialog, ElInput, vLoading } from 'element-plus'
 import * as echarts from '../../design/charts/analytics'
 import axios from 'axios'
 
@@ -133,6 +161,13 @@ const metricsError = ref(false)
 const hasEmotionSamples = computed(() => ['joy', 'anxiety'].some(field => metrics.value?.emotion_trends_7d?.[field]?.some(value => typeof value === 'number' && Number.isFinite(value))))
 const pendingList = ref([])
 const loadingPending = ref(false)
+const reviewHistory = ref([])
+const loadingReviewHistory = ref(false)
+const reviewDialogVisible = ref(false)
+const currentReview = ref({ row: null, action: '' })
+const reviewReason = ref('')
+const reviewError = ref('')
+const submittingReview = ref(false)
 const ws = ref(null)
 let pendingPollTimer = null
 let reconnectTimer = null
@@ -165,27 +200,74 @@ const fetchPendingList = async () => {
       params: { page: 1, pageSize: 200 }
     })
     pendingList.value = res.data?.data?.items || []
+    return true
   } catch (error) {
     console.error('Failed to fetch pending crisis records', error)
+    return false
   } finally {
     loadingPending.value = false
   }
 }
 
-const handleReview = async (row, action) => {
-  const actionName = action === 'pass' ? '通过并确认' : (action === 'reject' ? '驳回校正' : '升级处理')
-  await ElMessageBox.confirm(`确认对记录 ${row.id} 执行 [${actionName}] 操作吗？`, '操作确认')
+const handleReview = (row, action) => {
+  currentReview.value = { row, action }
+  reviewReason.value = ''
+  reviewError.value = ''
+  reviewDialogVisible.value = true
+}
+
+const submitReview = async () => {
+  if (submittingReview.value) return
+  const reason = reviewReason.value.trim()
+  if (!reason) { reviewError.value = '请填写审核原因。'; return }
+  const { row, action } = currentReview.value
+  if (!row) return
+  submittingReview.value = true
+  reviewError.value = ''
   try {
     await axios.post('/api/teacher/crisis/review', {
       recordId: row.id,
-      action
+      action,
+      reason
     })
-    pendingList.value = pendingList.value.filter(item => item.id !== row.id)
-    ElMessage.success('审核成功，已移入已审核历史')
+    reviewDialogVisible.value = false
+    const [pendingUpdated, historyUpdated] = await Promise.all([fetchPendingList(), fetchReviewHistory()])
+    if (pendingUpdated && historyUpdated) ElMessage.success('审核已保存，预警列表和审核历史已刷新。')
+    else ElMessage.warning('审核已保存，但页面刷新未完成，请稍后刷新查看。')
   } catch (error) {
-    ElMessage.error('审核提交失败')
+    if (error?.response?.status === 409) reviewError.value = '这条预警已被处理，请刷新预警列表后查看。'
+    else if (error?.response?.status === 404) reviewError.value = '这条预警不在你的分配范围内。'
+    else if (error?.response?.status === 422) reviewError.value = '审核原因未通过检查，请修改后重试。'
+    else if (error?.response?.status === 503) reviewError.value = '审核服务尚未启用，请联系管理员。'
+    else reviewError.value = '审核提交失败，请稍后重试。'
+  } finally {
+    submittingReview.value = false
   }
 }
+
+const fetchReviewHistory = async () => {
+  loadingReviewHistory.value = true
+  try {
+    const response = await axios.get('/api/advanced-teacher/warnings')
+    const rows = Array.isArray(response.data?.data) ? response.data.data : []
+    const processed = rows.filter(row => row.status !== 'pending').slice(0, 30)
+    const reviews = await Promise.all(processed.map(async row => {
+      try {
+        const result = await axios.get(`/api/teacher/crisis/${encodeURIComponent(row.id)}/reviews`)
+        const items = Array.isArray(result.data?.data) ? result.data.data : []
+        return { ...row, latestReview: items.at(-1) || null }
+      } catch { return { ...row, latestReview: null } }
+    }))
+    reviewHistory.value = reviews
+    return true
+  } catch {
+    return false
+  } finally { loadingReviewHistory.value = false }
+}
+
+const reviewActionLabel = (action) => ({ pass: '通过', reject: '驳回校正', escalate: '升级处理' }[action] || '审核')
+const reviewType = (action) => action === 'pass' ? 'success' : action === 'escalate' ? 'danger' : 'warning'
+const resetReviewDialog = () => { currentReview.value = { row: null, action: '' }; reviewReason.value = ''; reviewError.value = '' }
 
 const contactStudent = (row) => {
   ElMessageBox.alert('当前预警记录未提供可拨打的联络方式。请在学生管理中核实档案与校内联络流程。', '联络说明', {
@@ -265,6 +347,7 @@ onMounted(async () => {
   window.addEventListener('resize', resizeCharts)
   await fetchMetrics()
   await fetchPendingList()
+  await fetchReviewHistory()
   await nextTick()
   if (unmounted) return
   initCharts()

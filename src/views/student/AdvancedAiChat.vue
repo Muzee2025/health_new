@@ -51,6 +51,7 @@
           >
             新心理咨询
           </button>
+          <router-link to="/student/questions" class="mode-pill support-link">向老师留言</router-link>
           <span v-if="langStatus" class="voice-tag">语言 {{ langStatus.language }} · {{ Math.round(langStatus.confidence * 100) }}%</span>
         </div>
         <div class="anon-switch">
@@ -1275,6 +1276,7 @@ const scrollToBottom = async () => {
   background: var(--primary);
   color: var(--surface);
 }
+.support-link { display: inline-flex; align-items: center; color: var(--brand-700); text-decoration: underline; text-underline-offset: 3px; }
 
 .voice-tag {
   border-radius: 999px;

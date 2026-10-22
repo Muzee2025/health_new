@@ -1,0 +1,15 @@
+**
+!backend
+!backend/requirements.txt
+!backend/requirements-core.txt
+!backend/app
+!backend/app/**
+**/__pycache__/**
+**/*.py[cod]
+**/.env
+**/.env.*
+**/*.db
+**/*.db-*
+**/*.sqlite*
+**/uploads/**
+**/logs/**

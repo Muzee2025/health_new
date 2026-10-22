@@ -10,6 +10,7 @@ from ..security import (
     create_access_token, get_current_user, login_guard, signing_key,
     token_lifetime_minutes, SecurityConfigurationError, validate_new_password,
 )
+from ..account_access import access_state
 
 # Re-export the identical dependency callable for existing routes and test overrides.
 router = APIRouter(prefix="/api", tags=["Auth"])
@@ -44,13 +45,15 @@ def register(user: schemas.UserCreate, request: Request, db: Session = Depends(g
             role="student", student_id=user.student_id, name=user.name, advisor=user.advisor,
         )
         db.add(new_user)
+        db.flush()
+        db.add(models.UserAccessState(user_id=new_user.id, disabled=False, auth_epoch=0))
         db.commit()
         db.refresh(new_user)
     except SQLAlchemyError:
         db.rollback()
         raise HTTPException(status_code=503, detail="Registration is temporarily unavailable") from None
     login_guard.success(request, user.username)
-    return {"access_token": create_access_token(user_id=new_user.id), "token_type": "bearer", "user": new_user}
+    return {"access_token": create_access_token(user_id=new_user.id, auth_epoch=0), "token_type": "bearer", "user": new_user}
 
 
 @router.post("/login", response_model=schemas.Token)
@@ -77,11 +80,16 @@ def login(user: schemas.UserLogin, request: Request, db: Session = Depends(get_d
             valid = False
     except SQLAlchemyError:
         raise HTTPException(status_code=503, detail="Sign-in is temporarily unavailable") from None
+    auth_epoch = 0
+    if valid and db_user.role in ("student", "teacher"):
+        disabled, auth_epoch = access_state(db, db_user.id)
+        if disabled:
+            valid = False
     if not valid or db_user.role not in ("student", "teacher"):
         login_guard.failure(request, principal)
         raise HTTPException(status_code=401, detail="Invalid sign-in credentials", headers={"WWW-Authenticate": "Bearer"})
     login_guard.success(request, principal)
-    return {"access_token": create_access_token(user_id=db_user.id), "token_type": "bearer", "user": db_user}
+    return {"access_token": create_access_token(user_id=db_user.id, auth_epoch=auth_epoch), "token_type": "bearer", "user": db_user}
 
 
 @router.get("/me", response_model=schemas.UserResponse)

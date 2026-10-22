@@ -52,7 +52,7 @@ const fixtureTable = [
   [/^\/api\/student\/teachers$/, () => [{ id: 'demo-teacher-01', name: '林老师', title: '心理咨询师', consultation_direction: '压力与适应', location: '心理中心 201', intro: '关注学习压力与情绪调适，提供支持性谈话。', can_book: true, time_slots: ['2026-10-21 14:00-14:50', '2026-10-22 10:00-10:50'], booked_slots: [] }]],
   [/^\/api\/student\/appointments$/, () => [{ id: 'demo-appointment-01', time_slot: '2026-10-22 10:00-10:50', teacher_name: '林老师', location: '心理中心 201', status: 'pending' }]],
   [/^\/api\/student\/articles$/, () => [{ id: 'demo-article-01', title: '给日常压力留一个缓冲区', summary: '从呼吸、作息和任务安排开始，建立简单可持续的自我照顾习惯。', category: '情绪管理', source: '合成演示内容', views: 36, cover_url: '/__synthetic__/cover.svg' }, { id: 'demo-article-02', title: '睡前放松的三个小练习', summary: '用温和的节奏帮助身心逐渐安静下来。', category: '睡眠健康', source: '合成演示内容', views: 24, cover_url: '/__synthetic__/cover.svg' }]],
-  [/^\/api\/student\/questions$/, () => [{ id: 'demo-question-01', question_text: '考试前如何安排复习和休息？', answer: '可以先列出重点任务，再穿插短暂休息。', status: 'answered', created_at: '2026-10-18T09:00:00+08:00' }]],
+  [/^\/api\/student\/questions$/, () => [{ id: 'demo-question-01', question_text: '考试前如何安排复习和休息？', answer_text: '可以先列出重点任务，再穿插短暂休息。', status: 'answered', response_state: 'answered', assigned_teacher_count: 1, created_at: '2026-10-18T09:00:00+08:00' }]],
   [/^\/api\/advanced-ai\/sessions$/, () => []],
   [/^\/api\/advanced-ai\/sessions\/[^/]+\/messages$/, () => []],
   [/^\/api\/v1\/report\/analysis\/latest$/, () => ({ status: 'complete', data: {
@@ -67,6 +67,9 @@ const fixtureTable = [
   } })],
   [/^\/api\/v1\/model\/current$/, () => ({ data: { model_name: '合成演示模型', legacy_alias: 'synthetic-model' } })],
   [/^\/api\/teacher\/crisis\/pending$/, () => ({ data: { items: [] } })],
+  [/^\/api\/advanced-teacher\/warnings$/, () => []],
+  [/^\/api\/teacher\/questions$/, () => [{ id: 900010, student_id: 900001, student_name: '演示学生', question_text: '这是一条用于界面验证的合成留言。', status: 'pending', answer_text: null, created_at: '2026-10-22T01:00:00Z' }]],
+  [/^\/api\/teacher\/follow-ups$/, () => []],
   [/^\/api\/advanced-teacher\/dashboard\/metrics$/, () => ({
     source: 'assigned_students', data_status: 'measured',
     realtime_stats: { pv: 32, uv: 2, avg_session_rounds: 6.4, crisis_alerts: 1 },
@@ -96,6 +99,7 @@ const baseRoutes = [
   { path: '/student/treehole', role: 'student', name: 'student-treehole' },
   { path: '/student/questions', role: 'student', name: 'student-questions' },
   { path: '/teacher/advanced-dashboard', role: 'teacher', name: 'teacher-advanced-dashboard' },
+  { path: '/teacher/support', role: 'teacher', name: 'teacher-support' },
   { path: '/teacher/students', role: 'teacher', name: 'teacher-students' },
   { path: '/teacher/student/900001', role: 'teacher', name: 'teacher-student-900001' },
   { path: '/teacher/appointments', role: 'teacher', name: 'teacher-appointments' },

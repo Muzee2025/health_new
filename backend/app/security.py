@@ -20,6 +20,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app import models
 from app.database import get_db
+from app.account_access import access_state
 
 ALGORITHM = "HS256"
 TOKEN_VERSION = 2
@@ -83,7 +84,7 @@ def authentication_error() -> HTTPException:
     return HTTPException(status_code=401, detail="Invalid or expired login credentials; please sign in again", headers={"WWW-Authenticate": "Bearer"})
 
 
-def create_access_token(*, user_id: int) -> str:
+def create_access_token(*, user_id: int, auth_epoch: int = 0) -> str:
     try:
         key = signing_key()
         lifetime = token_lifetime_minutes()
@@ -91,8 +92,10 @@ def create_access_token(*, user_id: int) -> str:
         raise _configuration_http_error() from None
     if isinstance(user_id, bool) or not isinstance(user_id, int) or user_id <= 0:
         raise ValueError("Access tokens require a positive user ID")
+    if isinstance(auth_epoch, bool) or not isinstance(auth_epoch, int) or auth_epoch < 0:
+        raise ValueError("Access tokens require a nonnegative auth epoch")
     now = datetime.now(timezone.utc)
-    return jwt.encode({"sub": str(user_id), "ver": TOKEN_VERSION, "type": "access",
+    return jwt.encode({"sub": str(user_id), "auth_epoch": auth_epoch, "ver": TOKEN_VERSION, "type": "access",
                        "iat": now, "exp": now + timedelta(minutes=lifetime),
                        "iss": TOKEN_ISSUER, "aud": TOKEN_AUDIENCE}, key, algorithm=ALGORITHM)
 
@@ -116,6 +119,8 @@ def decode_access_token(token: str) -> dict:
                 or type(payload.get("exp")) not in (int, float)
                 or not 0 < payload["exp"] - payload["iat"] <= 3600):
             raise authentication_error()
+        if "auth_epoch" in payload and (type(payload["auth_epoch"]) is not int or payload["auth_epoch"] < 0):
+            raise authentication_error()
         return payload
     except (jwt.InvalidTokenError, TypeError, ValueError, OverflowError):
         raise authentication_error() from None
@@ -128,6 +133,10 @@ def resolve_access_user(token: str, db: Session) -> models.User:
     except SQLAlchemyError:
         raise HTTPException(status_code=503, detail="Authentication is temporarily unavailable") from None
     if user is None or user.role not in ("student", "teacher"):
+        raise authentication_error()
+    disabled, current_epoch = access_state(db, user.id)
+    token_epoch = payload.get("auth_epoch", 0)
+    if disabled or token_epoch != current_epoch:
         raise authentication_error()
     return user
 

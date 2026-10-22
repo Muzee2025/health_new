@@ -10,9 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY backend/requirements.txt /app/requirements.txt
+COPY backend/requirements-core.txt /app/requirements-core.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY backend /app
+COPY backend/app /app/app
 
 EXPOSE 8000
 

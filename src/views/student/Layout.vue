@@ -5,26 +5,29 @@
       <router-link to="/student" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
 
       <nav class="nav-menu" aria-label="学生导航">
-        <router-link to="/student/dashboard" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="home"  /></el-icon> <span class="nav-text">首页</span>
+        <router-link to="/student/dashboard" class="nav-item" active-class="active" exact-active-class="active">
+          <el-icon><LibraryIcon name="home" /></el-icon><span class="nav-text">首页</span>
         </router-link>
-        <router-link to="/student/test" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="assessment"  /></el-icon> <span class="nav-text">心理测评</span>
-        </router-link>
+        <div class="nav-group" :class="{ 'group-active': activeStudentGroup === 'growth' }">
+          <button type="button" class="nav-item nav-group-toggle" :aria-expanded="growthOpen" aria-controls="growth-submenu" @click="growthOpen = !growthOpen">
+            <el-icon><LibraryIcon name="assessment" /></el-icon><span class="nav-text">自助成长</span><el-icon class="nav-caret" :class="{ expanded: growthOpen }"><LibraryIcon name="arrow-down" /></el-icon>
+          </button>
+          <div v-if="growthOpen" id="growth-submenu" class="nav-submenu">
+            <router-link to="/student/test" class="nav-item nav-subitem" active-class="active">心理测评</router-link>
+            <router-link to="/student/articles" class="nav-item nav-subitem" active-class="active">心理科普</router-link>
+          </div>
+        </div>
         <router-link to="/student/appointments" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="appointment"  /></el-icon> <span class="nav-text">预约咨询</span>
-        </router-link>
-        <router-link to="/student/articles" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="knowledge"  /></el-icon> <span class="nav-text">心理科普</span>
+          <el-icon><LibraryIcon name="appointment" /></el-icon><span class="nav-text">预约咨询</span>
         </router-link>
         <router-link to="/student/advanced-chat" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="chat"  /></el-icon> <span class="nav-text">智能心理助手</span>
-        </router-link>
-        <router-link to="/student/report" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="report"  /></el-icon> <span class="nav-text">我的心理报告</span>
+          <el-icon><LibraryIcon name="chat" /></el-icon><span class="nav-text">智能助手</span>
         </router-link>
         <router-link to="/student/treehole" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="chat"  /></el-icon> <span class="nav-text">匿名树洞</span>
+          <el-icon><LibraryIcon name="treehole" /></el-icon><span class="nav-text">匿名树洞</span>
+        </router-link>
+        <router-link to="/student/report" class="nav-item" active-class="active">
+          <el-icon><LibraryIcon name="report" /></el-icon><span class="nav-text">我的</span>
         </router-link>
 
         <div class="nav-divider"></div>
@@ -67,13 +70,22 @@ import { getVisualAsset } from '../../design/asset-registry'
 const brandLogo = getVisualAsset('brandLogo').url
 const profileAvatar = getVisualAsset('studentAvatar').url
 
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const user = ref({})
 const route = useRoute()
 const pageTitle = computed(() => ({ dashboard: '心理健康数据看板', test: '心理测评', appointments: '预约咨询', articles: '心理科普', 'advanced-chat': '智能心理助手', report: '我的心理报告', treehole: '匿名树洞', questions: '心理问答' }[route.path.split('/').at(-1)] || '学生空间'))
+const growthOpen = ref(['/student/test', '/student/articles'].some(path => route.path === path || route.path.startsWith('/article/')))
+const activeStudentGroup = computed(() => {
+  if (['/student/test', '/student/articles'].includes(route.path) || route.path.startsWith('/article/')) return 'growth'
+  if (route.path === '/student/report') return 'mine'
+  return route.path.split('/')[2] || 'dashboard'
+})
+watch(() => route.path, (path) => {
+  if (['/student/test', '/student/articles'].includes(path) || path.startsWith('/article/')) growthOpen.value = true
+})
 
 onMounted(() => {
   const userInfo = localStorage.getItem('user')
@@ -171,6 +183,16 @@ const logout = () => {
 .nav-item.active .el-icon {
   color: var(--brand-600);
 }
+
+.nav-group { display: flex; flex-direction: column; }
+.nav-group-toggle { width: calc(100% - 20px); font: inherit; }
+.nav-caret { margin-left: auto; transition: transform .18s ease; }
+.nav-caret.expanded { transform: rotate(180deg); }
+.nav-submenu { display: flex; flex-direction: column; padding: 2px 10px 6px 46px; }
+.nav-subitem { min-height: 40px; padding: 9px 12px; font-size: 13px; }
+.nav-subitem.active { background: var(--brand-50); }
+.nav-group.group-active > .nav-group-toggle { color: var(--brand-600); }
+.nav-item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -2px; }
 
 .nav-divider {
   height: 1px;
@@ -320,5 +342,16 @@ const logout = () => {
   flex: 1;
   padding: 0 40px 40px 40px;
   overflow-y: auto;
+}
+
+@media (max-width: 760px) {
+  .nav-group { flex: 0 0 auto; }
+  .nav-group-toggle { width: auto; }
+  .nav-submenu { flex-direction: row; padding: 0 4px 8px; gap: 4px; }
+  .nav-subitem { min-height: 38px; }
+  .nav-caret { margin-left: 4px; }
+  .nav-menu { align-items: flex-start; }
+  .nav-menu { scrollbar-width: none; }
+  .nav-menu::-webkit-scrollbar { display: none; }
 }
 </style>

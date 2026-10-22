@@ -173,7 +173,8 @@ def test_teacher_process_warning_sync_flow(test_context, monkeypatch):
     assert len(rows) >= 1
     wid = rows[0]["id"]
 
-    proc_res = client.post(f"/api/advanced-teacher/warnings/{wid}/process")
+    proc_res = client.post(f"/api/advanced-teacher/warnings/{wid}/process",
+                           json={"action": "pass", "reason": "Synthetic human review"})
     assert proc_res.status_code == 200
 
     new_rows = client.get("/api/advanced-teacher/warnings").json()["data"]
@@ -184,4 +185,10 @@ def test_teacher_process_warning_sync_flow(test_context, monkeypatch):
     assert len(to_student_payloads) == 1
     assert to_student_payloads[0]["user_id"] == student.id
     assert to_student_payloads[0]["role"] == "student"
+    assert "reason" not in to_student_payloads[0]["message"].get("data", {})
+    with TestingSessionLocal() as db:
+        event = db.query(models.SupportWorkflowEvent).filter_by(
+            subject_type="crisis_warning", subject_id=wid).one()
+        assert event.action == "pass"
+        assert event.reason == "Synthetic human review"
 

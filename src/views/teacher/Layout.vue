@@ -5,21 +5,21 @@
       <router-link to="/teacher" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
 
       <nav class="nav-menu" aria-label="教师导航">
-        <router-link to="/teacher/advanced-dashboard" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="audit"  /></el-icon> <span class="nav-text">AI大屏与审计</span>
+        <router-link to="/teacher/advanced-dashboard" class="nav-item" :class="{ active: route.path === '/teacher/support' }" active-class="active" exact-active-class="active">
+          <el-icon><LibraryIcon name="audit" /></el-icon> <span class="nav-text">工作台</span>
         </router-link>
-        <router-link to="/teacher/students" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="assessment"  /></el-icon> <span class="nav-text">学生管理</span>
+        <router-link to="/teacher/students" class="nav-item" :class="{ active: route.path === '/teacher/students' || route.path.startsWith('/teacher/student/') }" active-class="active" exact-active-class="active">
+          <el-icon><LibraryIcon name="assessment" /></el-icon> <span class="nav-text">我的学生</span>
         </router-link>
         <router-link to="/teacher/appointments" class="nav-item" active-class="active">
           <el-icon><LibraryIcon name="appointment"  /></el-icon> <span class="nav-text">预约管理</span>
 
         </router-link>
-        <router-link to="/teacher/content" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="knowledge"  /></el-icon> <span class="nav-text">内容管理</span>
-        </router-link>
         <router-link to="/teacher/interventions" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="report"  /></el-icon> <span class="nav-text">干预记录</span>
+          <el-icon><LibraryIcon name="report" /></el-icon> <span class="nav-text">干预记录</span>
+        </router-link>
+        <router-link to="/teacher/content" class="nav-item" active-class="active">
+          <el-icon><LibraryIcon name="knowledge" /></el-icon> <span class="nav-text">内容与档案</span>
         </router-link>
 
         <div class="nav-divider"></div>
@@ -45,7 +45,7 @@
 
         <div class="header-right">
 
-          <button class="primary-btn" @click="openInterventionDialog()">添加干预</button>
+          <button v-if="route.path !== '/teacher/support'" class="primary-btn" @click="openInterventionDialog()">添加干预</button>
         </div>
       </header>
 
@@ -177,7 +177,8 @@ let openInterventionHandler = null
 
 const pageTitle = computed(() => {
   const path = route.path
-  if (path.includes('advanced-dashboard')) return 'AI大屏与审计'
+  if (path.includes('advanced-dashboard')) return '工作台'
+  if (path.includes('/support')) return '求助与跟进'
   if (path.includes('students') || path.includes('student/')) return '学生管理'
   if (path.includes('appointments')) return '预约管理'
   if (path.includes('content')) return '内容管理'

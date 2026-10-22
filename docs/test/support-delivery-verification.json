@@ -1,0 +1,325 @@
+{
+  "schemaVersion": 1,
+  "task": "SUPPORT-DELIVERY",
+  "checkedAt": "2026-10-22T15:20:15.486782+00:00",
+  "startingCommit": "a396b72",
+  "branch": "codex/support-delivery",
+  "status": "local_technical_passed_production_and_business_pending",
+  "delegation": {
+    "allNewSubagents": "gpt-6-luna",
+    "exclusiveOwners": true,
+    "independentBackendAndAiReview": "docs/test/补齐任务独立复核.md",
+    "opsReviewBoundary": "OPS author cross-checked deployment only; not an independent gate for own implementation"
+  },
+  "tests": {
+    "backend": {
+      "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py",
+      "exitCode": 0,
+      "passed": 101,
+      "skipped": 2,
+      "warnings": 24,
+      "seconds": 56.97,
+      "skipReason": "Windows symlink privilege unavailable",
+      "evidence": {
+        "path": "tmp/support-backend-question-validation-20261022.log",
+        "bytes": 300,
+        "sha256": "7e48f3805503a2e0bca2f93927c9c3a10cc2300c7430f8707bf9cc6735a5b859"
+      },
+      "isolation": "disposable SQLite/files; dotenv/RAG disabled; Python socket/DNS guard; not an OS sandbox"
+    },
+    "frontend": {
+      "unitTestsPassed": 17,
+      "testFiles": 6,
+      "unitExitCode": 0,
+      "buildModules": 2452,
+      "buildExitCode": 0,
+      "assetCoverage": 131,
+      "legacyProvenanceWarnings": 7,
+      "sourceCheckFiles": 55,
+      "sourceCheckErrors": 0,
+      "sourceNegativeTestsPassed": 7,
+      "auditBuildExitCode": 0
+    },
+    "aiEvaluator": {
+      "unittestsPassed": 6,
+      "exitCode": 0,
+      "caseCount": 12,
+      "actualProviderCalls": false,
+      "pipelineDemoOnly": true,
+      "professionalCaseReviewComplete": false,
+      "clinicalEffectivenessEstablished": false,
+      "reviewerIdentityVerifiedByTool": false
+    }
+  },
+  "realSqliteBrowser": {
+    "task": "SUPPORT-REAL-SQLITE-E2E",
+    "synthetic": true,
+    "apiMocked": false,
+    "actualProviderCalls": false,
+    "scenes": [
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "questionId": 1,
+        "studentSubmission": true,
+        "foreignTeacherDenied": true,
+        "teacherAnswer": true,
+        "followUpCompleteAndReload": true,
+        "individualExportAndForeignDenial": true,
+        "studentReplyVisibleAndInternalNotesHidden": true,
+        "overflow": false,
+        "errors": [],
+        "externalRequests": []
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "questionId": 2,
+        "studentSubmission": true,
+        "foreignTeacherDenied": true,
+        "teacherAnswer": true,
+        "followUpCompleteAndReload": true,
+        "individualExportAndForeignDenial": true,
+        "studentReplyVisibleAndInternalNotesHidden": true,
+        "overflow": false,
+        "errors": [],
+        "externalRequests": []
+      }
+    ],
+    "failures": [],
+    "evidence": {
+      "path": "tmp/support-e2e/qa.json",
+      "bytes": 1006,
+      "sha256": "e60c2c6b07e4d9927222cfeb19d677f53c79312c2e5db1d1faab5157af34dfeb"
+    },
+    "exportInspection": [
+      {
+        "file": "single-student-1440.docx",
+        "zip_ok": true,
+        "own_student_present": true,
+        "foreign_student_absent": true
+      },
+      {
+        "file": "single-student-390.docx",
+        "zip_ok": true,
+        "own_student_present": true,
+        "foreign_student_absent": true
+      }
+    ],
+    "studentQuestionCanonicalPost": "/api/student/questions",
+    "initialHarnessIssue": "waiter initially watched legacy /questions/ask alias while UI posted canonical /questions; fixed without product change",
+    "screenshots": "ignored tmp/support-e2e; early captures precede visual stability; stable tag recaptures separately inspected",
+    "stableScreens": [
+      {
+        "path": "tmp/support-e2e/tag-stable-teacher.png",
+        "bytes": 57531,
+        "sha256": "300b1b4db1998d43f2eea619eb6a080c5b0f53e04260a065f853bcd286cfdbbe"
+      },
+      {
+        "path": "tmp/support-e2e/tag-stable-student.png",
+        "bytes": 69972,
+        "sha256": "cee6c7053c864d51b96cd4048f88cbcd1a939eea230a5473d9501d855ccaeaff"
+      }
+    ]
+  },
+  "productionBrowser": {
+    "apiMocked": true,
+    "actualBackendUsed": false,
+    "totals": {
+      "expectedPages": 38,
+      "capturedPages": 38,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "libraryIconFailureCount": 0,
+      "pagesOverLimit": []
+    },
+    "viewportWidths": [
+      1440,
+      390
+    ],
+    "overflowPages": [],
+    "evidence": {
+      "path": "tmp/support-production-ui/qa.json",
+      "bytes": 113940,
+      "sha256": "5641295b38962ceb4f37779be9b6c0160f6e188cea1a0900f9a0c1bdcddc24e3"
+    }
+  },
+  "coldAuthentication": {
+    "budgetsEnforced": true,
+    "chartEnginesInAuth": false,
+    "budgetGzipBytes": 256000,
+    "measure": "JS response bodies only; excludes HTML/CSS/images, headers and latency",
+    "results": [
+      {
+        "route": "/login",
+        "width": 1440,
+        "scriptCount": 22,
+        "rawJsBytes": 406401,
+        "gzipJsBytes": 141031,
+        "servedJsBodyBytes": 141031
+      },
+      {
+        "route": "/register",
+        "width": 1440,
+        "scriptCount": 23,
+        "rawJsBytes": 407570,
+        "gzipJsBytes": 141452,
+        "servedJsBodyBytes": 141452
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "scriptCount": 22,
+        "rawJsBytes": 406401,
+        "gzipJsBytes": 141031,
+        "servedJsBodyBytes": 141031
+      },
+      {
+        "route": "/register",
+        "width": 390,
+        "scriptCount": 23,
+        "rawJsBytes": 407570,
+        "gzipJsBytes": 141452,
+        "servedJsBodyBytes": 141452
+      }
+    ]
+  },
+  "runtime": {
+    "database": "SQLite",
+    "schemaTables": 27,
+    "newTables": [
+      "operator_account_events",
+      "support_follow_up_events",
+      "support_follow_ups",
+      "support_workflow_events",
+      "user_access_states"
+    ],
+    "originalFilesHashVerified": 10,
+    "originalTableCount": 22,
+    "originalTableDataPreserved": true,
+    "originalsModified": false,
+    "newPrivateDirectorySelected": true,
+    "schemaOnlyInNewCopy": true,
+    "sourceBackupAndPreSchemaBackupCreated": true,
+    "signingKeyPreserved": true,
+    "foreignKeyViolationsRetained": 1,
+    "accountsCreated": 0,
+    "assignmentsCreated": 0,
+    "providerCredentialsIntroduced": false,
+    "frontendPort": 5173,
+    "backendPort": 18080,
+    "service": "health-new",
+    "readiness": true,
+    "temporaryQaPortsStopped": [
+      5175,
+      18081,
+      4187
+    ],
+    "otherProject8000Untouched": true
+  },
+  "deployment": {
+    "httpComposeConfigExitCode": 0,
+    "tlsComposeConfigExitCode": 0,
+    "imageBuildExitCode": 1,
+    "imageBuildBlock": "Docker Hub registry HTTPS connection timed out fetching python:3.12-slim metadata",
+    "imageBuilt": false,
+    "containersStarted": false,
+    "linuxRuntimeVerified": false,
+    "tlsVerified": false,
+    "githubActionsExecuted": false,
+    "crossHostProductionRestoreVerified": false,
+    "isolatedBackupRestoreTestsPassed": 2,
+    "isolatedBackupRestoreTestsSkipped": 1
+  },
+  "documents": [
+    {
+      "path": "deliverables/心域智链项目申报材料.docx",
+      "bytes": 124855,
+      "sha256": "409c4fa0f3fc471dd528647c64c01e2ce4bf8423b07a7bc19c9d88ae741f2303",
+      "renderedPages": 12,
+      "reviewedEveryPageByAuthor": true,
+      "leadVisualSpotCheckPages": [
+        1,
+        3,
+        7,
+        12
+      ],
+      "status": "review_draft_business_details_pending"
+    },
+    {
+      "path": "deliverables/心域智链项目答辩稿.pptx",
+      "bytes": 105499,
+      "sha256": "80c6495608617ccea16837a23d58cd17f30afecb118027a0a9328fa0c09900d1",
+      "renderedPages": 14,
+      "reviewedEveryPageByAuthor": true,
+      "leadVisualSpotCheckPages": [
+        1,
+        6,
+        9,
+        12
+      ],
+      "status": "review_draft_business_details_pending"
+    }
+  ],
+  "sourceTemplateUnmodifiedSha256": "2531a2432493e4592d0759473fb3add5b6e1770e3c69ef1ee501d31b1943202a",
+  "docxRenderer": "bundled renderer blocked by missing LibreOffice; independent Word COM read-only PDF export + Poppler, all 12 pages inspected",
+  "pptxRenderer": "skill PowerPoint renderer; 14 pages inspected, 14 editable slide notes",
+  "unknownBusinessInformation": [
+    "team/mentor/eligibility proof",
+    "budget/cycle",
+    "school owners/service hours/contact/retention policy",
+    "provider/model/professional review",
+    "approved pilot and measured outcomes",
+    "production Linux/domain/certificate"
+  ],
+  "codeSha256": {
+    ".github/workflows/offline-quality.yml": "03a700c438ae6b461fd489cffcf08a0487651dc5a825a66ab2cb980c512f217a",
+    "backend/app/account_access.py": "03c6a85d9205ae833fcd6ab4c615bfcd02fed13ee9b1a62a818b6a0668c50b49",
+    "backend/app/models.py": "8c0c892ff645b1154ec94702cd5af1d0288e8babe2eec6ff0c13b533dbe59949",
+    "backend/app/routers/advanced_teacher.py": "18f2de8f0dd4f5213b88882810577784008dffa74112de935573c4de89c11713",
+    "backend/app/routers/auth.py": "3191ee4b00f5fcf7baea3a58af350c1b916b2d00c32802e542a46d9f8b87895e",
+    "backend/app/routers/student.py": "d259375a282006d31a06b197701a6262120d2c65595ad14df18091e84da1b871",
+    "backend/app/routers/teacher.py": "b80c35169d343a36be7e76a2c011ca4fd87bcc8f5487a005c6f36b159ce31234",
+    "backend/app/schemas.py": "212cd679b7a239ea46ab288e9238ddc32d12543bac7245f7ac21321b60132c92",
+    "backend/app/security.py": "6f8c2b680b1608f2bcb2b1672e90d4a0f279b0c71e0d058fab8bf70592271366",
+    "backend/app/support_workflow.py": "91bbbadbcde223360fe22419072712c74213682cb32095a3f23de0b6a1a43927",
+    "backend/scripts/manage-teacher-accounts.py": "435cd8907c99bc1e723b8b1fcc54e978ec540d55ef15a2f2fc4d87c29bb733a8",
+    "backend/scripts/migrate-support-workflow.py": "7f0114cfbab36adb91bea022bf0c40635f8ee9b87119103894e87c11af2368b2",
+    "backend/tests/test_backup_restore_database.py": "00a703c8d165ab35ef6adc02a354866cc9c405796635c7ca4a6b764582f63ae2",
+    "backend/tests/test_crisis_warning_sync.py": "dabb5f61bec291f3e328e658a16eb54e5797aff5146299c2cbf0a0b0330c3d33",
+    "backend/tests/test_student_assignments.py": "e43107177f84efeaf78ee2f7f3c5d1ca89402f088446bd7885a3de31d64bf3fa",
+    "backend/tests/test_support_workflow.py": "d746811b53adf9928bbcc7efe971bcd605163800020bcfccedd4cf90e54a52bc",
+    "backend/tests/test_teacher_crisis_pending.py": "e7462f477006273958098bab111553967ea5973ae54e25d83d02bf0eebf6d779",
+    "deploy/backend/Dockerfile": "403c2d382b4de44f6d9bbe890eae5bec8dcbbb5a6ea6f76ae661be26d9c01399",
+    "deploy/backend/Dockerfile.dockerignore": "4d571f2104e7b8295bd9221a3e0e0f6708443af18db7184340f6507940a5ddd4",
+    "deploy/backend/README.md": "c96043a755a0047a20564253e78b231b95cb8ef998a8c79f21f351bd5779cd22",
+    "deploy/fullstack/Dockerfile": "f5a7bffdcd168236bbb4ab37564c485ae232bbc144482e3d769291a6367bb73e",
+    "deploy/fullstack/Dockerfile.dockerignore": "6eb3231722f2bd2c0b45e04abd5021ef4034ee0ec12591aa230ee4608c058836",
+    "deploy/fullstack/docker-compose.tls.yml": "22daf7787b562145996ee5ea5bef656f797a4d7c71ebcbbf79c631c8afd68068",
+    "deploy/fullstack/docker-compose.yml": "1e5b6e73972727876879a92a1b5ee9fff9ef783b3a61faad2898c5a3049bcf6d",
+    "deploy/fullstack/nginx-tls.conf": "f09c11163dc1e23ef02a121081f3ab51ea862f9e69e7a50e489593ac8cb4155d",
+    "deploy/fullstack/nginx.conf": "0c574b7a156be4dc513c07684df26dcae08c24e1527d2c72a7f7778a6f9e036f",
+    "scripts/backup-restore-database.py": "aa6e2deb00be54078a9fbd8107e7208e81a30aba304ba70089c7edf53546b942",
+    "scripts/build-project-deliverables.py": "f2eb3066557f9ae6f1db45dcf232f6464b6fd71cc9a7065431ec970850e8b1d0",
+    "scripts/capture-w2-ui.mjs": "12638698cd6cac16e24864f630c2096107efb95aed33afb93a9745dd06ba49b8",
+    "scripts/evaluate-support-ai.py": "24e275ec5fc1e4c8cf0c68eedccbffc07b4bd419cdbec2d79a8eff8fcf6f8421",
+    "scripts/tests/test_ai_evaluation.py": "13ce3222faa48e22fa23825af9c399db0e63857130e53012186ca0aa77e0e87b",
+    "src/router/index.js": "5d7ab9adf2d5f5c660ba7b6dd844b2746c75fa5be9c3f8ce3f6aee23f546c08f",
+    "src/views/student/AdvancedAiChat.vue": "c1c7e2cf2ce26ee36c470b6d21057b4e253128a4ccf60ae7ce6678061d3ef7e4",
+    "src/views/student/Appointments.vue": "fe4f88887612e3a340e3c8bd7851e7013641a55fb94c3324052773cfe64fe199",
+    "src/views/student/Layout.vue": "36a163c8c5a3cb94bb14d19f61b6ad177dc708f5813b389593adb89edffa960a",
+    "src/views/student/Questions.vue": "c72114d73319c285dddf9fff0d9b02fc4e25d3fbe7acf191907e36901f145483",
+    "src/views/teacher/AdvancedDashboard.vue": "ab44d0cd87b63c9c0de5f28bdf7fee5598b91e730eac8f0246a2308b11534d58",
+    "src/views/teacher/AppointmentManagement.vue": "d2663f8dbd7451af19d3014056a5bb563c309704aba70abc7992531d8833d798",
+    "src/views/teacher/Layout.vue": "c5a64ed1c24d8f30a63edcd0872e4c69478e5847c672d01c242678bafa49fe2b",
+    "src/views/teacher/StudentDetail.vue": "9163a7cf502651ba72a471247db5a4809a4d0ae6aa6af7ff909233de29f67bc9",
+    "src/views/teacher/StudentManagement.vue": "33a2dea304d8f8a9615be13e33e86f91217e3bcdeaa717aa7b2560b0cae5b85f",
+    "src/views/teacher/SupportWorkspace.vue": "dd824239d94624bb175a33eba28105f4a2a395f01063c3f50a0a311be750745b"
+  },
+  "evidenceRetention": "large rendered QA and synthetic databases stay in ignored tmp; published JSON stores summaries and hashes, not real student data or secrets"
+}

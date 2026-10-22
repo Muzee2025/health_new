@@ -11,7 +11,7 @@
           </div>
         </template>
         <template #extra>
-          <el-button type="warning" plain @click="exportWord">
+          <el-button type="warning" plain :loading="exporting" :disabled="exporting" @click="exportWord">
             <el-icon><LibraryIcon name="report"  /></el-icon> 导出个人心理报告 (Word)
           </el-button>
         </template>
@@ -182,26 +182,28 @@ import { ElMessage, ElPageHeader, ElButton, ElIcon, ElTimeline, ElTimelineItem, 
 const route = useRoute()
 const studentData = ref(null)
 const newRecordText = ref('')
+const exporting = ref(false)
 
 const exportWord = async () => {
+  if (exporting.value) return
+  exporting.value = true
   try {
-    const response = await axios.post(
-      '/api/advanced-teacher/export/compliance-report',
-      { chart_snapshots: [] },
-      { responseType: 'blob' }
-    )
+    const response = await axios.get(`/api/advanced-teacher/students/${encodeURIComponent(route.params.id)}/export/docx`, { responseType: 'blob' })
     const blob = new Blob([response.data])
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
-    link.download = '个人心理报告.docx'
+    const studentName = studentData.value?.student_info?.name || '学生'
+    link.download = `${studentName}-心理档案.docx`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
     ElMessage.success('已导出 Word 报告')
   } catch (error) {
-    ElMessage.error('导出 Word 报告失败')
+    ElMessage.error(error?.response?.status === 404 || error?.response?.status === 403 ? '该学生不在你的分配范围内，无法导出。' : '个体档案导出失败，请稍后重试。')
+  } finally {
+    exporting.value = false
   }
 }
 
@@ -302,13 +304,15 @@ const submitIntervention = async () => {
 }
 
 const getStatusType = (status) => {
-  const map = { pending: 'warning', approved: 'primary', completed: 'success', cancelled: 'info' }
-  return map[status] || 'info'
+  const normalized = status === 'approved' ? 'confirmed' : status
+  const map = { pending: 'warning', confirmed: 'primary', completed: 'success', cancelled: 'info' }
+  return map[normalized] || 'info'
 }
 
 const getStatusText = (status) => {
-  const map = { pending: '待处理', approved: '已通过', completed: '已完成', cancelled: '已取消' }
-  return map[status] || status
+  const normalized = status === 'approved' ? 'confirmed' : status
+  const map = { pending: '待处理', confirmed: '已确认', completed: '已完成', cancelled: '已取消' }
+  return map[normalized] || status
 }
 
 const formatDate = (dateString) => {

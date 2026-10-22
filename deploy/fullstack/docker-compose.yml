@@ -1,0 +1,65 @@
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: deploy/fullstack/Dockerfile
+      target: backend-runtime
+    env_file:
+      - ${RUNTIME_ENV_FILE:?Set RUNTIME_ENV_FILE to a private environment file outside the repository}
+    environment:
+      DATABASE_URL: sqlite:////var/lib/health-new/database/health.db
+      CORS_ALLOWED_ORIGINS: ${PUBLIC_ORIGIN:-http://127.0.0.1:4186}
+      RAG_ENABLED: "false"
+      RAG_ALLOW_MODEL_DOWNLOAD: "false"
+      CHROMA_DIR: /var/lib/health-new/chroma
+    volumes:
+      - database:/var/lib/health-new/database
+      - uploads:/app/backend/uploads
+      - app-logs:/app/backend/logs
+      - generated-documents:/app/backend/generated-documents
+      - generated-temp:/app/backend/temp
+    expose:
+      - "8000"
+    restart: unless-stopped
+    init: true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/ready', timeout=4)"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: deploy/fullstack/Dockerfile
+      target: frontend-runtime
+    ports:
+      - "127.0.0.1:4186:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:size=16m
+      - /var/run:size=2m
+      - /tmp:size=4m,noexec,nosuid
+
+volumes:
+  database:
+  uploads:
+  app-logs:
+  generated-documents:
+  generated-temp:

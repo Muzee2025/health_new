@@ -3,7 +3,7 @@
     <div class="filter-card">
       <el-select v-model="filterStatus" placeholder="全部状态" clearable class="filter-select">
         <el-option label="待处理" value="pending" />
-        <el-option label="已通过" value="approved" />
+        <el-option label="已确认" value="confirmed" />
         <el-option label="已完成" value="completed" />
         <el-option label="已取消" value="cancelled" />
       </el-select>
@@ -41,8 +41,8 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="approved" :disabled="scope.row.status !== 'pending'">通过</el-dropdown-item>
-                  <el-dropdown-item command="completed" :disabled="scope.row.status !== 'approved'">完成</el-dropdown-item>
+                  <el-dropdown-item command="confirmed" :disabled="scope.row.status !== 'pending'">确认预约</el-dropdown-item>
+                  <el-dropdown-item command="completed" :disabled="!isConfirmed(scope.row.status)">完成</el-dropdown-item>
                   <el-dropdown-item command="cancelled" :disabled="scope.row.status === 'completed'">取消</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -122,7 +122,7 @@ const handleStatusChange = async (id, status) => {
 
 const filteredData = computed(() => {
   return appointments.value.filter(a => {
-    return filterStatus.value ? a.status === filterStatus.value : true
+    return filterStatus.value ? normalizeStatus(a.status) === filterStatus.value : true
   })
 })
 
@@ -131,14 +131,18 @@ const paginatedData = computed(() => {
   return filteredData.value.slice(start, start + pageSize.value)
 })
 
-const getStatusType = (status) => {
-  const map = { pending: 'warning', approved: 'primary', completed: 'success', cancelled: 'info' }
-  return map[status] || 'info'
-}
+const normalizeStatus = (status) => status === 'approved' ? 'confirmed' : status
+const isConfirmed = (status) => normalizeStatus(status) === 'confirmed'
 
 const getStatusText = (status) => {
-  const map = { pending: '待处理', approved: '已通过', completed: '已完成', cancelled: '已取消' }
-  return map[status] || status
+  const normalized = normalizeStatus(status)
+  const map = { pending: '待处理', confirmed: '已确认', completed: '已完成', cancelled: '已取消' }
+  return map[normalized] || status
+}
+
+const getStatusType = (status) => {
+  const map = { pending: 'warning', confirmed: 'primary', completed: 'success', cancelled: 'info' }
+  return map[normalizeStatus(status)] || 'info'
 }
 
 onMounted(() => {

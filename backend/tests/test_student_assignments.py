@@ -143,9 +143,11 @@ def test_assignment_acl_filters_routes_and_allows_only_assigned_booking(acl_clie
     assert client.get("/api/advanced-teacher/dashboard/metrics", headers=teacher_a).json()["realtime_stats"]["uv"] == 1
     assert client.get("/api/advanced-teacher/audit/list", headers=teacher_a).json()["data"][0]["student_info"]["id"] == 201
     foreign_warning = warnings_b[0]["id"]
-    assert client.post(f"/api/advanced-teacher/warnings/{foreign_warning}/process", headers=teacher_a).status_code == 404
+    assert client.post(f"/api/advanced-teacher/warnings/{foreign_warning}/process", headers=teacher_a,
+                       json={"action": "pass", "reason": "Synthetic human review"}).status_code == 404
     own_warning = warnings_a[0]["id"]
-    assert client.post(f"/api/advanced-teacher/warnings/{own_warning}/process", headers=teacher_a).status_code == 200
+    assert client.post(f"/api/advanced-teacher/warnings/{own_warning}/process", headers=teacher_a,
+                       json={"action": "pass", "reason": "Synthetic human review"}).status_code == 200
 
     response = client.post("/api/advanced-teacher/export/compliance-report", headers=teacher_a, json={})
     assert response.status_code == 200

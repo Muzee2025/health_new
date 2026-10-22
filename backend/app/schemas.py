@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Literal
 from datetime import datetime
 
@@ -145,6 +145,14 @@ class TreeholeCommentCreate(BaseModel):
 class QuestionCreate(BaseModel):
     question_text: str
 
+    @field_validator("question_text")
+    @classmethod
+    def normalize_question_text(cls, value: str) -> str:
+        normalized = value.strip()
+        if not 1 <= len(normalized) <= 2000:
+            raise ValueError("Question text must contain 1 to 2000 non-whitespace characters")
+        return normalized
+
 class QuestionResponse(BaseModel):
     id: int
     user_id: int
@@ -152,6 +160,10 @@ class QuestionResponse(BaseModel):
     answer_text: Optional[str]
     status: str
     created_at: datetime
+    response_state: Optional[str] = None
+    assigned_teacher_count: Optional[int] = None
+    answered_at: Optional[datetime] = None
+    answered_by: Optional[str] = None
     
     class Config:
         from_attributes = True

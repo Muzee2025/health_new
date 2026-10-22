@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status, Request, Response
 from sqlalchemy.orm import Session
+from sqlalchemy import inspect
 from ..database import get_db
 from .. import models, schemas
 from .auth import get_current_user
@@ -1079,6 +1080,7 @@ def get_comments(post_id: int, db: Session = Depends(get_db)):
     return db.query(models.TreeholeComment).filter(models.TreeholeComment.post_id == post_id).order_by(models.TreeholeComment.created_at.asc()).all()
 
 @router.post("/questions/ask", response_model=schemas.QuestionResponse)
+@router.post("/questions", response_model=schemas.QuestionResponse)
 def ask_question(q_data: schemas.QuestionCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
     question = models.Question(
@@ -1088,9 +1090,28 @@ def ask_question(q_data: schemas.QuestionCreate, db: Session = Depends(get_db), 
     db.add(question)
     db.commit()
     db.refresh(question)
-    return question
+    teacher_count = len(assigned_teacher_ids(db, current_user.id))
+    return {"id": question.id, "user_id": question.user_id, "question_text": question.question_text,
+        "answer_text": question.answer_text, "status": question.status, "created_at": question.created_at,
+        "response_state": "pending" if teacher_count else "unassigned", "assigned_teacher_count": teacher_count}
 
 @router.get("/questions", response_model=List[schemas.QuestionResponse])
 def get_questions(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
-    return db.query(models.Question).filter(models.Question.user_id == current_user.id).order_by(models.Question.created_at.desc()).all()
+    teacher_count = len(assigned_teacher_ids(db, current_user.id))
+    questions = db.query(models.Question).filter(models.Question.user_id == current_user.id).order_by(models.Question.created_at.desc()).all()
+    has_events = "support_workflow_events" in inspect(db.get_bind()).get_table_names()
+    output = []
+    for question in questions:
+        event = None
+        if has_events and question.answer_text:
+            event = (db.query(models.SupportWorkflowEvent)
+                .filter_by(subject_type="question", subject_id=question.id, action="answer")
+                .order_by(models.SupportWorkflowEvent.id.desc()).first())
+        actor = db.query(models.User).filter_by(id=event.actor_id).first() if event and event.actor_id else None
+        output.append({"id": question.id, "user_id": question.user_id, "question_text": question.question_text,
+            "answer_text": question.answer_text, "status": question.status, "created_at": question.created_at,
+            "response_state": "answered" if question.answer_text else ("pending" if teacher_count else "unassigned"),
+            "assigned_teacher_count": teacher_count, "answered_at": event.created_at if event else None,
+            "answered_by": (actor.name or actor.username) if actor else None})
+    return output

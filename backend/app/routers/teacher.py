@@ -5,21 +5,22 @@ import hashlib
 import uuid
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import exists, func, insert, literal, select, update
 from ..database import get_db
 from .. import models, schemas
 from .auth import get_current_user
 from typing import List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import json
 import re
 import random
 from pathlib import Path
 from collections import Counter
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from app.utils.websocket_manager import manager
 from app.security import validate_new_password
 from app.student_access import assigned_student_ids, require_assigned_student
+from app.support_workflow import require_support_schema, append_event
 from app.upload_security import (read_image_upload, read_bounded_upload, validate_image_content,
                                  validate_document_content, MAX_IMAGE_BYTES, IMAGE_TYPES, DOCUMENT_TYPES)
 from app.services.crisis_pending_service import (
@@ -38,7 +39,29 @@ ALLOWED_AVATAR_EXT = set(IMAGE_TYPES)
 
 class CrisisReviewRequest(BaseModel):
     recordId: str
-    action: str = "pass"
+    action: str
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class CrisisDecisionRequest(BaseModel):
+    action: str
+    reason: str = Field(min_length=1, max_length=2000)
+
+
+class FollowUpCreate(BaseModel):
+    source_type: str
+    source_id: int
+    student_id: int
+    due_at: datetime
+    summary: str = Field(min_length=1, max_length=4000)
+
+
+class FollowUpComplete(BaseModel):
+    outcome: str = Field(min_length=1, max_length=4000)
+
+
+class FollowUpCancel(BaseModel):
+    reason: str = Field(min_length=1, max_length=2000)
 
 
 def _serialize_real_warning_row(db: Session, warning: models.CrisisWarning) -> dict:
@@ -197,27 +220,233 @@ async def review_pending_crisis(
     warning = db.query(models.CrisisWarning).filter(models.CrisisWarning.id == warning_id, models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).first()
     if not warning:
         raise HTTPException(status_code=404, detail="Warning not found")
-    if warning.status != "pending":
-        return {"status": "success", "data": {"recordId": record_id, "status": "reviewed"}}
-
-    warning.status = "processed"
-    warning.processed_at = func.now()
-    warning.processed_by = current_user.id
+    if payload.action not in {"pass", "reject", "escalate"}:
+        raise HTTPException(status_code=422, detail="action must be pass, reject, or escalate")
+    reason = payload.reason.strip()
+    if not reason:
+        raise HTTPException(status_code=422, detail="reason is required")
+    require_support_schema(db)
+    result = db.execute(update(models.CrisisWarning)
+        .where(models.CrisisWarning.id == warning_id, models.CrisisWarning.status == "pending",
+            models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
+        .values(status="processed", processed_at=func.now(), processed_by=current_user.id))
+    if result.rowcount != 1:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Warning was already reviewed")
+    append_event(db, subject_type="crisis_warning", subject_id=warning_id,
+                 student_id=warning.student_id, actor_id=current_user.id,
+                 action=payload.action, reason=reason)
     db.commit()
     db.refresh(warning)
-
-    await manager.send_personal_message(
-        {
+    try:
+        await manager.send_personal_message({
             "type": "warning_processed",
-            "data": {
-                "warning_id": warning.id,
-                "message": "老师已收到您的预警信息，正在处理中，请保持通讯畅通。",
-            },
-        },
-        warning.student_id,
-        "student",
-    )
-    return {"status": "success", "data": {"recordId": record_id, "status": "reviewed"}}
+            "data": {"warning_id": warning.id, "status": "processed",
+                     "message": "预警信息已由老师审阅"},
+        }, warning.student_id, "student")
+    except Exception:
+        # The durable review must remain successful when a live socket is absent.
+        pass
+    return {"status": "success", "data": {"recordId": record_id, "action": payload.action,
+        "reason": reason, "status": "processed", "reviewed_at": warning.processed_at,
+        "reviewed_by": current_user.name or current_user.username}}
+
+
+@router.get("/crisis/{warning_id}/reviews")
+def get_crisis_review_history(warning_id: int, db: Session = Depends(get_db),
+                              current_user: models.User = Depends(get_current_user)):
+    check_teacher_role(current_user)
+    require_support_schema(db)
+    warning = db.query(models.CrisisWarning).filter(
+        models.CrisisWarning.id == warning_id,
+        models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).first()
+    if warning is None:
+        raise HTTPException(status_code=404, detail="Warning not found")
+    events = (db.query(models.SupportWorkflowEvent)
+        .filter_by(subject_type="crisis_warning", subject_id=warning_id)
+        .order_by(models.SupportWorkflowEvent.id.asc()).all())
+    return {"status": "success", "data": [{"action": e.action, "reason": e.reason,
+        "reviewed_at": e.created_at, "reviewed_by": _support_actor_name(db, e.actor_id)} for e in events]}
+
+
+def _support_actor_name(db: Session, actor_id: int | None):
+    actor = db.query(models.User).filter_by(id=actor_id).first() if actor_id else None
+    return (actor.name or actor.username) if actor else None
+
+
+@router.get("/questions")
+def list_assigned_questions(status: str | None = None, db: Session = Depends(get_db),
+                            current_user: models.User = Depends(get_current_user)):
+    check_teacher_role(current_user)
+    require_support_schema(db)
+    if status not in (None, "pending", "answered"):
+        raise HTTPException(status_code=422, detail="status must be pending or answered")
+    query = (db.query(models.Question).join(models.User, models.User.id == models.Question.user_id)
+        .filter(models.Question.user_id.in_(assigned_student_ids(db, current_user.id))))
+    if status:
+        query = query.filter(models.Question.status == status)
+    questions = query.order_by(models.Question.created_at.desc()).all()
+    output = []
+    for question in questions:
+        event = (db.query(models.SupportWorkflowEvent)
+            .filter_by(subject_type="question", subject_id=question.id, action="answer")
+            .order_by(models.SupportWorkflowEvent.id.desc()).first())
+        output.append({"id": question.id, "student_id": question.user_id,
+            "student_name": question.user.name or question.user.username,
+            "question_text": question.question_text, "status": question.status,
+            "created_at": question.created_at, "answer_text": question.answer_text,
+            "answered_at": event.created_at if event else None,
+            "answered_by": _support_actor_name(db, event.actor_id) if event else None})
+    return {"status": "success", "data": output}
+
+
+@router.post("/questions/{question_id}/answer")
+def answer_assigned_question(question_id: int, payload: schemas.QuestionAnswer,
+                             db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    check_teacher_role(current_user)
+    require_support_schema(db)
+    answer_text = payload.answer_text.strip()
+    if not answer_text:
+        raise HTTPException(status_code=422, detail="answer_text is required")
+    question = (db.query(models.Question)
+        .filter(models.Question.id == question_id,
+            models.Question.user_id.in_(assigned_student_ids(db, current_user.id))).first())
+    if question is None:
+        raise HTTPException(status_code=404, detail="Question not found")
+    result = db.execute(update(models.Question).where(
+        models.Question.id == question_id, models.Question.status == "pending",
+        models.Question.user_id.in_(assigned_student_ids(db, current_user.id)),
+        (models.Question.answer_text.is_(None) | (models.Question.answer_text == ""))
+    ).values(answer_text=answer_text, status="answered"))
+    if result.rowcount != 1:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Question already has a response")
+    event = append_event(db, subject_type="question", subject_id=question_id,
+        student_id=question.user_id, actor_id=current_user.id, action="answer", result_text=answer_text)
+    db.commit()
+    db.refresh(event)
+    return {"status": "success", "data": {"id": question_id, "status": "answered",
+        "answer_text": answer_text, "answered_at": event.created_at,
+        "answered_by": current_user.name or current_user.username}}
+
+
+def _follow_up_dict(task: models.SupportFollowUp, db: Session):
+    def as_utc(value):
+        if value is None:
+            return None
+        normalized = value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value.astimezone(timezone.utc)
+        return normalized.isoformat().replace("+00:00", "Z")
+
+    return {"id": task.id, "source_type": task.source_type, "source_id": task.source_id,
+        "student_id": task.student_id, "due_at": as_utc(task.due_at), "summary": task.summary,
+        "status": task.status, "created_by": task.created_by, "created_at": as_utc(task.created_at),
+        "outcome": task.outcome, "completed_at": as_utc(task.completed_at),
+        "cancelled_at": as_utc(task.cancelled_at)}
+
+
+@router.get("/follow-ups")
+def list_follow_ups(status: str | None = None, db: Session = Depends(get_db),
+                    current_user: models.User = Depends(get_current_user)):
+    check_teacher_role(current_user)
+    require_support_schema(db)
+    if status not in (None, "open", "completed", "cancelled"):
+        raise HTTPException(status_code=422, detail="Unsupported follow-up status")
+    query = db.query(models.SupportFollowUp).filter(
+        models.SupportFollowUp.created_by == current_user.id,
+        models.SupportFollowUp.student_id.in_(assigned_student_ids(db, current_user.id)))
+    if status:
+        query = query.filter(models.SupportFollowUp.status == status)
+    tasks = query.order_by(models.SupportFollowUp.due_at.asc()).all()
+    return {"status": "success", "data": [_follow_up_dict(t, db) for t in tasks]}
+
+
+@router.post("/follow-ups", status_code=201)
+def create_follow_up(payload: FollowUpCreate, db: Session = Depends(get_db),
+                     current_user: models.User = Depends(get_current_user)):
+    check_teacher_role(current_user)
+    require_support_schema(db)
+    student = require_assigned_student(db, current_user.id, payload.student_id)
+    source_type = payload.source_type.strip()
+    summary = payload.summary.strip()
+    if not summary:
+        raise HTTPException(status_code=422, detail="summary is required")
+    if payload.due_at.tzinfo is None or payload.due_at.utcoffset() is None:
+        raise HTTPException(status_code=422, detail="due_at must include a timezone offset")
+    due_at_utc = payload.due_at.astimezone(timezone.utc).replace(tzinfo=None)
+    if source_type == "question":
+        source = db.query(models.Question).filter_by(id=payload.source_id, user_id=student.id).first()
+    elif source_type == "crisis_warning":
+        source = db.query(models.CrisisWarning).filter_by(id=payload.source_id, student_id=student.id).first()
+    else:
+        raise HTTPException(status_code=422, detail="source_type must be question or crisis_warning")
+    if source is None:
+        raise HTTPException(status_code=404, detail="Source record not found")
+    assignment_exists = exists(select(1).select_from(models.TeacherStudentAssignment).where(
+        models.TeacherStudentAssignment.teacher_id == current_user.id,
+        models.TeacherStudentAssignment.student_id == student.id))
+    if source_type == "question":
+        source_exists = exists(select(1).select_from(models.Question).where(
+            models.Question.id == payload.source_id, models.Question.user_id == models.User.id))
+    else:
+        source_exists = exists(select(1).select_from(models.CrisisWarning).where(
+            models.CrisisWarning.id == payload.source_id, models.CrisisWarning.student_id == models.User.id))
+    statement = insert(models.SupportFollowUp).from_select(
+        ["source_type", "source_id", "student_id", "created_by", "due_at", "summary", "status"],
+        select(literal(source_type), literal(payload.source_id), models.User.id, literal(current_user.id),
+            literal(due_at_utc), literal(summary), literal("open")).where(
+                models.User.id == student.id, models.User.role == "student", assignment_exists, source_exists)
+    ).returning(models.SupportFollowUp.id)
+    task_id = db.execute(statement).scalar_one_or_none()
+    if task_id is None:
+        db.rollback()
+        raise HTTPException(status_code=404, detail="Student assignment or source record is no longer available")
+    task = db.get(models.SupportFollowUp, task_id)
+    db.add(models.SupportFollowUpEvent(follow_up_id=task_id, actor_id=current_user.id,
+        action="created", note=summary))
+    db.commit()
+    db.refresh(task)
+    return {"status": "success", "data": _follow_up_dict(task, db)}
+
+
+def _transition_follow_up(task_id: int, action: str, note: str, db: Session, current_user: models.User):
+    check_teacher_role(current_user)
+    require_support_schema(db)
+    task = db.query(models.SupportFollowUp).filter(
+        models.SupportFollowUp.id == task_id, models.SupportFollowUp.created_by == current_user.id,
+        models.SupportFollowUp.student_id.in_(assigned_student_ids(db, current_user.id))).first()
+    if task is None:
+        raise HTTPException(status_code=404, detail="Follow-up not found")
+    fields = {"status": action, "outcome": note,
+        "completed_at": func.now() if action == "completed" else None,
+        "cancelled_at": func.now() if action == "cancelled" else None}
+    result = db.execute(update(models.SupportFollowUp).where(
+        models.SupportFollowUp.id == task_id, models.SupportFollowUp.status == "open",
+        models.SupportFollowUp.created_by == current_user.id,
+        models.SupportFollowUp.student_id.in_(assigned_student_ids(db, current_user.id))).values(**fields))
+    if result.rowcount != 1:
+        db.rollback()
+        raise HTTPException(status_code=409, detail="Follow-up is already closed")
+    db.add(models.SupportFollowUpEvent(follow_up_id=task_id, actor_id=current_user.id,
+        action=action, note=note))
+    db.commit()
+    db.refresh(task)
+    return {"status": "success", "data": _follow_up_dict(task, db)}
+
+
+@router.post("/follow-ups/{task_id}/complete")
+def complete_follow_up(task_id: int, payload: FollowUpComplete, db: Session = Depends(get_db),
+                        current_user: models.User = Depends(get_current_user)):
+    if not payload.outcome.strip():
+        raise HTTPException(status_code=422, detail="outcome is required")
+    return _transition_follow_up(task_id, "completed", payload.outcome.strip(), db, current_user)
+
+
+@router.post("/follow-ups/{task_id}/cancel")
+def cancel_follow_up(task_id: int, payload: FollowUpCancel, db: Session = Depends(get_db),
+                     current_user: models.User = Depends(get_current_user)):
+    if not payload.reason.strip():
+        raise HTTPException(status_code=422, detail="reason is required")
+    return _transition_follow_up(task_id, "cancelled", payload.reason.strip(), db, current_user)
 
 @router.post("/upload")
 async def upload_file(request: Request, file: UploadFile = File(...), current_user: models.User = Depends(get_current_user)):

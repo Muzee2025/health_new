@@ -18,12 +18,14 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app import models
 from app.models import User, ChatHistoryArchive, AIChatSession, AIChatMessage, CrisisWarning
 from app.routers.auth import get_current_user
-from app.routers.teacher import check_teacher_role
+from app.routers.teacher import check_teacher_role, CrisisReviewRequest, CrisisDecisionRequest, review_pending_crisis
 from app.utils.websocket_manager import manager
 from app.security import require_roles
-from app.student_access import assigned_student_ids
+from app.student_access import assigned_student_ids, require_assigned_student
+from app.support_workflow import require_support_schema
 from app.teacher_analytics import dashboard_payload, audit_items
 from app.upload_security import validate_image_content, MAX_IMAGE_BYTES, IMAGE_TYPES
 
@@ -150,30 +152,12 @@ async def get_crisis_warnings(db: Session = Depends(get_db), current_user: User 
     return {"status": "success", "data": res}
 
 @router.post("/warnings/{warning_id}/process")
-async def process_crisis_warning(warning_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    check_teacher_role(current_user)
-    warning = db.query(CrisisWarning).filter(CrisisWarning.id == warning_id, CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).first()
-    if not warning:
-        raise HTTPException(status_code=404, detail="Warning not found")
-    if warning.status == "processed":
-        return {"status": "success", "message": "Already processed"}
-    
-    warning.status = "processed"
-    warning.processed_at = func.now()
-    warning.processed_by = current_user.id
-    db.commit()
-    db.refresh(warning)
-
-    # 同步给学生端
-    asyncio.create_task(manager.send_personal_message({
-        "type": "warning_processed",
-        "data": {
-            "warning_id": warning.id,
-            "message": "老师已收到您的预警信息，正在处理中，请保持通讯畅通。"
-        }
-    }, warning.student_id, "student"))
-
-    return {"status": "success"}
+async def process_crisis_warning(warning_id: int, payload: CrisisDecisionRequest,
+                                 db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    """Compatibility path: legacy callers must now provide an audited decision."""
+    return await review_pending_crisis(
+        CrisisReviewRequest(recordId=f"real-{warning_id}", action=payload.action, reason=payload.reason),
+        db=db, current_user=current_user)
 
 
 @router.get("/audit/list")
@@ -227,3 +211,58 @@ async def export_compliance_report(payload: ComplianceReportExportRequest, db: S
                         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
                         background=BackgroundTask(Path(file_path).unlink, missing_ok=True))
+
+
+@router.get("/students/{student_id}/export/docx")
+async def export_assigned_student_report(student_id: int, db: Session = Depends(get_db),
+                                         current_user: User = Depends(require_roles("teacher"))):
+    """Export one explicitly assigned student's records, never the dashboard aggregate."""
+    student = require_assigned_student(db, current_user.id, student_id)
+    require_support_schema(db)
+    warnings = (db.query(CrisisWarning).filter(CrisisWarning.student_id == student.id)
+                .order_by(CrisisWarning.created_at.desc()).all())
+    questions = (db.query(models.Question).filter(models.Question.user_id == student.id)
+                 .order_by(models.Question.created_at.desc()).all())
+    results = (db.query(models.TestResult).filter(models.TestResult.user_id == student.id)
+               .order_by(models.TestResult.created_at.desc()).all())
+    events = (db.query(models.SupportWorkflowEvent).filter(models.SupportWorkflowEvent.student_id == student.id)
+              .order_by(models.SupportWorkflowEvent.created_at.asc()).all())
+    doc = Document()
+    _set_doc_styles(doc)
+    title = f"{student.name or student.username} 个体支持记录"
+    _add_text_paragraph(doc, title, style="Heading 1", size=18, bold=True)
+    _add_text_paragraph(doc, f"统计范围：仅学生 {student.name or student.username}（学号：{student.student_id or '未登记'}）的记录。")
+    _add_text_paragraph(doc, f"生成时间：{datetime.now().isoformat()}")
+    _add_text_paragraph(doc, "求助与答复", style="Heading 2")
+    for question in questions:
+        _add_text_paragraph(doc, f"提交时间：{question.created_at}; 状态：{question.status}")
+        _add_text_paragraph(doc, f"求助：{question.question_text}")
+        if question.answer_text:
+            _add_text_paragraph(doc, f"答复：{question.answer_text}")
+    if not questions:
+        _add_text_paragraph(doc, "暂无求助记录。")
+    _add_text_paragraph(doc, "预警审核", style="Heading 2")
+    events_by_warning = {}
+    for event in events:
+        if event.subject_type == "crisis_warning":
+            events_by_warning.setdefault(event.subject_id, []).append(event)
+    for warning in warnings:
+        _add_text_paragraph(doc, f"预警 #{warning.id}；风险等级：{warning.risk_level}；兼容状态：{warning.status}")
+        decisions = events_by_warning.get(warning.id, [])
+        for event in decisions:
+            _add_text_paragraph(doc, f"审核结论：{event.action}；原因：{event.reason or ''}")
+    if not warnings:
+        _add_text_paragraph(doc, "暂无预警记录。")
+    _add_text_paragraph(doc, "测评记录", style="Heading 2")
+    for result in results:
+        _add_text_paragraph(doc, f"{result.test_type}；分数：{result.score}；等级：{result.result_level or '未生成'}；时间：{result.created_at}")
+    if not results:
+        _add_text_paragraph(doc, "暂无测评记录。")
+    Path("temp").mkdir(exist_ok=True)
+    file_path = Path("temp") / f"student-report-{student.id}-{uuid.uuid4().hex}.docx"
+    doc.save(file_path)
+    safe_name = "".join(c for c in (student.name or student.username) if c.isalnum() or c in "-_ ").strip() or f"student-{student.id}"
+    return FileResponse(file_path, filename=f"{safe_name}-个体支持记录.docx",
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers={"Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff"},
+        background=BackgroundTask(file_path.unlink, missing_ok=True))

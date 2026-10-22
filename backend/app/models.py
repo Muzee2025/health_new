@@ -1,12 +1,15 @@
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     Column,
     DateTime,
+    DDL,
     ForeignKey,
     Integer,
     String,
     Text,
     UniqueConstraint,
+    event,
     func,
 )
 from sqlalchemy.orm import relationship
@@ -40,6 +43,30 @@ class TeacherStudentAssignment(Base):
     teacher_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     assigned_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class UserAccessState(Base):
+    """Database-backed account revocation state for access-token epochs."""
+    __tablename__ = "user_access_states"
+    __table_args__ = (CheckConstraint("auth_epoch >= 0", name="ck_user_access_state_epoch_nonnegative"),
+                      CheckConstraint("disabled IN (0, 1)", name="ck_user_access_state_disabled_boolean"))
+
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), primary_key=True)
+    disabled = Column(Boolean, nullable=False, default=False, server_default="0")
+    auth_epoch = Column(Integer, nullable=False, default=0, server_default="0")
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+
+
+class OperatorAccountEvent(Base):
+    """Append-only offline account lifecycle audit; credentials are never stored here."""
+    __tablename__ = "operator_account_events"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    operator_name = Column(String(128), nullable=False)
+    action = Column(String(32), nullable=False)
+    target_user_id = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=False, index=True)
+    reason = Column(Text, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
 class StudentProfile(Base):
@@ -224,6 +251,62 @@ class Question(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     
     user = relationship("User")
+
+
+class SupportWorkflowEvent(Base):
+    """Append-only audit events for question answers and crisis decisions."""
+    __tablename__ = "support_workflow_events"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    subject_type = Column(String(32), nullable=False, index=True)
+    subject_id = Column(Integer, nullable=False, index=True)
+    student_id = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=False, index=True)
+    actor_id = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=True)
+    action = Column(String(32), nullable=False)
+    reason = Column(Text, nullable=True)
+    result_text = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+class SupportFollowUp(Base):
+    __tablename__ = "support_follow_ups"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    source_type = Column(String(32), nullable=False)
+    source_id = Column(Integer, nullable=False)
+    student_id = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=False, index=True)
+    created_by = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=True, index=True)
+    due_at = Column(DateTime(timezone=True), nullable=False)
+    summary = Column(Text, nullable=False)
+    status = Column(String(16), nullable=False, default="open", index=True)
+    outcome = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+    cancelled_at = Column(DateTime(timezone=True), nullable=True)
+
+
+class SupportFollowUpEvent(Base):
+    __tablename__ = "support_follow_up_events"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    follow_up_id = Column(Integer, ForeignKey("support_follow_ups.id", ondelete="RESTRICT"), nullable=False, index=True)
+    actor_id = Column(Integer, ForeignKey("users.id", ondelete="RESTRICT"), nullable=True)
+    action = Column(String(16), nullable=False)
+    note = Column(Text, nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
+for table, prefix, message in (
+    (SupportWorkflowEvent.__table__, "support_workflow_events", "support workflow events are append-only"),
+    (SupportFollowUpEvent.__table__, "support_follow_up_events", "follow-up events are append-only"),
+    (OperatorAccountEvent.__table__, "operator_account_events", "operator account events are append-only"),
+):
+    for operation in ("UPDATE", "DELETE"):
+        trigger = DDL(
+            f"CREATE TRIGGER {prefix}_no_{operation.lower()} BEFORE {operation} ON {prefix} "
+            f"BEGIN SELECT RAISE(ABORT, '{message}'); END"
+        ).execute_if(dialect="sqlite")
+        event.listen(table, "after_create", trigger)
 
 class InterventionRecord(Base):
     __tablename__ = "intervention_records"

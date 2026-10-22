@@ -185,10 +185,11 @@ def test_pending_api_and_review_closed_loop(context, monkeypatch):
 
     review_res = client.post(
         "/api/teacher/crisis/review",
-        json={"recordId": real_item["id"], "action": "pass"},
+        json={"recordId": real_item["id"], "action": "pass", "reason": "Synthetic human review"},
     )
     assert review_res.status_code == 200
-    assert review_res.json()["data"]["status"] == "reviewed"
+    assert review_res.json()["data"]["status"] == "processed"
+    assert review_res.json()["data"]["action"] == "pass"
 
     pending_after = client.get("/api/teacher/crisis/pending").json()["data"]["items"]
     assert all(x["id"] != real_item["id"] for x in pending_after)

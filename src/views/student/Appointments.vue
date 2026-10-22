@@ -2,6 +2,7 @@
   <div class="appointments">
     <h2 class="page-title">预约心理老师</h2>
     <p class="page-desc">专业的心理老师为您提供倾听与支持，请选择合适的时间段进行预约。</p>
+    <p class="support-entry">想先把问题写下来？<router-link to="/student/questions">向老师留言</router-link>，你可以在留言记录中查看回复。</p>
 
     <el-row :gutter="20" class="mt-30">
       <el-col :xs="24" :md="12" :lg="8" v-for="teacher in teachers" :key="teacher.id">
@@ -63,8 +64,8 @@
         <el-table-column prop="location" label="地点" />
         <el-table-column prop="status" label="状态" width="120">
           <template #default="scope">
-            <el-tag :type="scope.row.status === 'pending' ? 'warning' : (scope.row.status === 'cancelled' ? 'info' : 'success')" round>
-              {{ scope.row.status === 'pending' ? '待确认' : (scope.row.status === 'cancelled' ? '已取消' : '已确认') }}
+            <el-tag :type="appointmentStatusType(scope.row.status)" round>
+              {{ appointmentStatusLabel(scope.row.status) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -91,6 +92,8 @@ import {
 
 const teachers = ref([])
 const appointments = ref([])
+const appointmentStatusLabel = (status) => ({ pending: '待确认', confirmed: '已确认', approved: '已确认', completed: '已完成', cancelled: '已取消' }[status] || status)
+const appointmentStatusType = (status) => ({ pending: 'warning', confirmed: 'primary', approved: 'primary', completed: 'success', cancelled: 'info' }[status] || 'info')
 
 const resolveTeacherAvatar = (teacher) => {
   const seed = teacher?.id ?? teacher?.user_id ?? teacher?.name ?? ''
@@ -193,6 +196,8 @@ const cancelAppointment = (appointment) => {
   color: var(--text-secondary);
   font-size: 14px;
 }
+.support-entry { margin: 14px 0 0; color: var(--text-secondary); font-size: 14px; }
+.support-entry a { color: var(--brand-700); text-underline-offset: 3px; }
 .mt-30 {
   margin-top: 30px;
 }
