@@ -116,7 +116,7 @@
           <section class="modern-card report-section">
             <h4 class="section-title">执行摘要</h4>
             <div v-if="hasQwenDegrade" class="summary-alert">
-              <span class="summary-alert-icon">⚠️</span>
+              <LibraryIcon name="alert" class="summary-alert-icon" />
               <span class="summary-alert-text">qwen3.6-plus 异常降级</span>
             </div>
             <ul class="summary-list">
@@ -126,7 +126,7 @@
           <section class="modern-card report-section">
             <h4 class="section-title">协同结论</h4>
             <div class="conclusion-highlight">
-              <span class="warn-icon" aria-hidden="true">⚠</span>
+              <LibraryIcon name="alert" class="warn-icon" />
               <p class="report-paragraph">{{ collaborativeReport.collaborativeConclusion || "暂无协同结论" }}</p>
             </div>
           </section>
@@ -162,7 +162,7 @@
         <section class="modern-card report-section diag-section">
           <h4 class="section-title">模型异常诊断</h4>
           <div v-if="modelDiagRows.length" class="diag-warning-box">
-            <span class="diag-warning-icon">⚠️</span>
+            <LibraryIcon name="alert" class="diag-warning-icon" />
             <div class="diag-warning-text">
               <strong>检测到{{ modelDiagRows.length }}个模型异常</strong>
               <p>
@@ -357,6 +357,7 @@
 </template>
 
 <script setup>
+import { setLibraryChartOption, createLibraryChartJsConfig, libraryChartFont } from '../../design/chart-registry'
 import { businessAlpha, businessColor, businessPalette } from '../../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import axios from "axios"
@@ -627,7 +628,7 @@ const renderBar = () => {
   const risk = reportData.value?.risk || {}
   const x = ["情绪", "认知", "行为", "抑郁", "焦虑", "自杀风险"]
   const y = [scores.emotion || 0, scores.cognition || 0, scores.behavior || 0, risk.depression_confidence || 0, risk.anxiety_confidence || 0, risk.suicide_confidence || 0]
-  barChart.setOption({
+  setLibraryChartOption(barChart, {
     tooltip: { trigger: "axis" },
     xAxis: { type: "category", data: x },
     yAxis: { type: "value", max: 100 },
@@ -646,7 +647,7 @@ const renderPie = () => {
       bucket[key] += Number(emo[key] || 0)
     })
   })
-  pieChart.setOption({
+  setLibraryChartOption(pieChart, {
     tooltip: { trigger: "item" },
     legend: { bottom: 0 },
     series: [{
@@ -669,7 +670,7 @@ const renderHeatmap = () => {
       values.push([x, y, item[dim] || 0])
     })
   })
-  heatmapChart.setOption({
+  setLibraryChartOption(heatmapChart, {
     tooltip: { position: "top" },
     xAxis: { type: "category", data: heat.map((x) => x.date.slice(5)) },
     yAxis: { type: "category", data: ["抑郁", "焦虑", "自杀"] },
@@ -683,7 +684,7 @@ const renderTrend = () => {
   const thirty = reportData.value?.trends?.thirty_days || []
   trendChart = initChart(trendRef.value, trendChart)
   if (!trendChart) return
-  trendChart.setOption({
+  setLibraryChartOption(trendChart, {
     tooltip: { trigger: "axis" },
     legend: { data: ["7天", "30天"] },
     xAxis: { type: "category", data: thirty.map((x) => x.date.slice(5)) },
@@ -711,7 +712,7 @@ const renderNetwork = () => {
   const links = [
     ["情绪", "认知"], ["情绪", "行为"], ["认知", "行为"], ["抑郁", "焦虑"], ["焦虑", "自杀风险"], ["情绪", "抑郁"],
   ].map(([source, target]) => ({ source, target }))
-  networkChart.setOption({
+  setLibraryChartOption(networkChart, {
     tooltip: {},
     series: [{
       type: "graph",
@@ -740,7 +741,7 @@ const renderHistogram = () => {
     else if (s < 80) bins[3] += 1
     else bins[4] += 1
   })
-  histogramChart.setOption({
+  setLibraryChartOption(histogramChart, {
     tooltip: { trigger: "axis" },
     xAxis: { type: "category", data: ["0-20", "20-40", "40-60", "60-80", "80-100"] },
     yAxis: { type: "value" },
@@ -875,7 +876,7 @@ const renderCollabFlow = () => {
     target: MODEL_CHAIN.value[i + 1].model,
     lineStyle: { color: businessColor('text-secondary'), width: 1.4 },
   }))
-  collabFlowChart.setOption({
+  setLibraryChartOption(collabFlowChart, {
     animationDurationUpdate: 250,
     xAxis: { show: false, min: 0, max: 900 },
     yAxis: { show: false, min: 0, max: 260 },
@@ -903,7 +904,7 @@ const renderCollabConfidence = () => {
     return chunks
   }
   const values = rows.map((x) => Number(x.confidence || 0))
-  collabConfidenceChart = new Chart(canvas, {
+  collabConfidenceChart = new Chart(canvas, createLibraryChartJsConfig({
     type: "bar",
     data: {
       labels,
@@ -953,8 +954,8 @@ const renderCollabConfidence = () => {
         const { ctx } = chart
         const meta = chart.getDatasetMeta(0)
         ctx.save()
-        ctx.fillStyle = businessColor('text-primary')
-        ctx.font = "12px sans-serif"
+        ctx.fillStyle = businessColor('data-text')
+        ctx.font = libraryChartFont()
         ctx.textAlign = "center"
         meta.data.forEach((bar, index) => {
           const value = values[index] || 0
@@ -963,7 +964,7 @@ const renderCollabConfidence = () => {
         ctx.restore()
       },
     }],
-  })
+  }))
 }
 
 const renderModelCompare = () => {
@@ -976,7 +977,7 @@ const renderModelCompare = () => {
   }
   if (compareChartType.value === "radar") {
     collabCompareChart.clear()
-    collabCompareChart.setOption({
+    setLibraryChartOption(collabCompareChart, {
       tooltip: { trigger: "item" },
       radar: {
         radius: "62%",
@@ -993,7 +994,7 @@ const renderModelCompare = () => {
     return
   }
   collabCompareChart.clear()
-  collabCompareChart.setOption({
+  setLibraryChartOption(collabCompareChart, {
     tooltip: {
       trigger: "axis",
       formatter: (params) => {

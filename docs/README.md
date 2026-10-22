@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 0.8 ｜ status: 评审 ｜ updated: 2026-10-22
+> owner: A ｜ version: 0.9 ｜ status: 评审 ｜ updated: 2026-10-22
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -19,7 +19,7 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001至011：W0/W1历史、W2身份与分配范围、依赖整改与显式数据操作 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001至012：W0/W1历史、W2权限/依赖/显式数据操作与素材唯一来源 |
 | [进度看板](team/进度看板.md) | 定稿 | W0/W1任务、阻塞与W2入口 |
 | [门禁记录](team/门禁记录.md) | 定稿 | G0/G1技术项和W2本轮身份/权限/页面技术项通过；整体验收未放行 |
 
@@ -29,6 +29,7 @@
 | --- | --- | --- |
 | [设计方案](design/设计方案.md) | 历史W1 | 原始方向；本轮已由品牌升级方案替代 |
 | [素材库规范](design/素材库规范.md) | 定稿 | token、主题、命名、来源、生成及使用规则 |
+| [业务素材统一引用](design/素材库统一引用.md) | 技术验收通过 | 16角色/25图标、空态与图表共享源；动态业务数据边界与生产渲染验证 |
 | [品牌升级方案](design/品牌升级方案.md) | 定稿 | 相伴/拥光/知音、人文色彩、源文件与可复建规则 |
 | [工作台升级方案](design/展示页升级方案.md) | 定稿 | 搜索筛选、详情规格、复制下载和执行验证 |
 | [图表升级方案](design/图表升级方案.md) | 定稿 | 8种图表、用途筛选、合成样例、数据与SVG导出 |
@@ -55,10 +56,13 @@
 | [仓库基线](test/仓库基线.md) | 定稿 | 原始状态、数据保留、口径更正和后续风险 |
 | [W2认证与权限](test/W2认证与权限.md) | 评审 | 单一身份、角色、上传限额、真实统计、明确师生分配与离线工具 |
 | [W2安全独立复核](test/W2安全独立复核.md) | 独立复核 | 虚假账号与临时数据的安全/ACL矩阵，测试边界与结果 |
+| [素材引用独立复核](test/素材引用独立复核.md) | 独立复核通过 | Luna独立来源门禁及7负例、131素材校验和三份浏览器QA交叉核对 |
 | [W2业务页面改造](design/W2业务页面改造.md) | 评审 | 既有品牌、科研配色、真实数据空态、XSS与跨账号缓存修复 |
 | [W2开发与隔离验证](ops/W2开发与隔离验证.md) | 评审 | 新运行依赖、显式配置/初始化、隔离命令与尚未执行的发布工作 |
 
 本轮机器证据：[W2验证摘要](test/w2-verification.json)、[客户端隔离](test/w2-client-qa.json)、[36业务页面状态](design/screenshots/w2-business/qa.json)、[升级后八图库回归](design/screenshots/w2-gallery/qa.json)。全部截图和API样例均为合成数据。
+
+素材统一来源追加证据：[机器摘要](test/library-source-verification.json)、[36开发场景](design/screenshots/library-source/dev/qa.json)、[10打包场景](design/screenshots/library-source/production/qa.json)、[图库13项](design/screenshots/library-source/gallery/qa.json)。历史截图保持原样。
 
 ## 历史归档
 
@@ -88,6 +92,7 @@
 | [后端隔离基线](../scripts/run-backend-baseline.py) | 从仓库根目录运行 `.\.venv\Scripts\python.exe scripts/run-backend-baseline.py`；需要先安装 pytest，使用临时数据库并阻止外部网络。 |
 | [素材构建](../scripts/build-design-assets.mjs) | `npm run assets:build`，使用已有sharp；模块定位参数见素材库规范。 |
 | [素材校验](../scripts/check-assets.mjs) | `npm run assets:check` 或添加 `-- --json`，仅使用Node内置模块。 |
+| [视觉来源门禁](../scripts/check-design-sources.mjs) | `npm run assets:source-check`；已集成素材校验。`npm run assets:source-test`运行7项隔离正/负例，不读取真实数据库。 |
 | [W2业务截图](../scripts/capture-w2-ui.mjs) | 18路由×2视口，合成API、XSS与布局检查，不连接真实后端。 |
 | [客户端隔离浏览器测试](../scripts/check-client-isolation.mjs) | `node scripts/check-client-isolation.mjs`，验证IDB双身份、迟到401、Bearer下载和真实SW退休；默认结果写tmp，可显式指定W2_CLIENT_QA_OUTPUT。 |
 | [图表数据检查](../scripts/check-chart-data.mjs) | `node scripts/check-chart-data.mjs`，验证6组固定合成数据的分母、分箱与跨图总量。 |

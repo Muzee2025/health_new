@@ -17,6 +17,7 @@ export function labelColor(background) {
     ? palette.colors.text : palette.colors.surface;
 }
 export function applyChartPalette(element) {
+  element.style.setProperty('--research-font',CHART_FONT);
   Object.entries(palette.colors).forEach(([role,color]) => element.style.setProperty(`--research-${role.replace(/[A-Z]/g,letter => `-${letter.toLowerCase()}`)}`,color));
 }
 export function createResearchTheme() {

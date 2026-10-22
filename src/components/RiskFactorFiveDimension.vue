@@ -8,16 +8,17 @@
     </template>
     <div v-if="loading" class="placeholder">加载中...</div>
     <div v-else-if="error" class="placeholder">
-      <el-empty description="数据加载失败，请重试" />
+      <LibraryEmpty role="networkError" description="数据加载失败，请重试" />
     </div>
     <div v-else-if="!hasData" class="placeholder">
-      <el-empty description="暂无五维风险数据" />
+      <LibraryEmpty role="emptyReport" description="暂无五维风险数据" />
     </div>
     <div v-else ref="radarRef" class="radar"></div>
   </el-card>
 </template>
 
 <script setup>
+import { setLibraryChartOption } from '../design/chart-registry'
 import { businessAlpha, businessColor } from '../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
 import axios from "axios"
@@ -56,7 +57,7 @@ const renderChart = async () => {
   if (!hasData.value || !radarRef.value) return
   await nextTick()
   if (!radarChart) radarChart = echarts.init(radarRef.value, 'xinyu-business')
-  radarChart.setOption({
+  setLibraryChartOption(radarChart, {
     tooltip: { trigger: "item" },
     radar: {
       indicator: [

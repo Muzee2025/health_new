@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "owner": "Lead",
+  "task": "W2-LIB",
+  "checkedAt": "2026-10-22T06:40:55.210Z",
+  "baseCommit": "12c6bc1",
+  "branch": "codex/w2-library-source",
+  "status": "local-technical-checks-passed",
+  "database": {
+    "localConfigurationProtocol": "sqlite",
+    "configurationValuesIncluded": false,
+    "connectionOpened": false,
+    "actualRunningBackendConfigurationVerified": false
+  },
+  "sourcePolicy": {
+    "staticVisuals": "approved library catalog, shared chart sources and registered standard controls",
+    "businessData": "authorized business API; never gallery demo numbers",
+    "frameworkBoundary": "Element Plus internal control structure remains owned by the framework",
+    "staticCheckBoundary": "File and regular-expression checks; not a Vue AST or arbitrary dynamic-value proof"
+  },
+  "sources": {
+    "status": "passed",
+    "staticAssetRoles": 16,
+    "icons": 25,
+    "approvedAssetsReferenced": 21,
+    "scannedFiles": 48,
+    "errors": [],
+    "boundaries": [
+      "Runtime user uploads, article content, conversation text and chart data remain governed by the business API.",
+      "This static check does not replace browser rendering, dynamic-key validation, or review of chart semantics and CSS layout."
+    ]
+  },
+  "checks": {
+    "sourceGuardTests": {
+      "command": "npm run assets:source-test",
+      "passed": 7,
+      "exitCode": 0,
+      "independentlyRerun": true
+    },
+    "assets": {
+      "command": "npm run assets:check",
+      "approved": 124,
+      "legacyUnverified": 7,
+      "total": 131,
+      "exitCode": 0,
+      "independentlyRerun": true
+    },
+    "frontend": {
+      "command": "npm test",
+      "files": 6,
+      "passed": 17,
+      "exitCode": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "modules": 2441,
+      "seconds": 17.04,
+      "exitCode": 0,
+      "warning": "Existing large chunk warning remains"
+    }
+  },
+  "browser": {
+    "dev": {
+      "record": "docs/design/screenshots/library-source/dev/qa.json",
+      "exitCode": 0,
+      "expectedPages": 36,
+      "capturedPages": 36,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "libraryIconFailureCount": 0,
+      "pagesOverLimit": [],
+      "screenshotsVerified": 36
+    },
+    "production": {
+      "record": "docs/design/screenshots/library-source/production/qa.json",
+      "exitCode": 0,
+      "expectedPages": 10,
+      "capturedPages": 10,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "libraryIconFailureCount": 0,
+      "pagesOverLimit": [],
+      "screenshotsVerified": 10
+    },
+    "gallery": {
+      "record": "docs/design/screenshots/library-source/gallery/qa.json",
+      "exitCode": 0,
+      "testsPassed": 13,
+      "svgDownloads": 8,
+      "screenshotsVerified": 18,
+      "paletteDownloadMatches": true
+    }
+  },
+  "preservation": {
+    "runtimeFilesChecked": 7,
+    "runtimeFilesChanged": 0,
+    "protectedSources": [
+      "backend",
+      "src/assets",
+      "package-lock.json",
+      "docs/design/chart-palette.json",
+      "docs/design/chart-demo-data.js"
+    ],
+    "historicalScreenshotPathsChecked": 139,
+    "protectedGitDiff": [],
+    "newScreenshotFilesVerified": 64,
+    "oldEvidenceOverwritten": false
+  },
+  "review": {
+    "independentReviewer": "Luna",
+    "record": "docs/test/素材引用独立复核.md",
+    "scope": "Independently reran source and asset checks; read-only cross-check of Lead browser records, not a browser rerun"
+  },
+  "limitations": [
+    "Browser API responses are synthetic; no real backend integration or database migration performed",
+    "Business screenshot SW registration is intentionally blocked; expected warnings recorded",
+    "Seven legacy assets retain unverified provenance and are excluded from new business references",
+    "No push, deployment or G2 production release approval"
+  ],
+  "recoveryTag": "wave2-library-source-20261022",
+  "hygiene": {
+    "stagedFiles": 116,
+    "trackedFiles": 572,
+    "forbidden": 0,
+    "ignoredTracked": 0,
+    "unexpectedPaths": 0,
+    "missing": 0,
+    "oversized": 0,
+    "markdownFiles": 45,
+    "brokenLocalLinks": 0,
+    "stagedDiffCheckExitCode": 0
+  }
+}

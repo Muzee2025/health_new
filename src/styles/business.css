@@ -1,3 +1,4 @@
+@import '../../docs/design/chart-surfaces.css';
 /* Business-only bridge. The independent W1 gallery does not import this file. */
 .xy-business {
   --el-color-primary: var(--brand-600);
@@ -63,10 +64,9 @@ body { margin: 0; }
 .xy-business .dashboard-container { background: transparent; padding: 0; }
 .xy-business .dashboard-container .header-actions { gap: 16px; flex-wrap: wrap; }
 .xy-business .dashboard-container .header-actions h2 { font-size: 20px; }
-.xy-business .dashboard-container .chart-card { border: 1px solid var(--border); box-shadow: none; }
 .xy-business .dashboard-container .stat-card { border-top: 3px solid var(--accent-sage); }
 .xy-business .auth-page { min-height: 100svh; display: grid; grid-template-columns: minmax(260px, 1fr) minmax(360px, 1fr); background: var(--surface-warm); }
-.xy-business .auth-story { padding: 48px clamp(32px, 7vw, 110px); display: flex; flex-direction: column; justify-content: space-between; background: url('../assets/backgrounds/bg-login-1440.webp') center / cover; }
+.xy-business .auth-story { padding: 48px clamp(32px, 7vw, 110px); display: flex; flex-direction: column; justify-content: space-between; background: var(--library-login-background) center / cover; }
 .xy-business .auth-story h1 { font: 400 clamp(28px, 3.2vw, 44px)/1.6 var(--font-editorial); color: var(--brand-700); max-width: 420px; }
 .xy-business .auth-story p { max-width: 380px; color: var(--text-secondary); }
 .xy-business .auth-illustration { width: min(100%, 300px); height: 220px; object-fit: contain; align-self: center; }

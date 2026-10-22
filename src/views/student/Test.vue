@@ -7,7 +7,7 @@
     <el-row :gutter="20" class="mt-30" v-if="!currentTest">
       <el-col :xs="24" :sm="12" :md="6" v-for="test in tests" :key="test.id">
         <el-card shadow="hover" class="test-card">
-          <div class="test-icon">{{ test.icon }}</div>
+          <div class="test-icon"><LibraryIcon :name="test.icon" /></div>
           <h3 class="test-title">{{ test.title }}</h3>
           <p class="test-desc">{{ test.desc }}</p>
           <div class="test-meta">共 {{ test.questions.length }} 题</div>
@@ -20,7 +20,7 @@
     <div v-else-if="!testResult" class="question-area mt-30">
       <el-card class="question-card">
         <div class="flex-between mb-20">
-          <el-button link @click="leaveToList"><el-icon><ArrowLeft /></el-icon> 返回列表</el-button>
+          <el-button link @click="leaveToList"><el-icon><LibraryIcon name="arrow-left"  /></el-icon> 返回列表</el-button>
           <div class="progress">进度: {{ currentQIndex + 1 }} / {{ currentTest.questions.length }}</div>
         </div>
 
@@ -57,7 +57,7 @@
     <!-- 结果区域 -->
     <div v-else class="result-area mt-30">
       <el-card class="result-card text-center">
-        <div class="result-icon">✨</div>
+        <div class="result-icon"><LibraryIcon name="report" /></div>
         <h2>测试结果</h2>
         
         <div class="score-result">
@@ -82,7 +82,7 @@
 
         <div class="result-actions mt-20">
           <el-button type="success" round :loading="aiAnalyzing" @click="analyzeResult">
-            {{ aiAnalyzing ? 'AI 分析中...' : '✨ AI 深度解析' }}
+            {{ aiAnalyzing ? 'AI 分析中...' : 'AI 深度解析' }}
           </el-button>
           <el-button type="primary" round @click="finishTest">返回测评大厅</el-button>
         </div>
@@ -107,7 +107,6 @@
 import { computed, onBeforeUnmount, ref } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { ArrowLeft } from '@element-plus/icons-vue'
 import { testsData } from '@/data/tests'
 const tests = testsData
 

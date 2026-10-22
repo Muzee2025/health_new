@@ -8,7 +8,7 @@
         clearable
       >
         <template #prefix>
-          <el-icon><Search /></el-icon>
+          <el-icon><LibraryIcon name="search"  /></el-icon>
         </template>
       </el-input>
       
@@ -23,7 +23,7 @@
       </el-select>
 
       <el-button type="primary" class="add-student-btn" @click="openAddStudentDialog">
-        + 添加学生
+        <LibraryIcon name="add" /> 添加学生
       </el-button>
     </div>
 
@@ -42,7 +42,7 @@
                 class="crisis-mark"
                 :title="`存在 ${scope.row.pending_crisis_count} 条未处理危机预警`"
               >
-                ❗
+                <LibraryIcon name="alert" />
               </span>
             </div>
           </template>
@@ -130,7 +130,6 @@
 import { passwordPolicyError } from '../../utils/passwordPolicy'
 import { businessColor } from '../../styles/business-theme.js'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Search } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 

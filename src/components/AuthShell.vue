@@ -1,5 +1,5 @@
 <template>
-  <main class="auth-page">
+  <main class="auth-page" :style="backgroundStyle">
     <section class="auth-story" aria-label="心域智链">
       <img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" />
       <div>
@@ -18,6 +18,10 @@
 </template>
 
 <script setup>
-import brandLogo from '../assets/brand/brand-logo-horizontal.svg'
-import companion from '../assets/illustrations/open-doodles/illu-open-doodles-loving.svg'
+import { getVisualAsset } from '../design/asset-registry'
+const brandLogo = getVisualAsset('brandLogo').url
+const companion = getVisualAsset('companion').url
+const loginBackground = getVisualAsset('loginBackground').url
+const backgroundStyle = { '--library-login-background': `url("${loginBackground}")` }
+
 </script>

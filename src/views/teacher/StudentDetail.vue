@@ -12,7 +12,7 @@
         </template>
         <template #extra>
           <el-button type="warning" plain @click="exportWord">
-            <el-icon><Document /></el-icon> 导出个人心理报告 (Word)
+            <el-icon><LibraryIcon name="report"  /></el-icon> 导出个人心理报告 (Word)
           </el-button>
         </template>
       </el-page-header>
@@ -50,7 +50,7 @@
 
         <!-- AI Analysis -->
         <div class="info-card ai-card">
-          <h3 class="card-title"><el-icon><Monitor /></el-icon> 风险预警分析与建议</h3>
+          <h3 class="card-title"><el-icon><LibraryIcon name="audit"  /></el-icon> 风险预警分析与建议</h3>
           <p class="ai-text">{{ studentData.ai_analysis }}</p>
         </div>
 
@@ -72,7 +72,7 @@
                   <span v-if="item.score" class="timeline-score">得分: {{ item.score }}</span>
                 </div>
               </el-timeline-item>
-              <el-empty v-if="!riskTimelineData.length" description="暂无时间轴记录" :image-size="60" />
+              <LibraryEmpty v-if="!riskTimelineData.length" description="暂无时间轴记录" :image-size="60" />
             </el-timeline>
           </div>
         </div>
@@ -97,7 +97,7 @@
                   <small class="record-date">记录日期: {{ record.record_date }}</small>
                 </div>
               </el-timeline-item>
-              <el-empty v-if="!studentData.intervention_records?.length" description="暂无干预记录" :image-size="60" />
+              <LibraryEmpty v-if="!studentData.intervention_records?.length" description="暂无干预记录" :image-size="60" />
             </el-timeline>
           </div>
         </div>
@@ -125,7 +125,7 @@
               </el-collapse-item>
             </el-collapse>
           </div>
-          <el-empty v-else description="暂无对话记录" :image-size="60" />
+          <LibraryEmpty v-else description="暂无对话记录" :image-size="60" />
         </div>
 
         <!-- Appointments & Treehole -->
@@ -161,7 +161,7 @@
                     <span v-if="!post.emotion_keywords && !post.tags" class="no-tags">无明显情绪标签</span>
                   </div>
                 </el-timeline-item>
-                <el-empty v-if="!studentData.treehole_summary?.length" description="暂无树洞发言" :image-size="60" />
+                <LibraryEmpty v-if="!studentData.treehole_summary?.length" description="暂无树洞发言" :image-size="60" />
               </el-timeline>
             </div>
           </div>
@@ -172,10 +172,11 @@
 </template>
 
 <script setup>
+import { setLibraryChartOption } from '../../design/chart-registry'
+import { interventionIcon } from '../../design/icon-registry'
 import { businessColor } from '../../styles/business-theme.js'
 import { ref, onMounted, onUnmounted, nextTick, computed, markRaw } from 'vue'
 import { useRoute } from 'vue-router'
-import { Monitor, Flag, Document } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
@@ -258,7 +259,7 @@ const riskTimelineData = computed(() => {
         date: rec.created_at,
         type: 'primary',
         color: businessColor('data-primary'),
-        icon: markRaw(Flag),
+        icon: markRaw(interventionIcon),
         title: '教师干预: ' + rec.notes.substring(0, 15) + '...',
         score: null
       })
@@ -373,7 +374,7 @@ const initChart = () => {
       }
     ]
   }
-  chartInstance.setOption(option)
+  setLibraryChartOption(chartInstance, option)
 }
 
 const handleResize = () => {

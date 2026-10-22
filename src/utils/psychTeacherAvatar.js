@@ -1,6 +1,7 @@
-import teacherAvatar1 from '../assets/avatars/teachers/avatar-teacher-01-256.webp'
-import teacherAvatar2 from '../assets/avatars/teachers/avatar-teacher-02-256.webp'
-import teacherAvatar3 from '../assets/avatars/teachers/avatar-teacher-03-256.webp'
+import { getVisualAsset } from '../design/asset-registry'
+const teacherAvatar1 = getVisualAsset('teacherAvatar1').url
+const teacherAvatar2 = getVisualAsset('teacherAvatar2').url
+const teacherAvatar3 = getVisualAsset('teacherAvatar3').url
 
 export const PSYCH_TEACHER_AVATAR_ALT = '心理教师卡通形象'
 

@@ -35,7 +35,7 @@
           <el-table-column label="头像" width="80">
             <template #default>
               <div class="teacher-avatar-small">
-                <el-icon><User /></el-icon>
+                <el-icon><LibraryIcon name="user"  /></el-icon>
               </div>
             </template>
           </el-table-column>

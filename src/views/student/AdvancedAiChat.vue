@@ -2,7 +2,7 @@
   <div class="chat-page">
     <aside class="session-panel">
       <div class="session-toolbar">
-        <el-button type="primary" plain class="new-conv-btn" @click="createNewChat(currentMode)">+ 新对话</el-button>
+        <el-button type="primary" plain class="new-conv-btn" @click="createNewChat(currentMode)"><LibraryIcon name="add" /> 新对话</el-button>
       </div>
       <div class="session-search">
         <el-input v-model="searchQuery" placeholder="搜索聊天记录..." />
@@ -63,7 +63,7 @@
       <div class="chat-content">
         <div class="messages-area" ref="chatScrollRef">
           <div v-if="crisisBannerVisible" class="crisis-banner">
-            <el-icon><WarningFilled /></el-icon>
+            <el-icon><LibraryIcon name="alert"  /></el-icon>
             <strong>高危预警</strong>
             <span>检测到高风险表达，系统已启动安全干预流程。</span>
           </div>
@@ -73,7 +73,7 @@
               <div class="avatar-wrap">
                 <el-avatar v-if="msg.role === 'user'" :size="36" :src="isAnonymous ? anonymousAvatar : userAvatar" />
                 <el-avatar v-else :size="36" class="mail-avatar">
-                  <el-icon><Message /></el-icon>
+                  <el-icon><LibraryIcon name="chat"  /></el-icon>
                 </el-avatar>
               </div>
 
@@ -112,7 +112,7 @@
           <div v-if="isTyping && !isDeepStreaming" class="message-row row-ai">
             <div class="avatar-wrap">
               <el-avatar :size="36" class="mail-avatar">
-                <el-icon><Message /></el-icon>
+                <el-icon><LibraryIcon name="chat"  /></el-icon>
               </el-avatar>
             </div>
             <div class="message-body">
@@ -170,11 +170,13 @@
 </template>
 
 <script setup>
-import userAvatar from '../../assets/avatars/students/avatar-student-01-96.webp'
-import anonymousAvatar from '../../assets/avatars/students/avatar-student-02-96.webp'
+import { setLibraryChartOption } from '../../design/chart-registry'
+import { getVisualAsset } from '../../design/asset-registry'
+const userAvatar = getVisualAsset('studentAvatar').url
+const anonymousAvatar = getVisualAsset('anonymousAvatar').url
+
 import { businessAlpha, businessColor } from '../../styles/business-theme.js'
 import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
-import { Message, WarningFilled } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import * as echarts from 'echarts'
@@ -1048,7 +1050,7 @@ const resizeRadar = () => {
 
 const drawRadar = (vals) => {
   if (!radarChart) return
-  radarChart.setOption({
+  setLibraryChartOption(radarChart, {
     radar: {
       radius: '65%',
       splitNumber: 4,

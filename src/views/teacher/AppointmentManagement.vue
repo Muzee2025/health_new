@@ -37,7 +37,7 @@
           <template #default="scope">
             <el-dropdown trigger="click" @command="handleStatusChange(scope.row.id, $event)">
               <el-button type="primary" size="small" :disabled="scope.row.status === 'completed' || scope.row.status === 'cancelled'">
-                修改状态<el-icon class="el-icon--right"><arrow-down /></el-icon>
+                修改状态<el-icon class="el-icon--right"><LibraryIcon name="arrow-down" /></el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
@@ -66,7 +66,6 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { ArrowDown } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import {

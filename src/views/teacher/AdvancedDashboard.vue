@@ -5,7 +5,7 @@
       <h2>已分配学生概览与干预审计</h2>
       <div class="export-btns">
         <el-button type="warning" plain :loading="exporting" @click="exportComplianceReport">
-          <el-icon><Document /></el-icon> 导出合规审计报告 (Word)
+          <el-icon><LibraryIcon name="report"  /></el-icon> 导出合规审计报告 (Word)
         </el-button>
       </div>
     </div>
@@ -53,7 +53,7 @@
       <el-col :xs="24" :lg="8">
         <el-card shadow="hover" class="chart-card">
           <template #header>近7日情绪均值</template>
-          <el-empty v-if="!hasEmotionSamples" description="近7日暂无有效情绪样本" :image-size="76" class="chart-empty" />
+          <LibraryEmpty v-if="!hasEmotionSamples" description="近7日暂无有效情绪样本" :image-size="76" class="chart-empty" />
           <div v-show="hasEmotionSamples" ref="lineChartRef" class="chart-box"></div>
         </el-card>
       </el-col>
@@ -61,7 +61,7 @@
       <el-col :xs="24" :lg="8">
         <el-card shadow="hover" class="chart-card">
           <template #header>楼栋风险密度</template>
-          <el-empty v-if="!metrics.campus_heatmap?.length" description="尚无可用楼宇数据" :image-size="76" class="chart-empty" />
+          <LibraryEmpty v-if="!metrics.campus_heatmap?.length" description="尚无可用楼宇数据" :image-size="76" class="chart-empty" />
           <div v-show="metrics.campus_heatmap?.length" ref="heatmapChartRef" class="chart-box"></div>
         </el-card>
       </el-col>
@@ -72,7 +72,7 @@
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: bold; color: var(--danger-text); display: flex; align-items: center;">
-            <el-icon class="mr-5"><Warning /></el-icon> 待审核危机预警记录
+            <el-icon class="mr-5"><LibraryIcon name="alert"  /></el-icon> 待审核危机预警记录
             <el-badge v-if="pendingCount > 0" :value="pendingCount" class="ml-10" />
           </span>
           <el-tag type="danger">需心理教师人工校正闭环</el-tag>
@@ -121,9 +121,9 @@
 </template>
 
 <script setup>
+import { setLibraryChartOption } from '../../design/chart-registry'
 import { businessColor, businessPalette } from '../../styles/business-theme.js'
 import { ref, onMounted, onUnmounted, computed, nextTick, shallowRef } from 'vue'
-import { Document, Warning } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import * as echarts from 'echarts'
 import axios from 'axios'
@@ -352,7 +352,7 @@ const initCharts = () => {
   chartInstances.value = { funnel: null, line: null, heatmap: null }
   const funnelChart = echarts.init(funnelChartRef.value, 'xinyu-business')
   chartInstances.value.funnel = funnelChart
-  funnelChart.setOption({
+  setLibraryChartOption(funnelChart, {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     grid: { left: 10, right: 28, top: 16, bottom: 16, containLabel: true },
     xAxis: { type: 'value', min: 0, minInterval: 1 },
@@ -370,7 +370,7 @@ const initCharts = () => {
     const trend = metrics.value.emotion_trends_7d
     const lineChart = echarts.init(lineChartRef.value, 'xinyu-business')
     chartInstances.value.line = lineChart
-    lineChart.setOption({
+    setLibraryChartOption(lineChart, {
       tooltip: {
         trigger: 'axis', renderMode: 'richText',
         formatter: params => {
@@ -393,7 +393,7 @@ const initCharts = () => {
   if (metrics.value.campus_heatmap?.length) {
     const heatChart = echarts.init(heatmapChartRef.value, 'xinyu-business')
     chartInstances.value.heatmap = heatChart
-    heatChart.setOption({
+    setLibraryChartOption(heatChart, {
       tooltip: { trigger: 'axis' },
       grid: { left: 12, right: 24, top: 16, bottom: 16, containLabel: true },
       xAxis: { type: 'value', min: 0, max: 1, name: '密度' },

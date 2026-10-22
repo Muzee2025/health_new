@@ -8,7 +8,7 @@
         <el-col :xs="24" :md="16" class="mb-20">
           <el-card class="chart-card" shadow="hover">
             <div class="card-header trend-header">
-              <div><span class="icon">📈</span> 情绪趋势曲线</div>
+              <div><LibraryIcon name="report" class="icon" /> 情绪趋势曲线</div>
               <div class="trend-tools">
                 <el-select v-model="trendRange" size="small" style="width: 110px" @change="handleTrendRangeChange">
                   <el-option label="近7天" value="7d" />
@@ -24,9 +24,9 @@
         <el-col :xs="24" :md="8" class="mb-20">
           <el-card class="chart-card" shadow="hover">
             <div class="card-header">
-              <span class="icon">📊</span> 量表得分对比
+              <LibraryIcon name="assessment" class="icon" /> 量表得分对比
               <el-popover placement="top" width="220" trigger="click" content="该常模基于全国大学生群体数据。">
-                <template #reference><el-icon class="help-icon"><QuestionFilled /></el-icon></template>
+                <template #reference><el-icon class="help-icon"><LibraryIcon name="help"  /></el-icon></template>
               </el-popover>
             </div>
             <div v-if="showSdsCard" class="score-card">
@@ -44,21 +44,21 @@
       <el-row :gutter="20">
         <el-col :xs="24" :md="8" class="mb-20">
           <el-card class="chart-card" shadow="hover">
-            <div class="card-header"><span class="icon">🔥</span> 红色能量积分趋势</div>
+            <div class="card-header"><LibraryIcon name="support" class="icon" /> 红色能量积分趋势</div>
             <div ref="energyChartRef" class="chart"></div>
           </el-card>
         </el-col>
 
         <el-col :xs="24" :md="8" class="mb-20">
           <el-card class="chart-card" shadow="hover">
-            <div class="card-header"><span class="icon">☁️</span> 树洞词频</div>
+            <div class="card-header"><LibraryIcon name="treehole" class="icon" /> 树洞词频</div>
             <div ref="wordChartRef" class="chart"></div>
           </el-card>
         </el-col>
 
         <el-col :xs="24" :md="8" class="mb-20">
           <el-card class="chart-card" shadow="hover">
-            <div class="card-header"><span class="icon">📅</span> 预约完成度</div>
+            <div class="card-header"><LibraryIcon name="appointment" class="icon" /> 预约完成度</div>
             <div ref="appointmentChartRef" class="chart"></div>
             <div class="appointment-meta">
               <div>总预约：{{ appointmentStats.total || 0 }} 个</div>
@@ -85,19 +85,19 @@
           <div class="meta text-xs text-gray-500 mt-10 text-right">{{ new Date(post.created_at).toLocaleString() }}</div>
         </div>
       </div>
-      <el-empty v-else description="暂无相关帖子" />
+      <LibraryEmpty v-else description="暂无相关帖子" />
     </el-dialog>
   </div>
 </template>
 
 <script setup>
+import { setLibraryChartOption } from '../../design/chart-registry'
 import { businessColor } from '../../styles/business-theme.js'
 import { ref, onMounted, nextTick, onBeforeUnmount, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import * as echarts from 'echarts'
 import { ElMessage } from 'element-plus'
-import { QuestionFilled } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const loading = ref(true)
@@ -233,28 +233,28 @@ const buildTrendOption = () => {
 const initTrendChart = () => {
   trendChart?.dispose()
   trendChart = echarts.init(trendChartRef.value, 'xinyu-business')
-  trendChart.setOption(buildTrendOption(), true)
+  setLibraryChartOption(trendChart, buildTrendOption(), true)
   trendChart.on('click', () => router.push('/student/report'))
 }
 const updateTrendChart = () => {
   if (!trendChart) return
-  trendChart.setOption(buildTrendOption(), true)
+  setLibraryChartOption(trendChart, buildTrendOption(), true)
 }
 const initScoreChart = () => {
   scoreChart?.dispose()
   scoreChart = echarts.init(scoreChartRef.value, 'xinyu-business')
-  scoreChart.setOption({ tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } }, legend: { data: ['我的得分', '常模平均'], bottom: 0 }, grid: { left: '5%', right: '5%', bottom: '15%', top: '10%', containLabel: true }, xAxis: { type: 'category', data: latestScores.value.map(i => i.name) }, yAxis: { type: 'value' }, series: [{ name: '我的得分', type: 'bar', data: latestScores.value.map(i => i.score) }, { name: '常模平均', type: 'bar', data: latestScores.value.map(i => i.norm) }] })
+  setLibraryChartOption(scoreChart, { tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } }, legend: { data: ['我的得分', '常模平均'], bottom: 0 }, grid: { left: '5%', right: '5%', bottom: '15%', top: '10%', containLabel: true }, xAxis: { type: 'category', data: latestScores.value.map(i => i.name) }, yAxis: { type: 'value' }, series: [{ name: '我的得分', type: 'bar', data: latestScores.value.map(i => i.score) }, { name: '常模平均', type: 'bar', data: latestScores.value.map(i => i.norm) }] })
 }
 const initEnergyChart = () => {
   energyChart?.dispose()
   energyChart = echarts.init(energyChartRef.value, 'xinyu-business')
-  energyChart.setOption({ tooltip: { trigger: 'axis' }, grid: { left: '5%', right: '5%', bottom: '5%', top: '15%', containLabel: true }, xAxis: { type: 'category', boundaryGap: false, data: redEnergy.value.map(i => i.date) }, yAxis: { type: 'value' }, series: [{ type: 'line', smooth: true, symbol: 'none', itemStyle: { color: businessColor('data-risk-high') }, data: redEnergy.value.map(i => i.score) }] })
+  setLibraryChartOption(energyChart, { tooltip: { trigger: 'axis' }, grid: { left: '5%', right: '5%', bottom: '5%', top: '15%', containLabel: true }, xAxis: { type: 'category', boundaryGap: false, data: redEnergy.value.map(i => i.date) }, yAxis: { type: 'value' }, series: [{ type: 'line', smooth: true, symbol: 'none', itemStyle: { color: businessColor('data-risk-high') }, data: redEnergy.value.map(i => i.score) }] })
 }
 const initWordChart = () => {
   wordChart?.dispose()
   wordChart = echarts.init(wordChartRef.value, 'xinyu-business')
   const words = treeholeWords.value.map(i => ({ name: i.word, value: i.count })).sort((a, b) => b.value - a.value)
-  wordChart.setOption({
+  setLibraryChartOption(wordChart, {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     grid: { left: 12, right: 30, top: 18, bottom: 20, containLabel: true },
     xAxis: { type: 'value', min: 0, minInterval: 1, name: '次数', nameLocation: 'middle', nameGap: 26 },
@@ -280,7 +280,7 @@ const initAppointmentChart = () => {
   const { completed = 0, pending = 0, cancelled = 0, total = 0 } = appointmentStats.value
   appointmentChart?.dispose()
   appointmentChart = echarts.init(appointmentChartRef.value, 'xinyu-business')
-  appointmentChart.setOption({ tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' }, legend: { bottom: 0 }, series: [{ type: 'pie', radius: ['50%', '70%'], center: ['50%', '45%'], data: [{ value: completed, name: '已完成' }, { value: pending, name: '待处理' }, { value: cancelled, name: '已取消' }] }], graphic: [{ type: 'text', left: 'center', top: '44%', style: { text: `${total}`, fill: businessColor('text-primary'), fontSize: 24, fontWeight: 700 } }] })
+  setLibraryChartOption(appointmentChart, { tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' }, legend: { bottom: 0 }, series: [{ type: 'pie', radius: ['50%', '70%'], center: ['50%', '45%'], data: [{ value: completed, name: '已完成' }, { value: pending, name: '待处理' }, { value: cancelled, name: '已取消' }] }], graphic: [{ type: 'text', left: 'center', top: '44%', style: { text: `${total}`, fill: businessColor('text-primary'), fontSize: 24, fontWeight: 700 } }] })
 }
 const cancelNextAppointment = async () => {
   const next = appointmentStats.value?.next_appointment

@@ -23,10 +23,10 @@
               <p class="summary">{{ article.summary }}</p>
               <div class="bottom">
                 <span class="source-tag text-xs text-gray-500" v-if="article.source">
-                  <el-icon><Collection /></el-icon> {{ article.source }}
+                  <el-icon><LibraryIcon name="collection"  /></el-icon> {{ article.source }}
                 </span>
                 <span class="views text-xs text-gray-500">
-                  <el-icon><View /></el-icon> {{ article.views || 0 }}
+                  <el-icon><LibraryIcon name="view"  /></el-icon> {{ article.views || 0 }}
                 </span>
               </div>
             </div>
@@ -34,18 +34,19 @@
         </el-col>
       </el-row>
       
-      <el-empty v-if="filteredArticles.length === 0" description="暂无该分类的文章" />
+      <LibraryEmpty v-if="filteredArticles.length === 0" description="暂无该分类的文章" />
     </el-card>
   </div>
 </template>
 
 <script setup>
-import articleFallback from '../../assets/illustrations/open-doodles/illu-open-doodles-reading-side.svg'
+import { getVisualAsset } from '../../design/asset-registry'
+const articleFallback = getVisualAsset('articleFallback').url
+
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { View, Collection } from '@element-plus/icons-vue'
 
 const router = useRouter()
 

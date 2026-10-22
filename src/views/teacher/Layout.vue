@@ -6,26 +6,26 @@
 
       <nav class="nav-menu" aria-label="教师导航">
         <router-link to="/teacher/advanced-dashboard" class="nav-item" active-class="active">
-          <el-icon><Monitor /></el-icon> <span class="nav-text">AI大屏与审计</span>
+          <el-icon><LibraryIcon name="audit"  /></el-icon> <span class="nav-text">AI大屏与审计</span>
         </router-link>
         <router-link to="/teacher/students" class="nav-item" active-class="active">
-          <el-icon><DataAnalysis /></el-icon> <span class="nav-text">学生管理</span>
+          <el-icon><LibraryIcon name="assessment"  /></el-icon> <span class="nav-text">学生管理</span>
         </router-link>
         <router-link to="/teacher/appointments" class="nav-item" active-class="active">
-          <el-icon><Calendar /></el-icon> <span class="nav-text">预约管理</span>
+          <el-icon><LibraryIcon name="appointment"  /></el-icon> <span class="nav-text">预约管理</span>
 
         </router-link>
         <router-link to="/teacher/content" class="nav-item" active-class="active">
-          <el-icon><Reading /></el-icon> <span class="nav-text">内容管理</span>
+          <el-icon><LibraryIcon name="knowledge"  /></el-icon> <span class="nav-text">内容管理</span>
         </router-link>
         <router-link to="/teacher/interventions" class="nav-item" active-class="active">
-          <el-icon><Document /></el-icon> <span class="nav-text">干预记录</span>
+          <el-icon><LibraryIcon name="report"  /></el-icon> <span class="nav-text">干预记录</span>
         </router-link>
 
         <div class="nav-divider"></div>
 
         <button type="button" class="nav-item" @click="logout">
-          <el-icon><SwitchButton /></el-icon> <span class="nav-text">退出登录</span>
+          <el-icon><LibraryIcon name="logout"  /></el-icon> <span class="nav-text">退出登录</span>
         </button>
       </nav>
 
@@ -141,14 +141,12 @@
 </template>
 
 <script setup>
-import brandLogo from '../../assets/brand/brand-logo-horizontal.svg'
-import profileAvatar from '../../assets/avatars/teachers/avatar-teacher-01-96.webp'
+import { getVisualAsset } from '../../design/asset-registry'
+const brandLogo = getVisualAsset('brandLogo').url
+const profileAvatar = getVisualAsset('teacherAvatar').url
+
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import {
-  Platform, DataAnalysis, Calendar, Reading,
-  Document, SwitchButton, Search, Bell
-} from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 

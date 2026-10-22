@@ -1,0 +1,1297 @@
+{
+  "schemaVersion": 1,
+  "owner": "Lead",
+  "task": "W2-LIB-PRODUCTION",
+  "status": "synthetic-business-regression",
+  "generatedAt": "2026-10-22T05:27:30.403Z",
+  "fixtureTime": "2026-10-22T01:00:00.000Z",
+  "baselineLabel": "合成数据 · W2业务验收",
+  "source": "W2业务页面；所有 API 均由本脚本在浏览器路由层合成响应。真实后端、真实账号、真实学生数据均未使用。",
+  "app": "http://127.0.0.1:4183",
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "timezone": "Asia/Shanghai",
+  "browser": {
+    "engine": "Chromium",
+    "channel": "msedge",
+    "executablePathConfigured": false,
+    "headless": true,
+    "browserPluginAvailable": false,
+    "fallbackReason": "Browser plugin not available; isolation requires per-request Playwright routing and synthetic API fulfillment."
+  },
+  "artifactFormat": "WebP",
+  "maxBytes": 307200,
+  "pages": [
+    {
+      "libraryIcons": [],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "login",
+      "path": "/login",
+      "url": "http://127.0.0.1:4183/login",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 69,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/illu-open-doodles-loving-CTeXSAog.svg",
+          "complete": true,
+          "naturalWidth": 1024,
+          "naturalHeight": 768
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "login-1440.webp",
+        "bytes": 23076,
+        "sha256": "75398ed8d1a2d4751fa7ad2bef8f4886b631f0c9be9414752c2b56edce89051d"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "login",
+      "path": "/login",
+      "url": "http://127.0.0.1:4183/login",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 23,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/illu-open-doodles-loving-CTeXSAog.svg",
+          "complete": true,
+          "naturalWidth": 1024,
+          "naturalHeight": 768
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "login-390.webp",
+        "bytes": 8050,
+        "sha256": "5fd247d7cd3112e482b277e9c1c3b68f21453b40280aff55ed4d4c53d2153f9f"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 0,
+      "apiRequests": [],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "home",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "help",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "support",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "treehole",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-dashboard",
+      "path": "/student/dashboard",
+      "url": "http://127.0.0.1:4183/student/dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 150,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-student-01-96-R4NInaYX.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-dashboard-1440.webp",
+        "bytes": 40142,
+        "sha256": "c2845305968df4ff44ac8883917d9f8d1c2ec739c3f74b6c7b4dc45dbb0d18d4"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 7,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/latest_scores",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/red_energy",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/treehole_words",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/appointment_stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "home",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "help",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "support",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "treehole",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-dashboard",
+      "path": "/student/dashboard",
+      "url": "http://127.0.0.1:4183/student/dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 140,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-student-01-96-R4NInaYX.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-dashboard-390.webp",
+        "bytes": 15968,
+        "sha256": "e6250c5eb12314fcfd19fb469fbda9bdaad9e315b3d0e5f56339562f17a6c154"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 7,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/latest_scores",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/red_energy",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/treehole_words",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/appointment_stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "home",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "treehole",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "heart",
+          "source": "icon-phosphor-heart-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "star",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "heart",
+          "source": "icon-phosphor-heart-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "star",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-treehole",
+      "path": "/student/treehole",
+      "url": "http://127.0.0.1:4183/student/treehole",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 366,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-student-01-96-R4NInaYX.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-treehole-1440.webp",
+        "bytes": 39968,
+        "sha256": "53195edd363a95d1d2bd6f48a150408ed6f2004350dd77ae54ee539c9234c802"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/treehole/posts",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "home",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "treehole",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "heart",
+          "source": "icon-phosphor-heart-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "star",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "heart",
+          "source": "icon-phosphor-heart-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "chat",
+          "source": "icon-phosphor-chat-circle-dots-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "star",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "student-treehole",
+      "path": "/student/treehole",
+      "url": "http://127.0.0.1:4183/student/treehole",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 356,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-student-01-96-R4NInaYX.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "student-treehole-390.webp",
+        "bytes": 24818,
+        "sha256": "fdd13754078994edf4622ce4af3bae3452d6d5ac68ad8d42fb8cf329190a2420"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/treehole/posts",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "audit",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "alert",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-advanced-dashboard",
+      "path": "/teacher/advanced-dashboard",
+      "url": "http://127.0.0.1:4183/teacher/advanced-dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 243,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-teacher-01-96-BBYoKEwQ.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/illu-empty-list-320-BNZid7YV.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 180
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-advanced-dashboard-1440.webp",
+        "bytes": 39184,
+        "sha256": "6252718a70974aff9e16697883df9adc1080af837ea5c52f5b79598deee6d9fe"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/dashboard/metrics",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/crisis/pending",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "audit",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "alert",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-advanced-dashboard",
+      "path": "/teacher/advanced-dashboard",
+      "url": "http://127.0.0.1:4183/teacher/advanced-dashboard",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 229,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-teacher-01-96-BBYoKEwQ.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/illu-empty-list-320-BNZid7YV.svg",
+          "complete": true,
+          "naturalWidth": 320,
+          "naturalHeight": 180
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-advanced-dashboard-390.webp",
+        "bytes": 19376,
+        "sha256": "21c31a9e09bea940e2515be52bd62299a615764fce12141e084612b05b1dd101"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 3,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/dashboard/metrics",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/crisis/pending",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 1,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "audit",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "arrow-down",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-appointments",
+      "path": "/teacher/appointments",
+      "url": "http://127.0.0.1:4183/teacher/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "bodyTextLength": 162,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-teacher-01-96-BBYoKEwQ.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-teacher-01-256-B0PjvXSE.webp",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-appointments-1440.webp",
+        "bytes": 20096,
+        "sha256": "3ec5dbd7fe0ac99e7a26cd682c9fa54eb6afbff9e55c0293a69a3b96849aafd9"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/appointments",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    },
+    {
+      "libraryIcons": [
+        {
+          "name": "audit",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "assessment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "appointment",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "knowledge",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "report",
+          "source": "icon-domain-sprite-24-svg",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "logout",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        },
+        {
+          "name": "arrow-down",
+          "source": "@element-plus/icons-vue",
+          "visible": true,
+          "rendered": true
+        }
+      ],
+      "security": null,
+      "layout": {
+        "overflow": false
+      },
+      "name": "teacher-appointments",
+      "path": "/teacher/appointments",
+      "url": "http://127.0.0.1:4183/teacher/appointments",
+      "title": "心域智链平台",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "bodyTextLength": 148,
+      "nonBlank": true,
+      "frameworkOverlay": false,
+      "navigationError": null,
+      "imageHealth": [
+        {
+          "src": "http://127.0.0.1:4183/assets/brand-logo-horizontal-D8OZzCl7.svg",
+          "complete": true,
+          "naturalWidth": 300,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-teacher-01-96-BBYoKEwQ.webp",
+          "complete": true,
+          "naturalWidth": 96,
+          "naturalHeight": 96
+        },
+        {
+          "src": "http://127.0.0.1:4183/assets/avatar-teacher-01-256-B0PjvXSE.webp",
+          "complete": true,
+          "naturalWidth": 256,
+          "naturalHeight": 256
+        }
+      ],
+      "imageLoadFailures": 0,
+      "syntheticResourceCount": 0,
+      "screenshot": {
+        "file": "teacher-appointments-390.webp",
+        "bytes": 11142,
+        "sha256": "72562f46ba22c6ab8ca4d8b87ef1a8d9a4b1b713190cd54562f78b26cf1a3a6e"
+      },
+      "console": [
+        {
+          "type": "warning",
+          "text": "Service Worker registration blocked by Playwright"
+        }
+      ],
+      "pageErrors": [],
+      "apiRequestCount": 2,
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/appointments",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "blockedExternalRequestCount": 0,
+      "blockedWebSocketCount": 0,
+      "unknownApis": []
+    }
+  ],
+  "interactions": [
+    {
+      "interaction": "student-dashboard-trend-range",
+      "observed": true,
+      "from": "近30天",
+      "to": "近90天"
+    },
+    {
+      "interaction": "student-dashboard-trend-range",
+      "observed": true,
+      "from": "近30天",
+      "to": "近90天"
+    }
+  ],
+  "totals": {
+    "expectedPages": 10,
+    "capturedPages": 10,
+    "unknownApiCount": 0,
+    "pageErrorCount": 0,
+    "imageLoadFailureCount": 0,
+    "libraryIconFailureCount": 0,
+    "pagesOverLimit": []
+  }
+}

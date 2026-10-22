@@ -6,31 +6,31 @@
 
       <nav class="nav-menu" aria-label="学生导航">
         <router-link to="/student/dashboard" class="nav-item" active-class="active">
-          <el-icon><House /></el-icon> <span class="nav-text">首页</span>
+          <el-icon><LibraryIcon name="home"  /></el-icon> <span class="nav-text">首页</span>
         </router-link>
         <router-link to="/student/test" class="nav-item" active-class="active">
-          <el-icon><DataAnalysis /></el-icon> <span class="nav-text">心理测评</span>
+          <el-icon><LibraryIcon name="assessment"  /></el-icon> <span class="nav-text">心理测评</span>
         </router-link>
         <router-link to="/student/appointments" class="nav-item" active-class="active">
-          <el-icon><Calendar /></el-icon> <span class="nav-text">预约咨询</span>
+          <el-icon><LibraryIcon name="appointment"  /></el-icon> <span class="nav-text">预约咨询</span>
         </router-link>
         <router-link to="/student/articles" class="nav-item" active-class="active">
-          <el-icon><Reading /></el-icon> <span class="nav-text">心理科普</span>
+          <el-icon><LibraryIcon name="knowledge"  /></el-icon> <span class="nav-text">心理科普</span>
         </router-link>
         <router-link to="/student/advanced-chat" class="nav-item" active-class="active">
-          <el-icon><ChatDotRound /></el-icon> <span class="nav-text">智能心理助手</span>
+          <el-icon><LibraryIcon name="chat"  /></el-icon> <span class="nav-text">智能心理助手</span>
         </router-link>
         <router-link to="/student/report" class="nav-item" active-class="active">
-          <el-icon><Document /></el-icon> <span class="nav-text">我的心理报告</span>
+          <el-icon><LibraryIcon name="report"  /></el-icon> <span class="nav-text">我的心理报告</span>
         </router-link>
         <router-link to="/student/treehole" class="nav-item" active-class="active">
-          <el-icon><ChatDotRound /></el-icon> <span class="nav-text">匿名树洞</span>
+          <el-icon><LibraryIcon name="chat"  /></el-icon> <span class="nav-text">匿名树洞</span>
         </router-link>
 
         <div class="nav-divider"></div>
 
         <button type="button" class="nav-item" @click="logout">
-          <el-icon><SwitchButton /></el-icon> <span class="nav-text">退出登录</span>
+          <el-icon><LibraryIcon name="logout"  /></el-icon> <span class="nav-text">退出登录</span>
         </button>
       </nav>
 
@@ -62,14 +62,12 @@
 </template>
 
 <script setup>
-import brandLogo from '../../assets/brand/brand-logo-horizontal.svg'
-import profileAvatar from '../../assets/avatars/students/avatar-student-01-96.webp'
+import { getVisualAsset } from '../../design/asset-registry'
+const brandLogo = getVisualAsset('brandLogo').url
+const profileAvatar = getVisualAsset('studentAvatar').url
+
 import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import {
-  Platform, House, DataAnalysis, Calendar, Reading,
-  Document, ChatDotRound, SwitchButton, Search, Bell
-} from '@element-plus/icons-vue'
 
 const router = useRouter()
 const user = ref({})

@@ -1,3 +1,4 @@
+@import './chart-surfaces.css';
 /* Research chart workbench. Palette roles come only from chart-palette.json. */
 #charts{--surface:var(--research-surface);--surface-warm:var(--research-surface);--surface-subtle:var(--research-background);--text-primary:var(--research-text);--text-secondary:var(--research-muted);--border:var(--research-grid);--brand-50:var(--research-primary-soft);--brand-100:var(--research-primary-soft);--brand-500:var(--research-primary);--brand-600:var(--research-primary);--focus-ring:var(--research-focus);color:var(--text-primary)}
 .chart-workbench .section-heading{align-items:start;margin-bottom:26px}

@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto'
 const require = createRequire(import.meta.url)
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(scriptDir, '..')
-const outputDir = resolve(repoRoot, 'docs/design/screenshots/w2-business')
+const outputDir = resolve(repoRoot, process.env.W2_UI_QA_OUTPUT || 'tmp/w2-ui-qa')
 const baseUrl = process.env.BASELINE_BASE_URL || 'http://127.0.0.1:5173'
 const viewports = [{ width: 1440, height: 900 }, { width: 390, height: 844 }]
 const frozenTime = '2026-10-22T01:00:00.000Z'
@@ -103,7 +103,10 @@ const baseRoutes = [
   { path: '/teacher/interventions', role: 'teacher', name: 'teacher-interventions' },
 ]
 
-const routes = baseRoutes.flatMap(item => viewports.map(viewport => ({ ...item, viewport })))
+const selectedCases = (process.env.W2_UI_CASES || '').split(',').filter(Boolean)
+const selectedRoutes = selectedCases.length ? baseRoutes.filter(item => selectedCases.includes(item.name)) : baseRoutes
+if (!selectedRoutes.length) throw new Error('No matching UI cases selected')
+const routes = selectedRoutes.flatMap(item => viewports.map(viewport => ({ ...item, viewport })))
 
 const fixtureFor = (path) => fixtureTable.find(([pattern]) => pattern.test(path))?.[1]()
 const isApi = (url) => new URL(url).pathname.startsWith('/api/')
@@ -297,7 +300,17 @@ try {
       preservedAttachment: Boolean(document.querySelector('.article-content a[download]')),
     })) : null
     const layout = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > innerWidth + 2 }))
+    const libraryIcons = await page.evaluate(() => [...document.querySelectorAll('[data-library-icon]')].map(element => {
+      const rectangle = element.getBoundingClientRect()
+      const visible = rectangle.width > 0 && rectangle.height > 0 && getComputedStyle(element).visibility !== 'hidden'
+      const use = element.querySelector('use')
+      let rendered = true
+      if (visible && use) { try { const box = use.getBBox(); rendered = box.width > 0 && box.height > 0 } catch { rendered = false } }
+      if (visible && element.classList.contains('library-icon--asset')) rendered = getComputedStyle(element).maskImage !== 'none' && getComputedStyle(element).backgroundColor !== 'rgba(0, 0, 0, 0)'
+      return { name: element.getAttribute('data-library-icon'), source: element.getAttribute('data-library-source'), visible, rendered }
+    }))
     const pageResult = {
+      libraryIcons,
       security,
       layout,
       name: routeConfig.name,
@@ -332,7 +345,7 @@ const browserPluginAvailable = false
 const manifest = {
   schemaVersion: 1,
   owner: 'Lead',
-  task: 'W2-QA-UI',
+  task: process.env.W2_UI_QA_TASK || 'W2-QA-UI',
   status: 'synthetic-business-regression',
   generatedAt: new Date().toISOString(),
   fixtureTime: frozenTime,
@@ -352,11 +365,12 @@ const manifest = {
     unknownApiCount: results.filter((item) => item.path).flatMap((item) => item.unknownApis).length,
     pageErrorCount: results.filter((item) => item.path).flatMap((item) => item.pageErrors).length,
     imageLoadFailureCount: results.filter((item) => item.path).reduce((sum, item) => sum + item.imageLoadFailures, 0),
+    libraryIconFailureCount: results.filter((item) => item.path).flatMap(item => item.libraryIcons).filter(item => item.visible && !item.rendered).length,
     pagesOverLimit: results.filter((item) => item.screenshot && item.screenshot.bytes > 300 * 1024).map((item) => item.name),
   },
 }
 await writeFile(resolve(outputDir, 'qa.json'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8')
 
-const failed = manifest.totals.capturedPages !== routes.length || manifest.totals.unknownApiCount > 0 || manifest.totals.pageErrorCount > 0 || manifest.totals.imageLoadFailureCount > 0 || manifest.totals.pagesOverLimit.length > 0 || manifest.pages.some((item) => item.navigationError || !item.nonBlank || item.frameworkOverlay || item.layout.overflow || (item.security && (item.security.xssExecuted || item.security.scripts || item.security.eventAttributes || item.security.dangerousLinks || !item.security.preservedHeading || !item.security.preservedStrong || !item.security.preservedAttachment)))
+const failed = manifest.totals.capturedPages !== routes.length || manifest.totals.unknownApiCount > 0 || manifest.totals.pageErrorCount > 0 || manifest.totals.imageLoadFailureCount > 0 || manifest.totals.libraryIconFailureCount > 0 || manifest.totals.pagesOverLimit.length > 0 || manifest.pages.some((item) => item.navigationError || !item.nonBlank || item.frameworkOverlay || item.layout.overflow || (item.security && (item.security.xssExecuted || item.security.scripts || item.security.eventAttributes || item.security.dangerousLinks || !item.security.preservedHeading || !item.security.preservedStrong || !item.security.preservedAttachment)))
 console.log(JSON.stringify({ outputDir, totals: manifest.totals, pages: manifest.pages.map((page) => ({ name: page.name, bytes: page.screenshot?.bytes, nonBlank: page.nonBlank, frameworkOverlay: page.frameworkOverlay, errors: page.pageErrors.length, unknownApis: page.unknownApis.length })) }, null, 2))
 if (failed) process.exitCode = 1

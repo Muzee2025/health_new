@@ -8,7 +8,7 @@
         clearable
       >
         <template #prefix>
-          <el-icon><Search /></el-icon>
+          <el-icon><LibraryIcon name="search"  /></el-icon>
         </template>
       </el-input>
       
@@ -55,7 +55,6 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Search } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 

@@ -1,5 +1,6 @@
 import * as echarts from 'echarts';
 import { palette, CHART_FONT, applyChartPalette, createResearchTheme, labelColor } from './chart-style.js';
+import { createLibraryChartBase, setLibraryChartOption } from './chart-options.js';
 import { getChartDemoData, CHANNEL_NAMES, WEEKDAYS, TIME_SLOTS } from './chart-demo-data.js';
 
 const escape = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -94,7 +95,7 @@ export function initChartLibrary() {
   const cards = new Map(SPECS.map(spec => [spec.id,gallery.querySelector(`[data-chart-id="${spec.id}"]`)]));
 
   function option(spec, data, exporting = false) {
-    const base = { animation:false, animationDuration:0, animationDurationUpdate:0, backgroundColor:'transparent', aria:{enabled:true,label:{description:`${spec.title}。${spec.unit}。${spec.summary(data)} 合成示例 ${data.sample}，${data.period}。详细数值见查看数据。`}}, textStyle:{fontSize:12,fontFamily:token('font-sans')}, tooltip:{show:false}, grid:{left:42,right:22,top:30,bottom:36,containLabel:false}, xAxis:{type:'category',axisLabel:{fontSize:12,color:secondary,margin:12},axisLine:{lineStyle:{color:token('border')}},axisTick:{show:false}}, yAxis:{type:'value',min:0,minInterval:1,axisLabel:{fontSize:12,color:secondary,margin:12},splitLine:{lineStyle:{color:token('chart-grid'),type:'solid',opacity:.65}}} };
+    const base = createLibraryChartBase({description:`${spec.title}。${spec.unit}。${spec.summary(data)} 合成示例 ${data.sample}，${data.period}。详细数值见查看数据。`});
     const label = {show:true,color:text,fontSize:12,position:'top'};
     if (spec.id === 'trend') return {...base, grid:{left:40,right:data.range === 7 ? 20:56,top:28,bottom:38}, xAxis:{...base.xAxis,boundaryGap:false,data:data.daily.map(day => day.label),axisLabel:{...base.xAxis.axisLabel,interval:data.range === 30 ? 5 : data.range === 14 ? 2 : 0,showMinLabel:true,showMaxLabel:true}}, yAxis:{...base.yAxis,name:'次',nameTextStyle:{fontSize:12,color:secondary}}, series:[{type:'line',name:'支持记录',data:data.daily.map(day => day.support),symbolSize:6,lineStyle:{color:colors[0],width:2.5},itemStyle:{color:token('surface'),borderColor:colors[0],borderWidth:2},areaStyle:{color:token('brand-100'),opacity:.55},label:{...label,show:data.range === 7},endLabel:{show:data.range !== 7,formatter:'{c} 次',fontSize:12,color:colors[0],fontWeight:600},labelLayout:{hideOverlap:true}}]};
     if (spec.id === 'emotion') return { ...base,xAxis:undefined,yAxis:undefined,graphic:[{type:'text',left:'center',top:'41%',style:{text:format(sum(data.emotions.map(item => item.value))),font:`600 26px ${token('font-sans')}`,fill:text}},{type:'text',left:'center',top:'56%',style:{text:'条情绪记录',font:`12px ${token('font-sans')}`,fill:secondary}}],series:[{type:'pie',radius:['52%','73%'],center:['50%','50%'],silent:true,label:{show:exporting,fontSize:12,color:text,formatter:'{b} {c}条 ({d}%)'},labelLine:{show:exporting},data:data.emotions.map(item => ({name:item.name,value:item.value,itemStyle:{color:theme.xy.emotions[item.field],borderColor:token('surface'),borderWidth:2}}))}] };
@@ -120,7 +121,7 @@ export function initChartLibrary() {
     let chart = instances.get(spec.id);
     if (!chart) { chart = echarts.init(element,'xinyu-charts',{renderer:'svg'}); instances.set(spec.id,chart); }
     chart.resize();
-    chart.setOption(option(spec,current),{notMerge:true});
+    setLibraryChartOption(chart,option(spec,current),{notMerge:true});
     element.dataset.rendered = 'true';
   }
   function render() {
@@ -192,7 +193,7 @@ export function initChartLibrary() {
     let exportChart;
     try {
       exportChart = echarts.init(host,'xinyu-charts',{renderer:'svg',width:880,height:380});
-      exportChart.setOption(option(spec,data,true));
+      setLibraryChartOption(exportChart,option(spec,data,true));
       // Serialize the actual SVG DOM so quoted local font-family names stay XML-safe.
       exportChart.getZr().flush();
       const inner = host.querySelector('svg')?.cloneNode(true);

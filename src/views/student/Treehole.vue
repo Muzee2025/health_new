@@ -2,7 +2,7 @@
   <div class="treehole-container">
     <div class="treehole-header">
       <div class="header-left">
-        <h2>🌳 匿名树洞</h2>
+        <h2><LibraryIcon name="treehole" /> 匿名树洞</h2>
         <p class="desc">放下伪装，说出心里话。深度分享将获得红色能量积分。</p>
       </div>
       <div class="header-right">
@@ -72,7 +72,7 @@
     </div>
 
     <div class="post-list">
-      <el-empty v-if="posts.length === 0" description="这里静悄悄的，快来发布第一条树洞吧！" />
+      <LibraryEmpty v-if="posts.length === 0" description="这里静悄悄的，快来发布第一条树洞吧！" />
 
       <div v-for="post in posts" :key="post.id" class="post-item glass-card">
         <div class="post-item-header">
@@ -83,7 +83,7 @@
               <span class="post-time">{{ new Date(post.created_at).toLocaleString() }}</span>
             </div>
           </div>
-          <el-tag v-if="post.is_deep" type="warning" effect="light" round size="small">✨深度好文</el-tag>
+          <el-tag v-if="post.is_deep" type="warning" effect="light" round size="small"><LibraryIcon name="book" /> 深度好文</el-tag>
         </div>
 
         <div class="post-content">{{ post.content }}</div>
@@ -93,20 +93,20 @@
         </div>
 
         <div v-if="post.reply_tip" class="reply-tip mt-10">
-          <el-icon><Microphone /></el-icon> <strong>心晴小助手：</strong> {{ post.reply_tip }}
+          <el-icon><LibraryIcon name="support"  /></el-icon> <strong>心晴小助手：</strong> {{ post.reply_tip }}
         </div>
 
         <div class="post-footer">
-          <button type="button" class="interaction-btn" :class="{ active: post.is_liked }" @click="toggleLike(post)">
-            <el-icon><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4 4.6 13.3C1.8 10.6 1.8 6.6 4.2 4.6c2.3-1.9 5.4-1 7.8 1.6 2.4-2.6 5.5-3.5 7.8-1.6 2.4 2 2.4 6-.4 8.7L12 20.4Z" :fill="post.is_liked ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg></el-icon>
+          <button type="button" class="interaction-btn" :class="{ active: post.is_liked }" :aria-pressed="!!post.is_liked" :aria-label="post.is_liked ? '取消点赞' : '点赞'" @click="toggleLike(post)">
+            <LibraryIcon name="heart" />
             <span>{{ post.likes_count || '点赞' }}</span>
           </button>
           <button type="button" class="interaction-btn" @click="openComments(post)">
-            <el-icon><ChatDotRound /></el-icon>
+            <el-icon><LibraryIcon name="chat"  /></el-icon>
             <span>{{ post.comments_count || '评论' }}</span>
           </button>
-          <button type="button" class="interaction-btn" :class="{ active: post.is_favorited }" @click="toggleFavorite(post)">
-            <el-icon><StarFilled v-if="post.is_favorited" /><Star v-else /></el-icon>
+          <button type="button" class="interaction-btn" :class="{ active: post.is_favorited }" :aria-pressed="!!post.is_favorited" :aria-label="post.is_favorited ? '取消收藏' : '收藏'" @click="toggleFavorite(post)">
+            <el-icon><LibraryIcon name="star-filled" v-if="post.is_favorited" /><LibraryIcon name="star" v-else /></el-icon>
             <span>{{ post.favorites_count || '收藏' }}</span>
           </button>
         </div>
@@ -144,7 +144,6 @@
 import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Microphone } from '@element-plus/icons-vue'
 
 const PRESET_TAGS = ['#人生意义', '#自我成长', '#抗压故事', '#红色精神与我', '#价值观碰撞', '#情绪洞察', '#人际关系', '#未来规划']
 
@@ -416,8 +415,6 @@ const getParentAuthor = (parentId) => {
   margin-left: 15px;
 }
 
-.emoji-btn { font-size: 24px; cursor: pointer; transition: transform 0.2s; }
-.emoji-btn:hover { transform: scale(1.2); }
 
 .publish-btn {
   background: linear-gradient(135deg, var(--brand-600) 0%, var(--brand-600) 100%);

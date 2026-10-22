@@ -1,7 +1,9 @@
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import LibraryIcon from './design/LibraryIcon.vue'
+import LibraryEmpty from './design/LibraryEmpty.vue'
+import { getVisualAsset } from './design/asset-registry'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import axios from 'axios'
 import App from './App.vue'
@@ -12,6 +14,10 @@ import { installBusinessCharts } from './styles/business-theme'
 
 document.body.classList.add('xy-business')
 installBusinessCharts(echarts)
+const favicon = document.querySelector('#app-favicon')
+if (favicon) favicon.href = getVisualAsset('favicon').url
+const themeColor = document.querySelector('#app-theme-color')
+if (themeColor) themeColor.content = getComputedStyle(document.documentElement).getPropertyValue('--brand-600').trim()
 import router from './router'
 
 const rawBaseURL = String(import.meta.env.VITE_API_BASE_URL || '').trim()
@@ -72,9 +78,8 @@ axios.interceptors.response.use(
 
 const app = createApp(App)
 
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
+app.component('LibraryIcon', LibraryIcon)
+app.component('LibraryEmpty', LibraryEmpty)
 
 app.use(ElementPlus, { locale: zhCn })
 app.use(router)

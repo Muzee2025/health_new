@@ -1,7 +1,7 @@
 export const testsData = [
   {
     id: 'SDS',
-    icon: '🌧️',
+    icon: 'assessment',
     title: '抑郁自评量表 (SDS)',
     desc: '20道题，测试你近期的情绪状态，评估抑郁倾向。',
     type: 'score',
@@ -36,7 +36,7 @@ export const testsData = [
   },
   {
     id: 'SAS',
-    icon: '😰',
+    icon: 'assessment',
     title: '焦虑自评量表 (SAS)',
     desc: '20道题，评估你的焦虑情绪及严重程度。',
     type: 'score',
@@ -71,7 +71,7 @@ export const testsData = [
   },
   {
     id: 'MBTI',
-    icon: '🧩',
+    icon: 'assessment',
     title: 'MBTI 精简版',
     desc: '28道题，快速测出你的16型人格类型及职业建议。',
     type: 'mbti',
@@ -115,7 +115,7 @@ export const testsData = [
   },
   {
     id: 'MentalAge',
-    icon: '🎂',
+    icon: 'assessment',
     title: '心理年龄测试',
     desc: '15道题，测测你的心理年龄究竟是老成持重还是永远年轻。',
     type: 'age',

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { inspectDesignSources } from './check-design-sources.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const assetsRoot = path.join(root, 'src', 'assets');
@@ -286,13 +287,15 @@ if (manifest) {
     if (source) add(warnings, 'APPROVED_MIRROR', rel(f), `Byte-identical mirror of approved asset ${source} exists outside ppt-kit.`);
   }
 }
+const designSources = inspectDesignSources(root);
+for (const error of designSources.errors) add(errors, `DESIGN_SOURCE_${error.code}`, error.file, error.message);
 const result = {
   status: errors.length ? 'failed' : 'passed',
   manifest: exists(manifestPath),
   approved,
   legacy,
   coverage: { listed: pathsCount(assets), files: fileCount, complete: Boolean(manifest) && errors.every((e) => !['COVERAGE_MISSING', 'COVERAGE_EXTRA', 'FILE_MISSING', 'PATH_UNSAFE'].includes(e.code)) },
-  errors, warnings, contrasts,
+  errors, warnings, contrasts, designSources,
   w2Legacy: { hardcodedColorOccurrences: legacyColors, externalUrlOccurrences: legacyUrls, blocking: false },
   limitations: ['ICO dimensions are not parsed; SVG viewBox is validated and raster PNG/WebP dimensions are parsed from headers.', 'Mirror scan covers versioned src, public, and picture; it excludes ppt-kit copies and does not scan backend/uploads or ignored dependency/cache directories.'],
 };

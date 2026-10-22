@@ -25,7 +25,7 @@
               <div class="direction" v-if="teacher.consultation_direction">
                 <el-tag size="small" type="success" effect="plain">{{ teacher.consultation_direction }}</el-tag>
               </div>
-              <div class="location"><el-icon><Location /></el-icon> {{ teacher.location }}</div>
+              <div class="location"><el-icon><LibraryIcon name="location"  /></el-icon> {{ teacher.location }}</div>
             </div>
           </div>
           <div class="teacher-intro">{{ teacher.intro }}</div>
@@ -56,7 +56,7 @@
     </el-row>
     
     <el-card class="mt-30 table-card">
-      <h3>📅 我的预约记录</h3>
+      <h3><LibraryIcon name="appointment" /> 我的预约记录</h3>
       <el-table :data="appointments" style="width: 100%" stripe>
         <el-table-column prop="time_slot" label="预约时间" width="180" />
         <el-table-column prop="teacher_name" label="咨询老师" width="120" />
@@ -84,7 +84,6 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Location } from '@element-plus/icons-vue'
 import {
   PSYCH_TEACHER_AVATAR_ALT,
   getPsychTeacherAvatar,

@@ -1,0 +1,19 @@
+/* Shared library chart surfaces. Palette values are installed by chart-style.js. */
+.xy-design #charts .chart-exhibit,
+.xy-business .el-card.chart-card {
+  background: var(--research-surface);
+  border: 1px solid var(--research-grid);
+  border-radius: 8px;
+  box-shadow: none;
+  color: var(--research-text);
+  font-family: var(--research-font);
+  font-variant-numeric: tabular-nums;
+}
+.xy-business .chart-card .card-header,
+.xy-business .chart-card > .el-card__header {
+  color: var(--research-text);
+  font-family: var(--research-font);
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 600;
+}

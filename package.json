@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "assets:build": "node scripts/build-design-assets.mjs",
-    "assets:check": "node scripts/check-assets.mjs"
+    "assets:check": "node scripts/check-assets.mjs",
+    "assets:source-check": "node scripts/check-design-sources.mjs",
+    "assets:source-test": "node --test scripts/tests/check-design-sources.test.mjs"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
