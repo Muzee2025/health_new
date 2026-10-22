@@ -1,0 +1,134 @@
+{
+  "task": "W2 UI and security integration",
+  "date": "2026-10-22",
+  "baseCommit": "62055a0",
+  "branch": "codex/w2-hardening",
+  "runtimeIntegrity": {
+    "checked": 7,
+    "changed": []
+  },
+  "protectedW1Changes": [],
+  "businessUI": {
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 900
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "totals": {
+      "expectedPages": 36,
+      "capturedPages": 36,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "pagesOverLimit": []
+    },
+    "overflow": 0,
+    "unexpectedConsole": [],
+    "xssCases": [
+      {
+        "xssExecuted": false,
+        "scripts": 0,
+        "eventAttributes": 0,
+        "dangerousLinks": 0,
+        "preservedHeading": true,
+        "preservedStrong": true,
+        "preservedAttachment": true
+      },
+      {
+        "xssExecuted": false,
+        "scripts": 0,
+        "eventAttributes": 0,
+        "dangerousLinks": 0,
+        "preservedHeading": true,
+        "preservedStrong": true,
+        "preservedAttachment": true
+      }
+    ]
+  },
+  "gallery": {
+    "status": "passed",
+    "tests": 13,
+    "downloads": 8,
+    "screenshots": 18
+  },
+  "npmAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "pythonAudit": {
+    "packages": 65,
+    "knownVulnerabilities": 0
+  },
+  "pythonVersions": {
+    "fastapi": "0.140.13",
+    "starlette": "1.3.1",
+    "sqlalchemy": "2.1.6",
+    "PyJWT": "2.15.1",
+    "pytest": "9.1.1",
+    "httpx": "0.28.1",
+    "pydantic": "2.14.1",
+    "pip": "26.2.2",
+    "pip-audit": "2.10.1"
+  },
+  "boundary": "Synthetic data only. No runtime migration, student data, real provider requests, remote push or deployment.",
+  "backendTests": {
+    "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py",
+    "passed": 70,
+    "warnings": 24,
+    "exitCode": 0,
+    "seconds": 46.25,
+    "reviewer": "Luna (independent of implementation)",
+    "warningDetail": "Runner suppresses per-warning output; categories not independently verified."
+  },
+  "frontendTests": {
+    "command": "npm test",
+    "files": 6,
+    "passed": 17,
+    "exitCode": 0,
+    "scope": "src/**/*.test.{js,ts}; ignored tmp copies excluded"
+  },
+  "build": {
+    "command": "npm run build",
+    "modules": 2317,
+    "seconds": 8.91,
+    "exitCode": 0,
+    "remainingWarning": "Main chunk 2350.51 kB; performance splitting still pending."
+  },
+  "clientIsolation": {
+    "chatStorage": {
+      "emptyB": true,
+      "ownB": true,
+      "bMessagesEmpty": true,
+      "staleRead": true,
+      "staleWrite": true,
+      "lateRejected": true,
+      "loggedOut": true,
+      "legacyRetained": true
+    },
+    "delayed401": true,
+    "document": {
+      "bearerSent": true,
+      "downloadFilename": "0123456789abcdef0123456789abcdef.pdf",
+      "views": true
+    },
+    "serviceWorker": {
+      "controlled": true,
+      "cacheNames": [
+        "unrelated-retained"
+      ],
+      "a": "synthetic-A",
+      "b": "synthetic-B",
+      "offlineFailed": true
+    }
+  },
+  "conclusion": "Current W2 identity/ACL and business UI batch passed; full G2 and production release not approved."
+}

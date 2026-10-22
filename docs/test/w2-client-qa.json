@@ -1,0 +1,27 @@
+{
+  "chatStorage": {
+    "emptyB": true,
+    "ownB": true,
+    "bMessagesEmpty": true,
+    "staleRead": true,
+    "staleWrite": true,
+    "lateRejected": true,
+    "loggedOut": true,
+    "legacyRetained": true
+  },
+  "delayed401": true,
+  "document": {
+    "bearerSent": true,
+    "downloadFilename": "0123456789abcdef0123456789abcdef.pdf",
+    "views": true
+  },
+  "serviceWorker": {
+    "controlled": true,
+    "cacheNames": [
+      "unrelated-retained"
+    ],
+    "a": "synthetic-A",
+    "b": "synthetic-B",
+    "offlineFailed": true
+  }
+}
