@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from .. import models, schemas
 from .auth import get_current_user
+from app.security import require_roles, get_optional_user
+from app.student_access import assigned_teacher_ids
 from typing import List, Optional
 from pydantic import BaseModel
 import json
@@ -65,7 +67,7 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
     }
 
 from datetime import date, datetime, timedelta, timezone
-from sqlalchemy import func, or_
+from sqlalchemy import func
 
 def _adjust_liming_emotion_index(original_index: int, created_at: datetime, current_user: models.User) -> int:
     """
@@ -256,7 +258,8 @@ def get_treehole_by_word(
     ]
 
 @router.get("/teachers")
-def get_teachers(request: Request, db: Session = Depends(get_db)):
+def get_teachers(request: Request, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(get_optional_user)):
+    bookable = assigned_teacher_ids(db, current_user.id) if current_user and current_user.role == "student" else set()
     teachers = db.query(models.User).filter(models.User.role == "teacher").all()
     result = []
     for t in teachers:
@@ -290,13 +293,16 @@ def get_teachers(request: Request, db: Session = Depends(get_db)):
             "avatar": avatar_url,
             "consultation_direction": profile.consultation_direction if profile else "",
             "time_slots": time_slots,
-            "booked_slots": booked_slots
+            "booked_slots": booked_slots,
+            "can_book": t.id in bookable
         })
     return result
 
 @router.post("/appointments", response_model=schemas.AppointmentResponse)
 def create_appointment(app_data: schemas.AppointmentCreate, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
+    if app_data.teacher_id not in assigned_teacher_ids(db, current_user.id):
+        raise HTTPException(status_code=403, detail="Only an explicitly assigned teacher can be booked; contact the school operator")
 
     existing = db.query(models.Appointment).filter(
         models.Appointment.teacher_id == app_data.teacher_id,
@@ -458,8 +464,8 @@ ARTICLE_VIEW_LOCK = Lock()
 ARTICLE_VIEW_CACHE = {}
 ARTICLE_VIEW_IDEMPOTENCY = {}
 ARTICLE_VIEW_DEDUP_WINDOW_SECONDS = 5 * 60
-ARTICLE_VIEW_INIT_MIN = 50
-ARTICLE_VIEW_INIT_MAX = 200
+ARTICLE_VIEW_INIT_MIN = 0
+ARTICLE_VIEW_INIT_MAX = 0
 
 
 def _normalize_report_type(report_type: str) -> str:
@@ -737,7 +743,7 @@ def get_report_analysis(
 
 
 @router.get("/report/cache/metrics")
-def get_report_cache_metrics():
+def get_report_cache_metrics(current_user: models.User = Depends(require_roles("teacher"))):
     total = REPORT_LOAD_METRICS["report:load:hit_rate"] + REPORT_LOAD_METRICS["report:load:miss"]
     hit_ratio = (REPORT_LOAD_METRICS["report:load:hit_rate"] / total) if total else 1.0
     return {
@@ -783,8 +789,8 @@ def refresh_report_analysis(
 
 
 def _generate_initial_article_views(rng: Optional[random.Random] = None) -> int:
-    random_gen = rng or random
-    return int(random_gen.randint(ARTICLE_VIEW_INIT_MIN, ARTICLE_VIEW_INIT_MAX))
+    """New articles start with zero measured reads; rng is retained for callers."""
+    return 0
 
 
 def _touch_article_view_cache(article_id: int, views: int):
@@ -793,8 +799,10 @@ def _touch_article_view_cache(article_id: int, views: int):
 
 
 def _read_article_views_cached(article_id: int, default: int) -> int:
-    with ARTICLE_VIEW_LOCK:
-        return int(ARTICLE_VIEW_CACHE.get(int(article_id), default))
+    # The current database result wins over a possibly stale process-local cache.
+    value = int(default or 0)
+    _touch_article_view_cache(article_id, value)
+    return value
 
 
 def _cleanup_view_idempotency(now_ts: float):
@@ -837,21 +845,13 @@ def _build_viewer_key(request: Request, viewer_id: Optional[str] = None) -> str:
 
 
 def _ensure_article_views_initialized(db: Session):
-    zero_rows = db.query(models.Article).filter(
-        or_(models.Article.views.is_(None), models.Article.views < ARTICLE_VIEW_INIT_MIN)
-    ).all()
-    if not zero_rows:
-        return
-    for article in zero_rows:
-        article.views = _generate_initial_article_views()
-    db.commit()
-    for article in zero_rows:
-        _touch_article_view_cache(article.id, article.views or 0)
+    """Compatibility hook: reads must not backfill or overwrite historical data."""
+    return None
 
 
 def _increment_article_views_atomic(db: Session, article_id: int) -> int:
     affected = db.query(models.Article).filter(models.Article.id == article_id).update(
-        {models.Article.views: models.Article.views + 1},
+        {models.Article.views: func.coalesce(models.Article.views, 0) + 1},
         synchronize_session=False,
     )
     if not affected:

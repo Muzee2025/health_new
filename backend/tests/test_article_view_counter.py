@@ -65,10 +65,16 @@ def _clear_view_runtime_cache():
     student.ARTICLE_VIEW_IDEMPOTENCY.clear()
 
 
-def test_random_initial_views_range():
-    for _ in range(200):
-        value = student._generate_initial_article_views()
-        assert 50 <= value <= 200
+def test_new_article_views_are_zero_and_legacy_counts_remain_unchanged():
+    assert student._generate_initial_article_views() == 0
+    _, session_factory = _build_test_db()
+    article_id = _seed_article(session_factory, views=87)
+    db = session_factory()
+    try:
+        student._ensure_article_views_initialized(db)
+        assert db.query(models.Article).filter_by(id=article_id).one().views == 87
+    finally:
+        db.close()
 
 
 def test_atomic_increment_logic():

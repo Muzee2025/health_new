@@ -61,6 +61,8 @@ def context():
     teacher_user = models.User(id=201, username="tea", password_hash="x", role="teacher", name="王老师")
     db.add_all([student, teacher_user])
     db.commit()
+    db.add(models.TeacherStudentAssignment(teacher_id=teacher_user.id, student_id=student.id))
+    db.commit()
     session = models.AIChatSession(id="s-001", user_id=student.id, mode="daily", title="测试会话")
     db.add(session)
     db.commit()
@@ -140,7 +142,8 @@ def test_pending_api_and_review_closed_loop(context, monkeypatch):
     app, _, student, teacher_user, session_id = context
     delivered_payloads: List[dict] = []
 
-    async def fake_broadcast(message: dict):
+    async def fake_broadcast(message: dict, *, db, student_id):
+        assert student_id == student.id
         delivered_payloads.append(message)
 
     monkeypatch.setattr(advanced_chat.manager, "broadcast_to_teachers", fake_broadcast)
@@ -176,7 +179,8 @@ def test_pending_api_and_review_closed_loop(context, monkeypatch):
     assert len(items) >= 1
     assert all("createdAt" in x and "studentId" in x and "riskLevel" in x and "description" in x and "status" in x for x in items)
     assert all("source" not in x for x in items)
-    assert any(str(x["id"]).startswith("mock-") for x in items)
+    assert len(items) == 1
+    assert all(str(x["id"]).startswith("real-") for x in items)
     real_item = next(x for x in items if str(x["id"]).startswith("real-"))
 
     review_res = client.post(

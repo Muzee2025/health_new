@@ -1,6 +1,8 @@
 import json
 from typing import Dict, List, Any
 from fastapi import WebSocket
+from sqlalchemy.orm import Session
+from app.student_access import assigned_teacher_ids
 
 class ConnectionManager:
     def __init__(self):
@@ -9,8 +11,11 @@ class ConnectionManager:
         # teacher websockets (user_id -> websockets)
         self.teacher_connections: Dict[int, List[WebSocket]] = {}
 
-    async def connect(self, websocket: WebSocket, user_id: int, role: str):
-        await websocket.accept()
+    async def connect(self, websocket: WebSocket, user_id: int, role: str, subprotocol: str | None = None):
+        if subprotocol is None:
+            await websocket.accept()
+        else:
+            await websocket.accept(subprotocol=subprotocol)
         if role == "teacher":
             if user_id not in self.teacher_connections:
                 self.teacher_connections[user_id] = []
@@ -41,10 +46,13 @@ class ConnectionManager:
             except Exception:
                 pass
 
-    async def broadcast_to_teachers(self, message: dict):
+    async def broadcast_to_teachers(self, message: dict, *, db: Session, student_id: int):
+        allowed = assigned_teacher_ids(db, student_id)
         msg_str = json.dumps(message, ensure_ascii=False)
-        for user_id, connections in self.teacher_connections.items():
-            for connection in connections:
+        for user_id, connections in list(self.teacher_connections.items()):
+            if user_id not in allowed:
+                continue
+            for connection in list(connections):
                 try:
                     await connection.send_text(msg_str)
                 except Exception:

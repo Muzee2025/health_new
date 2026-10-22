@@ -23,6 +23,7 @@ from app.services.nlp_engine import NLPModelsService
 from app.services.rag_service import embedding_function
 from app.services.dialogue_analysis_service import enqueue_dialogue_analysis
 from app.utils.websocket_manager import manager
+from app.upload_security import read_image_upload
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -148,10 +149,10 @@ def _safe_datetime_str(value: Any) -> str | None:
 
 async def _emotion_pipeline(message: str) -> Dict[str, Any]:
     clean = str(message or "").strip()
-    logger.info("emotion_pipeline_enter text_len=%s text_preview=%s", len(clean), clean[:120])
+    logger.info("emotion_pipeline_enter chars=%s", len(clean))
     if not _is_effective_emotion_input(clean):
         emotions = _default_emotion_tags()
-        logger.info("emotion_pipeline_invalid_input text_preview=%s", clean[:120])
+        logger.info("emotion_pipeline_invalid_input")
         keywords = []
         heatmap = []
         radar = nlp_engine.calc_5d_risk_radar(emotions)
@@ -177,7 +178,7 @@ async def _emotion_pipeline(message: str) -> Dict[str, Any]:
     is_crisis, crisis_score = nlp_engine.detect_crisis_albert(message, max_emotion)
     heatmap = nlp_engine.generate_attention_heatmap(message, keywords)
     radar = nlp_engine.calc_5d_risk_radar(emotions)
-    logger.info("emotion_pipeline_exit parsed_emotions=%s", emotions)
+    logger.info("emotion_pipeline_exit")
     return {
         "emotion_tags": emotions,
         "keywords": keywords,
@@ -558,13 +559,7 @@ async def _vector_retrieve_memories(
     recall_ms = round((time.perf_counter() - recall_started) * 1000, 2)
     total_ms = round((time.perf_counter() - timer_all) * 1000, 2)
     topk = [{"score": round(s, 6), "session_id": sid, "snippet": text} for s, text, sid in top]
-    logger.info(
-        "vector_recall trace_id=%s query=%s timings_ms=%s topk=%s",
-        trace_id,
-        user_message,
-        {"query": query_ms, "embedding": embedding_ms, "recall": recall_ms, "total": total_ms},
-        topk,
-    )
+    logger.info("vector_recall trace_id=%s count=%s latency_ms=%s", trace_id, len(topk), total_ms)
     return {
         "snippets": [x["snippet"] for x in topk],
         "timings_ms": {"query": query_ms, "embedding": embedding_ms, "recall": recall_ms, "total": total_ms},
@@ -603,7 +598,7 @@ async def _vector_retrieve_memories_with_timeout(
                 trace_id,
                 attempt,
                 retries + 1,
-                str(exc),
+                type(exc).__name__,
             )
             if attempt <= retries:
                 await asyncio.sleep(0.6 * attempt)
@@ -644,7 +639,7 @@ async def _invoke_deep_think_with_retry(
                 attempt,
                 retries + 1,
                 timeout_seconds,
-                str(exc),
+                type(exc).__name__,
             )
             if attempt <= retries:
                 await asyncio.sleep(0.8 * attempt)
@@ -721,7 +716,7 @@ async def get_chat_sessions(
             )
         return {"status": "success", "data": data}
     except Exception as exc:
-        logger.exception("get_chat_sessions_failed user_id=%s error=%s", getattr(current_user, "id", None), str(exc))
+        logger.error("get_chat_sessions_failed user_id=%s error=%s", getattr(current_user, "id", None), type(exc).__name__)
         raise HTTPException(status_code=500, detail="加载会话失败")
 
 @router.post("/sessions")
@@ -837,7 +832,7 @@ async def delete_chat_session(
                 current_user.id,
                 session_id,
                 attempt + 1,
-                str(exc),
+                type(exc).__name__,
             )
             if attempt < max_retries:
                 await asyncio.sleep(0.2 * (attempt + 1))
@@ -845,20 +840,20 @@ async def delete_chat_session(
             raise HTTPException(status_code=503, detail="服务端删除暂时失败，请稍后重试")
         except SQLAlchemyError as exc:
             db.rollback()
-            logger.exception(
+            logger.error(
                 "delete_session_db_error user_id=%s session_id=%s error=%s",
                 current_user.id,
                 session_id,
-                str(exc),
+                type(exc).__name__,
             )
             raise HTTPException(status_code=500, detail="服务端删除失败（数据库异常）")
         except Exception as exc:
             db.rollback()
-            logger.exception(
+            logger.error(
                 "delete_session_integrity_error user_id=%s session_id=%s error=%s",
                 current_user.id,
                 session_id,
-                str(exc),
+                type(exc).__name__,
             )
             raise HTTPException(status_code=500, detail="服务端删除失败（一致性校验未通过）")
 
@@ -921,7 +916,7 @@ async def ai_chat_interaction(
     try:
         analysis = await _emotion_pipeline(req.message)
     except Exception:
-        logger.exception("emotion_analyze_failed user_id=%s anonymous=%s", current_user.id, req.anonymous)
+        logger.error("emotion_analyze_failed user_id=%s anonymous=%s", current_user.id, req.anonymous)
         analysis = {
             "emotion_tags": _default_emotion_tags(),
             "keywords": [],
@@ -1025,7 +1020,7 @@ async def ai_chat_interaction(
                         "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
                         "status": "pending",
                     }
-                }))
+                }, db=db, student_id=current_user.id))
             except Exception as e:
                 logger.error(f"Failed to create warning: {e}")
     else:
@@ -1088,10 +1083,10 @@ async def ai_chat_interaction(
                 logger.info("deep_think_success trace_id=%s attempts=%s latency_ms=%s", trace_id, attempt_used, model_latency_ms)
                 reply = _format_deep_think_reply(raw_reply, trace_id=trace_id)
             except Exception as exc:
-                logger.exception("deep_think_invoke_failed trace_id=%s user_id=%s error=%s", trace_id, current_user.id, str(exc))
+                logger.error("deep_think_invoke_failed trace_id=%s user_id=%s error=%s", trace_id, current_user.id, type(exc).__name__)
                 raise HTTPException(
                     status_code=500,
-                    detail={"error": "deep_think_invoke_failed", "trace_id": trace_id, "cause": str(exc)},
+                    detail={"error": "deep_think_invoke_failed", "trace_id": trace_id, "cause": "model_unavailable"},
                 )
         else:
             reply = await zhipu_chat_service.chat_with_student(
@@ -1165,7 +1160,7 @@ async def ai_chat_stream(
             try:
                 analysis = await _emotion_pipeline(req.message)
             except Exception:
-                logger.exception("stream_emotion_analyze_failed user_id=%s", current_user.id)
+                logger.error("stream_emotion_analyze_failed user_id=%s", current_user.id)
                 analysis = {
                     "emotion_tags": _default_emotion_tags(),
                     "keywords": [],
@@ -1274,7 +1269,7 @@ async def ai_chat_stream(
                             "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
                             "status": "pending",
                         }
-                    }))
+                    }, db=db, student_id=current_user.id))
 
                     if user_msg is not None:
                         _archive_dialogue(
@@ -1397,7 +1392,7 @@ async def ai_chat_stream(
                             trace_id,
                             attempt,
                             max_attempts,
-                            str(exc),
+                            type(exc).__name__,
                         )
                         if attempt < max_attempts:
                             yield _sse_event("trend_chunk", {"text": f"模型响应较慢，正在进行第 {attempt + 1} 次重试..."})
@@ -1461,8 +1456,8 @@ async def ai_chat_stream(
 
             yield _sse_event("done", final_payload)
         except Exception as exc:
-            logger.exception("chat_stream_failed user_id=%s trace_id=%s error=%s", current_user.id, trace_id, str(exc))
-            yield _sse_event("error", {"text": "深度思考流式处理失败", "trace_id": trace_id, "error": str(exc)})
+            logger.error("chat_stream_failed user_id=%s trace_id=%s error=%s", current_user.id, trace_id, type(exc).__name__)
+            yield _sse_event("error", {"text": "深度思考流式处理失败", "trace_id": trace_id, "error": "model_unavailable"})
             yield _sse_event("done", {"ok": False})
 
     return StreamingResponse(
@@ -1534,13 +1529,13 @@ async def get_chat_based_report(
     }
 
 @router.post("/chat/upload")
-async def upload_image_or_audio(file: UploadFile = File(...), type: str = Form(...)):
-    """
-    处理图片输入，返回情绪特征。
-    """
-    if type == "image":
-        # 模拟 CNN + CLIP 抽取情绪色彩特征
-        emotion_vector = nlp_engine.extract_image_emotion_clip()
-        return {"status": "success", "emotion_5d": emotion_vector, "message": "图片情绪提取成功"}
-    else:
+async def upload_image_or_audio(
+    file: UploadFile = File(...), type: str = Form(...),
+    current_user: User = Depends(get_current_user),
+):
+    if type != "image":
         raise HTTPException(status_code=400, detail="Invalid media type, only image is supported")
+    # Authentication and bounded content validation happen before model work.
+    await read_image_upload(file)
+    emotion_vector = nlp_engine.extract_image_emotion_clip()
+    return {"status": "success", "emotion_5d": emotion_vector, "message": "Image features extracted"}

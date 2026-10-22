@@ -31,6 +31,17 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
 
+class TeacherStudentAssignment(Base):
+    """Explicit operator-managed access, independent of display-name advisors."""
+    __tablename__ = "teacher_student_assignments"
+    __table_args__ = (UniqueConstraint("teacher_id", "student_id", name="uq_teacher_student_assignment"),)
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    teacher_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    assigned_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
 class StudentProfile(Base):
     __tablename__ = "student_profiles"
 

@@ -12,8 +12,9 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.database import SessionLocal
+from app.services.llm_fallback import _build_structured_fallback, is_local_fallback_url
 
-LLM_URL = os.getenv("LLM_GENERATE_URL", "http://llm-internal:8000/generate")
+LLM_URL = os.getenv("LLM_GENERATE_URL", "")
 logger = logging.getLogger(__name__)
 JOB_LOCK = Lock()
 ANALYSIS_JOBS: Dict[int, Dict[str, Any]] = {}
@@ -165,11 +166,9 @@ def _llm_analyze(messages: List[Dict[str, Any]], *, deadline_ts: float | None = 
         f"对话数据: {json.dumps(sample, ensure_ascii=False)}"
     )
     retry_timeouts = [1.0, 1.8, 3.0]
-    llm_urls = [
-        LLM_URL,
-        "http://127.0.0.1:8000/generate",
-        "http://127.0.0.1:8000/api/llm/generate",
-    ]
+    llm_urls = [LLM_URL] if LLM_URL and not is_local_fallback_url(LLM_URL) else []
+    if not llm_urls:
+        return _build_structured_fallback(prompt)
     # 去重并保持顺序
     llm_urls = list(dict.fromkeys([u for u in llm_urls if u]))
     last_error = ""
@@ -191,8 +190,8 @@ def _llm_analyze(messages: List[Dict[str, Any]], *, deadline_ts: float | None = 
             except Exception as exc:
                 last_error = f"{llm_url}:{str(exc)}"
                 time.sleep(0.15)
-    logger.warning("LLM analyze degraded to heuristic: primary_url=%s error=%s", LLM_URL, last_error)
-    return {}
+    logger.warning("LLM analyze degraded to local rule fallback")
+    return _build_structured_fallback(prompt)
 
 
 def ensure_chart_explanations(report: Dict[str, Any]) -> Dict[str, Any]:

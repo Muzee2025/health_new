@@ -1,22 +1,4 @@
-# 版本范围：兼容 Python 3.10+；3.12+ / 3.14 需较新 pydantic-core（带 wheel），勿锁死 2.6.x
-fastapi>=0.110.0,<0.116.0
-uvicorn[standard]>=0.27.0,<0.35.0
-sqlalchemy>=2.0.27,<3
-pymysql>=1.1.0,<2
-python-dotenv>=1.0.1,<2
-pydantic>=2.10.0,<3
-requests>=2.31.0,<3
-python-jose[cryptography]>=3.3.0,<4
-# 密码哈希：直接用 bcrypt，避免 passlib 与 bcrypt 4.x / 新版 Python 不兼容（注册 500）
-bcrypt>=4.1.0,<5
+# Default installation starts the web application without training or vector models.
+-r requirements-core.txt
 
-# 新增：RAG 升级与微调集成依赖
-langchain-community
-sentence-transformers
-FlagEmbedding
-chromadb
-transformers
-peft
-# Python 3.14+ 使用 HTTP fallback，避免 zai-sdk 触发 pydantic.v1 兼容警告
-zai-sdk==0.2.2; python_version < "3.14"
-python-docx
+# Optional RAG and training tools are explicit opt-ins. See requirements-optional.txt.

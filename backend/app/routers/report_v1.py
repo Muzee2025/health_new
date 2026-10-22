@@ -26,10 +26,11 @@ from app.services.dialogue_analysis_service import (
     save_report,
 )
 from app.services.multi_model_orchestrator import orchestrator
+from app.services.llm_fallback import _build_interpretation_fallback, is_local_fallback_url
 
 router = APIRouter(prefix="/api/v1/report", tags=["report-v1"])
 logger = logging.getLogger(__name__)
-LLM_URL = os.getenv("LLM_GENERATE_URL", "http://llm-internal:8000/generate")
+LLM_URL = os.getenv("LLM_GENERATE_URL", "")
 
 FALLBACK_TEXT = "AI 解读生成中，请稍后再试"
 THOUGHT_LOG = Path("logs") / "report_thought_process.log"
@@ -77,12 +78,7 @@ def _latest_report_row(db: Session, user_id: int):
 
 
 def _llm_url_candidates():
-    urls = [
-        LLM_URL,
-        "http://127.0.0.1:8000/generate",
-        "http://127.0.0.1:8000/api/llm/generate",
-    ]
-    return list(dict.fromkeys([u for u in urls if u]))
+    return [LLM_URL] if LLM_URL and not is_local_fallback_url(LLM_URL) else []
 
 
 @router.post("/analysis/trigger")
@@ -178,7 +174,7 @@ def stream_analysis(
             except Exception as exc:
                 full = quick
                 status = "degraded"
-                thought = f"模型调用超时或异常，已降级为规则分析：{str(exc)}"
+                thought = "Model temporarily unavailable; using local rules."
             step2_ms = round((time.perf_counter() - step2_t0) * 1000, 2)
             step2_done = {
                 "step": "风险评级",
@@ -246,7 +242,7 @@ def stream_analysis(
             yield _sse("done", done_payload)
         except Exception as exc:
             logger.exception("analysis_stream_failed request_id=%s user_id=%s", request_id, current_user.id)
-            payload = {"step": "异常", "status": "failed", "thought": str(exc)}
+            payload = {"step": "error", "status": "failed", "thought": "Analysis temporarily unavailable"}
             _append_thought_log(current_user.id, request_id, payload)
             yield _sse("error", payload)
 
@@ -287,7 +283,7 @@ def generate_ai_interpret(
                 return {"text": text.strip()}
         except Exception:
             continue
-    return {"text": FALLBACK_TEXT}
+    return {"text": _build_interpretation_fallback(prompt)}
 
 
 @router.get("/analysis/diagnostics")
@@ -297,41 +293,24 @@ def get_analysis_diagnostics(
 ):
     started = time.perf_counter()
     db_ok = True
-    db_latency_ms = -1.0
-    llm_ok = False
-    llm_latency_ms = -1.0
-    llm_error = ""
+    db_t0 = time.perf_counter()
     try:
-        db_t0 = time.perf_counter()
         db.execute(text("SELECT 1"))
-        db_latency_ms = (time.perf_counter() - db_t0) * 1000
     except Exception:
         db_ok = False
-
-    for llm_url in _llm_url_candidates():
-        try:
-            llm_t0 = time.perf_counter()
-            resp = requests.post(llm_url, json={"prompt": "ping"}, timeout=0.8)
-            llm_latency_ms = (time.perf_counter() - llm_t0) * 1000
-            llm_ok = resp.status_code == 200
-            if llm_ok:
-                llm_error = ""
-                break
-            llm_error = f"{llm_url}:http_{resp.status_code}"
-        except Exception as exc:
-            llm_error = f"{llm_url}:{str(exc)}"
-
-    snapshot = get_analysis_job_snapshot()
-    total_ms = (time.perf_counter() - started) * 1000
+    db_latency_ms = (time.perf_counter() - db_t0) * 1000
+    # Do not probe configured providers from this user-facing endpoint.
+    local = not _llm_url_candidates()
+    job = get_analysis_job_snapshot(current_user.id)
+    safe_fields = {"status", "started_at", "finished_at", "deadline_seconds", "duration_ms"}
+    own_job = {key: value for key, value in job.items() if key in safe_fields}
     return {
         "user_id": current_user.id,
-        "llm_url": LLM_URL,
-        "llm_candidates": _llm_url_candidates(),
         "db": {"ok": db_ok, "latency_ms": round(db_latency_ms, 2)},
-        "llm": {"ok": llm_ok, "latency_ms": round(llm_latency_ms, 2), "error": llm_error},
-        "queue": snapshot.get("jobs", {}),
-        "metrics": snapshot.get("metrics", {}),
-        "response_ms": round(total_ms, 2),
+        "llm": {"ok": local, "latency_ms": 0.0, "error": "" if local else "health_check_not_performed"},
+        "queue": {str(current_user.id): own_job},
+        "metrics": {},
+        "response_ms": round((time.perf_counter() - started) * 1000, 2),
         "sla": {"first_screen_seconds": 30, "full_report_seconds": 120},
     }
 

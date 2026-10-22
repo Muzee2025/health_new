@@ -267,13 +267,13 @@ class MultiModelOrchestrator:
             try:
                 await self._run_task(task_id)
             except Exception as exc:
-                logger.exception("run_multi_model_task_failed task_id=%s", task_id)
+                logger.error("run_multi_model_task_failed task_id=%s error_type=%s", task_id, type(exc).__name__)
                 task = self._tasks.get(task_id)
                 if task:
                     task["status"] = "failed"
-                    task["error"] = str(exc)
+                    task["error"] = "analysis_failed"
                     task["updated_at"] = _utc_now()
-                    self._append_event(task_id, "error", {"taskId": task_id, "status": "failed", "message": str(exc)})
+                    self._append_event(task_id, "error", {"taskId": task_id, "status": "failed", "message": "Analysis temporarily unavailable"})
                     self._metrics["failed"] += 1
             finally:
                 self._queue.task_done()

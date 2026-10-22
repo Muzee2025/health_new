@@ -52,21 +52,23 @@ $nodeVersionText = $null
 $nodeOk = $false
 if ($null -ne $nodePath) {
     $nodeVersionText = Invoke-VersionCommand -Executable $nodePath -Arguments @('--version')
-    if ($null -ne $nodeVersionText -and $nodeVersionText -match '^v?(\d+)\.') {
-        $nodeOk = [int]$Matches[1] -ge 18
+    if ($null -ne $nodeVersionText -and $nodeVersionText -match '^v?(\d+)\.(\d+)\.(\d+)$') {
+        $nodeMajor = [int]$Matches[1]
+        $nodeMinor = [int]$Matches[2]
+        $nodeOk = (($nodeMajor -eq 22 -and $nodeMinor -ge 12) -or $nodeMajor -eq 24 -or $nodeMajor -ge 26)
     }
 }
 if ($null -eq $nodePath) {
     Write-Output 'Node.js: MISSING'
-    Add-Failure 'Node.js >= 18'
+    Add-Failure 'Node.js 22.12.x+, 24.x or >=26 (full toolchain)'
 }
 elseif ($null -eq $nodeVersionText) {
     Write-Output ("Node.js: VERSION UNKNOWN ({0})" -f $nodePath)
-    Add-Failure 'Node.js >= 18'
+    Add-Failure 'Node.js 22.12.x+, 24.x or >=26 (full toolchain)'
 }
 else {
-    Write-Output ("Node.js: {0} at {1} ({2})" -f $nodeVersionText, $nodePath, $(if ($nodeOk) { 'PASS' } else { 'FAIL: requires >= 18' }))
-    if (-not $nodeOk) { Add-Failure 'Node.js >= 18' }
+    Write-Output ("Node.js: {0} at {1} ({2})" -f $nodeVersionText, $nodePath, $(if ($nodeOk) { 'PASS' } else { 'FAIL: requires 22.12+ within 22.x, 24.x or >=26' }))
+    if (-not $nodeOk) { Add-Failure 'Node.js 22.12.x+, 24.x or >=26 (full toolchain)' }
 }
 
 $npmPath = Get-CommandPath 'npm'
@@ -204,7 +206,7 @@ else {
 }
 
 if ($null -ne $pythonExecutable -and $null -ne $pythonVersion) {
-    $dependencyModules = @('fastapi', 'sqlalchemy', 'dotenv', 'jwt', 'jose', 'bcrypt', 'requests', 'uvicorn', 'docx', 'multipart', 'chromadb')
+    $dependencyModules = @('fastapi', 'sqlalchemy', 'dotenv', 'jwt', 'bcrypt', 'requests', 'uvicorn', 'docx', 'multipart', 'pydantic', 'openai', 'jieba', 'pytest', 'httpx')
     $moduleProbeCode = 'import importlib.util, sys; [print(m, importlib.util.find_spec(m) is not None) for m in sys.argv[1:]]'
     try {
         $moduleOutput = @(& $pythonExecutable @pythonPrefixArguments -c $moduleProbeCode @dependencyModules 2>$null)

@@ -27,21 +27,21 @@ class ZhipuEmohaaService:
 
     def __init__(self) -> None:
         # 优先读取环境变量，未配置时使用当前项目默认值
-        api_key = os.getenv("ZHIPU_API_KEY", "a0de72e8cb2a4b5094ab488186866a50.s34RBgrKIYajxFqe")
+        api_key = os.getenv("ZHIPU_API_KEY", "").strip()
         self.api_key = api_key
         self.base_url = os.getenv("ZHIPU_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
         self.client = None
         self.provider = "http"
 
         # zai-sdk 在 Python 3.14+ 下会触发 pydantic.v1 兼容警告，改为 HTTP 模式避免告警与潜在不稳定。
-        if sys.version_info < (3, 14):
+        if self.api_key and sys.version_info < (3, 14):
             try:
                 from zai import ZhipuAiClient  # 延迟导入，避免 3.14 启动时触发 pydantic.v1 warning
 
                 self.client = ZhipuAiClient(api_key=api_key)
                 self.provider = "zai_sdk"
             except Exception as exc:  # noqa: BLE001
-                logger.warning("zai_sdk_unavailable_fallback_to_http reason=%s", exc)
+                logger.warning("zai_sdk_unavailable_fallback_to_http")
 
     def _http_chat_completion(
         self,
@@ -50,6 +50,8 @@ class ZhipuEmohaaService:
         meta: Dict[str, str] | None = None,
         trace_id: str | None = None,
     ) -> str:
+        if not self.api_key:
+            raise RuntimeError("Emotion provider is not configured")
         url = f"{self.base_url}/chat/completions"
         payload: Dict[str, Any] = {
             "model": "emohaa",
@@ -59,12 +61,7 @@ class ZhipuEmohaaService:
         if meta:
             payload["meta"] = meta
         req_started = time.perf_counter()
-        logger.info(
-            "emohaa_http_request trace_id=%s provider=http url=%s payload=%s",
-            trace_id or "-",
-            url,
-            json.dumps(payload, ensure_ascii=False),
-        )
+        logger.info("emohaa_http_request trace_id=%s message_count=%s", trace_id or "-", len(messages))
 
         resp = requests.post(
             url,
@@ -76,13 +73,7 @@ class ZhipuEmohaaService:
             timeout=60,
         )
         req_elapsed_ms = round((time.perf_counter() - req_started) * 1000, 2)
-        logger.info(
-            "emohaa_http_response trace_id=%s status=%s latency_ms=%s body=%s",
-            trace_id or "-",
-            resp.status_code,
-            req_elapsed_ms,
-            resp.text,
-        )
+        logger.info("emohaa_http_response trace_id=%s status=%s latency_ms=%s", trace_id or "-", resp.status_code, req_elapsed_ms)
         resp.raise_for_status()
         if stream:
             parts: List[str] = []
@@ -237,16 +228,16 @@ class ZhipuEmohaaService:
         try:
             parsed = json.loads(candidate)
         except Exception:
-            logger.warning("emohaa_emotion_parse_failed raw=%s", candidate[:400])
+            logger.warning("emohaa_emotion_parse_failed")
             return dict(self.DEFAULT_EMOTION_TAGS)
         return self._normalize_emotion_tags(parsed if isinstance(parsed, dict) else {})
 
     def _analyze_emotion_sync(self, text: str, retry: int = 1) -> Dict[str, float]:
         clean = str(text or "").strip()
-        logger.info("emohaa_emotion_enter text_len=%s text_preview=%s", len(clean), clean[:120])
+        logger.info("emohaa_emotion_enter chars=%s", len(clean))
 
         if not self._is_effective_text(clean):
-            logger.info("emohaa_emotion_skip_invalid_input text_preview=%s", clean[:120])
+            logger.info("emohaa_emotion_skip_invalid_input")
             return dict(self.DEFAULT_EMOTION_TAGS)
 
         prompt = (
@@ -272,19 +263,14 @@ class ZhipuEmohaaService:
                         stream=False,
                     )
                 parsed = self._parse_emotion_payload(raw_output)
-                logger.info(
-                    "emohaa_emotion_exit attempt=%s raw_output=%s parsed=%s",
-                    attempt + 1,
-                    raw_output[:400],
-                    parsed,
-                )
+                logger.info("emohaa_emotion_exit attempt=%s", attempt + 1)
                 return parsed
             except Exception as exc:
                 last_error = str(exc)
-                logger.warning("emohaa_emotion_call_failed attempt=%s error=%s", attempt + 1, last_error)
+                logger.warning("emohaa_emotion_call_failed attempt=%s", attempt + 1)
                 if attempt < retry:
                     continue
-        logger.error("emohaa_emotion_fallback reason=%s", last_error)
+        logger.error("emohaa_emotion_fallback")
         return dict(self.DEFAULT_EMOTION_TAGS)
 
     def _deep_think_sync(self, prompt: str, chat_context: str, mode: str, trace_id: str | None = None) -> str:
@@ -305,12 +291,7 @@ class ZhipuEmohaaService:
                 ),
             },
         ]
-        logger.info(
-            "emohaa_deep_think_request trace_id=%s provider=%s request_body=%s",
-            trace_id or "-",
-            self.provider,
-            json.dumps({"model": "emohaa", "messages": messages, "meta": self._meta_for_mode(mode)}, ensure_ascii=False),
-        )
+        logger.info("emohaa_deep_think_request trace_id=%s provider=%s", trace_id or "-", self.provider)
 
         if self.provider == "zai_sdk" and self.client is not None:
             stream = self.client.chat.completions.create(
@@ -328,11 +309,7 @@ class ZhipuEmohaaService:
                 if delta:
                     parts.append(delta)
             text = "".join(parts).strip()
-            logger.info(
-                "emohaa_deep_think_response trace_id=%s provider=zai_sdk response_body=%s",
-                trace_id or "-",
-                text,
-            )
+            logger.info("emohaa_deep_think_response trace_id=%s chars=%s", trace_id or "-", len(text))
         else:
             text = self._http_chat_completion(
                 messages=messages,
@@ -354,7 +331,7 @@ class ZhipuEmohaaService:
         try:
             return await asyncio.to_thread(self._chat_sync, message, history, mode)
         except Exception as e:
-            logger.error("emohaa API Error: %s", str(e))
+            logger.error("emohaa_request_failed error_type=%s", type(e).__name__)
             return "抱歉，我现在有些走神（网络波动），能重新说一遍吗？"
 
     async def deep_think_with_student(
@@ -368,7 +345,7 @@ class ZhipuEmohaaService:
         try:
             return await asyncio.to_thread(self._deep_think_sync, prompt, chat_context, mode, trace_id)
         except Exception as e:
-            logger.exception("emohaa deep think API Error trace_id=%s error=%s", trace_id or "-", str(e))
+            logger.error("emohaa_deep_think_failed trace_id=%s error_type=%s", trace_id or "-", type(e).__name__)
             raise
 
     async def analyze_emotion_tags(self, text: str, retry: int = 1) -> Dict[str, float]:

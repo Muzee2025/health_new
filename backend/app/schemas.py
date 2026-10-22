@@ -1,11 +1,11 @@
-from pydantic import BaseModel
-from typing import Optional, List
+from pydantic import BaseModel, Field
+from typing import Optional, List, Literal
 from datetime import datetime
 
 class UserCreate(BaseModel):
-    username: str
+    username: str = Field(min_length=1, max_length=50)
     password: str
-    role: str = "student" # student or teacher
+    role: Literal["student"] = "student"
     student_id: Optional[str] = None
     name: Optional[str] = None
     advisor: Optional[str] = None
@@ -182,6 +182,7 @@ class InterventionRecordCreate(BaseModel):
 
 
 class TeacherStudentCreate(BaseModel):
+    initial_password: str = Field(min_length=8, max_length=72)
     name: str
     student_id: str
     class_name: Optional[str] = None

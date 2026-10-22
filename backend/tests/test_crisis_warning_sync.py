@@ -52,6 +52,8 @@ def test_context():
     teacher = models.User(id=201, username="tea", password_hash="x", role="teacher", name="王老师")
     db.add_all([student, teacher])
     db.commit()
+    db.add(models.TeacherStudentAssignment(teacher_id=teacher.id, student_id=student.id))
+    db.commit()
     session = models.AIChatSession(id="s-001", user_id=student.id, mode="daily", title="测试会话")
     db.add(session)
     db.commit()
@@ -63,7 +65,8 @@ def test_crisis_keyword_trigger_rate_and_teacher_delivery(test_context, monkeypa
     app, TestingSessionLocal, student, _, session_id = test_context
     delivered_payloads: List[dict] = []
 
-    async def fake_broadcast(message: dict):
+    async def fake_broadcast(message: dict, *, db, student_id):
+        assert student_id == student.id
         delivered_payloads.append(message)
 
     monkeypatch.setattr(advanced_chat.manager, "broadcast_to_teachers", fake_broadcast)
@@ -131,7 +134,8 @@ def test_teacher_process_warning_sync_flow(test_context, monkeypatch):
     app, TestingSessionLocal, student, teacher, session_id = test_context
     to_student_payloads: List[dict] = []
 
-    async def fake_broadcast(_: dict):
+    async def fake_broadcast(_: dict, *, db, student_id):
+        assert student_id == student.id
         return None
 
     async def fake_personal(message: dict, user_id: int, role: str):

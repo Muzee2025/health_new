@@ -1,0 +1,9 @@
+# Legacy optional functionality. Do not install this for web runtime/tests alone.
+-r requirements-core.txt
+-r requirements_rag.txt
+sentence-transformers
+FlagEmbedding
+transformers
+peft
+# Python 3.14+ uses the existing HTTP transport instead of this optional SDK.
+zai-sdk==0.2.2; python_version < "3.14"
