@@ -26,7 +26,11 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 CMD pytho
 CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
 
 FROM nginx:1.30.6-alpine AS frontend-runtime
+COPY deploy/fullstack/nginx-main.conf /etc/nginx/nginx.conf
 COPY deploy/fullstack/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=frontend-build /workspace/dist /usr/share/nginx/html
+USER nginx
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1:8080/ || exit 1
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]

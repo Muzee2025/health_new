@@ -1,8 +1,9 @@
 # 心域智链协作规则
 
-> owner: A ｜ version: 1.1 ｜ status: 定稿 ｜ updated: 2026-10-22
+> owner: A ｜ version: 1.2 ｜ status: 定稿 ｜ updated: 2026-10-24
 
 ## 当前工作
+- 用户2026-10-24要求继续下一任务，本轮推进W3隔离全栈部署/恢复保障；起点4e1851b，分支codex/fullstack-verification。Luna独占新验收runner/单测及新后端契约测试后交接冻结，Lead接管其整合与实际执行；另一Luna独立复核。所有测试使用新QA配置、全新合成库/账号/证书及随机healthnew-qa项目，只绑定loopback，禁止读现有.env/库或触碰其他Docker项目。默认plan不创建资源；--run显式执行，失败后只清本轮容器/网络，保留QA卷/私有证据。固定目标镜像构建仍受Docker Hub网络阻塞；缓存Nginx合成传输与本机新库契约通过不能替代目标容器或生产验收。原W0/W1/W2记录保持历史属性。
 - 先读 `docs/team/进度看板.md`、`docs/team/门禁记录.md`；不存在时由 Lead 建立。
 - `prompts/CODEX_MASTER_PROMPT.md` 是项目任务与验收参考；仓库代码、实际命令结果优先于其中的历史统计。
 - 本轮由用户“开始下一轮工作”授权进入 W1 素材库；G0 技术项已通过，真人信息与签字待补。

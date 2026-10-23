@@ -42,7 +42,7 @@ services:
       dockerfile: deploy/fullstack/Dockerfile
       target: frontend-runtime
     ports:
-      - "127.0.0.1:4186:8080"
+      - "127.0.0.1:${HTTP_PORT:-4186}:8080"
     depends_on:
       backend:
         condition: service_healthy
@@ -53,9 +53,7 @@ services:
       - ALL
     read_only: true
     tmpfs:
-      - /var/cache/nginx:size=16m
-      - /var/run:size=2m
-      - /tmp:size=4m,noexec,nosuid
+      - /tmp:size=32m,noexec,nosuid
 
 volumes:
   database:

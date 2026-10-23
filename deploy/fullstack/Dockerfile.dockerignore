@@ -28,6 +28,7 @@
 !deploy
 !deploy/fullstack
 !deploy/fullstack/nginx.conf
+!deploy/fullstack/nginx-main.conf
 **/__pycache__/**
 **/*.py[cod]
 **/.env

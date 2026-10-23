@@ -1,0 +1,214 @@
+{
+  "task": "W3 isolated full-stack acceptance",
+  "date": "2026-10-24",
+  "base_commit": "4e1851b",
+  "branch": "codex/fullstack-verification",
+  "status": "tools_and_synthetic_contracts_passed_target_build_blocked",
+  "target_attempt": {
+    "task": "W3-RUNNER",
+    "project": "healthnew-qa-19fe7300270c",
+    "mode": "run",
+    "port": 4188,
+    "stages": {
+      "preflight": {
+        "status": "passed",
+        "project_prefix": "healthnew-qa-",
+        "output_is_new": true,
+        "port_free": true
+      },
+      "setup": {
+        "status": "passed"
+      },
+      "config": {
+        "status": "passed",
+        "config_quiet": true
+      },
+      "build": {
+        "status": "failed",
+        "error": "docker command failed: compose-build (exit 1)"
+      },
+      "init_empty": {
+        "status": "not_run"
+      },
+      "up_wait": {
+        "status": "not_run"
+      },
+      "http_smoke": {
+        "status": "not_run"
+      },
+      "backup_restore": {
+        "status": "not_run"
+      },
+      "inspect": {
+        "status": "not_run"
+      },
+      "cleanup": {
+        "status": "passed"
+      }
+    },
+    "cleanup": {
+      "status": "passed",
+      "scope": "healthnew-qa-19fe7300270c",
+      "command": "docker compose -p <this-project> down --remove-orphans",
+      "volumes_before": [],
+      "volumes_after": [],
+      "volume_lifecycle": "no project volume found after down",
+      "volumes_preserved": true,
+      "errors": []
+    }
+  },
+  "target_build_blocker": "Docker Hub registry metadata connection unavailable; target image not built; no target services or volumes initialized",
+  "latest_compose_config_quiet": {
+    "exit_code": 0,
+    "passed": true
+  },
+  "cached_proxy_transport": {
+    "scope": "cached images and synthetic transport only",
+    "project": "healthnew-qa-transport-38674553e9",
+    "target_images_built": false,
+    "checks": {
+      "http": {
+        "health_proxy": true,
+        "spa_fallback": true,
+        "gzip": true,
+        "sse_first_seconds": 0.015,
+        "sse_complete_seconds": 1.406,
+        "sse_first_arrived_before_second": true,
+        "websocket_upgrade_and_frame": true,
+        "certificate_verified_against_qa_ca": false,
+        "nonroot_readonly_capdrop": true
+      },
+      "tls": {
+        "health_proxy": true,
+        "spa_fallback": true,
+        "gzip": true,
+        "sse_first_seconds": 0.0,
+        "sse_complete_seconds": 1.39,
+        "sse_first_arrived_before_second": true,
+        "websocket_upgrade_and_frame": true,
+        "certificate_verified_against_qa_ca": true,
+        "nonroot_readonly_capdrop": true
+      }
+    },
+    "cleanup": {
+      "healthnew-qa-transport-38674553e9-http": {
+        "stop_exit": 0,
+        "remove_exit": 0
+      },
+      "healthnew-qa-transport-38674553e9-tls": {
+        "stop_exit": 0,
+        "remove_exit": 0
+      },
+      "healthnew-qa-transport-38674553e9-backend": {
+        "stop_exit": 0,
+        "remove_exit": 0
+      },
+      "network_remove_exit": 0
+    },
+    "nginx_image_id": "sha256:8b1e78743a03dbb2c95171cc58639fef29abc8816598e27fb910ed2e621e589a",
+    "synthetic_python_image_id": "sha256:8dca233de9f3d9bb410665f00a4da6dd06f331083137e0e98ccf227236fcc438",
+    "nginx_version": "nginx version: nginx/1.31.1",
+    "status": "passed"
+  },
+  "tests": [
+    {
+      "command": ".venv/Scripts/python.exe -m unittest discover -s scripts/tests -p test_fullstack_verification.py -v",
+      "passed": 16,
+      "exit_code": 0,
+      "log": "tmp/fullstack-20261024/runner-final-tests.log"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m unittest discover -s scripts/tests -p test_nginx_transport.py -v",
+      "passed": 3,
+      "exit_code": 0,
+      "log": "tmp/fullstack-20261024/transport-tests.log"
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py backend/tests/test_fullstack_runner_contract.py",
+      "passed": 1,
+      "warnings": 13,
+      "exit_code": 0,
+      "log": "tmp/fullstack-20261024/contract-tests.log",
+      "scope": "real FastAPI TestClient and new SQLite; synthetic static HTML/JS; actual generated restore script and backup utility; no Docker"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m py_compile scripts/verify-fullstack.py scripts/verify-nginx-transport.py scripts/tests/test_fullstack_verification.py scripts/tests/test_nginx_transport.py backend/tests/test_fullstack_runner_contract.py",
+      "files": 5,
+      "exit_code": 0
+    }
+  ],
+  "independent_review": {
+    "model": "gpt-6-luna",
+    "document": "docs/test/全栈验收独立复核.md",
+    "independently_reran": {
+      "runner_unit_tests": 16,
+      "transport_cli_tests": 3,
+      "sqlite_api_contract": 1
+    },
+    "docker_evidence": "read-only cross-check of Lead summaries"
+  },
+  "data_protection": {
+    "existing_env_database_uploads_not_opened_or_modified": true,
+    "real_providers_called": false,
+    "actual_accounts_or_assignments_modified": false,
+    "existing_logged_in_tabs_used": false,
+    "other_docker_projects_modified": false,
+    "ports_8000_5173_18080_18081_not_used_for_host_probes": true,
+    "new_QA_containers_and_networks_absent_after_cleanup": true,
+    "private_logs_and_QA_configuration_remain_ignored": true
+  },
+  "ci": {
+    "offline_tests_updated": true,
+    "manual_linux_workflow_added": true,
+    "remote_push_or_execution": false,
+    "artifact_scope": "sanitized summary JSON only; no env, keys, databases, raw logs"
+  },
+  "development_failures_preserved": [
+    "Windows Docker plugin discovery required standard directory environment variables",
+    "Role=teacher public registration is schema-rejected with HTTP422, not HTTP403",
+    "Local OpenSSL needed explicit SAN config instead of unsupported -addext",
+    "Docker internal network host port was unreachable in this Desktop environment",
+    "Initial public transport helper used a conflicting variable name; corrected and rerun",
+    "Reviewer system Python lacked pytest; repository virtualenv succeeded without installation"
+  ],
+  "not_validated": [
+    "target-version application Docker image runtime",
+    "production TLS DNS certificates and firewall",
+    "capacity and load",
+    "cross-host restoration",
+    "real provider quality",
+    "school operational responsibility and pilot approval"
+  ],
+  "source_sha256": {
+    ".github/workflows/offline-quality.yml": "927414a265e9f543cb9d51cb8950849cad3056c64106ed0f83532411fa427596",
+    ".github/workflows/fullstack-acceptance.yml": "7a11133a3ee389bf6be8ebbd5bc1a30e929bc89de8e63a7d6aa5c0ca1d9cd7fd",
+    "deploy/fullstack/Dockerfile": "7edaafcf25d4bccb7731760457a9b02bb6697d71725254d7e4dd851d781c26ea",
+    "deploy/fullstack/Dockerfile.dockerignore": "a68386fba79e74f7010043d3ec21d4f5c0be351eae051276cc5d5a3332f78150",
+    "deploy/fullstack/docker-compose.yml": "1b2676904ab78c0052d5a061bdf3869e4d8aeeb59814724fd6cba1d5dd754b61",
+    "deploy/fullstack/nginx-main.conf": "6139a2cf3eb6c328a23004a71ae7e8c3e0f76c95ff09f3f63d8459c5ab3ce2af",
+    "deploy/fullstack/nginx.conf": "0c574b7a156be4dc513c07684df26dcae08c24e1527d2c72a7f7778a6f9e036f",
+    "deploy/fullstack/nginx-tls.conf": "f09c11163dc1e23ef02a121081f3ab51ea862f9e69e7a50e489593ac8cb4155d",
+    "scripts/verify-fullstack.py": "da7d8924a6f9dd67dddb77e9f0ecbe9575427d264d8ed7adf8713da69cc02535",
+    "scripts/verify-nginx-transport.py": "b88975604eac3ab4108b31d86d1a15b10c5e24ac3a1d8ade4cea853c2aa351ab",
+    "scripts/tests/test_fullstack_verification.py": "43285085267cd3e6f3ef71953471b09226dc78f17a8173eb4380a60b3c6b22ed",
+    "scripts/tests/test_nginx_transport.py": "fb065f47da3a82b572076295f0885ab83e212815ec83bbc28ff60e556f734b47",
+    "backend/tests/test_fullstack_runner_contract.py": "633e41e6a22ece0a93ebf8f3f64e77df44937a99b6715d281f95cf90d53b7306"
+  },
+  "private_evidence_sha256": {
+    "runner-final-console.json": "bfdfe293195ce0278522e950e2cd67560fb32a0eee078402eb931079d1b388fb",
+    "transport-final.json": "72e2f8a79c7f8800c941d078c62b4d637ed0c0d3ca5a930b2c84e8f0a81027c4",
+    "runner-final-tests.log": "89673c21c2021c9ec5bb5d1cee198e506fcbfb3830a5fbb3654cab58b51bad8f",
+    "transport-tests.log": "c926635008d3760c95bc92f872be87f790ab283f931c8ba2519d00dd0b0dd9ee",
+    "contract-tests.log": "4f130fef9ee33bde5c927b6772f17f9a6a779719a14e98a0129d2c90e41bda1a"
+  },
+  "hash_convention": "SHA256 over raw working tree bytes at final verification; Git line-ending normalization may differ across platforms",
+  "final_hygiene": {
+    "staged_files": 20,
+    "tracked_files": 638,
+    "markdown_files": 63,
+    "broken_local_links": 0,
+    "forbidden_ignored_unexpected_missing_oversized": 0,
+    "cached_diff_check_exit": 0,
+    "business_sources_assets_dependencies_unchanged": true
+  }
+}

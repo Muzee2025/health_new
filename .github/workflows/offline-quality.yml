@@ -37,3 +37,5 @@ jobs:
       - run: python -m py_compile scripts/backup-restore-database.py backend/tests/test_backup_restore_database.py
       - run: python scripts/run-backend-baseline.py
       - run: python -m unittest discover -s scripts/tests -p test_ai_evaluation.py -v
+      - run: python -m unittest discover -s scripts/tests -p test_fullstack_verification.py -v
+      - run: python -m unittest discover -s scripts/tests -p test_nginx_transport.py -v
