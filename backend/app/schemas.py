@@ -214,12 +214,19 @@ class InterventionRecordResponse(BaseModel):
         from_attributes = True
 
 class ArticleCreate(BaseModel):
-    title: str
-    summary: Optional[str] = None
-    content: str
-    cover_url: Optional[str] = None
-    category: Optional[str] = "心理科普"
-    source: Optional[str] = None
+    title: str = Field(min_length=1, max_length=200)
+    summary: Optional[str] = Field(default=None, max_length=500)
+    content: str = Field(min_length=1, max_length=100_000)
+    cover_url: Optional[str] = Field(default=None, max_length=255)
+    category: Optional[str] = Field(default="心理科普", max_length=50)
+    source: Optional[str] = Field(default=None, max_length=100)
+
+    @field_validator("title", "summary", "content", "cover_url", "category", "source", mode="before")
+    @classmethod
+    def trim_article_fields(cls, value):
+        # SQLite does not enforce VARCHAR lengths. Validate all creation paths
+        # before a transaction, retaining interior whitespace in the article.
+        return value.strip() if isinstance(value, str) else value
 
 class TeacherProfileCreateUpdate(BaseModel):
     user_id: int

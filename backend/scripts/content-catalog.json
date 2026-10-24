@@ -1,0 +1,109 @@
+{
+  "catalog_version": "1.0.0",
+  "articles": [
+    {
+      "id": "guide-reading",
+      "title": "如何阅读平台中的心理科普文章",
+      "category": "平台使用指南",
+      "summary": "了解文章列表、详情页、来源信息与阅读量的含义。",
+      "content": "<p>在学生端打开“心理科普”，可以按标题、摘要或来源搜索，也可以选择分类，并按“最新发布”或“阅读最多”排序。没有匹配文章时，点击“清空筛选”重新浏览。</p><h2>阅读与返回</h2><p>点击文章卡片打开正文。使用键盘时，先将焦点移到卡片，再按回车。文章较多时可使用底部分页继续查找；详情页的返回入口可回到上一页。</p><p>阅读量是平台记录的浏览次数，不代表内容的专业质量或效果。请留意文章来源；平台使用指南仅介绍操作，不构成心理评估、诊断或治疗建议。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/Articles.vue", "src/views/ArticleDetail.vue", "backend/app/routers/student.py"]
+    },
+    {
+      "id": "guide-message-teacher",
+      "title": "如何给老师留言",
+      "category": "平台使用指南",
+      "summary": "说明学生提交留言、查看答复以及教师处理范围。",
+      "content": "<p>打开留言页面，填写希望沟通的问题，再点击“提交留言”。看到提交成功后，可在自己的留言列表查看状态与老师回复。提交失败时，请保留内容并按页面提示重试。</p><h2>答复与可见范围</h2><p>留言关联当前登录账号，只有已分配给你的老师可以在其工作区看到。填写导师姓名不会自动完成分配；如页面提示尚未分配老师，请联系校方确认承接安排。请避免填写与问题无关的敏感身份信息。</p><p>留言功能不是紧急求助或全天候值守渠道。遇到需要立即处理的情况，请使用校方公布的紧急支持方式。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/Questions.vue", "src/views/teacher/SupportWorkspace.vue", "backend/app/routers/student.py", "backend/app/routers/teacher.py", "backend/app/student_access.py"]
+    },
+    {
+      "id": "guide-appointments",
+      "title": "预约咨询与查看预约状态",
+      "category": "平台使用指南",
+      "summary": "说明查看可预约信息、提交预约和理解预约状态。",
+      "content": "<p>打开预约页面，查看教师介绍和可选时段，选择合适时段后确认提交。请以页面显示提交成功和预约记录为准；没有可选时段时，不表示校方没有其他支持渠道。</p><h2>查看状态</h2><p>“待确认”表示预约仍在等待处理，“已确认”表示老师已确认，“已完成”表示记录已标记完成，“已取消”表示该次预约已取消。实际服务安排以老师及校方通知为准。</p><p>如需取消，请在记录中使用“取消预约”并确认结果。不要把提交预约视为已获得即时服务；本指南不承诺固定值班时间或紧急响应。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/Appointments.vue", "src/views/teacher/AppointmentManagement.vue", "backend/app/routers/student.py", "backend/app/routers/teacher.py"]
+    },
+    {
+      "id": "guide-test-records",
+      "title": "测评记录可以说明什么",
+      "category": "平台使用指南",
+      "summary": "说明平台保存测评结果的用途与解释边界。",
+      "content": "<p>完成测评并提交保存成功后，可查看本次结果和历史记录。如果页面提示“结果保存失败”，当前看到的结果可能尚未保存，请按提示处理。已分配给你的老师可在权限范围内查看相关记录。</p><h2>解释边界</h2><p>测评记录用于自我了解，不等同于临床诊断，也不能仅凭单次分数判断整体状态。量表版本、适用人群和解释方式应由专业人员确认；本指南不提供量表题目、计分规则或临床阈值。</p><p>测评结果与对话生成的心理报告属于不同记录。如对结果感到担心，可联系校方正式公布的专业支持渠道。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/Test.vue", "src/views/student/Report.vue", "backend/app/models.py", "backend/app/routers/student.py", "backend/app/routers/teacher.py"]
+    },
+    {
+      "id": "guide-ai-assistant",
+      "title": "AI助手的能力与使用边界",
+      "category": "平台使用指南",
+      "summary": "说明助手的交互入口、数据依赖和不能替代的服务。",
+      "content": "<p>平台中的智能助手用于围绕当前对话提供文字回应。可用能力取决于系统配置、网络和服务状态；请求失败或功能不可用时，请按页面提示稍后重试或使用其他支持渠道。</p><h2>使用边界</h2><p>AI回应可能不完整或不准确，不应作为诊断、治疗、危机评估或紧急处置结论。请勿仅依据AI内容作重要健康决定，也不要在对话中提交不必要的身份信息。有关个人处境的重要问题应向合适的专业人员确认。</p><p>本指南不承诺特定模型、提供商或服务可用性。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/AdvancedAiChat.vue", "backend/app/routers/assistant_v1.py", "backend/app/routers/advanced_chat.py"]
+    },
+    {
+      "id": "guide-teacher-follow-up",
+      "title": "教师如何记录跟进",
+      "category": "平台使用指南",
+      "summary": "介绍教师查看分配学生、处理待办和记录跟进的基本边界。",
+      "content": "<p>在教师端“求助与跟进”中，可查看分配学生的留言、预警记录和跟进任务。处理前先核对学生与事项；给学生的回复应写在留言答复区域。</p><h2>创建和完成内部跟进</h2><p>从留言或预警记录点击“创建内部跟进”，填写摘要和截止时间。任务完成后记录实际结果；取消时填写原因。内部任务摘要和处理结果不会显示给学生，不能把内部记录当作已向学生发送通知。</p><p>请只记录工作所需且可核实的信息。系统提示供人工复核，不代表已完成联系、处置或专业判断；紧急情况应遵循校方人工处置制度。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/teacher/SupportWorkspace.vue", "src/views/teacher/StudentManagement.vue", "src/views/teacher/StudentDetail.vue", "backend/app/student_access.py", "backend/app/routers/advanced_teacher.py"]
+    },
+    {
+      "id": "guide-privacy-anonymity",
+      "title": "隐私、个人信息与匿名说明",
+      "category": "平台使用指南",
+      "summary": "提醒用户区分页面展示方式与后台数据处理，并减少不必要的信息提交。",
+      "content": "<p>请只提交完成当前功能所需的信息，并在提交前确认内容。留言、测评、预约、对话和教师跟进可能关联登录账号或业务记录，访问范围由系统权限控制。</p><h2>匿名展示不等于不可识别</h2><p>树洞等页面可能以匿名标识展示内容，但这不代表后台完全无法关联用户，也不代表内容可脱离平台数据管理规则。请勿在公开文本中写入姓名、学号、联系方式或其他可识别信息。</p><p>本指南不代替校方隐私告知、数据保留期限或事件处置制度；相关政策应以校方正式发布的信息为准。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/Treehole.vue", "src/views/student/Questions.vue", "backend/app/models.py", "backend/app/routers/student.py"]
+    },
+    {
+      "id": "guide-account-logout",
+      "title": "账号安全与退出登录",
+      "category": "平台使用指南",
+      "summary": "介绍使用个人账号、保护登录凭据和结束会话的基本做法。",
+      "content": "<p>请使用本人注册或获配的账号访问平台，不与他人共享密码或登录状态。在公共或共用设备上完成操作后，点击导航中的“退出登录”，确认已返回登录页，再关闭不再使用的窗口。</p><h2>异常情况</h2><p>如发现陌生操作或无法正常登录，请通过校方公布的系统支持渠道报告，不要在普通留言中发送密码、验证码或密钥。</p><p>学生可按注册页要求创建账号；教师账号、学生分配、账号停用和凭据重置需要获授权的管理流程处理。退出登录不等于删除已提交的业务记录。</p>",
+      "source": "心域智链·使用指南",
+      "source_url": null,
+      "cover_url": null,
+      "license": "项目原创",
+      "review_status": "engineering_reviewed",
+      "provenance": ["src/views/student/Layout.vue", "src/views/teacher/Layout.vue", "backend/app/routers/auth.py"]
+    }
+  ]
+}

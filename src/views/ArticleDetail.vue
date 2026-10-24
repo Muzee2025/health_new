@@ -8,7 +8,7 @@
     </section>
     <template v-else-if="article">
     <div class="header-card">
-      <el-page-header @back="goBack" title="返回" class="page-header">
+      <el-page-header @back="goBack" @keydown.enter.prevent="goBack" @keydown.space.prevent="goBack" title="返回" class="page-header">
         <template #content>
           <span class="header-title">文章详情</span>
         </template>
@@ -278,6 +278,7 @@ watch(() => route.params.id, () => { fetchArticle() })
   line-height: 1.8;
   color: var(--text-primary);
   overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 .article-state { padding: var(--space-7); background: var(--surface); border-radius: var(--radius-lg); }
 .article-state h1 { font-size: var(--text-h3); text-align: center; }

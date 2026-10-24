@@ -1,14 +1,21 @@
 <template>
-  <div class="content-container business-page">
+  <div ref="pageRoot" class="content-container business-page">
     <el-tabs v-model="activeTab" class="content-tabs">
       <!-- Article Management Tab -->
       <el-tab-pane label="文章管理" name="articles">
         <div class="action-bar">
           <el-button type="primary" @click="openArticleDialog(null)">新增文章</el-button>
         </div>
-        
+
         <el-alert v-if="articleLoadError" type="error" :closable="false" title="文章列表暂时无法加载。"><el-button text type="primary" @click="fetchArticles">重新加载</el-button></el-alert>
-        <div class="business-table-wrap"><el-table :data="articles" style="width: 100%" v-loading="loadingArticles" stripe empty-text="还没有文章记录。">
+        <div class="article-toolbar" v-if="articles.length">
+          <el-input v-model="articleSearch" clearable aria-label="搜索文章标题、摘要或来源" placeholder="搜索标题、摘要或来源" @input="articlePage = 1" />
+          <el-select v-model="articleCategory" aria-label="按分类筛选文章" @change="articlePage = 1">
+            <el-option label="全部分类" value="全部" />
+            <el-option v-for="category in articleCategories" :key="category" :label="category" :value="category" />
+          </el-select>
+        </div>
+        <div class="business-table-wrap"><el-table :data="paginatedArticles" style="width: 100%" v-loading="loadingArticles" stripe :empty-text="articles.length ? '没有符合条件的文章。' : '还没有文章记录。'">
           <el-table-column prop="title" label="标题" min-width="200" />
           <el-table-column prop="category" label="分类" width="120" />
           <el-table-column prop="source" label="来源" width="150" />
@@ -18,12 +25,25 @@
               {{ formatDate(scope.row.created_at) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150" align="right">
+          <el-table-column label="操作" width="170" align="right">
             <template #default="scope">
-              <el-button link type="danger" @click="deleteArticle(scope.row.id)">删除</el-button>
+              <el-button link type="primary" @click="openArticle(scope.row.id)">阅读</el-button>
+              <el-button link type="danger" :loading="deletingArticleIds.includes(scope.row.id)" :disabled="deletingArticleIds.includes(scope.row.id)" @click="deleteArticle(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+        </div>
+        <div v-if="filteredArticles.length" class="pagination-wrapper">
+          <el-pagination
+            v-model:current-page="articlePage"
+            :page-size="articlePageSize"
+            :total="filteredArticles.length"
+            :pager-count="5"
+            layout="total, prev, pager, next"
+            :hide-on-single-page="true"
+            aria-label="文章分页"
+            @current-change="scrollToArticles"
+          />
         </div>
       </el-tab-pane>
 
@@ -57,22 +77,22 @@
     </el-tabs>
 
     <!-- Article Dialog -->
-    <el-dialog v-model="articleDialogVisible" title="新增文章" width="600px">
-      <el-form :model="articleForm" label-width="80px">
+    <el-dialog v-model="articleDialogVisible" title="新增文章" width="600px" :close-on-click-modal="!savingArticle" :close-on-press-escape="!savingArticle" :show-close="!savingArticle">
+      <el-form :model="articleForm" label-width="80px" :disabled="savingArticle">
         <el-form-item label="标题" required>
-          <el-input v-model="articleForm.title" />
+          <el-input v-model="articleForm.title" maxlength="200" show-word-limit />
         </el-form-item>
         <el-form-item label="分类">
-          <el-input v-model="articleForm.category" />
+          <el-input v-model="articleForm.category" maxlength="50" show-word-limit />
         </el-form-item>
         <el-form-item label="来源">
-          <el-input v-model="articleForm.source" />
+          <el-input v-model="articleForm.source" maxlength="100" show-word-limit />
         </el-form-item>
         <el-form-item label="封面链接">
-          <el-input v-model="articleForm.cover_url" />
+          <el-input v-model="articleForm.cover_url" maxlength="255" show-word-limit />
         </el-form-item>
         <el-form-item label="摘要">
-          <el-input v-model="articleForm.summary" type="textarea" :rows="2" />
+          <el-input v-model="articleForm.summary" type="textarea" :rows="2" maxlength="500" show-word-limit />
         </el-form-item>
         <el-form-item label="正文" required>
           <el-upload
@@ -87,13 +107,13 @@
           >
             <el-button type="success" size="small" plain style="margin-bottom: 10px;">上传PDF / DOCX附件或图片</el-button>
           </el-upload>
-          <el-input v-model="articleForm.content" type="textarea" :rows="6" placeholder="请输入文章正文" />
+          <el-input v-model="articleForm.content" type="textarea" :rows="6" maxlength="100000" show-word-limit placeholder="请输入文章正文" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="articleDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="submitArticle">保存</el-button>
+          <el-button :disabled="savingArticle" @click="articleDialogVisible = false">取消</el-button>
+          <el-button type="primary" :loading="savingArticle" :disabled="savingArticle" @click="submitArticle">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -130,10 +150,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage, ElMessageBox, ElTabs, ElTabPane, ElButton, ElTable, ElTableColumn, ElIcon, ElDialog, ElForm, ElFormItem, ElInput, ElUpload, ElInputNumber, ElAlert, vLoading } from 'element-plus'
+import { ElMessage, ElMessageBox, ElTabs, ElTabPane, ElButton, ElTable, ElTableColumn, ElIcon, ElDialog, ElForm, ElFormItem, ElInput, ElUpload, ElInputNumber, ElAlert, ElSelect, ElOption, ElPagination, vLoading } from 'element-plus'
 
+const router = useRouter()
 const currentTeacherId = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}').id } catch { return null } })()
 const activeTab = ref('articles')
 const uploadUrl = axios.getUri({ url: '/api/teacher/upload' })
@@ -169,6 +191,28 @@ const articles = ref([])
 const loadingArticles = ref(false)
 const articleLoadError = ref(false)
 const articleDialogVisible = ref(false)
+const savingArticle = ref(false)
+const deletingArticleIds = ref([])
+const articleSearch = ref('')
+const articleCategory = ref('全部')
+const articlePage = ref(1)
+const articlePageSize = 12
+const pageRoot = ref(null)
+const scrollToArticles = () => nextTick(() => pageRoot.value?.scrollIntoView({ block: 'start' }))
+const articleCategories = computed(() => [...new Set(articles.value.map(article => article.category).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-CN')))
+const filteredArticles = computed(() => {
+  const query = articleSearch.value.trim().toLocaleLowerCase()
+  return articles.value.filter((article) => {
+    const matchesCategory = articleCategory.value === '全部' || article.category === articleCategory.value
+    const searchable = [article.title, article.summary, article.source].filter(Boolean).join(' ').toLocaleLowerCase()
+    return matchesCategory && (!query || searchable.includes(query))
+  })
+})
+const paginatedArticles = computed(() => filteredArticles.value.slice((articlePage.value - 1) * articlePageSize, articlePage.value * articlePageSize))
+watch(() => filteredArticles.value.length, (total) => {
+  const lastPage = Math.max(1, Math.ceil(total / articlePageSize))
+  if (articlePage.value > lastPage) articlePage.value = lastPage
+})
 const articleForm = ref({
   title: '',
   summary: '',
@@ -186,6 +230,7 @@ const fetchArticles = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     articles.value = res.data
+    if (articleCategory.value !== '全部' && !articleCategories.value.includes(articleCategory.value)) articleCategory.value = '全部'
     articleLoadError.value = false
   } catch (error) {
     articleLoadError.value = true
@@ -195,7 +240,8 @@ const fetchArticles = async () => {
   }
 }
 
-const openArticleDialog = (row) => {
+const openArticleDialog = () => {
+  if (savingArticle.value) return
   articleForm.value = {
     title: '',
     summary: '',
@@ -208,24 +254,48 @@ const openArticleDialog = (row) => {
 }
 
 const submitArticle = async () => {
-  if (!articleForm.value.title || !articleForm.value.content) {
+  const title = String(articleForm.value.title || '').trim()
+  const content = String(articleForm.value.content || '').trim()
+  if (!title || !content) {
     ElMessage.warning('标题和正文必填')
     return
   }
+  if (title.length > 200 || content.length > 100000 || String(articleForm.value.summary || '').length > 500 || String(articleForm.value.category || '').length > 50 || String(articleForm.value.source || '').length > 100 || String(articleForm.value.cover_url || '').length > 255) {
+    ElMessage.warning('请检查各字段长度限制')
+    return
+  }
+  if (savingArticle.value) return
+  savingArticle.value = true
   try {
     const token = localStorage.getItem('token')
-    await axios.post('/api/teacher/articles', articleForm.value, {
+    const payload = {
+      ...articleForm.value,
+      title,
+      content,
+      summary: String(articleForm.value.summary || '').trim(),
+      category: String(articleForm.value.category || '').trim(),
+      source: String(articleForm.value.source || '').trim(),
+      cover_url: String(articleForm.value.cover_url || '').trim()
+    }
+    await axios.post('/api/teacher/articles', payload, {
       headers: { Authorization: `Bearer ${token}` }
     })
     ElMessage.success('保存成功')
     articleDialogVisible.value = false
+    articleSearch.value = ''
+    articleCategory.value = '全部'
+    articlePage.value = 1
     fetchArticles()
   } catch (error) {
     ElMessage.error('保存失败')
+  } finally {
+    savingArticle.value = false
   }
 }
 
 const deleteArticle = async (id) => {
+  if (deletingArticleIds.value.includes(id)) return
+  deletingArticleIds.value = [...deletingArticleIds.value, id]
   try {
     await ElMessageBox.confirm('确定要删除这篇文章吗？', '警告', { type: 'warning' })
     const token = localStorage.getItem('token')
@@ -235,9 +305,13 @@ const deleteArticle = async (id) => {
     ElMessage.success('删除成功')
     fetchArticles()
   } catch (error) {
-    if (error !== 'cancel') ElMessage.error('删除失败')
+    if (error !== 'cancel' && error !== 'close' && error !== 'closed') ElMessage.error('删除失败')
+  } finally {
+    deletingArticleIds.value = deletingArticleIds.value.filter(articleId => articleId !== id)
   }
 }
+
+const openArticle = (id) => router.push(`/article/${id}`)
 
 // Teachers
 const teachers = ref([])
@@ -351,6 +425,10 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
 }
+.article-toolbar { display: flex; gap: 12px; margin-bottom: 14px; }
+.article-toolbar :deep(.el-input) { max-width: 320px; }
+.article-toolbar :deep(.el-select) { width: 180px; }
+.pagination-wrapper { display: flex; justify-content: center; margin-top: 16px; }
 
 .help-text {
   font-size: 12px;
@@ -375,5 +453,7 @@ onMounted(() => {
   .content-container { padding: 14px; }
   .action-bar { justify-content: stretch; }
   .action-bar :deep(.el-button) { width: 100%; }
+  .article-toolbar { flex-direction: column; }
+  .article-toolbar :deep(.el-input), .article-toolbar :deep(.el-select) { max-width: none; width: 100%; }
 }
 </style>

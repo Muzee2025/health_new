@@ -1,8 +1,9 @@
 # 心域智链协作规则
 
-> owner: A ｜ version: 1.3 ｜ status: 定稿 ｜ updated: 2026-10-24
+> owner: A ｜ version: 1.4 ｜ status: 定稿 ｜ updated: 2026-10-24
 
 ## 当前工作
+- 用户2026-10-24要求根据完成情况继续优化前端和数据库内容；本轮起点50b9386，分支codex/content-quality。Luna独占两文章列表页及内容体验说明，Luna独占新内容目录/建库工具/专项测试及操作说明，另一Luna独立复核；冻结后Lead接管整合、ArticleCreate校验、详情换行、隔离QA与记录。仅在全新SQLite或明确只读备份生成的新目标导入平台使用指南，保留原库/.env/上传；不运行旧清库种子，不增加真实账号/师生分配，不编医学内容、来源、阅读量。所有新子代理使用gpt-6-luna；原有阶段约束按历史语境理解。
 - 用户2026-10-24授权自行设计工作流、多agent完成前端优化；当前分支codex/frontend-experience，起点4fcdebc。全部子代理使用gpt-6-luna：shell独占两Layout/business.css，学生/教师代理分别独占角色页面且排除Layout，另一Luna独立复核；Lead负责共享认证/文章、隔离浏览器/性能QA、记录与Git。详见docs/design/前端优化工作流.md。仅使用现有素材/token/图表源，不增依赖、接口或后端/库变更；全新Playwright上下文与合成API，不操作用户登录标签或真实服务/账号。冻结交接后Lead整合，前端验收不替代生产批准。下列阶段记录保留其历史语境。
 - 用户2026-10-24要求继续下一任务，本轮推进W3隔离全栈部署/恢复保障；起点4e1851b，分支codex/fullstack-verification。Luna独占新验收runner/单测及新后端契约测试后交接冻结，Lead接管其整合与实际执行；另一Luna独立复核。所有测试使用新QA配置、全新合成库/账号/证书及随机healthnew-qa项目，只绑定loopback，禁止读现有.env/库或触碰其他Docker项目。默认plan不创建资源；--run显式执行，失败后只清本轮容器/网络，保留QA卷/私有证据。固定目标镜像构建仍受Docker Hub网络阻塞；缓存Nginx合成传输与本机新库契约通过不能替代目标容器或生产验收。原W0/W1/W2记录保持历史属性。
 - 先读 `docs/team/进度看板.md`、`docs/team/门禁记录.md`；不存在时由 Lead 建立。

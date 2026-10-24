@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "task": "OPT-CONTENT",
+  "status": "local-technical-checks-passed",
+  "completedDate": "2026-10-25",
+  "baseCommit": "50b9386",
+  "branch": "codex/content-quality",
+  "subagentModel": "gpt-6-luna",
+  "backend": {
+    "passed": 128,
+    "skipped": 3,
+    "warnings": 24,
+    "exitCode": 0,
+    "seconds": 141.0,
+    "skippedReason": "Windows account cannot create real symlinks; backup_restore, content_catalog, support_workflow. Mock path rejection checks passed."
+  },
+  "targetedBackend": {
+    "passed": 31,
+    "skipped": 1,
+    "warnings": 13,
+    "exitCode": 0,
+    "includesActualFastApiReadsOfNewCatalog": true
+  },
+  "frontend": {
+    "vitestPassed": 17,
+    "sourceNegativeTestsPassed": 7,
+    "assetsChecked": 131,
+    "legacyWarnings": 7,
+    "sourceFilesScanned": 55,
+    "sourceErrors": 0
+  },
+  "build": {
+    "path": "tmp/content-quality-20261024/build-verified",
+    "modules": 2451,
+    "seconds": 8.5,
+    "maxJsBytes": 492110,
+    "exitCode": 0
+  },
+  "browser": {
+    "engine": "Edge / Playwright",
+    "browserPlugin": "not available",
+    "viewports": [
+      1440,
+      390
+    ],
+    "pageTotals": {
+      "expectedPages": 38,
+      "capturedPages": 38,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "libraryIconFailureCount": 0,
+      "pagesOverLimit": []
+    },
+    "pageOverflows": 0,
+    "extendedInteractions": 92,
+    "legacyObservedInteractions": 2,
+    "failedExtendedInteractions": 0,
+    "content": {
+      "scenarios": 26,
+      "failedScenarios": 0,
+      "contexts": 4,
+      "failedContexts": 0,
+      "screenshots": 26,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "consoleErrors": 0
+    },
+    "expectedCreateFailureConsoleEntries": 2,
+    "scope": "All browser APIs use synthetic fixtures, new contexts, service workers blocked, loopback only; no user tabs or live service."
+  },
+  "coldAuth": {
+    "status": "passed",
+    "scenarios": [
+      {
+        "route": "/login",
+        "width": 1440,
+        "rawJsBytes": 405459,
+        "gzipJsBytes": 140175,
+        "scriptCount": 17
+      },
+      {
+        "route": "/register",
+        "width": 1440,
+        "rawJsBytes": 406747,
+        "gzipJsBytes": 140677,
+        "scriptCount": 18
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "rawJsBytes": 405459,
+        "gzipJsBytes": 140175,
+        "scriptCount": 17
+      },
+      {
+        "route": "/register",
+        "width": 390,
+        "rawJsBytes": 406747,
+        "gzipJsBytes": 140677,
+        "scriptCount": 18
+      }
+    ],
+    "metric": "JS response bodies only, not user-visible latency"
+  },
+  "newDatabases": [
+    {
+      "path": "tmp/content-quality-20261024/content.db",
+      "articles": 8,
+      "users": 0,
+      "teacher_student_assignments": 0,
+      "tables": 27,
+      "triggers": 6,
+      "quick_check": "ok",
+      "foreign_key_violations": 0,
+      "sha256": "eb3cf383adb6a45c5ca08b417991a1c7a7d9722511361e615b4d3e37baae7035"
+    },
+    {
+      "path": "tmp/content-quality-20261024/content-repeat.db",
+      "articles": 8,
+      "users": 0,
+      "teacher_student_assignments": 0,
+      "tables": 27,
+      "triggers": 6,
+      "quick_check": "ok",
+      "foreign_key_violations": 0,
+      "sha256": "aacbe19c2a73eb5e7806faf6dd5508b9f89fc57efd4e298c3df7a8a4a7894792"
+    }
+  ],
+  "catalogImport": {
+    "initialInserted": 8,
+    "repeatInserted": 0,
+    "repeatSkipped": 8,
+    "sourceIsExistingUserDatabase": false,
+    "runtimeSwitched": false
+  },
+  "cleanup": {
+    "ownedPreviewStopped": true,
+    "qaPorts4198And4199NotListening": true,
+    "existingUserServicesTouched": false,
+    "temporaryEvidenceRetained": true
+  },
+  "guidePreview": {
+    "source": "Eight rows exported from this task new SQLite into isolated browser fixtures. API persistence separately covered by TestClient.",
+    "viewports": [
+      1440,
+      390
+    ],
+    "reviewedByLead": true
+  },
+  "intermediateFailures": [
+    "Initial pytest long auto-generated case id caused setup errors; short ids corrected, product implementation unchanged.",
+    "Initial content browser script selected page-header container and omitted teacher layout students mock: 12/26 failed; corrected selectors and exact fixture, ui-v2 26/26 passed.",
+    "Pagination scroll and keyboard back added after visual review; final ui-verified 26/26 passed.",
+    "Exec preview ended before continued turn: ui-final/regression-final connection refused. Restarted own hidden loopback preview; new verified evidence retained alongside failures.",
+    "Default Python lacked runner compatibility and alternative interpreter lacked pytest; existing .venv used without dependency installation."
+  ],
+  "limitations": [
+    "No original database/env/uploads read or changed. No real accounts, assignments, models, schema migration or production deployment.",
+    "Client-side pagination still receives full article payloads; server-side pagination remains future work.",
+    "Guides engineering-reviewed only; clinical content, institutional responsibilities/policy and Linux/TLS production acceptance remain pending."
+  ],
+  "sourceHashes": {
+    "backend/app/schemas.py": "94443af9f16984ffce9b422efe61f1b04aa0672ad87d466a728d3e0a05881e99",
+    "backend/scripts/build-content-database.py": "8a6fbc92c09ff42c69c19ff949893f4e667ad9503849f9bc1820dbdabfb572ba",
+    "backend/scripts/content-catalog.json": "81cd624690df9b2abaa4c87d14c73ea4ff6cf85f553af1c4ce0701125bb0bcf9",
+    "backend/tests/test_content_catalog.py": "18c2dc05c214ea5d6671410b3c3650908a7bca7e21f4f3ec9368f75054c300a1",
+    "backend/tests/test_article_content_validation.py": "c792f0bc2cd86a0fe417f021c442d3fd930dabb21466b8bc406bf26f48014f32",
+    "src/views/student/Articles.vue": "a20eb6c6761cad54e96a6945e06740ac162b24923ad14a23f8cc44baeb1ac210",
+    "src/views/teacher/ContentManagement.vue": "5d256d2627e5216ead355af0f13dbf7bebaef09a85533900360ed3e09b6bcdbc",
+    "src/views/ArticleDetail.vue": "24c6b6a483960a8d00d02cec5b3033c45f1833884e926a28e98a8f563fcad067",
+    "scripts/check-content-experience.mjs": "858081b031d84f52db4dd9f9946366cf4f0c9f6e9f8e72a300492f19489eb9e2"
+  },
+  "evidence": {
+    "tmp/content-quality-20261024/build-verified.log": {
+      "sha256": "29ed5c7c206b8d7caa5301667b6c36294eb3c807bb32ca76fc14b49be6ce52b7",
+      "bytes": 27862
+    },
+    "tmp/content-quality-20261024/backend-final.log": {
+      "sha256": "b78c7810ae7d1ef95793b0b30bfe2b964bb9e11b5f353d02f6b84f4777f2ceb1",
+      "bytes": 768
+    },
+    "tmp/content-quality-20261024/content-final-tests.log": {
+      "sha256": "394492bee96516e383246985c11713b792d71dc3b47d88610840fecaa3636265",
+      "bytes": 218
+    },
+    "tmp/content-quality-20261024/regression-verified/qa.json": {
+      "sha256": "fb7aade55673581d02d573591e5167f6551d47abbe9da3ffcd270b94b43d9137",
+      "bytes": 161453
+    },
+    "tmp/content-quality-20261024/ui-verified/qa.json": {
+      "sha256": "cce604b304c1ced251b246a52adc931473332ce5e25e2c4a0835ed316254bf58",
+      "bytes": 24482
+    },
+    "tmp/content-quality-20261024/cold-verified.json": {
+      "sha256": "c87e4fa3365b9c3cfffe5b97373fd830fa0b0aecd367a8c86b4814391e52200d",
+      "bytes": 20210
+    },
+    "tmp/content-quality-20261024/guide-preview.json": {
+      "sha256": "88d489a79c820197f39c12aa01178683d01e77627da8f372c6159001a41715a7",
+      "bytes": 340
+    },
+    "tmp/content-quality-20261024/guides-1440.png": {
+      "sha256": "88591bc054f9ca730b33b036791e36ae5346f5b52bf73875ccaa290daa1f613f",
+      "bytes": 165095
+    },
+    "tmp/content-quality-20261024/guides-390.png": {
+      "sha256": "048bb1da0512408e0c5d3700629b4a2c43ff27887460010582bb3a0d49119411",
+      "bytes": 76431
+    }
+  }
+}
