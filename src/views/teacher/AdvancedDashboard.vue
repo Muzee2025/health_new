@@ -1,74 +1,21 @@
 <template>
-  <div class="dashboard-container">
-    <!-- 头部：大盘数据与导出功能 -->
-    <div class="header-actions">
-      <h2>已分配学生概览与干预审计</h2>
-      <div class="export-btns">
+  <div class="dashboard-container business-page">
+    <div class="header-actions business-page__header business-actions">
+      <div class="dashboard-actions">
+        <el-button plain @click="$router.push('/teacher/support')">求助与跟进工作区</el-button>
         <el-button type="warning" plain :loading="exporting" @click="exportComplianceReport">
-          <el-icon><LibraryIcon name="report"  /></el-icon> 导出合规审计报告 (Word)
+          <el-icon><LibraryIcon name="report" /></el-icon> 导出合规审计报告（Word）
         </el-button>
       </div>
     </div>
 
     <el-alert :title="metrics?.data_status === 'empty' ? '当前尚未分配学生，请由学校完成分配。' : '仅统计明确分配给您的学生'" type="info" :closable="false" show-icon />
-    <el-alert v-if="metricsError" title="统计数据加载失败，请刷新重试。" type="error" :closable="false" show-icon class="mt-20" />
-    <!-- 第一排：核心指标卡片 -->
-    <el-row :gutter="20" class="mt-20" v-if="metrics">
-      <el-col :xs="12" :md="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">已分配学生（人）</div>
-          <div class="stat-value text-blue">{{ metrics.realtime_stats.uv }}</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="12" :md="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">每会话用户消息数</div>
-          <div class="stat-value">{{ metrics.realtime_stats.avg_session_rounds }}</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="12" :md="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">待处理预警（条）</div>
-          <div class="stat-value text-red">{{ metrics.realtime_stats.crisis_alerts }}</div>
-        </el-card>
-      </el-col>
-      <el-col :xs="12" :md="6">
-        <el-card shadow="hover" class="stat-card">
-          <div class="stat-title">对话消息（条）</div>
-          <div class="stat-value text-green">{{ metrics.realtime_stats.pv }}</div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <el-alert v-if="metricsError" title="统计数据加载失败，请刷新后重试。" type="error" :closable="false" show-icon class="mt-20">
+      <el-button text type="primary" @click="fetchMetrics">重新加载统计</el-button>
+    </el-alert>
+    <div v-if="!metrics && !metricsError" class="loading-note" role="status">正在加载统计数据…</div>
 
-    <!-- 第二排：图表可视化 (ECharts) -->
-    <el-row :gutter="20" class="mt-20" v-if="metrics">
-      <!-- 原漏斗字段现为真实学生计数，各组不假定互为转化子集。 -->
-      <el-col :xs="24" :lg="8">
-        <el-card shadow="hover" class="chart-card">
-          <template #header>学生状态计数</template>
-          <div ref="funnelChartRef" class="chart-box"></div>
-        </el-card>
-      </el-col>
-      <!-- 折线图：7日情绪趋势 -->
-      <el-col :xs="24" :lg="8">
-        <el-card shadow="hover" class="chart-card">
-          <template #header>近7日情绪均值</template>
-          <LibraryEmpty v-if="!hasEmotionSamples" description="近7日暂无有效情绪样本" :image-size="76" class="chart-empty" />
-          <div v-show="hasEmotionSamples" ref="lineChartRef" class="chart-box"></div>
-        </el-card>
-      </el-col>
-      <!-- 没有可信楼栋字段时明确留空。 -->
-      <el-col :xs="24" :lg="8">
-        <el-card shadow="hover" class="chart-card">
-          <template #header>楼栋风险密度</template>
-          <LibraryEmpty v-if="!metrics.campus_heatmap?.length" description="尚无可用楼宇数据" :image-size="76" class="chart-empty" />
-          <div v-show="metrics.campus_heatmap?.length" ref="heatmapChartRef" class="chart-box"></div>
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <!-- 第三排：统一待审核危机预警记录 -->
-    <el-card shadow="hover" class="mt-20 warning-card" :class="{'has-unread': pendingCount > 0}">
+    <el-card shadow="never" class="mt-20 warning-card business-card" :class="{'has-unread': pendingCount > 0}">
       <template #header>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: bold; color: var(--danger-text); display: flex; align-items: center;">
@@ -79,7 +26,11 @@
         </div>
       </template>
 
-      <el-table :data="pendingList" border style="width: 100%" :row-class-name="tableRowClassName" v-loading="loadingPending">
+      <el-alert v-if="pendingLoadError" type="error" :closable="false" title="待审核预警暂时无法加载，当前列表可能不完整。">
+        <el-button text type="primary" @click="fetchPendingList">重新加载预警</el-button>
+      </el-alert>
+      <div class="business-table-wrap">
+      <el-table :data="pendingList" border style="width: 100%" :row-class-name="tableRowClassName" v-loading="loadingPending" empty-text="当前没有待审核预警。">
         <el-table-column prop="createdAt" label="预警时间" width="160" />
         <el-table-column label="学生信息" width="170">
           <template #default="{row}">
@@ -105,7 +56,7 @@
             <el-tag type="success" v-else>已审核</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="360" fixed="right">
+        <el-table-column label="操作" width="360">
           <template #default="{row}">
             <div class="audit-action-group">
               <el-button size="small" type="success" @click="handleReview(row, 'pass')">通过</el-button>
@@ -117,13 +68,17 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
     </el-card>
 
-    <el-card shadow="hover" class="mt-20 review-history-card">
+    <el-card shadow="never" class="mt-20 review-history-card business-card">
       <template #header>
         <div class="history-heading"><strong>预警审核历史</strong><el-button text @click="fetchReviewHistory" :loading="loadingReviewHistory">刷新历史</el-button></div>
       </template>
-      <el-table :data="reviewHistory" style="width: 100%" v-loading="loadingReviewHistory">
+      <el-alert v-if="reviewHistoryError" type="error" :closable="false" title="预警审核历史暂时无法加载；请重试后再判断历史原因。">
+        <el-button text type="primary" @click="fetchReviewHistory">重新加载审核历史</el-button>
+      </el-alert>
+      <div class="business-table-wrap"><el-table :data="reviewHistory" style="width: 100%" v-loading="loadingReviewHistory" :empty-text="reviewHistoryError ? '审核历史加载失败。' : '还没有已审核预警记录。'">
         <el-table-column prop="created_at" label="预警时间" width="170" />
         <el-table-column prop="student_name" label="学生" width="130" />
         <el-table-column label="审核结论" width="130">
@@ -136,8 +91,23 @@
           <template #default><el-button type="primary" @click="$router.push('/teacher/support')">创建跟进</el-button></template>
         </el-table-column>
       </el-table>
-      <LibraryEmpty v-if="!loadingReviewHistory && !reviewHistory.length" description="还没有已审核预警记录。" :image-size="72" />
+      </div>
     </el-card>
+
+    <section class="insights-section" aria-labelledby="teacher-insights-heading">
+      <div class="insights-heading"><h2 id="teacher-insights-heading">分配范围内的统计与趋势</h2><p>数据用于工作观察；楼宇字段缺失时保留真实空态。</p></div>
+      <el-row :gutter="16" class="mt-20" v-if="metrics">
+        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">已分配学生（人）</div><div class="stat-value text-blue">{{ metrics.realtime_stats.uv }}</div></el-card></el-col>
+        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">每会话用户消息数</div><div class="stat-value">{{ metrics.realtime_stats.avg_session_rounds }}</div></el-card></el-col>
+        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">待处理预警（条）</div><div class="stat-value text-red">{{ metrics.realtime_stats.crisis_alerts }}</div></el-card></el-col>
+        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">对话消息（条）</div><div class="stat-value text-green">{{ metrics.realtime_stats.pv }}</div></el-card></el-col>
+      </el-row>
+      <el-row :gutter="16" class="mt-20" v-if="metrics">
+        <el-col :xs="24" :lg="8"><el-card shadow="never" class="chart-card business-card"><template #header>学生状态计数</template><div ref="funnelChartRef" class="chart-box"></div></el-card></el-col>
+        <el-col :xs="24" :lg="8"><el-card shadow="never" class="chart-card business-card"><template #header>近7日情绪均值</template><LibraryEmpty v-if="!hasEmotionSamples" description="近7日暂无有效情绪样本" :image-size="76" class="chart-empty" /><div v-show="hasEmotionSamples" ref="lineChartRef" class="chart-box"></div></el-card></el-col>
+        <el-col :xs="24" :lg="8"><el-card shadow="never" class="chart-card business-card"><template #header>楼栋风险密度</template><LibraryEmpty v-if="!metrics.campus_heatmap?.length" description="尚无可用楼宇数据" :image-size="76" class="chart-empty" /><div v-show="metrics.campus_heatmap?.length" ref="heatmapChartRef" class="chart-box"></div></el-card></el-col>
+      </el-row>
+    </section>
 
     <el-dialog v-model="reviewDialogVisible" title="记录预警审核" width="520px" :close-on-click-modal="false" @closed="resetReviewDialog">
       <p class="review-dialog-note">选择“{{ reviewActionLabel(currentReview.action) }}”并说明判断依据。保存后会写入审核历史。</p>
@@ -161,8 +131,10 @@ const metricsError = ref(false)
 const hasEmotionSamples = computed(() => ['joy', 'anxiety'].some(field => metrics.value?.emotion_trends_7d?.[field]?.some(value => typeof value === 'number' && Number.isFinite(value))))
 const pendingList = ref([])
 const loadingPending = ref(false)
+const pendingLoadError = ref(false)
 const reviewHistory = ref([])
 const loadingReviewHistory = ref(false)
+const reviewHistoryError = ref(false)
 const reviewDialogVisible = ref(false)
 const currentReview = ref({ row: null, action: '' })
 const reviewReason = ref('')
@@ -200,9 +172,11 @@ const fetchPendingList = async () => {
       params: { page: 1, pageSize: 200 }
     })
     pendingList.value = res.data?.data?.items || []
+    pendingLoadError.value = false
     return true
   } catch (error) {
     console.error('Failed to fetch pending crisis records', error)
+    pendingLoadError.value = true
     return false
   } finally {
     loadingPending.value = false
@@ -247,6 +221,7 @@ const submitReview = async () => {
 
 const fetchReviewHistory = async () => {
   loadingReviewHistory.value = true
+  reviewHistoryError.value = false
   try {
     const response = await axios.get('/api/advanced-teacher/warnings')
     const rows = Array.isArray(response.data?.data) ? response.data.data : []
@@ -259,8 +234,10 @@ const fetchReviewHistory = async () => {
       } catch { return { ...row, latestReview: null } }
     }))
     reviewHistory.value = reviews
+    reviewHistoryError.value = false
     return true
   } catch {
+    reviewHistoryError.value = true
     return false
   } finally { loadingReviewHistory.value = false }
 }
@@ -488,9 +465,14 @@ const initCharts = () => {
 </script>
 
 <style scoped>
-.dashboard-container { padding: 20px; background: var(--surface-warm); min-height: calc(100vh - 60px); }
-.header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.header-actions h2 { margin: 0; color: var(--text-primary); }
+.dashboard-container { display: flex; flex-direction: column; gap: 16px; }
+.header-actions { display: flex; justify-content: flex-end; align-items: center; }
+.dashboard-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.dashboard-actions :deep(.el-button) { margin-left: 0; }
+.insights-section { margin-top: 12px; }
+.insights-heading h2 { margin: 0; color: var(--text-primary); font-size: 18px; }
+.insights-heading p { margin: 5px 0 0; color: var(--text-secondary); }
+.loading-note { padding: 14px 4px; color: var(--text-secondary); }
 
 .stat-card { text-align: center; border-radius: 12px; }
 .stat-title { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
@@ -502,6 +484,7 @@ const initCharts = () => {
 .chart-card { border-radius: 12px; }
 .chart-box { height: 250px; width: 100%; }
 .chart-empty { min-height: 250px; }
+:deep(.el-table) { min-width: 980px; }
 
 .audit-msg { font-size: 14px; color: var(--text-primary); background: var(--surface-subtle); padding: 10px; border-radius: 6px; }
 .audit-reply { font-size: 13px; color: var(--text-secondary); border-left: 3px solid var(--brand-600); padding-left: 10px; }
@@ -534,5 +517,11 @@ const initCharts = () => {
 }
 :deep(.warning-row-unread:hover > td) {
   background-color: var(--danger-100) !important;
+}
+@media (max-width: 640px) {
+  .dashboard-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
+  .dashboard-actions :deep(.el-button) { width: 100%; }
+  .stat-value { font-size: 24px; }
+  .insights-heading h2 { font-size: 17px; }
 }
 </style>

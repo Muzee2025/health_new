@@ -1,5 +1,5 @@
 <template>
-  <div class="content-container">
+  <div class="content-container business-page">
     <el-tabs v-model="activeTab" class="content-tabs">
       <!-- Article Management Tab -->
       <el-tab-pane label="文章管理" name="articles">
@@ -7,7 +7,8 @@
           <el-button type="primary" @click="openArticleDialog(null)">新增文章</el-button>
         </div>
         
-        <el-table :data="articles" style="width: 100%" v-loading="loadingArticles" stripe>
+        <el-alert v-if="articleLoadError" type="error" :closable="false" title="文章列表暂时无法加载。"><el-button text type="primary" @click="fetchArticles">重新加载</el-button></el-alert>
+        <div class="business-table-wrap"><el-table :data="articles" style="width: 100%" v-loading="loadingArticles" stripe empty-text="还没有文章记录。">
           <el-table-column prop="title" label="标题" min-width="200" />
           <el-table-column prop="category" label="分类" width="120" />
           <el-table-column prop="source" label="来源" width="150" />
@@ -23,6 +24,7 @@
             </template>
           </el-table-column>
         </el-table>
+        </div>
       </el-tab-pane>
 
       <!-- Teacher Management Tab -->
@@ -31,7 +33,8 @@
           <el-button type="primary" @click="openTeacherDialog(null)">编辑我的老师档案</el-button>
         </div>
         
-        <el-table :data="teachers" style="width: 100%" v-loading="loadingTeachers" stripe>
+        <el-alert v-if="teacherLoadError" type="error" :closable="false" title="教师档案列表暂时无法加载。"><el-button text type="primary" @click="fetchTeachers">重新加载</el-button></el-alert>
+        <div class="business-table-wrap"><el-table :data="teachers" style="width: 100%" v-loading="loadingTeachers" stripe empty-text="暂无教师档案记录。">
           <el-table-column label="头像" width="80">
             <template #default>
               <div class="teacher-avatar-small">
@@ -49,6 +52,7 @@
             </template>
           </el-table-column>
         </el-table>
+        </div>
       </el-tab-pane>
     </el-tabs>
 
@@ -128,7 +132,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElMessageBox, ElTabs, ElTabPane, ElButton, ElTable, ElTableColumn, ElIcon, ElDialog, ElForm, ElFormItem, ElInput, ElUpload, ElInputNumber, vLoading } from 'element-plus'
+import { ElMessage, ElMessageBox, ElTabs, ElTabPane, ElButton, ElTable, ElTableColumn, ElIcon, ElDialog, ElForm, ElFormItem, ElInput, ElUpload, ElInputNumber, ElAlert, vLoading } from 'element-plus'
 
 const currentTeacherId = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}').id } catch { return null } })()
 const activeTab = ref('articles')
@@ -163,6 +167,7 @@ const handleUploadSuccess = (res, file) => {
 // Articles
 const articles = ref([])
 const loadingArticles = ref(false)
+const articleLoadError = ref(false)
 const articleDialogVisible = ref(false)
 const articleForm = ref({
   title: '',
@@ -181,7 +186,9 @@ const fetchArticles = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     articles.value = res.data
+    articleLoadError.value = false
   } catch (error) {
+    articleLoadError.value = true
     ElMessage.error('获取文章列表失败')
   } finally {
     loadingArticles.value = false
@@ -235,6 +242,7 @@ const deleteArticle = async (id) => {
 // Teachers
 const teachers = ref([])
 const loadingTeachers = ref(false)
+const teacherLoadError = ref(false)
 const teacherDialogVisible = ref(false)
 const teacherForm = ref({
   user_id: 1,
@@ -252,7 +260,9 @@ const fetchTeachers = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     teachers.value = res.data
+    teacherLoadError.value = false
   } catch (error) {
+    teacherLoadError.value = true
     ElMessage.error('获取老师列表失败')
   } finally {
     loadingTeachers.value = false
@@ -359,5 +369,11 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-size: 14px;
+}
+.business-table-wrap :deep(.el-table) { min-width: 760px; }
+@media (max-width: 760px) {
+  .content-container { padding: 14px; }
+  .action-bar { justify-content: stretch; }
+  .action-bar :deep(.el-button) { width: 100%; }
 }
 </style>

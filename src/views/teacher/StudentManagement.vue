@@ -1,9 +1,12 @@
 <template>
-  <div class="management-container">
-    <div class="filter-card">
+  <div class="management-container business-page">
+    <el-alert title="仅显示明确分配给你的学生；辅导员筛选仅用于当前列表。" type="info" :closable="false" />
+    <el-alert v-if="loadError" title="学生列表暂时无法加载，现有列表可能不完整。" type="error" :closable="false"><el-button text type="primary" @click="fetchStudents">重新加载</el-button></el-alert>
+    <div class="filter-card business-actions">
       <el-input
         v-model="searchQuery"
         placeholder="搜索姓名或学号"
+        aria-label="搜索已分配学生姓名或学号"
         class="search-input"
         clearable
       >
@@ -12,13 +15,13 @@
         </template>
       </el-input>
       
-      <el-select v-model="filterRisk" placeholder="风险等级" clearable class="filter-select">
+      <el-select v-model="filterRisk" placeholder="风险等级" aria-label="按风险等级筛选" clearable class="filter-select">
         <el-option label="高风险 (红)" value="red" />
         <el-option label="中风险 (黄)" value="yellow" />
         <el-option label="低风险 (绿)" value="green" />
       </el-select>
 
-      <el-select v-model="filterClass" placeholder="辅导员" clearable class="filter-select">
+      <el-select v-model="filterClass" placeholder="辅导员" aria-label="按辅导员筛选当前列表" clearable class="filter-select">
         <el-option v-for="adv in uniqueAdvisors" :key="adv" :label="adv" :value="adv" />
       </el-select>
 
@@ -28,8 +31,8 @@
       <el-button plain @click="$router.push('/teacher/support')">求助与跟进</el-button>
     </div>
 
-    <div class="table-card">
-      <el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe>
+    <div class="table-card business-card">
+      <div class="business-table-wrap"><el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe empty-text="当前筛选下没有学生记录。">
         <el-table-column prop="student_id" label="学号" width="120" />
         <el-table-column label="姓名" width="150">
           <template #default="scope">
@@ -71,12 +74,14 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
 
       <div class="pagination-wrapper">
         <el-pagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
           :page-sizes="[10, 20, 50]"
+          :pager-count="5"
           layout="total, sizes, prev, pager, next"
           :total="filteredData.length"
         />
@@ -132,9 +137,10 @@ import { passwordPolicyError } from '../../utils/passwordPolicy'
 import { businessColor } from '../../styles/business-theme.js'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElInput, ElIcon, ElSelect, ElOption, ElButton, ElTable, ElTableColumn, ElTag, ElPagination, ElDialog, ElForm, ElFormItem, ElRadioGroup, ElRadio, vLoading } from 'element-plus'
+import { ElMessage, ElInput, ElIcon, ElSelect, ElOption, ElButton, ElTable, ElTableColumn, ElTag, ElPagination, ElDialog, ElForm, ElFormItem, ElRadioGroup, ElRadio, ElAlert, vLoading } from 'element-plus'
 
 const loading = ref(false)
+const loadError = ref(false)
 const students = ref([])
 const searchQuery = ref('')
 const filterRisk = ref('')
@@ -169,8 +175,10 @@ const fetchStudents = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     students.value = res.data
+    loadError.value = false
   } catch (error) {
     console.error('Failed to fetch students', error)
+    loadError.value = true
   } finally {
     loading.value = false
   }
@@ -308,6 +316,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
   align-items: center;
 }
+.filter-card :deep(.el-button) { margin-left: 0; }
 
 .search-input {
   width: 300px;
@@ -332,6 +341,8 @@ onUnmounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  min-width: 0;
+  width: 100%;
 }
 
 .text-avatar {
@@ -351,5 +362,24 @@ onUnmounted(() => {
   font-size: 16px;
   font-weight: bold;
   line-height: 1;
+}
+@media (max-width: 760px) {
+  .filter-card { align-items: stretch; flex-wrap: wrap; padding: 14px; }
+  .search-input, .filter-select { width: 100%; }
+  .filter-card :deep(.el-button) { flex: 1 1 100%; }
+  .pagination-wrapper { justify-content: flex-start; overflow: visible; }
+  .pagination-wrapper :deep(.el-pagination) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 10px;
+    max-width: 100%;
+  }
+  .pagination-wrapper :deep(.el-pagination__total) { order: 1; margin-right: 0; }
+  .pagination-wrapper :deep(.el-pagination__sizes) { order: 2; margin: 0; }
+  .pagination-wrapper :deep(.el-pagination__sizes .el-select) { width: 104px; }
+  .pagination-wrapper :deep(.btn-prev) { order: 3; margin: 0; }
+  .pagination-wrapper :deep(.el-pager) { order: 4; margin: 0; }
+  .pagination-wrapper :deep(.btn-next) { order: 5; margin: 0; }
 }
 </style>

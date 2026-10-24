@@ -1,19 +1,23 @@
 <template>
-  <div class="articles">
-    <el-card>
-      <div class="header-wrapper flex-between mb-20">
+  <div class="articles business-page business-page--reading">
+    <el-card class="business-card">
+      <header class="header-wrapper flex-between mb-20 business-page__header">
         <h2 class="page-title">心理科普精选</h2>
         <div class="category-filter">
-          <el-radio-group v-model="selectedCategory" size="default" @change="filterArticles">
+          <el-radio-group v-model="selectedCategory" size="default" aria-label="按分类筛选文章" @change="filterArticles">
             <el-radio-button value="全部">全部</el-radio-button>
             <el-radio-button v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</el-radio-button>
           </el-radio-group>
         </div>
-      </div>
+      </header>
+      <el-alert v-if="loadError" type="error" :closable="false" show-icon title="文章暂时无法加载，请检查网络后重试。">
+        <el-button link type="primary" @click="fetchArticles">重新加载</el-button>
+      </el-alert>
+      <div v-else-if="loading" v-loading="loading" class="article-loading" role="status" aria-label="正在加载文章" />
       
-      <el-row :gutter="20">
+      <el-row v-else :gutter="20">
         <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="article in filteredArticles" :key="article.id">
-          <el-card shadow="hover" class="article-card" @click="showArticle(article)" :body-style="{ padding: '0px' }">
+          <el-card shadow="hover" class="article-card" role="link" tabindex="0" :aria-label="`阅读文章：${article.title}`" @click="showArticle(article)" @keydown.enter.prevent="showArticle(article)" @keydown.space.prevent="showArticle(article)" :body-style="{ padding: '0px' }">
             <div class="image-wrapper">
               <img :src="article.cover_url || articleFallback" class="image" :alt="article.title" width="300" height="200" @error="handleImageError" />
               <el-tag v-if="article.category" class="category-tag" effect="dark" size="small">{{ article.category }}</el-tag>
@@ -34,7 +38,7 @@
         </el-col>
       </el-row>
       
-      <LibraryEmpty v-if="filteredArticles.length === 0" description="暂无该分类的文章" />
+      <LibraryEmpty v-if="!loading && !loadError && filteredArticles.length === 0" description="暂无该分类的文章" />
     </el-card>
   </div>
 </template>
@@ -46,11 +50,13 @@ const articleFallback = getVisualAsset('articleFallback').url
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage, ElCard, ElRadioGroup, ElRadioButton, ElRow, ElCol, ElTag, ElIcon } from 'element-plus'
+import { ElAlert, ElButton, ElCard, ElRadioGroup, ElRadioButton, ElRow, ElCol, ElTag, ElIcon } from 'element-plus'
 
 const router = useRouter()
 
 const articles = ref([])
+const loading = ref(false)
+const loadError = ref(false)
 const filteredArticles = ref([])
 const categories = ref([])
 const selectedCategory = ref('全部')
@@ -66,6 +72,8 @@ onBeforeUnmount(() => {
 })
 
 const fetchArticles = async () => {
+  loading.value = true
+  loadError.value = false
   try {
     const res = await axios.get('/api/student/articles')
     const rows = normalizeArticleViews(res.data)
@@ -76,7 +84,9 @@ const fetchArticles = async () => {
     const cats = new Set(rows.map(a => a.category).filter(Boolean))
     categories.value = Array.from(cats)
   } catch (error) {
-    ElMessage.error('获取文章列表失败')
+    loadError.value = true
+  } finally {
+    loading.value = false
   }
 }
 
@@ -148,6 +158,8 @@ const handleImageError = (e) => {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px color-mix(in srgb, var(--gray-900) 10%, transparent);
 }
+.article-card:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+.article-loading { min-height: 180px; }
 .image-wrapper {
   position: relative;
   width: 100%;
@@ -216,5 +228,11 @@ const handleImageError = (e) => {
   max-width: 100%;
   border-radius: 8px;
   margin: 10px 0;
+}
+@media (max-width: 600px) {
+  .header-wrapper { align-items: stretch; }
+  .category-filter { max-width: 100%; overflow-x: auto; }
+  .category-filter :deep(.el-radio-group) { display: inline-flex; flex-wrap: nowrap; }
+  .article-card:hover { transform: none; }
 }
 </style>

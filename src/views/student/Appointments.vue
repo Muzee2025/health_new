@@ -1,10 +1,16 @@
 <template>
-  <div class="appointments">
-    <h2 class="page-title">预约心理老师</h2>
-    <p class="page-desc">专业的心理老师为您提供倾听与支持，请选择合适的时间段进行预约。</p>
+  <div class="appointments business-page">
+    <header class="business-page__header">
+      <h2 class="page-title">预约咨询</h2>
+      <p class="page-desc">查看可预约的老师和时间。可预约范围由学校分配关系决定。</p>
+    </header>
     <p class="support-entry">想先把问题写下来？<router-link to="/student/questions">向老师留言</router-link>，你可以在留言记录中查看回复。</p>
 
-    <el-row :gutter="20" class="mt-30">
+    <el-alert v-if="teacherError" type="error" :closable="false" show-icon :title="teacherError">
+      <el-button link type="primary" @click="fetchTeachers">重新加载老师</el-button>
+    </el-alert>
+    <LibraryEmpty v-if="!teacherLoading && !teacherError && teachers.length === 0" description="当前没有可展示的老师信息。" />
+    <el-row v-loading="teacherLoading" :gutter="20" class="mt-30" aria-label="可预约老师">
       <el-col :xs="24" :md="12" :lg="8" v-for="teacher in teachers" :key="teacher.id">
         <el-card shadow="hover" class="teacher-card">
           <div class="teacher-header">
@@ -56,9 +62,14 @@
       </el-col>
     </el-row>
     
+    <el-alert v-if="appointmentError" class="mt-30" type="error" :closable="false" show-icon :title="appointmentError">
+      <el-button link type="primary" @click="fetchAppointments">重新加载预约记录</el-button>
+    </el-alert>
     <el-card class="mt-30 table-card">
-      <h3><LibraryIcon name="appointment" /> 我的预约记录</h3>
+      <h3 class="business-card__header"><LibraryIcon name="appointment" /> 我的预约记录</h3>
+      <div class="business-table-wrap" v-loading="appointmentLoading">
       <el-table :data="appointments" style="width: 100%" stripe>
+        <template #empty><LibraryEmpty description="还没有预约记录。" /></template>
         <el-table-column prop="time_slot" label="预约时间" width="180" />
         <el-table-column prop="teacher_name" label="咨询老师" width="120" />
         <el-table-column prop="location" label="地点" />
@@ -77,6 +88,7 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
     </el-card>
   </div>
 </template>
@@ -84,7 +96,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElMessageBox, ElRow, ElCol, ElCard, ElTag, ElIcon, ElDivider, ElButton, ElTable, ElTableColumn } from 'element-plus'
+import LibraryEmpty from '../../design/LibraryEmpty.vue'
+import { ElMessage, ElMessageBox, ElRow, ElCol, ElCard, ElTag, ElIcon, ElDivider, ElButton, ElTable, ElTableColumn, ElAlert } from 'element-plus'
 import {
   PSYCH_TEACHER_AVATAR_ALT,
   getPsychTeacherAvatar,
@@ -92,6 +105,10 @@ import {
 
 const teachers = ref([])
 const appointments = ref([])
+const teacherLoading = ref(false)
+const appointmentLoading = ref(false)
+const teacherError = ref('')
+const appointmentError = ref('')
 const appointmentStatusLabel = (status) => ({ pending: '待确认', confirmed: '已确认', approved: '已确认', completed: '已完成', cancelled: '已取消' }[status] || status)
 const appointmentStatusType = (status) => ({ pending: 'warning', confirmed: 'primary', approved: 'primary', completed: 'success', cancelled: 'info' }[status] || 'info')
 
@@ -113,6 +130,8 @@ onMounted(() => {
 })
 
 const fetchTeachers = async () => {
+  teacherLoading.value = true
+  teacherError.value = ''
   try {
     const res = await axios.get('/api/student/teachers')
     const rows = Array.isArray(res.data) ? res.data : []
@@ -124,16 +143,22 @@ const fetchTeachers = async () => {
       booked_slots: Array.isArray(teacher.booked_slots) ? teacher.booked_slots : [],
     }))
   } catch (error) {
-    ElMessage.error('获取老师列表失败')
+    teacherError.value = '老师列表暂时无法加载，请检查网络后重试。'
+  } finally {
+    teacherLoading.value = false
   }
 }
 
 const fetchAppointments = async () => {
+  appointmentLoading.value = true
+  appointmentError.value = ''
   try {
     const res = await axios.get('/api/student/appointments')
-    appointments.value = res.data
+    appointments.value = Array.isArray(res.data) ? res.data : []
   } catch (error) {
-    console.error(error)
+    appointmentError.value = '预约记录暂时无法加载，请稍后重试。'
+  } finally {
+    appointmentLoading.value = false
   }
 }
 
@@ -296,5 +321,14 @@ const cancelAppointment = (appointment) => {
   font-size: 16px;
   color: var(--text-primary);
   margin-bottom: 20px;
+}
+.business-page__header { margin-bottom: 20px; }
+.business-page__header .page-title { margin-bottom: 8px; }
+.table-card :deep(.el-card__body) { min-width: 0; }
+.table-card :deep(.el-table) { min-width: 620px; }
+@media (max-width: 600px) {
+  .mt-30 { margin-top: 20px; }
+  .teacher-avatar { margin-right: 12px; }
+  .table-card :deep(.el-card__body) { padding: 16px; }
 }
 </style>

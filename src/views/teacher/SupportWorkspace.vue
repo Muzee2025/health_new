@@ -1,14 +1,17 @@
 <template>
-  <section class="support-workspace" aria-label="求助与跟进工作区">
+  <section class="support-workspace business-page" aria-label="求助与跟进工作区">
     <header class="workspace-heading">
       <div>
         <p>只显示明确分配给你的学生。学生可见答复与内部跟进备注分别保存。</p>
       </div>
       <el-button plain @click="refreshAll" :loading="refreshing">刷新工作区</el-button>
     </header>
+    <nav class="workspace-nav" aria-label="求助与跟进区域">
+      <a href="#questions-heading">学生提问</a><a href="#warnings-heading">预警与审核记录</a><a href="#followups-heading">跟进任务</a>
+    </nav>
 
     <el-alert v-if="schemaDisabled" type="info" :closable="false" title="求助与跟进服务尚未启用，请联系管理员。刷新对应区域可重新检查服务状态。" />
-    <section class="workspace-section" aria-labelledby="questions-heading">
+    <section id="questions" class="workspace-section business-card" aria-labelledby="questions-heading">
       <div class="section-title">
         <div><h3 id="questions-heading">学生提问</h3><p>答复会直接显示在学生自己的留言记录中。</p></div>
         <el-button plain @click="loadQuestions" :loading="loadingQuestions">刷新提问</el-button>
@@ -20,7 +23,7 @@
       <el-alert v-if="sectionErrors.questions" type="error" :closable="false" :title="sectionErrors.questions" />
       <div v-if="loadingQuestions && !questions.length" class="status-line" role="status">正在加载提问…</div>
       <LibraryEmpty v-else-if="!questions.length && !schemaDisabled && !sectionErrors.questions" :description="questionStatus === 'pending' ? '当前没有待答复的学生留言。' : '还没有已答复的留言。'" :image-size="88" />
-      <ol v-else class="record-list">
+      <ol v-else-if="questions.length" class="record-list">
         <li v-for="question in questions" :key="question.id" class="record-row">
           <div class="record-meta"><span>{{ question.student_name || '学生' }}</span><time>{{ formatDate(question.created_at) }}</time></div>
           <div class="record-copy"><strong>学生留言</strong><p>{{ question.question_text }}</p></div>
@@ -43,7 +46,7 @@
       </ol>
     </section>
 
-    <section class="workspace-section" aria-labelledby="warnings-heading">
+    <section id="warnings" class="workspace-section business-card" aria-labelledby="warnings-heading">
       <div class="section-title">
         <div><h3 id="warnings-heading">预警与审核记录</h3><p>只列出分配范围内的预警。审核原因来自服务端历史，可从这里创建内部跟进。</p></div>
         <el-button plain @click="loadWarnings" :loading="loadingWarnings">刷新预警</el-button>
@@ -51,7 +54,7 @@
       <el-alert v-if="sectionErrors.warnings" type="error" :closable="false" :title="sectionErrors.warnings" />
       <div v-if="loadingWarnings && !warnings.length" class="status-line" role="status">正在加载预警记录…</div>
       <LibraryEmpty v-else-if="!warnings.length && !schemaDisabled && !sectionErrors.warnings" description="当前分配范围内没有预警记录。" :image-size="88" />
-      <ol v-else class="record-list">
+      <ol v-else-if="warnings.length" class="record-list">
         <li v-for="warning in warnings" :key="warning.id" class="record-row">
           <div class="record-meta"><span>{{ warning.student_name || '学生' }} · {{ formatDate(warning.created_at) }}</span><el-tag :type="warning.status === 'pending' ? 'warning' : 'success'">{{ warning.status === 'pending' ? '待审核' : '已审核' }}</el-tag></div>
           <div class="record-copy"><strong>预警记录</strong><p>{{ warning.trigger_msg || '记录未提供描述' }}</p></div>
@@ -73,7 +76,7 @@
       </ol>
     </section>
 
-    <section class="workspace-section" aria-labelledby="followups-heading">
+    <section id="followups" class="workspace-section business-card" aria-labelledby="followups-heading">
       <div class="section-title">
         <div><h3 id="followups-heading">跟进任务</h3><p>任务摘要与处理结果仅供教师工作使用，不会显示给学生。</p></div>
         <el-button plain @click="loadFollowUps" :loading="loadingFollowUps">刷新任务</el-button>
@@ -86,7 +89,7 @@
       <el-alert v-if="sectionErrors.followUps" type="error" :closable="false" :title="sectionErrors.followUps" />
       <div v-if="loadingFollowUps && !followUps.length" class="status-line" role="status">正在加载跟进任务…</div>
       <LibraryEmpty v-else-if="!followUps.length && !schemaDisabled && !sectionErrors.followUps" description="当前筛选下没有跟进任务。可从学生留言或预警记录创建任务。" :image-size="88" />
-      <ol v-else class="record-list">
+      <ol v-else-if="followUps.length" class="record-list">
         <li v-for="task in followUps" :key="task.id" class="record-row">
           <div class="record-meta"><span>学生 #{{ task.student_id }} · {{ sourceLabel(task.source_type) }}</span><el-tag :type="task.status === 'completed' ? 'success' : task.status === 'cancelled' ? 'info' : 'warning'">{{ followUpLabel(task.status) }}</el-tag></div>
           <div class="record-copy"><strong>内部跟进摘要</strong><p>{{ task.summary }}</p><small>截止：{{ formatDate(task.due_at) }}</small></div>
@@ -125,7 +128,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import axios from 'axios'
-import { ElAlert, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElTag, ElTabs, ElTabPane } from 'element-plus'
+import { ElAlert, ElButton, ElDialog, ElForm, ElFormItem, ElInput, ElTag, ElTabs, ElTabPane, ElMessage } from 'element-plus'
 import LibraryEmpty from '../../design/LibraryEmpty.vue'
 
 const questionStatus = ref('pending')
@@ -250,6 +253,7 @@ const submitAnswer = async (question) => {
   try {
     await request({ method: 'post', url: `/api/teacher/questions/${question.id}/answer`, data: { answer_text: answerText } })
     if (!active) return
+    ElMessage.success('答复已发送至学生留言记录。')
     delete answerDrafts[question.id]
     questionStatus.value = 'answered'
     await loadQuestions()
@@ -283,6 +287,7 @@ const createTask = async () => {
       summary: taskForm.summary.trim()
     } })
     if (!active) return
+    ElMessage.success('内部跟进任务已创建。')
     taskDialogVisible.value = false
     followUpStatus.value = 'open'
     await loadFollowUps()
@@ -310,6 +315,7 @@ const submitTaskAction = async () => {
   try {
     await request({ method: 'post', url: `/api/teacher/follow-ups/${activeTaskId.value}/${action === 'complete' ? 'complete' : 'cancel'}`, data: action === 'complete' ? { outcome: text } : { reason: text } })
     if (!active) return
+    ElMessage.success(action === 'complete' ? '跟进结果已保存。' : '取消原因已保存。')
     taskActionVisible.value = false
     await Promise.all([loadFollowUps(), action === 'complete' ? reloadCompletedFollowUps() : reloadCancelledFollowUps()])
   } catch (error) {
@@ -344,7 +350,11 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.support-workspace { display: grid; gap: 24px; max-width: 1080px; margin: 0 auto; }
+.support-workspace { display: grid; gap: 18px; }
+.workspace-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+.workspace-nav a { display: inline-flex; align-items: center; min-height: 38px; padding: 7px 13px; border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-primary); background: var(--surface); text-decoration: none; }
+.workspace-nav a:hover { border-color: var(--brand-600); color: var(--brand-700); }
+.workspace-nav a:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 .workspace-heading, .section-title, .record-meta, .row-actions { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .workspace-heading h2, .section-title h3 { margin: 0; color: var(--text-primary); }
 .workspace-heading p, .section-title p, .dialog-note { margin: 6px 0 0; color: var(--text-secondary); line-height: 1.6; }
@@ -373,6 +383,8 @@ onUnmounted(() => {
 @media (max-width: 600px) {
   .workspace-heading, .section-title { align-items: stretch; flex-direction: column; }
   .workspace-section { padding: 18px; }
+  .workspace-nav { padding: 6px 0; overflow-x: auto; flex-wrap: nowrap; }
+  .workspace-nav a { flex: 0 0 auto; }
   .record-meta { align-items: flex-start; flex-direction: column; }
   .row-actions > :deep(.el-button) { margin-left: 0; }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-page">
+  <div class="chat-page business-page">
     <aside class="session-panel">
       <div class="session-toolbar">
         <el-button type="primary" plain class="new-conv-btn" @click="createNewChat(currentMode)"><LibraryIcon name="add" /> 新对话</el-button>
@@ -12,7 +12,12 @@
           v-for="session in filteredSessions"
           :key="session.id"
           :class="['session-item', currentSessionId === session.id ? 'active' : '']"
+          role="button"
+          tabindex="0"
+          :aria-current="currentSessionId === session.id ? 'true' : undefined"
           @click="loadSession(session.id)"
+          @keydown.enter.stop.prevent="loadSession(session.id)"
+          @keydown.space.stop.prevent="loadSession(session.id)"
         >
           <div class="session-top">
             <span class="session-mode-dot" :class="session.mode === 'daily' ? 'dot-daily' : 'dot-counsel'" />
@@ -39,14 +44,18 @@
         <div class="mode-actions">
           <button
             class="mode-pill"
+            type="button"
             :class="{ active: currentMode === 'daily' }"
+            :aria-pressed="currentMode === 'daily'"
             @click="createNewChat('daily')"
           >
             新日常聊天
           </button>
           <button
             class="mode-pill"
+            type="button"
             :class="{ active: currentMode === 'counseling' }"
+            :aria-pressed="currentMode === 'counseling'"
             @click="createNewChat('counseling')"
           >
             新心理咨询
@@ -139,6 +148,7 @@
 
       <footer class="input-bar">
         <el-input
+          aria-label="输入消息"
           v-model="inputText"
           type="textarea"
           :rows="2"
@@ -148,6 +158,8 @@
           @keydown.enter.prevent="sendMessage"
         />
         <button
+          type="button"
+          aria-label="发送消息"
           class="send-btn"
           @click="sendMessage"
           :disabled="!inputText.trim() || ((!isAnonymous && !currentSessionId) || isTyping)"
@@ -155,6 +167,7 @@
           发送
         </button>
         <button
+          type="button"
           class="deep-think-toggle"
           :class="{ active: deepThinkEnabled }"
           @click="toggleDeepThink"
@@ -1125,6 +1138,7 @@ const scrollToBottom = async () => {
   height: calc(100vh - 120px);
   background: var(--bg);
 }
+.chat-page.business-page { width: 100%; max-width: none; margin: 0; }
 
 .session-panel {
   width: 280px;
@@ -1175,6 +1189,7 @@ const scrollToBottom = async () => {
 .session-item:hover {
   background: var(--surface-subtle);
 }
+.session-item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 
 .session-item.active {
   background: var(--brand-50);
@@ -1599,5 +1614,18 @@ const scrollToBottom = async () => {
     border-left: none;
     border-top: 1px solid var(--border);
   }
+}
+@media (max-width: 600px) {
+  .chat-page { gap: 10px; }
+  .session-panel { max-height: 240px; min-height: 0; }
+  .session-list { max-height: 130px; }
+  .chat-top-bar { align-items: stretch; flex-direction: column; gap: 10px; }
+  .mode-actions { flex-wrap: wrap; }
+  .anon-switch { justify-content: flex-start; }
+  .input-bar { flex-wrap: wrap; gap: 8px; }
+  .input-bar :deep(.el-textarea) { flex: 1 1 100%; min-width: 0; }
+  .input-bar .send-btn, .input-bar .deep-think-toggle { min-height: 44px; }
+  .message-row { max-width: 100%; }
+  .bubble { overflow-wrap: anywhere; }
 }
 </style>

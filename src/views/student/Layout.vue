@@ -1,10 +1,14 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<template>
-  <div class="app-layout">
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<template>
+  <div class="app-layout xy-business">
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <router-link to="/student" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
+    <button class="nav-scrim" type="button" aria-hidden="true" tabindex="-1" @click="closeMobileNav" v-if="mobileNavOpen"></button>
+    <aside ref="sidebarRef" id="student-navigation-panel" class="sidebar" :class="{ 'mobile-open': mobileNavOpen }" :aria-hidden="isMobile && !mobileNavOpen ? 'true' : 'false'" @keydown.tab="handleNavTab" @click="handleNavClick">
+      <div class="sidebar-head">
+        <router-link to="/student" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
+        <button class="mobile-nav-close" type="button" aria-label="关闭导航" @click="closeMobileNav"><el-icon><LibraryIcon name="arrow-left" /></el-icon><span>关闭</span></button>
+      </div>
 
-      <nav class="nav-menu" aria-label="学生导航">
+      <nav class="nav-menu" aria-label="学生导航" @keydown.esc="closeMobileNav">
         <router-link to="/student/dashboard" class="nav-item" active-class="active" exact-active-class="active">
           <el-icon><LibraryIcon name="home" /></el-icon><span class="nav-text">首页</span>
         </router-link>
@@ -26,9 +30,15 @@
         <router-link to="/student/treehole" class="nav-item" active-class="active">
           <el-icon><LibraryIcon name="treehole" /></el-icon><span class="nav-text">匿名树洞</span>
         </router-link>
-        <router-link to="/student/report" class="nav-item" active-class="active">
-          <el-icon><LibraryIcon name="report" /></el-icon><span class="nav-text">我的</span>
-        </router-link>
+        <div class="nav-group" :class="{ 'group-active': activeStudentGroup === 'mine' }">
+          <button type="button" class="nav-item nav-group-toggle" :aria-expanded="mineOpen" aria-controls="mine-submenu" @click="mineOpen = !mineOpen">
+            <el-icon><LibraryIcon name="user" /></el-icon><span class="nav-text">我的</span><el-icon class="nav-caret" :class="{ expanded: mineOpen }"><LibraryIcon name="arrow-down" /></el-icon>
+          </button>
+          <div v-if="mineOpen" id="mine-submenu" class="nav-submenu">
+            <router-link to="/student/report" class="nav-item nav-subitem" active-class="active">心理报告</router-link>
+            <router-link to="/student/questions" class="nav-item nav-subitem" active-class="active">留言与答复</router-link>
+          </div>
+        </div>
 
         <div class="nav-divider"></div>
 
@@ -47,8 +57,9 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content" :inert="mobileNavOpen">
       <header class="top-header">
+        <button ref="mobileNavTrigger" class="mobile-nav-trigger" type="button" aria-controls="student-navigation-panel" :aria-expanded="mobileNavOpen" @click="toggleMobileNav"><el-icon><LibraryIcon name="collection" /></el-icon><span>导航</span></button>
         <h1 class="page-title">{{ pageTitle }}</h1>
 
         <div class="header-right">
@@ -70,288 +81,96 @@ import { getVisualAsset } from '../../design/asset-registry'
 const brandLogo = getVisualAsset('brandLogo').url
 const profileAvatar = getVisualAsset('studentAvatar').url
 
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
 const user = ref({})
 const route = useRoute()
-const pageTitle = computed(() => ({ dashboard: '心理健康数据看板', test: '心理测评', appointments: '预约咨询', articles: '心理科普', 'advanced-chat': '智能心理助手', report: '我的心理报告', treehole: '匿名树洞', questions: '心理问答' }[route.path.split('/').at(-1)] || '学生空间'))
+const mobileNavOpen = ref(false)
+const mobileNavTrigger = ref(null)
+const sidebarRef = ref(null)
+const isMobile = ref(false)
+let mediaQuery
+let navFocusRequest = 0
+const focusableNavItems = () => [...(sidebarRef.value?.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])') || [])].filter(element => element.getClientRects().length > 0)
+const nextFrame = () => new Promise(resolve => window.requestAnimationFrame(resolve))
+const openMobileNav = async () => {
+  const request = ++navFocusRequest
+  mobileNavOpen.value = true
+  await nextTick()
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    await nextFrame()
+    if (request !== navFocusRequest || !mobileNavOpen.value || !isMobile.value || !sidebarRef.value?.isConnected) return
+    const target = focusableNavItems().find(element => {
+      const style = window.getComputedStyle(element)
+      return style.display !== 'none' && style.visibility === 'visible' && !element.hasAttribute('disabled')
+    })
+    target?.focus?.({ preventScroll: true })
+    if (target && sidebarRef.value.contains(document.activeElement)) return
+  }
+}
+const closeMobileNav = async () => {
+  if (!mobileNavOpen.value) return
+  navFocusRequest += 1
+  mobileNavOpen.value = false
+  await nextTick()
+  mobileNavTrigger.value?.focus?.()
+}
+const toggleMobileNav = () => { if (mobileNavOpen.value) closeMobileNav(); else openMobileNav() }
+const handleNavClick = (event) => { if (event.target.closest?.('a[href]')) closeMobileNav() }
+const handleEscape = (event) => { if (event.key === 'Escape') closeMobileNav() }
+const handleNavTab = (event) => {
+  if (!mobileNavOpen.value || !isMobile.value || event.key !== 'Tab') return
+  const items = focusableNavItems()
+  if (!items.length) return
+  const first = items[0]
+  const last = items[items.length - 1]
+  if (event.shiftKey && (document.activeElement === first || !sidebarRef.value?.contains(document.activeElement))) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && (document.activeElement === last || !sidebarRef.value?.contains(document.activeElement))) {
+    event.preventDefault()
+    first.focus()
+  }
+}
+const syncViewport = async (event) => {
+  isMobile.value = event.matches
+  if (!event.matches && mobileNavOpen.value) {
+    navFocusRequest += 1
+    mobileNavOpen.value = false
+    await nextTick()
+    sidebarRef.value?.querySelector('[aria-current="page"], .nav-item')?.focus?.()
+  }
+}
+const pageTitle = computed(() => ({ dashboard: '我的近况', test: '心理测评', appointments: '预约咨询', articles: '心理科普', 'advanced-chat': '智能心理助手', report: '我的心理报告', treehole: '匿名树洞', questions: '留言与答复' }[route.path.split('/').at(-1)] || '学生空间'))
 const growthOpen = ref(['/student/test', '/student/articles'].some(path => route.path === path || route.path.startsWith('/article/')))
+const mineOpen = ref(['/student/report', '/student/questions'].includes(route.path))
 const activeStudentGroup = computed(() => {
   if (['/student/test', '/student/articles'].includes(route.path) || route.path.startsWith('/article/')) return 'growth'
-  if (route.path === '/student/report') return 'mine'
+  if (['/student/report', '/student/questions'].includes(route.path)) return 'mine'
   return route.path.split('/')[2] || 'dashboard'
 })
 watch(() => route.path, (path) => {
+  if (mobileNavOpen.value) closeMobileNav()
   if (['/student/test', '/student/articles'].includes(path) || path.startsWith('/article/')) growthOpen.value = true
+  if (['/student/report', '/student/questions'].includes(path)) mineOpen.value = true
 })
 
 onMounted(() => {
+  mediaQuery = window.matchMedia('(max-width: 760px)')
+  isMobile.value = mediaQuery.matches
+  mediaQuery.addEventListener?.('change', syncViewport)
+  window.addEventListener('keydown', handleEscape)
   const userInfo = localStorage.getItem('user')
   if (userInfo) {
     try { user.value = JSON.parse(userInfo) || {} } catch { user.value = {} }
   }
 })
+onUnmounted(() => { navFocusRequest += 1; mediaQuery?.removeEventListener?.('change', syncViewport); window.removeEventListener('keydown', handleEscape) })
 
 const logout = () => {
   for (const key of ['token', 'access_token', 'role', 'user']) localStorage.removeItem(key)
   router.push('/login')
 }
 </script>
-
-<style scoped>
-.app-layout {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--surface-warm);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  background-color: var(--surface-warm);
-  display: flex;
-  flex-direction: column;
-  padding: 30px 0;
-  border-right: 1px solid var(--border);
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  padding: 0 30px;
-  margin-bottom: 40px;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--text-primary);
-}
-
-.logo-icon {
-  font-size: 24px;
-  margin-right: 10px;
-}
-
-.nav-menu {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 30px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s;
-  cursor: pointer;
-  position: relative;
-  border-radius: 12px;
-  margin: 0 10px;
-}
-
-.nav-item .el-icon {
-  font-size: 18px;
-  margin-right: 12px;
-  color: var(--text-secondary);
-}
-
-.nav-item:hover, .nav-item.active {
-  color: var(--brand-600);
-  font-weight: 500;
-}
-
-.nav-item.active {
-  background-color: color-mix(in srgb, var(--brand-500) 14%, transparent);
-  color: var(--brand-600);
-}
-
-.nav-item.active::before {
-  content: "";
-  position: absolute;
-  left: -10px;
-  top: 8px;
-  bottom: 8px;
-  width: 3px;
-  border-radius: 3px;
-  background: var(--brand-600);
-}
-
-.nav-item.active .el-icon {
-  color: var(--brand-600);
-}
-
-.nav-group { display: flex; flex-direction: column; }
-.nav-group-toggle { width: calc(100% - 20px); font: inherit; }
-.nav-caret { margin-left: auto; transition: transform .18s ease; }
-.nav-caret.expanded { transform: rotate(180deg); }
-.nav-submenu { display: flex; flex-direction: column; padding: 2px 10px 6px 46px; }
-.nav-subitem { min-height: 40px; padding: 9px 12px; font-size: 13px; }
-.nav-subitem.active { background: var(--brand-50); }
-.nav-group.group-active > .nav-group-toggle { color: var(--brand-600); }
-.nav-item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: -2px; }
-
-.nav-divider {
-  height: 1px;
-  background-color: color-mix(in srgb, var(--gray-900) 5%, transparent);
-  margin: 20px 30px;
-}
-
-/* User Profile */
-.user-profile {
-  display: flex;
-  align-items: center;
-  padding: 14px 22px 0 22px;
-  margin-top: auto;
-  border-top: 1px solid var(--border);
-}
-
-.user-info {
-  margin-left: 12px;
-}
-
-.user-name {
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--text-primary);
-}
-
-.user-email {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-/* Main Content */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* Header */
-.top-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 40px;
-  gap: 16px;
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--text-primary);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background-color: var(--surface);
-  padding: 10px 16px;
-  border-radius: 12px;
-  width: 300px;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--gray-900) 6%, transparent);
-  margin-left: auto;
-}
-
-.search-icon {
-  color: var(--text-secondary);
-  margin-right: 10px;
-  font-size: 18px;
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-size: 14px;
-  color: var(--text-primary);
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.icon-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  padding: 8px;
-  font-size: 18px;
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all .2s ease;
-}
-
-.icon-btn:hover {
-  color: var(--brand-600);
-  border-color: var(--brand-600);
-}
-
-.avatar-group {
-  display: flex;
-  align-items: center;
-  background-color: var(--surface);
-  padding: 4px 12px 4px 4px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--gray-900) 6%, transparent);
-}
-
-.overlap-avatar {
-  border: 2px solid var(--surface);
-}
-
-.avatar-count {
-  font-size: 13px;
-  font-weight: bold;
-  margin-left: 8px;
-  color: var(--text-primary);
-}
-
-.primary-btn {
-  background-color: var(--brand-600);
-  color: var(--surface);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--gray-900) 6%, transparent);
-}
-
-.primary-btn:hover {
-  background-color: var(--brand-600);
-}
-
-/* Page Wrapper */
-.page-wrapper {
-  flex: 1;
-  padding: 0 40px 40px 40px;
-  overflow-y: auto;
-}
-
-@media (max-width: 760px) {
-  .nav-group { flex: 0 0 auto; }
-  .nav-group-toggle { width: auto; }
-  .nav-submenu { flex-direction: row; padding: 0 4px 8px; gap: 4px; }
-  .nav-subitem { min-height: 38px; }
-  .nav-caret { margin-left: 4px; }
-  .nav-menu { align-items: flex-start; }
-  .nav-menu { scrollbar-width: none; }
-  .nav-menu::-webkit-scrollbar { display: none; }
-}
-</style>

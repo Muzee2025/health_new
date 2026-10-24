@@ -1,5 +1,5 @@
 <template>
-  <section class="questions-page" aria-labelledby="questions-title">
+  <section class="questions-page business-page" aria-labelledby="questions-title">
     <header class="page-intro">
       <div>
         <h2 id="questions-title">向老师留言</h2>
@@ -8,8 +8,8 @@
       <el-button plain @click="fetchQuestions" :loading="loadingQuestions">刷新记录</el-button>
     </header>
 
-    <el-alert v-if="schemaDisabled" type="info" :closable="false" title="求助服务尚未启用，请联系管理员。" />
-    <el-alert v-else-if="loadError" type="error" :closable="false" title="提问记录暂时无法加载，请检查网络后重试。" />
+    <el-alert v-if="schemaDisabled" role="status" type="info" :closable="false" title="求助服务尚未启用，请联系管理员。" />
+    <el-alert v-else-if="loadError" role="alert" type="error" :closable="false" title="提问记录暂时无法加载，请检查网络后重试。" />
 
     <section v-else class="question-compose" aria-label="提交问题">
       <label for="student-question-text" class="question-label">想留言咨询什么？</label>
@@ -22,11 +22,12 @@
         show-word-limit
         placeholder="写下想和老师讨论的事情"
         :disabled="submitting || schemaDisabled"
+        aria-describedby="question-service-note"
       />
       <div class="compose-footer">
-        <p>留言只会提供给按学校明确分配关系负责你的老师。这里不提供紧急响应。</p>
+        <p id="question-service-note">留言只会提供给按学校明确分配关系负责你的老师。这里不提供紧急响应，也不承诺回复时效。</p>
         <el-button type="primary" :loading="submitting" :disabled="submitting || !form.question_text.trim()" @click="submitQuestion">
-          提交留言
+          {{ submitting ? '正在提交' : '提交留言' }}
         </el-button>
       </div>
       <el-alert v-if="submitError" type="error" :closable="false" :title="submitError" show-icon />
@@ -39,11 +40,11 @@
           <p>仅显示本人提交的问题和老师公开给你的回复。</p>
         </div>
       </div>
-      <div v-if="loadingQuestions && !questions.length" class="history-loading" role="status">正在加载留言…</div>
+      <div v-if="loadingQuestions && !questions.length" class="history-loading" role="status" aria-live="polite">正在加载留言…</div>
       <LibraryEmpty v-else-if="!questions.length && !loadError && !schemaDisabled" description="还没有留言。你可以在上方写下想咨询老师的问题。" :image-size="100">
         <el-button type="primary" plain @click="focusComposer">写一条留言</el-button>
       </LibraryEmpty>
-      <ol v-else class="question-list">
+      <ol v-else class="question-list" aria-live="polite">
         <li v-for="question in questions" :key="question.id" class="question-entry">
           <div class="entry-meta">
             <time :datetime="question.created_at">{{ formatDate(question.created_at) }}</time>

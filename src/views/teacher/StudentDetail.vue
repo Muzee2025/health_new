@@ -1,5 +1,9 @@
 <template>
-  <div class="detail-container" v-if="studentData">
+  <div v-if="!studentData" class="detail-state" role="status">
+    <p v-if="detailLoading">正在加载学生档案…</p>
+    <template v-else><p>{{ detailError || '学生档案暂时无法显示。' }}</p><el-button type="primary" plain @click="fetchStudentDetail">重新加载</el-button></template>
+  </div>
+  <div class="detail-container business-page" v-else>
     <div class="header-card">
       <el-page-header @back="$router.back()" title="返回" class="page-header">
         <template #content>
@@ -7,7 +11,7 @@
             <div class="text-avatar" :style="{ backgroundColor: getAvatarColor(studentData.student_info.name) }">
               {{ getSurname(studentData.student_info.name) }}
             </div>
-            <span class="header-title">{{ studentData.student_info.name }} 的心理档案</span>
+            <span class="header-title"><span>{{ studentData.student_info.name }}</span><span>的心理档案</span></span>
           </div>
         </template>
         <template #extra>
@@ -35,7 +39,7 @@
             </div>
             <div class="info-item">
               <span class="label">班级</span>
-              <span class="value">默认班级</span> <!-- Mock -->
+              <span class="value">{{ studentData.student_info.class_name || '暂无' }}</span>
             </div>
             <div class="info-item">
               <span class="label">辅导员</span>
@@ -132,7 +136,7 @@
         <div class="bottom-grid mt-20">
           <div class="info-card flex-col">
             <h3 class="card-title">预约记录</h3>
-            <el-table :data="studentData.appointments" style="width: 100%" height="250" stripe>
+            <div class="business-table-wrap"><el-table :data="studentData.appointments" style="width: 100%" height="250" stripe empty-text="暂无预约记录。">
               <el-table-column prop="time_slot" label="时间" width="160" />
               <el-table-column prop="teacher_name" label="咨询老师" />
               <el-table-column prop="status" label="状态">
@@ -142,7 +146,7 @@
                   </el-tag>
                 </template>
               </el-table-column>
-            </el-table>
+            </el-table></div>
           </div>
           
           <div class="info-card flex-col">
@@ -181,6 +185,8 @@ import { ElMessage, ElPageHeader, ElButton, ElIcon, ElTimeline, ElTimelineItem, 
 
 const route = useRoute()
 const studentData = ref(null)
+const detailLoading = ref(false)
+const detailError = ref('')
 const newRecordText = ref('')
 const exporting = ref(false)
 
@@ -270,6 +276,8 @@ const riskTimelineData = computed(() => {
 
 const fetchStudentDetail = async () => {
   const id = route.params.id
+  detailLoading.value = true
+  detailError.value = ''
   try {
     const token = localStorage.getItem('token')
     const res = await axios.get(`/api/teacher/student/${id}`, {
@@ -279,7 +287,11 @@ const fetchStudentDetail = async () => {
     studentData.value = res.data
   } catch (error) {
     if (unmounted) return
-    ElMessage.error('获取学生详情失败')
+    detailError.value = error?.response?.status === 403 || error?.response?.status === 404
+      ? '该学生不在你的分配范围内，无法查看档案。'
+      : '学生档案暂时无法加载，请重试。'
+  } finally {
+    if (!unmounted) detailLoading.value = false
   }
 }
 
@@ -336,8 +348,10 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 100%;
+  min-width: 0;
 }
+.detail-state { display: grid; justify-items: start; gap: 12px; padding: 28px; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.detail-container :deep(.business-table-wrap .el-table) { min-width: 520px; }
 
 .header-card {
   background: var(--surface);
@@ -372,18 +386,21 @@ onUnmounted(() => {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
   gap: 20px;
   flex: 1;
+  min-width: 0;
 }
 
 .left-col, .right-col {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0;
 }
 
 .info-card {
+  min-width: 0;
   background: var(--surface);
   border-radius: 8px;
   padding: 24px;
@@ -438,6 +455,7 @@ onUnmounted(() => {
   font-size: 14px;
   line-height: 1.6;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .risk-timeline, .intervention-list {
@@ -468,11 +486,13 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  min-width: 0;
 }
 
-.add-btn {
-  align-self: flex-end;
-}
+.intervention-add :deep(.el-textarea),
+.intervention-add :deep(.el-textarea__inner) { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+.add-btn { align-self: flex-end; max-width: 100%; }
 
 .record-content p {
   margin: 0 0 8px 0;
@@ -594,5 +614,27 @@ onUnmounted(() => {
 .text-red {
   color: var(--danger-text) !important;
   font-weight: 500;
+}
+@media (max-width: 900px) {
+  .content-grid, .bottom-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .header-card, .info-card { padding: 16px; }
+  .page-header :deep(.el-page-header__header) { align-items: stretch; flex-direction: column; gap: 12px; }
+  .page-header :deep(.el-page-header__left) { align-items: flex-start; width: 100%; min-width: 0; margin-right: 0; }
+  .page-header :deep(.el-page-header__back) { flex: 0 0 auto; min-width: max-content; }
+  .page-header :deep(.el-page-header__title) { white-space: nowrap; }
+  .page-header :deep(.el-page-header__content) { flex: 1 1 auto; min-width: 0; }
+  .page-header :deep(.el-page-header__extra) { width: 100%; margin: 0; }
+  .page-header :deep(.el-page-header__extra .el-button) { width: 100%; min-height: 44px; justify-content: center; white-space: normal; line-height: 1.4; }
+  .header-title-wrapper { align-items: flex-start; gap: 10px; }
+  .header-title-wrapper, .header-title { min-width: 0; }
+  .text-avatar { flex: 0 0 40px; width: 40px; height: 40px; font-size: 17px; }
+  .header-title { display: flex; flex: 1 1 auto; flex-wrap: wrap; column-gap: .3em; font-size: 17px; line-height: 1.4; }
+  .header-title > span { white-space: nowrap; }
+  .info-item { align-items: flex-start; gap: 12px; }
+  .value { text-align: right; overflow-wrap: anywhere; }
+  .chat-msg { max-width: 94%; }
+  .intervention-add :deep(.el-button) { align-self: stretch; width: 100%; margin-left: 0; }
 }
 </style>

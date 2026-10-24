@@ -1,7 +1,7 @@
 <template>
-  <div class="test-container">
-    <h2 class="page-title">专业心理测评</h2>
-    <p class="page-desc">了解自己，从这里开始。请选择适合您的专业量表进行测试。</p>
+  <div class="test-container business-page">
+    <h2 class="page-title">心理测评</h2>
+    <p class="page-desc">选择一份量表开始作答。结果按页面展示的量表规则呈现，不代替专业评估。</p>
 
     <!-- 测评列表 -->
     <el-row :gutter="20" class="mt-30" v-if="!currentTest">
@@ -35,12 +35,17 @@
         <h3 class="q-title">{{ currentTest.questions[currentQIndex].title }}</h3>
         <p class="q-tip">请选择最符合你当前状态的选项；支持返回上一题并修改答案。</p>
         
-        <div class="options">
+        <div class="options" role="radiogroup" :aria-label="currentTest.questions[currentQIndex].title">
           <div 
             v-for="(opt, idx) in getCurrentOptions()" 
             :key="idx"
             :class="['option-item', { 'is-selected': isOptionSelected(opt) }]"
+            role="radio"
+            :aria-checked="isOptionSelected(opt)"
+            tabindex="0"
             @click="selectOption(opt)"
+            @keydown.enter.prevent="selectOption(opt)"
+            @keydown.space.prevent="selectOption(opt)"
           >
             {{ opt.label }}
           </div>
@@ -517,6 +522,7 @@ onBeforeUnmount(() => {
   border-color: var(--brand-600);
   color: var(--brand-600);
 }
+.option-item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 .option-item.is-selected {
   background-color: var(--brand-100);
   border-color: var(--brand-600);
@@ -641,5 +647,17 @@ onBeforeUnmount(() => {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
   100% { transform: translateY(0px); }
+}
+@media (max-width: 600px) {
+  .question-card :deep(.el-card__body), .result-card :deep(.el-card__body) { padding: 18px; }
+  .option-item { padding: 14px 16px; }
+  .question-actions { align-items: stretch; flex-direction: column; }
+  .question-actions :deep(.el-button) { width: 100%; margin: 0; }
+  .result-actions :deep(.el-button) { min-height: 44px; margin: 0; }
+  .score-display { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .result-icon { animation: none; }
+  .option-item { transition: none; }
 }
 </style>

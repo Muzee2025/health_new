@@ -1,9 +1,40 @@
 ﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<template>
-  <div class="dashboard-container">
+  <div class="dashboard-container business-page">
     <el-alert v-if="loadError" class="data-error" :title="loadError" type="error" :closable="false" show-icon><el-button link type="primary" @click="retryDashboard">重新加载</el-button></el-alert>
     <div v-if="loading" class="loading-state"><el-skeleton :rows="5" animated /></div>
 
-    <div v-show="!loading && !loadError">
+    <section v-show="!loading && !loadError" class="dashboard-content" aria-labelledby="dashboard-next-title">
+      <header class="dashboard-intro">
+        <div>
+          <h2 id="dashboard-next-title">从这里开始</h2>
+          <p>按你现在的需要选择下一步。测评、预约和对话记录分别展示，不合并成单一分数。</p>
+        </div>
+        <div class="action-links" aria-label="常用行动">
+          <el-button type="primary" @click="router.push('/student/test')"><LibraryIcon name="assessment" /> 开始测评</el-button>
+          <el-button plain @click="router.push('/student/appointments')"><LibraryIcon name="appointment" /> 预约咨询</el-button>
+          <el-button plain @click="router.push('/student/questions')"><LibraryIcon name="support" /> 向老师留言</el-button>
+          <el-button plain @click="router.push('/student/advanced-chat')"><LibraryIcon name="chat" /> 和助手聊聊</el-button>
+        </div>
+      </header>
+
+      <el-card v-if="appointmentStats.next_appointment" class="next-appointment-card" shadow="never">
+        <div class="next-appointment-copy">
+          <strong>下一次预约</strong>
+          <span>{{ appointmentStats.next_appointment.time_slot }}</span>
+        </div>
+        <div class="appointment-actions">
+          <el-button size="small" plain @click="goModifyAppointment">查看预约</el-button>
+          <el-button size="small" type="danger" plain @click="cancelNextAppointment">取消预约</el-button>
+        </div>
+      </el-card>
+
+      <section class="insights-section" aria-labelledby="insights-title">
+        <div class="section-heading">
+          <div>
+            <h2 id="insights-title">近期洞察</h2>
+            <p>以下内容来自你的记录。图表帮助回看变化，不代替专业评估。</p>
+          </div>
+        </div>
       <el-row :gutter="20">
         <el-col :xs="24" :md="16" class="mb-20">
           <el-card class="chart-card" shadow="hover">
@@ -25,16 +56,15 @@
           <el-card class="chart-card" shadow="hover">
             <div class="card-header">
               <LibraryIcon name="assessment" class="icon" /> 量表得分对比
-              <el-popover placement="top" width="220" trigger="click" content="该常模基于全国大学生群体数据。">
+              <el-popover placement="top" width="240" trigger="click" content="常模来源与适用范围待核实，请以量表原始说明为准。">
                 <template #reference><el-icon class="help-icon"><LibraryIcon name="help"  /></el-icon></template>
               </el-popover>
             </div>
             <div v-if="showSdsCard" class="score-card">
               <div class="score-title">SDS抑郁自评量表</div>
-              <div class="score-value">您的得分：{{ sdsScore }}分（{{ sdsLevel }}）</div>
-              <el-progress :percentage="Math.min(100, Math.max(0, sdsScore))" :stroke-width="16" :color="sdsColor" />
-              <div class="score-norm">常模平均：{{ sdsNorm }}分</div>
-              <div class="score-desc">您的得分 {{ sdsScore }} 分，属于{{ sdsLevel }}抑郁倾向。{{ sdsAdvice }}</div>
+              <div class="score-value">本次得分：{{ sdsScoreObj.score ?? '暂无记录' }}<span v-if="sdsScoreObj.score != null">分</span></div>
+              <div v-if="sdsScoreObj.norm != null" class="score-norm">参考值：{{ sdsScoreObj.norm }}分（来源与适用范围待核实）</div>
+              <div class="score-desc">此处展示量表记录值，不作诊断或临床解释。请结合量表原始说明理解结果。</div>
             </div>
             <div v-else ref="scoreChartRef" class="chart"></div>
           </el-card>
@@ -66,17 +96,11 @@
               <div>待处理：{{ appointmentStats.pending || 0 }} 个</div>
               <div>已取消：{{ appointmentStats.cancelled || 0 }} 个</div>
             </div>
-            <div v-if="appointmentStats.next_appointment" class="next-appointment">
-              您的下一次咨询：{{ appointmentStats.next_appointment.time_slot }}
-              <div class="appointment-actions">
-                <el-button size="small" type="danger" plain @click="cancelNextAppointment">取消</el-button>
-                <el-button size="small" type="primary" plain @click="goModifyAppointment">修改</el-button>
-              </div>
-            </div>
           </el-card>
         </el-col>
       </el-row>
-    </div>
+      </section>
+    </section>
 
     <el-dialog v-model="wordDialogVisible" :title="`包含「${currentWord}」的树洞心声`" width="500px">
       <div v-if="treeholePosts.length > 0" class="treehole-list">
@@ -125,11 +149,6 @@ const trendLastUpdatedAt = ref('')
 
 const sdsScoreObj = computed(() => latestScores.value.find(item => item.name === 'SDS'))
 const showSdsCard = computed(() => latestScores.value.length === 1 && !!sdsScoreObj.value)
-const sdsScore = computed(() => Number(sdsScoreObj.value?.score || 0))
-const sdsNorm = computed(() => Number(sdsScoreObj.value?.norm || 42))
-const sdsLevel = computed(() => sdsScore.value >= 73 ? '重度' : sdsScore.value >= 63 ? '中度' : sdsScore.value >= 53 ? '轻度' : '无明显')
-const sdsAdvice = computed(() => sdsScore.value >= 63 ? '建议尽快预约心理咨询，并减少连续高压学习时长。' : sdsScore.value >= 53 ? '建议多进行户外活动，必要时可预约咨询。' : '建议保持规律作息并持续关注情绪波动。')
-const sdsColor = computed(() => sdsScore.value >= 73 ? businessColor('data-risk-high') : sdsScore.value >= 63 ? businessColor('data-risk-mid') : sdsScore.value >= 53 ? businessColor('danger-100') : businessColor('data-risk-low'))
 
 let unmounted = false
 onMounted(async () => {
@@ -301,7 +320,17 @@ const cancelNextAppointment = async () => {
 const goModifyAppointment = () => router.push('/student/appointments')
 </script>
 <style scoped>
-.dashboard-container { background-color: var(--surface-subtle); min-height: 100%; padding-bottom: 20px; }
+.dashboard-container { min-height: 100%; padding-bottom: 20px; }
+.dashboard-content { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; min-width: 0; }
+.dashboard-intro { display: grid; grid-template-columns: minmax(220px, .75fr) minmax(0, 1.25fr); align-items: center; gap: 24px; padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+.dashboard-intro > *, .section-heading > * { min-width: 0; }
+.dashboard-intro h2, .section-heading h2 { margin: 0; color: var(--text-primary); font-size: 20px; }
+.dashboard-intro p, .section-heading p { margin: 8px 0 0; color: var(--text-secondary); line-height: 1.6; }
+.action-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.next-appointment-card { border-left: 3px solid var(--accent-sage); }
+.next-appointment-copy { display: flex; flex-wrap: wrap; gap: 10px 20px; color: var(--text-primary); }
+.insights-section { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.section-heading { display: flex; justify-content: space-between; gap: 16px; }
 .page-title { font-size: 24px; color: var(--text-primary); margin-bottom: 24px; font-weight: 600; }
 .mb-20 { margin-bottom: 20px; }
 .chart-card { border-radius: 16px; border: none; box-shadow: 0 4px 6px -1px color-mix(in srgb, var(--gray-900) 5%, transparent), 0 2px 4px -1px color-mix(in srgb, var(--gray-900) 3%, transparent); }
@@ -311,7 +340,7 @@ const goModifyAppointment = () => router.push('/student/appointments')
 .trend-meta { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
 .help-icon { color: var(--text-secondary); font-size: 14px; cursor: pointer; }
 .card-header .icon { font-size: 20px; }
-.chart { width: 100%; height: 250px; }
+.chart { width: 100%; min-width: 0; height: 250px; }
 .score-card { min-height: 250px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
 .score-title { font-size: 16px; color: var(--text-primary); font-weight: 600; }
 .score-value { font-size: 15px; color: var(--text-primary); }
@@ -322,6 +351,18 @@ const goModifyAppointment = () => router.push('/student/appointments')
 .treehole-item { background: var(--surface-subtle); padding: 16px; border-radius: 8px; }
 .treehole-item .content { color: var(--text-primary); line-height: 1.5; font-size: 14px; margin: 0; font-style: italic; }
 .appointment-meta { color: var(--text-secondary); font-size: 13px; line-height: 1.7; margin-top: -4px; }
-.next-appointment { margin-top: 8px; border-left: 3px solid var(--warning-text); background: var(--warning-100); color: var(--warning-text); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
-.appointment-actions { margin-top: 8px; display: flex; gap: 8px; }
+.next-appointment-card :deep(.el-card__body) { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.appointment-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 600px) {
+  .dashboard-intro { grid-template-columns: minmax(0, 1fr); padding: 18px; min-width: 0; }
+  .action-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 0; }
+  .action-links :deep(.el-button) { width: 100%; min-width: 0; min-height: 44px; margin: 0; padding-inline: 8px; white-space: normal; }
+  .trend-header { align-items: flex-start; flex-direction: column; }
+  .trend-header > *, .trend-tools { min-width: 0; max-width: 100%; }
+  .trend-tools { width: 100%; flex-wrap: wrap; }
+  .insights-section > .el-row { min-width: 0; max-width: 100%; }
+  .next-appointment-card :deep(.el-card__body) { display: grid; gap: 12px; }
+  .appointment-actions { flex-wrap: wrap; }
+  .next-appointment-copy, .appointment-actions { min-width: 0; }
+}
 </style>

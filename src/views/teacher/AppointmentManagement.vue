@@ -1,7 +1,7 @@
 <template>
-  <div class="management-container">
-    <div class="filter-card">
-      <el-select v-model="filterStatus" placeholder="全部状态" clearable class="filter-select">
+  <div class="management-container business-page">
+    <div class="filter-card business-actions">
+      <el-select v-model="filterStatus" placeholder="全部状态" aria-label="按预约状态筛选" clearable class="filter-select">
         <el-option label="待处理" value="pending" />
         <el-option label="已确认" value="confirmed" />
         <el-option label="已完成" value="completed" />
@@ -9,8 +9,9 @@
       </el-select>
     </div>
 
-    <div class="table-card">
-      <el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe>
+    <div class="table-card business-card">
+      <el-alert v-if="loadError" type="error" :closable="false" title="预约列表暂时无法加载。"><el-button text type="primary" @click="fetchAppointments">重新加载</el-button></el-alert>
+      <div class="business-table-wrap"><el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe empty-text="当前筛选下没有预约记录。">
         <el-table-column label="头像" width="92" align="center">
           <template #default="scope">
             <img
@@ -50,12 +51,14 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
 
       <div class="pagination-wrapper">
         <el-pagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
           :page-sizes="[10, 20, 50]"
+          :pager-count="5"
           layout="total, sizes, prev, pager, next"
           :total="filteredData.length"
         />
@@ -67,13 +70,14 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElSelect, ElOption, ElTable, ElTableColumn, ElTag, ElDropdown, ElButton, ElIcon, ElDropdownMenu, ElDropdownItem, ElPagination, vLoading } from 'element-plus'
+import { ElMessage, ElSelect, ElOption, ElTable, ElTableColumn, ElTag, ElDropdown, ElButton, ElIcon, ElDropdownMenu, ElDropdownItem, ElPagination, ElAlert, vLoading } from 'element-plus'
 import {
   PSYCH_TEACHER_AVATAR_ALT,
   getPsychTeacherAvatar,
 } from '../../utils/psychTeacherAvatar'
 
 const loading = ref(false)
+const loadError = ref(false)
 const appointments = ref([])
 const filterStatus = ref('')
 
@@ -100,8 +104,10 @@ const fetchAppointments = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     appointments.value = res.data
+    loadError.value = false
   } catch (error) {
     console.error('Failed to fetch appointments', error)
+    loadError.value = true
   } finally {
     loading.value = false
   }
@@ -181,6 +187,26 @@ onMounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  min-width: 0;
+  width: 100%;
+}
+@media (max-width: 760px) {
+  .filter-card { padding: 14px; }
+  .filter-select { width: 100%; }
+  .pagination-wrapper { justify-content: flex-start; overflow: visible; }
+  .pagination-wrapper :deep(.el-pagination) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 10px;
+    max-width: 100%;
+  }
+  .pagination-wrapper :deep(.el-pagination__total) { order: 1; margin-right: 0; }
+  .pagination-wrapper :deep(.el-pagination__sizes) { order: 2; margin: 0; }
+  .pagination-wrapper :deep(.el-pagination__sizes .el-select) { width: 104px; }
+  .pagination-wrapper :deep(.btn-prev) { order: 3; margin: 0; }
+  .pagination-wrapper :deep(.el-pager) { order: 4; margin: 0; }
+  .pagination-wrapper :deep(.btn-next) { order: 5; margin: 0; }
 }
 
 .teacher-avatar-img {

@@ -1,5 +1,12 @@
 <template>
-  <div class="article-detail-container" v-if="article">
+  <main class="article-detail-container" :aria-busy="loading">
+    <div v-if="loading" class="article-state" role="status" aria-label="正在加载文章"><el-skeleton :rows="7" animated /></div>
+    <section v-else-if="loadError" class="article-state" aria-labelledby="article-error-title">
+      <LibraryEmpty role="networkError" :description="loadError" />
+      <h1 id="article-error-title">文章暂时无法打开</h1>
+      <div class="article-recovery"><el-button type="primary" @click="fetchArticle">重新加载</el-button><el-button @click="goBack">返回列表</el-button></div>
+    </section>
+    <template v-else-if="article">
     <div class="header-card">
       <el-page-header @back="goBack" title="返回" class="page-header">
         <template #content>
@@ -21,18 +28,19 @@
         <img :src="article.cover_url" class="article-cover" :alt="article.title" />
       </div>
       
-      <div class="article-content" v-html="safeArticleContent" @click="handleArticleContentClick"></div>
+      <article class="article-content" aria-label="文章正文" v-html="safeArticleContent" @click="handleArticleContentClick"></article>
     </div>
-  </div>
+    </template>
+  </main>
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount, onMounted } from 'vue'
+import { ref, computed, onBeforeUnmount, onMounted, watch } from 'vue'
 import DOMPurify from 'dompurify'
 import { downloadArticleDocument } from '../utils/articleDocuments'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage, ElPageHeader, ElTag } from 'element-plus'
+import { ElMessage, ElPageHeader, ElTag, ElButton, ElSkeleton } from 'element-plus'
 
 const handleArticleContentClick = async (event) => {
   try { await downloadArticleDocument(event) } catch { ElMessage.error('附件下载失败，请重新登录或稍后重试') }
@@ -40,13 +48,19 @@ const handleArticleContentClick = async (event) => {
 const route = useRoute()
 const router = useRouter()
 const article = ref(null)
+const loading = ref(true)
+const loadError = ref('')
+let articleRequest
+let disposed = false
 const safeArticleContent = computed(() => DOMPurify.sanitize(article.value?.content || '', { USE_PROFILES: { html: true } }))
 const VIEW_DEDUP_WINDOW_MS = 5 * 60 * 1000
 const VIEW_RETRY_QUEUE_KEY = 'article_view_retry_queue_v1'
 let retryTimer = null
 
 const goBack = () => {
-  router.back()
+  const back = window.history.state?.back
+  if (typeof back === 'string' && back.startsWith('/') && !back.startsWith('//')) router.back()
+  else router.push(localStorage.getItem('role') === 'teacher' ? '/teacher/content' : '/student/articles')
 }
 
 const getViewerId = () => {
@@ -111,7 +125,7 @@ const flushRetryQueue = async () => {
   try {
     const res = await axios.post(`/api/student/articles/${task.articleId}/view`, { viewer_id: task.viewerId }, { timeout: 5000 })
     const nextViews = Number(res?.data?.views || 0)
-    if (article.value && Number(article.value.id) === Number(task.articleId) && Number.isFinite(nextViews)) {
+    if (!disposed && article.value && Number(article.value.id) === Number(task.articleId) && Number.isFinite(nextViews)) {
       article.value.views = Math.max(0, nextViews)
     }
     dispatchArticleViewUpdated(task.articleId, Math.max(0, nextViews))
@@ -125,7 +139,7 @@ const flushRetryQueue = async () => {
     writeRetryQueue([{ ...task, retryCount }, ...rest])
   }
   if (retryTimer) clearTimeout(retryTimer)
-  retryTimer = setTimeout(flushRetryQueue, 2000)
+  if (!disposed) retryTimer = setTimeout(flushRetryQueue, 2000)
 }
 
 const trackArticleView = async (articleId) => {
@@ -134,7 +148,7 @@ const trackArticleView = async (articleId) => {
   try {
     const res = await axios.post(`/api/student/articles/${articleId}/view`, { viewer_id: viewerId }, { timeout: 5000 })
     const nextViews = Number(res?.data?.views || 0)
-    if (Number.isFinite(nextViews) && article.value) {
+    if (!disposed && Number.isFinite(nextViews) && Number(article.value?.id) === Number(articleId)) {
       const syncedViews = Math.max(0, nextViews)
       article.value.views = syncedViews
       dispatchArticleViewUpdated(articleId, syncedViews)
@@ -142,26 +156,39 @@ const trackArticleView = async (articleId) => {
   } catch {
     enqueueRetryTask({ articleId, viewerId, retryCount: 0, createdAt: Date.now() })
     if (retryTimer) clearTimeout(retryTimer)
-    retryTimer = setTimeout(flushRetryQueue, 1500)
+    if (!disposed) retryTimer = setTimeout(flushRetryQueue, 1500)
   }
 }
 
 const fetchArticle = async () => {
   const id = Number(route.params.id)
+  articleRequest?.abort()
+  const request = new AbortController()
+  articleRequest = request
+  loading.value = true
+  loadError.value = ''
+  article.value = null
   try {
-    const res = await axios.get(`/api/student/articles/${id}`)
+    if (!Number.isSafeInteger(id) || id <= 0) throw new Error('invalid-article')
+    const res = await axios.get(`/api/student/articles/${id}`, { signal: request.signal, timeout: 15000 })
+    if (disposed || request.signal.aborted) return
+    if (!res.data || typeof res.data.title !== 'string') throw new Error('invalid-article')
     article.value = res.data
     article.value.views = Math.max(0, Number(article.value.views) || 0)
-    await trackArticleView(id)
+    trackArticleView(id)
   } catch (error) {
-    ElMessage.error('获取文章失败')
+    if (disposed || request.signal.aborted) return
+    const status = error.status || error.response?.status
+    loadError.value = status === 403 || status === 404 ? '文章不存在或当前账号无权查看。' : '文章加载失败，请检查连接后重试。'
+  } finally {
+    if (!disposed && !request.signal.aborted) loading.value = false
   }
 }
 
 const formatDate = (dateString) => {
-  if (!dateString) return ''
+  if (!dateString) return '未提供'
   const d = new Date(dateString)
-  return d.toLocaleString()
+  return Number.isNaN(d.getTime()) ? '未提供' : d.toLocaleString('zh-CN')
 }
 
 onMounted(() => {
@@ -170,8 +197,11 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  disposed = true
+  articleRequest?.abort()
   if (retryTimer) clearTimeout(retryTimer)
 })
+watch(() => route.params.id, () => { fetchArticle() })
 </script>
 
 <style scoped>
@@ -179,7 +209,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 1000px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -214,12 +244,13 @@ onBeforeUnmount(() => {
   color: var(--text-primary);
   margin-top: 0;
   margin-bottom: 20px;
-  text-align: center;
+  text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .article-meta {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   gap: 20px;
   color: var(--text-secondary);
@@ -246,6 +277,18 @@ onBeforeUnmount(() => {
   font-size: 16px;
   line-height: 1.8;
   color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+.article-state { padding: var(--space-7); background: var(--surface); border-radius: var(--radius-lg); }
+.article-state h1 { font-size: var(--text-h3); text-align: center; }
+.article-recovery { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
+:deep(.article-content table) { display: block; max-width: 100%; overflow-x: auto; }
+:deep(.article-content pre) { overflow-x: auto; max-width: 100%; padding: var(--space-4); background: var(--surface-subtle); }
+@media (max-width: 600px) {
+  .article-detail-container { padding: var(--space-3); gap: var(--space-3); }
+  .content-card, .header-card, .article-state { padding: var(--space-4); box-shadow: none; }
+  .article-title { font-size: var(--text-h3); line-height: var(--line-height-heading); }
+  .article-meta { gap: var(--space-2) var(--space-4); margin-bottom: var(--space-5); }
 }
 
 /* Add some styles for rich text content */

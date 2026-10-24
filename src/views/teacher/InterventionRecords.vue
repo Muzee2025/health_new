@@ -1,11 +1,12 @@
 <template>
-  <div class="intervention-container">
-    <div class="filter-card">
+  <div class="intervention-container business-page">
+    <div class="filter-card business-actions">
       <el-input
         v-model="searchQuery"
         placeholder="搜索学生姓名或辅导老师"
         class="search-input"
         clearable
+        aria-label="搜索学生姓名、辅导老师或干预记录"
       >
         <template #prefix>
           <el-icon><LibraryIcon name="search"  /></el-icon>
@@ -20,11 +21,14 @@
         end-placeholder="结束日期"
         value-format="YYYY-MM-DD"
         class="filter-date"
+        popper-class="teacher-intervention-date-popper"
+        aria-label="按干预日期范围筛选"
       />
     </div>
 
-    <div class="table-card">
-      <el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe>
+    <div class="table-card business-card">
+      <el-alert v-if="loadError" type="error" :closable="false" title="干预记录暂时无法加载。"><el-button text type="primary" @click="fetchRecords">重新加载</el-button></el-alert>
+      <div class="business-table-wrap"><el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe empty-text="当前筛选下没有干预记录。">
         <el-table-column prop="student_name" label="学生姓名" width="150" />
         <el-table-column prop="teacher_name" label="干预教师" width="150" />
         <el-table-column prop="record_date" label="干预日期" width="150" />
@@ -39,12 +43,14 @@
           </template>
         </el-table-column>
       </el-table>
+      </div>
 
       <div class="pagination-wrapper">
         <el-pagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
           :page-sizes="[10, 20, 50]"
+          :pager-count="5"
           layout="total, sizes, prev, pager, next"
           :total="filteredData.length"
         />
@@ -56,9 +62,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElInput, ElIcon, ElDatePicker, ElTable, ElTableColumn, ElPagination, vLoading } from 'element-plus'
+import { ElInput, ElIcon, ElDatePicker, ElTable, ElTableColumn, ElPagination, ElAlert, ElButton, vLoading } from 'element-plus'
 
 const loading = ref(false)
+const loadError = ref(false)
 const records = ref([])
 const searchQuery = ref('')
 const dateRange = ref([])
@@ -74,8 +81,9 @@ const fetchRecords = async () => {
       headers: { Authorization: `Bearer ${token}` }
     })
     records.value = res.data
+    loadError.value = false
   } catch (error) {
-    ElMessage.error('获取干预记录失败')
+    loadError.value = true
   } finally {
     loading.value = false
   }
@@ -139,7 +147,7 @@ onUnmounted(() => {
   width: 300px;
 }
 
-.filter-date {
+.filter-card :deep(.filter-date) {
   width: 350px;
 }
 
@@ -160,5 +168,53 @@ onUnmounted(() => {
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
+  min-width: 0;
+  width: 100%;
+}
+@media (max-width: 760px) {
+  .filter-card { align-items: stretch; flex-direction: column; padding: 14px; }
+  .search-input { width: 100%; max-width: 100%; min-width: 0; }
+  .filter-card :deep(.filter-date) {
+    --el-date-editor-daterange-width: 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  .filter-card :deep(.filter-date .el-range-input) { width: 0; min-width: 0; flex: 1 1 0; }
+  .filter-card :deep(.filter-date .el-range-separator) { flex: 0 0 auto; white-space: nowrap; padding-inline: 4px; }
+  :global(.teacher-intervention-date-popper) {
+    box-sizing: border-box;
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    max-height: min(70dvh, calc(100dvh - 24px));
+    overflow-y: auto;
+  }
+  :global(.teacher-intervention-date-popper .el-date-range-picker) { box-sizing: border-box; width: 100%; }
+  :global(.teacher-intervention-date-popper .el-picker-panel__body) { box-sizing: border-box; width: 100%; min-width: 0; }
+  :global(.teacher-intervention-date-popper .el-date-range-picker__content) {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    padding: 12px;
+  }
+  :global(.teacher-intervention-date-popper .el-date-range-picker__content.is-left) {
+    border-right: 0;
+    border-bottom: 1px solid var(--el-datepicker-inner-border-color);
+  }
+  .pagination-wrapper { justify-content: flex-start; overflow: visible; }
+  .pagination-wrapper :deep(.el-pagination) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 8px 10px;
+    max-width: 100%;
+  }
+  .pagination-wrapper :deep(.el-pagination__total) { order: 1; margin-right: 0; }
+  .pagination-wrapper :deep(.el-pagination__sizes) { order: 2; margin: 0; }
+  .pagination-wrapper :deep(.el-pagination__sizes .el-select) { width: 104px; }
+  .pagination-wrapper :deep(.btn-prev) { order: 3; margin: 0; }
+  .pagination-wrapper :deep(.el-pager) { order: 4; margin: 0; }
+  .pagination-wrapper :deep(.btn-next) { order: 5; margin: 0; }
 }
 </style>

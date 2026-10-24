@@ -1,14 +1,24 @@
 <template>
-  <div class="app-layout">
+  <div class="app-layout xy-business">
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <router-link to="/teacher" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
+    <button class="nav-scrim" type="button" aria-hidden="true" tabindex="-1" @click="closeMobileNav" v-if="mobileNavOpen"></button>
+    <aside ref="sidebarRef" id="teacher-navigation-panel" class="sidebar" :class="{ 'mobile-open': mobileNavOpen }" :aria-hidden="isMobile && !mobileNavOpen ? 'true' : 'false'" @keydown.tab="handleNavTab" @click="handleNavClick">
+      <div class="sidebar-head">
+        <router-link to="/teacher" class="logo-area" aria-label="心域智链首页"><img :src="brandLogo" class="business-brand" alt="心域智链" width="152" height="52" /></router-link>
+        <button class="mobile-nav-close" type="button" aria-label="关闭导航" @click="closeMobileNav"><el-icon><LibraryIcon name="arrow-left" /></el-icon><span>关闭</span></button>
+      </div>
 
-      <nav class="nav-menu" aria-label="教师导航">
-        <router-link to="/teacher/advanced-dashboard" class="nav-item" :class="{ active: route.path === '/teacher/support' }" active-class="active" exact-active-class="active">
-          <el-icon><LibraryIcon name="audit" /></el-icon> <span class="nav-text">工作台</span>
-        </router-link>
-        <router-link to="/teacher/students" class="nav-item" :class="{ active: route.path === '/teacher/students' || route.path.startsWith('/teacher/student/') }" active-class="active" exact-active-class="active">
+      <nav class="nav-menu" aria-label="教师导航" @keydown.esc="closeMobileNav">
+        <div class="nav-group" :class="{ 'group-active': route.path.startsWith('/teacher/advanced-dashboard') || route.path.startsWith('/teacher/support') }">
+          <button type="button" class="nav-item nav-group-toggle" :aria-expanded="workbenchOpen" aria-controls="workbench-submenu" @click="workbenchOpen = !workbenchOpen">
+            <el-icon><LibraryIcon name="audit" /></el-icon><span class="nav-text">工作台</span><el-icon class="nav-caret" :class="{ expanded: workbenchOpen }"><LibraryIcon name="arrow-down" /></el-icon>
+          </button>
+          <div v-if="workbenchOpen" id="workbench-submenu" class="nav-submenu">
+            <router-link to="/teacher/advanced-dashboard" class="nav-item nav-subitem" active-class="active">风险工作台</router-link>
+            <router-link to="/teacher/support" class="nav-item nav-subitem" active-class="active">求助与跟进</router-link>
+          </div>
+        </div>
+        <router-link to="/teacher/students" class="nav-item" :class="{ active: route.path === '/teacher/students' || route.path.startsWith('/teacher/student/') }" :aria-current="route.path === '/teacher/students' || route.path.startsWith('/teacher/student/') ? 'page' : undefined" active-class="active" exact-active-class="active">
           <el-icon><LibraryIcon name="assessment" /></el-icon> <span class="nav-text">我的学生</span>
         </router-link>
         <router-link to="/teacher/appointments" class="nav-item" active-class="active">
@@ -39,8 +49,9 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="main-content" :inert="mobileNavOpen">
       <header class="top-header">
+        <button ref="mobileNavTrigger" class="mobile-nav-trigger" type="button" aria-controls="teacher-navigation-panel" :aria-expanded="mobileNavOpen" @click="toggleMobileNav"><el-icon><LibraryIcon name="collection" /></el-icon><span>导航</span></button>
         <h1 class="page-title">{{ pageTitle }}</h1>
 
         <div class="header-right">
@@ -145,7 +156,7 @@ import { getVisualAsset } from '../../design/asset-registry'
 const brandLogo = getVisualAsset('brandLogo').url
 const profileAvatar = getVisualAsset('teacherAvatar').url
 
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage, ElIcon, ElAvatar, ElDialog, ElForm, ElFormItem, ElSelect, ElOption, ElInput, ElDatePicker, ElButton } from 'element-plus'
 import axios from 'axios'
@@ -153,6 +164,63 @@ import axios from 'axios'
 const router = useRouter()
 const route = useRoute()
 const user = ref({})
+const mobileNavOpen = ref(false)
+const mobileNavTrigger = ref(null)
+const sidebarRef = ref(null)
+const isMobile = ref(false)
+const workbenchOpen = ref(['/teacher/advanced-dashboard', '/teacher/support'].includes(route.path))
+let mediaQuery
+let navFocusRequest = 0
+const focusableNavItems = () => [...(sidebarRef.value?.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])') || [])].filter(element => element.getClientRects().length > 0)
+const nextFrame = () => new Promise(resolve => window.requestAnimationFrame(resolve))
+const openMobileNav = async () => {
+  const request = ++navFocusRequest
+  mobileNavOpen.value = true
+  await nextTick()
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    await nextFrame()
+    if (request !== navFocusRequest || !mobileNavOpen.value || !isMobile.value || !sidebarRef.value?.isConnected) return
+    const target = focusableNavItems().find(element => {
+      const style = window.getComputedStyle(element)
+      return style.display !== 'none' && style.visibility === 'visible' && !element.hasAttribute('disabled')
+    })
+    target?.focus?.({ preventScroll: true })
+    if (target && sidebarRef.value.contains(document.activeElement)) return
+  }
+}
+const closeMobileNav = async () => {
+  if (!mobileNavOpen.value) return
+  navFocusRequest += 1
+  mobileNavOpen.value = false
+  await nextTick()
+  mobileNavTrigger.value?.focus?.()
+}
+const toggleMobileNav = () => { if (mobileNavOpen.value) closeMobileNav(); else openMobileNav() }
+const handleNavClick = (event) => { if (event.target.closest?.('a[href]')) closeMobileNav() }
+const handleEscape = (event) => { if (event.key === 'Escape') closeMobileNav() }
+const handleNavTab = (event) => {
+  if (!mobileNavOpen.value || !isMobile.value || event.key !== 'Tab') return
+  const items = focusableNavItems()
+  if (!items.length) return
+  const first = items[0]
+  const last = items[items.length - 1]
+  if (event.shiftKey && (document.activeElement === first || !sidebarRef.value?.contains(document.activeElement))) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && (document.activeElement === last || !sidebarRef.value?.contains(document.activeElement))) {
+    event.preventDefault()
+    first.focus()
+  }
+}
+const syncViewport = async (event) => {
+  isMobile.value = event.matches
+  if (!event.matches && mobileNavOpen.value) {
+    navFocusRequest += 1
+    mobileNavOpen.value = false
+    await nextTick()
+    sidebarRef.value?.querySelector('[aria-current="page"], .nav-item')?.focus?.()
+  }
+}
 const students = ref([])
 const interventionDialogVisible = ref(false)
 const submittingIntervention = ref(false)
@@ -179,6 +247,7 @@ const pageTitle = computed(() => {
   const path = route.path
   if (path.includes('advanced-dashboard')) return '工作台'
   if (path.includes('/support')) return '求助与跟进'
+  if (path.startsWith('/teacher/student/')) return '学生档案'
   if (path.includes('students') || path.includes('student/')) return '学生管理'
   if (path.includes('appointments')) return '预约管理'
   if (path.includes('content')) return '内容管理'
@@ -302,6 +371,10 @@ const submitIntervention = async () => {
 }
 
 onMounted(() => {
+  mediaQuery = window.matchMedia('(max-width: 760px)')
+  isMobile.value = mediaQuery.matches
+  mediaQuery.addEventListener?.('change', syncViewport)
+  window.addEventListener('keydown', handleEscape)
   const userInfo = localStorage.getItem('user')
   if (userInfo) {
     try { user.value = JSON.parse(userInfo) || {} } catch { user.value = {} }
@@ -312,8 +385,12 @@ onMounted(() => {
   }
   window.addEventListener('open-intervention-dialog', openInterventionHandler)
 })
+watch(() => route.path, (path) => { if (mobileNavOpen.value) closeMobileNav(); if (path.startsWith('/teacher/advanced-dashboard') || path.startsWith('/teacher/support')) workbenchOpen.value = true })
 
 onUnmounted(() => {
+  navFocusRequest += 1
+  mediaQuery?.removeEventListener?.('change', syncViewport)
+  window.removeEventListener('keydown', handleEscape)
   if (openInterventionHandler) {
     window.removeEventListener('open-intervention-dialog', openInterventionHandler)
   }
@@ -324,333 +401,3 @@ const logout = () => {
   router.push('/login')
 }
 </script>
-
-<style scoped>
-.app-layout {
-  --ui-primary: var(--brand-600);
-  --ui-primary-hover: var(--brand-600);
-  --ui-bg: var(--surface-warm);
-  --ui-card: var(--surface);
-  --ui-text: var(--text-primary);
-  --ui-muted: var(--text-secondary);
-  --ui-border: var(--border);
-  --ui-radius: 12px;
-  --ui-shadow: 0 2px 8px color-mix(in srgb, var(--gray-900) 6%, transparent);
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--ui-bg);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 240px;
-  background-color: var(--ui-bg);
-  display: flex;
-  flex-direction: column;
-  padding: 30px 0;
-  border-right: 1px solid var(--ui-border);
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  padding: 0 30px;
-  margin-bottom: 40px;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--text-primary);
-}
-
-.logo-icon {
-  font-size: 24px;
-  margin-right: 10px;
-}
-
-.nav-menu {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
-  margin: 0 10px;
-  border-radius: var(--ui-radius);
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.2s;
-  cursor: pointer;
-  position: relative;
-}
-
-.nav-item .el-icon {
-  font-size: 18px;
-  margin-right: 15px;
-  color: var(--text-secondary);
-}
-
-.nav-item:hover, .nav-item.active {
-  color: var(--ui-primary);
-  font-weight: 500;
-}
-
-.nav-item.active {
-  background-color: color-mix(in srgb, var(--brand-500) 14%, transparent);
-  color: var(--ui-primary);
-}
-
-.nav-item.active .el-icon {
-  color: var(--ui-primary);
-}
-
-.badge {
-  background-color: var(--success-text);
-  color: var(--surface);
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 10px;
-  margin-left: auto;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.nav-divider {
-  height: 1px;
-  background-color: color-mix(in srgb, var(--gray-900) 5%, transparent);
-  margin: 20px 30px;
-}
-
-/* User Profile */
-.user-profile {
-  display: flex;
-  align-items: center;
-  padding: 0 30px;
-  margin-top: auto;
-}
-
-.user-info {
-  margin-left: 12px;
-}
-
-.teacher-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--ui-primary);
-  color: var(--surface);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: var(--ui-shadow);
-}
-
-.user-name {
-  font-size: 14px;
-  font-weight: bold;
-  color: var(--text-primary);
-}
-
-.user-email {
-  font-size: 12px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-
-/* Main Content */
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* Header */
-.top-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 40px;
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--text-primary);
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.search-box {
-  display: flex;
-  align-items: center;
-  background-color: var(--ui-card);
-  padding: 10px 16px;
-  border-radius: var(--ui-radius);
-  width: 300px;
-  box-shadow: var(--ui-shadow);
-  margin-left: auto;
-}
-
-.search-icon {
-  color: var(--text-secondary);
-  margin-right: 10px;
-  font-size: 18px;
-}
-
-.search-box input {
-  border: none;
-  outline: none;
-  background: transparent;
-  width: 100%;
-  font-size: 14px;
-  color: var(--text-primary);
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.icon-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--ui-radius);
-  border: 1px solid var(--ui-border);
-  background: var(--ui-card);
-  padding: 8px;
-  font-size: 18px;
-  color: var(--ui-text);
-  cursor: pointer;
-  transition: all .2s ease;
-}
-
-.icon-btn:hover {
-  color: var(--ui-primary);
-  border-color: var(--ui-primary);
-}
-
-.avatar-group {
-  display: flex;
-  align-items: center;
-  background-color: var(--ui-card);
-  padding: 4px 12px 4px 4px;
-  border-radius: var(--ui-radius);
-  box-shadow: var(--ui-shadow);
-}
-
-.overlap-avatar {
-  border: 2px solid var(--surface);
-}
-
-.avatar-count {
-  font-size: 13px;
-  font-weight: bold;
-  margin-left: 8px;
-  color: var(--text-primary);
-}
-
-.primary-btn {
-  background-color: var(--ui-primary);
-  color: var(--surface);
-  border: none;
-  padding: 10px 20px;
-  border-radius: var(--ui-radius);
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  box-shadow: var(--ui-shadow);
-}
-
-.primary-btn:hover {
-  background-color: var(--ui-primary-hover);
-}
-
-.readonly-block {
-  width: 100%;
-  border: 1px solid var(--ui-border);
-  border-radius: var(--ui-radius);
-  padding: 8px 12px;
-  background: var(--surface-subtle);
-  color: var(--text-primary);
-}
-
-/* Page Wrapper */
-.page-wrapper {
-  flex: 1;
-  padding: 0 40px 40px 40px;
-  overflow-y: auto;
-}
-
-.page-wrapper :deep(.el-card) {
-  border-radius: var(--ui-radius);
-  border: 1px solid var(--ui-border);
-  box-shadow: var(--ui-shadow);
-}
-
-.page-wrapper :deep(.el-button--primary) {
-  background: var(--ui-primary);
-  border-color: var(--ui-primary);
-  border-radius: var(--ui-radius);
-}
-
-.page-wrapper :deep(.el-button--primary:hover) {
-  background: var(--ui-primary-hover);
-  border-color: var(--ui-primary-hover);
-}
-
-.page-wrapper :deep(.el-table) {
-  border-radius: var(--ui-radius);
-  overflow: hidden;
-}
-
-.page-wrapper :deep(.el-table th.el-table__cell) {
-  background: var(--surface-subtle);
-}
-
-.page-wrapper :deep(.el-input__wrapper),
-.page-wrapper :deep(.el-textarea__inner),
-.page-wrapper :deep(.el-select__wrapper),
-.page-wrapper :deep(.el-date-editor.el-input__wrapper) {
-  border-radius: var(--ui-radius);
-}
-
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 212px;
-  }
-  .top-header {
-    padding: 20px 24px;
-    flex-wrap: wrap;
-  }
-  .page-wrapper {
-    padding: 0 24px 24px 24px;
-  }
-}
-
-@media (max-width: 768px) {
-  .app-layout {
-    flex-direction: column;
-  }
-  .sidebar {
-    width: 100%;
-    padding: 16px 0;
-  }
-  .top-header {
-    padding: 16px;
-  }
-  .search-box {
-    width: 100%;
-    order: 3;
-  }
-  .page-wrapper {
-    padding: 0 16px 16px;
-  }
-}
-</style>

@@ -1,9 +1,9 @@
 <template>
-  <div class="treehole-container">
+  <div class="treehole-container business-page">
     <div class="treehole-header">
       <div class="header-left">
         <h2><LibraryIcon name="treehole" /> 匿名树洞</h2>
-        <p class="desc">放下伪装，说出心里话。深度分享将获得红色能量积分。</p>
+        <p class="desc">这里以匿名方式展示内容，匿名展示不等于平台不可关联。请勿写入可识别个人身份的信息。</p>
       </div>
       <div class="header-right">
         <el-tag type="danger" effect="dark" round size="large">红色能量: {{ redEnergy }}</el-tag>
@@ -12,6 +12,7 @@
 
     <div class="post-card glass-card">
       <el-input
+        aria-label="树洞内容"
         v-model="newPost"
         type="textarea"
         :rows="4"
@@ -29,7 +30,12 @@
               :key="tag"
               :effect="selectedTags.includes(tag) ? 'dark' : 'plain'"
               class="selectable-tag"
+              role="button"
+              tabindex="0"
+              :aria-pressed="selectedTags.includes(tag)"
               @click="toggleTagSelection(tag)"
+              @keydown.enter.prevent="toggleTagSelection(tag)"
+              @keydown.space.prevent="toggleTagSelection(tag)"
             >
               {{ tag }}
             </el-tag>
@@ -55,7 +61,12 @@
         <el-tag
           :effect="filterTag === '' ? 'dark' : 'plain'"
           class="selectable-tag"
+          role="button"
+          tabindex="0"
+          :aria-pressed="filterTag === ''"
           @click="setFilterTag('')"
+          @keydown.enter.prevent="setFilterTag('')"
+          @keydown.space.prevent="setFilterTag('')"
         >
           全部
         </el-tag>
@@ -64,15 +75,23 @@
           :key="tag"
           :effect="filterTag === tag ? 'dark' : 'plain'"
           class="selectable-tag"
+          role="button"
+          tabindex="0"
+          :aria-pressed="filterTag === tag"
           @click="setFilterTag(tag)"
+          @keydown.enter.prevent="setFilterTag(tag)"
+          @keydown.space.prevent="setFilterTag(tag)"
         >
           {{ tag }}
         </el-tag>
       </div>
     </div>
 
-    <div class="post-list">
-      <LibraryEmpty v-if="posts.length === 0" description="这里静悄悄的，快来发布第一条树洞吧！" />
+    <el-alert v-if="postsError" type="error" :closable="false" show-icon title="树洞列表暂时无法加载，请检查网络后重试。">
+      <el-button link type="primary" @click="fetchPosts">重新加载</el-button>
+    </el-alert>
+    <div v-else class="post-list" v-loading="loadingPosts">
+      <LibraryEmpty v-if="!loadingPosts && posts.length === 0" description="还没有可显示的内容。" />
 
       <div v-for="post in posts" :key="post.id" class="post-item glass-card">
         <div class="post-item-header">
@@ -130,7 +149,7 @@
                 {{ comment.content }}
               </div>
               <div class="c-actions">
-                <span class="reply-btn" @click="replyToComment(comment)">回复</span>
+              <button type="button" class="reply-btn" @click="replyToComment(comment)">回复</button>
               </div>
             </div>
           </div>
@@ -143,7 +162,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElMessageBox, ElTag, ElInput, ElTabs, ElTabPane, ElAvatar, ElIcon, ElDivider, ElButton } from 'element-plus'
+import { ElMessage, ElMessageBox, ElTag, ElInput, ElTabs, ElTabPane, ElAvatar, ElIcon, ElDivider, ElButton, ElAlert } from 'element-plus'
 
 const PRESET_TAGS = ['#人生意义', '#自我成长', '#抗压故事', '#红色精神与我', '#价值观碰撞', '#情绪洞察', '#人际关系', '#未来规划']
 
@@ -151,6 +170,8 @@ const redEnergy = ref(0)
 const newPost = ref('')
 const selectedTags = ref([])
 const loading = ref(false)
+const loadingPosts = ref(false)
+const postsError = ref(false)
 const posts = ref([])
 const activeTab = ref('home')
 const filterTag = ref('')
@@ -193,6 +214,8 @@ const setFilterTag = (tag) => {
 }
 
 const fetchPosts = async () => {
+  loadingPosts.value = true
+  postsError.value = false
   try {
     const res = await axios.get('/api/student/treehole/posts', {
       params: {
@@ -200,10 +223,11 @@ const fetchPosts = async () => {
         tag: filterTag.value || null
       }
     })
-    posts.value = res.data
+    posts.value = Array.isArray(res.data) ? res.data : []
   } catch (error) {
-    console.error('Fetch treehole error:', error)
-    ElMessage.error('获取树洞列表失败')
+    postsError.value = true
+  } finally {
+    loadingPosts.value = false
   }
 }
 
@@ -347,7 +371,7 @@ const getParentAuthor = (parentId) => {
 
 <style scoped>
 .treehole-container {
-  min-height: 100vh;
+  min-height: 100%;
   background: linear-gradient(135deg, var(--surface-subtle) 0%, var(--brand-50) 100%);
   padding: 20px;
   border-radius: 16px;
@@ -407,6 +431,7 @@ const getParentAuthor = (parentId) => {
   border-radius: 12px;
   user-select: none;
 }
+.selectable-tag:focus-visible, .interaction-btn:focus-visible, .reply-btn:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 
 .action-buttons {
   display: flex;
@@ -477,6 +502,10 @@ const getParentAuthor = (parentId) => {
 }
 
 .interaction-btn {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  padding: 6px 4px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -504,6 +533,19 @@ const getParentAuthor = (parentId) => {
 .c-content { font-size: 14px; color: var(--text-primary); margin-bottom: 4px; }
 .reply-to { color: var(--brand-600); font-weight: 500; }
 .c-actions { display: flex; justify-content: flex-end; }
-.reply-btn { font-size: 12px; color: var(--text-secondary); cursor: pointer; }
+.reply-btn { font-size: 12px; color: var(--text-secondary); cursor: pointer; border: 0; background: transparent; font: inherit; padding: 6px 10px; }
 .reply-btn:hover { color: var(--brand-600); }
+@media (max-width: 600px) {
+  .treehole-container { padding: 14px 0; border-radius: var(--radius-md); }
+  .treehole-header { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .glass-card { padding: 16px; border-radius: var(--radius-lg); }
+  .post-actions { align-items: stretch; flex-direction: column; gap: 14px; }
+  .action-buttons { margin-left: 0; justify-content: flex-end; }
+  .post-footer { gap: 8px; justify-content: space-between; }
+  .interaction-btn { font-size: 13px; }
+  .comment-input-box { align-items: stretch; flex-direction: column; }
+  .comment-input-box :deep(.el-button) { align-self: flex-end; min-height: 40px; }
+  .comment-author { align-items: flex-start; flex-direction: column; gap: 2px; }
+  .sub-comment { margin-left: 12px; }
+}
 </style>

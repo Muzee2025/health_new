@@ -1,5 +1,8 @@
 <template>
-  <div class="report-container">
+  <div class="report-container business-page">
+    <el-alert v-if="loadError" type="error" :closable="false" show-icon title="报告暂时无法加载，请稍后重试。">
+      <el-button link type="primary" @click="fetchLatest">重新加载报告</el-button>
+    </el-alert>
     <div class="header-container">
       <div>
         <h2 class="page-title">我的心理报告（对话驱动）</h2>
@@ -10,7 +13,7 @@
           {{ collabRunning ? "分析中..." : "重新分析" }}
         </el-button>
         <el-button @click="openPrintPreview">打印报告</el-button>
-        <el-button @click="shareReport">分享</el-button>
+        <el-button @click="shareReport">分享说明</el-button>
       </div>
     </div>
 
@@ -363,10 +366,11 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import axios from "axios"
 import * as echarts from '../../design/charts/report'
 import Chart from '../../design/charts/confidence'
-import { ElMessage, ElButton, ElSkeleton, ElSkeletonItem, ElCard, ElDialog, ElProgress, ElTag, ElSelect, ElOption, ElSegmented, ElTable, ElTableColumn } from 'element-plus'
+import { ElMessage, ElButton, ElSkeleton, ElSkeletonItem, ElCard, ElDialog, ElProgress, ElTag, ElSelect, ElOption, ElSegmented, ElTable, ElTableColumn, ElAlert } from 'element-plus'
 import { computeRenderStrategy, parseSseBlocks } from "@/services/reportStream"
 
 const loading = ref(false)
+const loadError = ref(false)
 const refreshing = ref(false)
 const reportData = ref(null)
 const barRef = ref(null)
@@ -536,6 +540,7 @@ const PRINT_CHART_META = [
 const fetchLatest = async (force = false) => {
   if (unmounted) return
   loading.value = true
+  loadError.value = false
   try {
     const before = reportData.value
       ? { risk: reportData.value?.risk, msgCount: reportData.value?.source?.message_count, updated_at: reportData.value?.updated_at }
@@ -563,6 +568,7 @@ const fetchLatest = async (force = false) => {
     renderCharts()
   } catch (error) {
     if (unmounted) return
+    loadError.value = true
     ElMessage.error("报告加载失败")
   } finally {
     loading.value = false
@@ -1802,6 +1808,14 @@ onBeforeUnmount(() => {
     max-height: calc(90vh - 56px);
     overflow-y: auto;
   }
+}
+
+@media (max-width: 390px) {
+  .header-container { gap: 12px; }
+  .actions { display: grid; grid-template-columns: 1fr; width: 100%; }
+  .actions :deep(.el-button) { width: 100%; min-height: 44px; margin: 0; }
+  .page-title { font-size: 20px; overflow-wrap: anywhere; }
+  .collab-meta { flex-direction: column; gap: 6px; }
 }
 
 @media print {

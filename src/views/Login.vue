@@ -1,7 +1,8 @@
 <template>
   <AuthShell>
-    <h2>欢迎回来</h2>
-    <el-form :model="form" label-position="top" @submit.prevent="handleLogin">
+    <h1>欢迎回来</h1>
+    <p class="auth-intro">使用账号、姓名或学号登录。</p>
+    <el-form :model="form" label-position="top" :aria-busy="submitting" @submit.prevent="handleLogin">
       <el-form-item label="账号"><el-input v-model="form.username" placeholder="用户名、姓名或学号" autocomplete="username" aria-label="账号" /></el-form-item>
       <el-form-item label="密码"><el-input v-model="form.password" type="password" placeholder="请输入密码" autocomplete="current-password" aria-label="密码" show-password /></el-form-item>
       <el-alert v-if="errorMessage" :title="errorMessage" type="error" :closable="false" show-icon role="alert" />

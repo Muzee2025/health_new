@@ -24,6 +24,8 @@ function loadModule(envName, packageName) {
 
 const { chromium } = loadModule('PLAYWRIGHT_MODULE_PATH', 'playwright')
 const sharp = loadModule('SHARP_MODULE_PATH', 'sharp')
+const experienceChecks = process.env.W2_UI_EXTENDED === '1'
+  ? (await import('./frontend-experience-checks.mjs')).checkExperience : null
 
 const svgPlaceholder = Buffer.from(
   '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200"><defs><linearGradient id="g"><stop stop-color="#dbeafe"/><stop offset="1" stop-color="#ede9fe"/></linearGradient></defs><rect width="320" height="200" rx="20" fill="url(#g)"/><circle cx="160" cy="75" r="32" fill="#93c5fd"/><path d="M92 178c8-40 34-58 68-58s60 18 68 58" fill="#c4b5fd"/><text x="160" y="194" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475569">合成演示素材</text></svg>'
@@ -330,7 +332,7 @@ try {
       imageLoadFailures: imageHealth.filter((image) => image.complete && image.naturalWidth === 0).length,
       syntheticResourceCount: syntheticResources.length,
       screenshot: screenshotSha256 ? { file: `${routeConfig.name}-${viewport.width}.webp`, bytes: screenshotBytes, sha256: screenshotSha256 } : null,
-      console: consoleEvents,
+      console: [...consoleEvents],
       pageErrors,
       apiRequestCount: apiRequests.length,
       apiRequests,
@@ -339,6 +341,10 @@ try {
       unknownApis,
     }
     results.push(pageResult)
+    if (experienceChecks && !navigationError) {
+      const checks = await experienceChecks({ page, routeConfig, baseUrl, outputDir })
+      results.push(...checks.map(check => ({ interaction: `FE-${check.name}`, observed: check.passed, ...check })))
+    }
     await context.close()
   }
 } finally {
@@ -365,7 +371,7 @@ const manifest = {
   interactions: results.filter((item) => item.interaction),
   totals: {
     expectedPages: routes.length,
-    capturedPages: results.filter((item) => item.screenshot).length,
+    capturedPages: results.filter((item) => item.path && item.screenshot).length,
     unknownApiCount: results.filter((item) => item.path).flatMap((item) => item.unknownApis).length,
     pageErrorCount: results.filter((item) => item.path).flatMap((item) => item.pageErrors).length,
     imageLoadFailureCount: results.filter((item) => item.path).reduce((sum, item) => sum + item.imageLoadFailures, 0),
@@ -377,4 +383,4 @@ await writeFile(resolve(outputDir, 'qa.json'), `${JSON.stringify(manifest, null,
 
 const failed = manifest.totals.capturedPages !== routes.length || manifest.totals.unknownApiCount > 0 || manifest.totals.pageErrorCount > 0 || manifest.totals.imageLoadFailureCount > 0 || manifest.totals.libraryIconFailureCount > 0 || manifest.totals.pagesOverLimit.length > 0 || manifest.pages.some((item) => item.navigationError || !item.nonBlank || item.frameworkOverlay || item.layout.overflow || (item.security && (item.security.xssExecuted || item.security.scripts || item.security.eventAttributes || item.security.dangerousLinks || !item.security.preservedHeading || !item.security.preservedStrong || !item.security.preservedAttachment)))
 console.log(JSON.stringify({ outputDir, totals: manifest.totals, pages: manifest.pages.map((page) => ({ name: page.name, bytes: page.screenshot?.bytes, nonBlank: page.nonBlank, frameworkOverlay: page.frameworkOverlay, errors: page.pageErrors.length, unknownApis: page.unknownApis.length })) }, null, 2))
-if (failed) process.exitCode = 1
+if (failed || manifest.interactions.some(item => item.interaction.startsWith('FE-') && !item.observed)) process.exitCode = 1

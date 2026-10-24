@@ -1,14 +1,17 @@
 <template>
   <AuthShell>
-    <h2>创建学生账号</h2>
-    <el-form :model="form" label-position="top" @submit.prevent="handleRegister">
+    <h1>创建学生账号</h1>
+    <p class="auth-intro">学生可自主注册，教师账号由学校开通。</p>
+    <el-form :model="form" label-position="top" :aria-busy="submitting" @submit.prevent="handleRegister">
       <el-form-item label="用户名"><el-input v-model="form.username" placeholder="请输入用户名" autocomplete="username" aria-label="用户名" /></el-form-item>
       <el-form-item label="密码"><el-input v-model="form.password" type="password" placeholder="至少8个字符，包含字母和数字" autocomplete="new-password" aria-label="密码" show-password /></el-form-item>
+      <fieldset class="auth-optional"><legend>个人资料（选填）</legend>
       <el-form-item label="姓名（选填）"><el-input v-model="form.name" placeholder="请输入姓名" autocomplete="name" aria-label="姓名" /></el-form-item>
       <template v-if="form.role === 'student'">
         <el-form-item label="学号（选填）"><el-input v-model="form.student_id" placeholder="请输入学号" aria-label="学号" /></el-form-item>
         <el-form-item label="辅导员姓名（选填）"><el-input v-model="form.advisor" placeholder="请输入辅导员姓名" aria-label="辅导员姓名" /></el-form-item>
       </template>
+      </fieldset>
       <el-alert v-if="errorMessage" :title="errorMessage" type="error" :closable="false" show-icon role="alert" />
       <el-button type="primary" native-type="submit" class="auth-submit" :loading="submitting" :disabled="submitting">注册</el-button>
       <div class="auth-links"><router-link to="/login">已有账号？去登录</router-link></div>
