@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 1.8 ｜ status: 评审 ｜ updated: 2026-10-26
+> owner: A ｜ version: 2.0 ｜ status: 评审 ｜ updated: 2026-10-27
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -19,7 +19,7 @@
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
 | [分工与 RACI](team/分工与RACI.md) | 草稿（待负责人确认） | A/B/C/D 角色占位，成员资料及确认待填写 |
-| [决策记录](team/决策记录.md) | 草稿 | ADR-001至020：历史阶段、SUPPORT/W3、前端、独立数据库内容与文章分页预览 |
+| [决策记录](team/决策记录.md) | 草稿 | ADR-001至021：历史阶段、SUPPORT/W3、前端、独立数据库内容、文章分页预览与申报交付 |
 | [进度看板](team/进度看板.md) | 定稿 | 前端优化当前结果、W0/W1/W2/W3历史、阻塞和交接 |
 | [门禁记录](team/门禁记录.md) | 定稿 | 各阶段技术证据；目标镜像构建及整体验收仍未放行 |
 
@@ -93,11 +93,14 @@
 | [全栈隔离验收](ops/全栈隔离验收.md) | 工具/合成契约通过；目标构建阻塞 | 随机project、非root Nginx、HTTP恢复、缓存TLS/SSE/WebSocket与手动CI；[机器摘要](test/fullstack-verification.json) |
 | [校内运营与隐私流程](ops/校内运营与隐私流程.md) | 待校内确认 | 离线教师账号与分配工具、值班/交接/审核、隐私与事件责任草案 |
 | [隐私与服务告知](user/隐私与服务告知_草案.md) | 草案 | 可见范围、匿名边界、人工承接、模型传输与留存待确认项 |
-| [申报计划书源稿](plan/心域智链申报计划书.md) | 待业务确认的评审稿 | 六板块、预算变量、五平台来源与未虚构的项目事实 |
+| [申报计划书源稿](plan/心域智链申报计划书.md) | 申报前完善稿 | 六板块、高校测评主场景、初高中市场、真实状态及12项外部参考 |
+| [学生心理测评市场分析](plan/学生心理测评市场分析.md) | 来源核验完成 | 学生样本/学校建设、三学段统计及4项采购；[来源元数据](plan/市场分析来源.json)与[待填字段](plan/申报表字段.json) |
+| [申报材料验收](test/申报材料验收.md) | 当前格式交付通过 | 申报16页/8三线表及4页大纲，原生Word逐页核对；[机器摘要](test/application-delivery-verification.json) |
+| [申报材料独立复核](test/申报材料独立复核.md) | 独立内容与结构复核 | 亲查来源/成品结构，区分Lead渲染证据；不代替资格及学校批准 |
 | [申报证据与待确认清单](plan/申报证据与待确认清单.md) | 证据索引 | 工程与业务证据分开，人员/资格/金额/周期/校内批准留待确认 |
-| [答辩方案](ppt/答辩方案.md) | 评审稿 | 14页叙事与逐页说明，讲稿同时保留于PPT备注 |
-| [项目申报材料 Word](../deliverables/心域智链项目申报材料.docx) | 12页评审稿 | 申请表/简介表/模板封面及六板块；原附件保留 |
-| [项目答辩稿 PowerPoint](../deliverables/心域智链项目答辩稿.pptx) | 14页可编辑评审稿 | 素材库token与approved品牌，逐页渲染核对，未知信息未填造 |
+| [答辩大纲](ppt/答辩方案.md) | 仅文字大纲 | 16主题/48条要点，高校为主、初高中独立论证；用户暂不制作PPT |
+| [项目申报材料 Word](../deliverables/心域智链项目申报材料.docx) | 16页，可手填 | 8表全部三线，含附件/封面；六板块正文及市场证据，原附件保留 |
+| [答辩大纲 Word](../deliverables/心域智链项目答辩大纲.docx) | 4页可编辑 | 16个建议页面及要点，无表格，供后续自行制作PPT |
 
 本轮机器证据：[W2验证摘要](test/w2-verification.json)、[客户端隔离](test/w2-client-qa.json)、[36业务页面状态](design/screenshots/w2-business/qa.json)、[升级后八图库回归](design/screenshots/w2-gallery/qa.json)。全部截图和API样例均为合成数据。
 
@@ -139,7 +142,11 @@
 | [全栈隔离执行器](../scripts/verify-fullstack.py) | 默认只读计划；`--run`新QA配置/新卷，合成注册登录/问题/恢复对照与定向清理。 |
 | [Nginx传输探针](../scripts/verify-nginx-transport.py) | 默认计划；`--run`使用已有缓存镜像、新合成证书/后端，验证HTTP/TLS/SSE/WebSocket，不接业务服务。 |
 | [离线AI评测汇总](../scripts/evaluate-support-ai.py) | 从[合成案例](test/ai-evaluation-cases.jsonl)、实际响应和人工评分JSONL生成新证据，不调用提供商或虚构成本。 |
-| [申报工件构建](../scripts/build-project-deliverables.py) | 分DOCX/PPTX阶段，以原附件为只读模板、素材库token/approved品牌为视觉源；按文档技能渲染QA。 |
+| [申报Word构建](../scripts/build-application-document.py) | 当前16页材料；只改模板指定正文槽位，输出必须为新路径。 |
+| [答辩大纲构建](../scripts/build-application-outline.py) | 生成16主题Word/Markdown大纲，不制作幻灯片；新DOCX路径不可覆盖。 |
+| [原生Word渲染](../scripts/render-application-word.ps1) | 隐藏只读打开并输出新PDF，用于16+4页QA；需本机Word。 |
+| [申报工件校验](../scripts/verify-application-artifacts.py) | 结构、原文保持、全部三线边框、摘要/占位、大纲及哈希绑定的目视证据。 |
+| [历史申报工件构建](../scripts/build-project-deliverables.py) | 前轮12/14页生成器，仅为历史复现保留；当前交付使用上述新工作流。 |
 | [本地数据库准备](../backend/scripts/prepare-local-database.py) | 只读源备份到新私有目录或新空库；拒绝覆盖及缺列旧schema，命令见本机部署说明。 |
 | [本机后端启动](../scripts/start-local-backend.ps1) | 独立loopback18080隐藏进程，拒绝占用端口；读取Git忽略的current.json或显式部署目录。 |
 | [性能审计构建](../scripts/build-frontend-audit.mjs) | `npm run perf:build`在新tmp目录编译并生成模块来源；不覆盖旧证据。 |

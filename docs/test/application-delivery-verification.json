@@ -1,0 +1,111 @@
+{
+  "status": "pass",
+  "updated": "2026-10-27",
+  "request": "Application with every table in three-line format; PPT outline only",
+  "referenceSha256": "2531a2432493e4592d0759473fb3add5b6e1770e3c69ef1ee501d31b1943202a",
+  "document": {
+    "path": "deliverables/心域智链项目申报材料.docx",
+    "sha256": "98c2a5f7850f64886b49a75c7dc2f10e97bf1cd69edeb33cf1e5d9a71de04909",
+    "pages": 16,
+    "sections": 3,
+    "preservedParts": 17,
+    "summaryCharacters": 218,
+    "editablePlaceholders": 42,
+    "threeLineTables": [
+      {
+        "table": 1,
+        "rows": 15,
+        "headerLastRow": 2,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 2,
+        "rows": 5,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 3,
+        "rows": 7,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 4,
+        "rows": 7,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 5,
+        "rows": 4,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 6,
+        "rows": 5,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 7,
+        "rows": 6,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      },
+      {
+        "table": 8,
+        "rows": 8,
+        "headerLastRow": 0,
+        "horizontalRules": 3,
+        "verticalRules": 0
+      }
+    ]
+  },
+  "outline": {
+    "path": "deliverables/心域智链项目答辩大纲.docx",
+    "sha256": "8349db6ce08ae4af54225e2fa57b616559e648e114073aa8d8a49fcf1fb4fe52",
+    "pages": 4,
+    "topics": 16,
+    "tables": 0
+  },
+  "visualReview": {
+    "owner": "Lead",
+    "documentSha256": "98c2a5f7850f64886b49a75c7dc2f10e97bf1cd69edeb33cf1e5d9a71de04909",
+    "outlineSha256": "8349db6ce08ae4af54225e2fa57b616559e648e114073aa8d8a49fcf1fb4fe52",
+    "documentPages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "outlinePages": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "result": "pass"
+  },
+  "scope": "Documents only; no PPTX delivery, business integration or school/professional approval inferred."
+}
