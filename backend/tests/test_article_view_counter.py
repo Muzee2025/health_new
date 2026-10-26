@@ -1,11 +1,15 @@
 import os
+import sqlite3
 import sys
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import pytest
+from sqlalchemy import event
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import sessionmaker
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -103,15 +107,15 @@ def test_api_concurrent_same_user_only_plus_one():
     _clear_view_runtime_cache()
     article_id = _seed_article(session_factory, views=100)
 
-    def hit_once():
-        with _build_test_client(session_factory) as client:
+    with _build_test_client(session_factory) as client:
+        def hit_once():
             return client.post(
                 f"/api/student/articles/{article_id}/view",
                 json={"viewer_id": "same-user"},
             )
 
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        responses = list(executor.map(lambda _: hit_once(), range(100)))
+        with ThreadPoolExecutor(max_workers=20) as executor:
+            responses = list(executor.map(lambda _: hit_once(), range(100)))
 
     assert all(r.status_code == 200 for r in responses)
 
@@ -128,15 +132,15 @@ def test_api_concurrent_different_user_plus_hundred():
     _clear_view_runtime_cache()
     article_id = _seed_article(session_factory, views=100)
 
-    def hit_once(i):
-        with _build_test_client(session_factory) as client:
+    with _build_test_client(session_factory) as client:
+        def hit_once(i):
             return client.post(
                 f"/api/student/articles/{article_id}/view",
                 json={"viewer_id": f"user-{i}"},
             )
 
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        responses = list(executor.map(hit_once, range(100)))
+        with ThreadPoolExecutor(max_workers=20) as executor:
+            responses = list(executor.map(hit_once, range(100)))
 
     assert all(r.status_code == 200 for r in responses)
 
@@ -146,3 +150,112 @@ def test_api_concurrent_different_user_plus_hundred():
         assert article.views == 200
     finally:
         db.close()
+
+
+def _lock_update_event(engine, *, failures):
+    attempts = {"count": 0}
+
+    def before_cursor_execute(conn, cursor, statement, parameters, context, executemany):
+        if statement.lstrip().upper().startswith("UPDATE ARTICLES"):
+            attempts["count"] += 1
+            if attempts["count"] <= failures:
+                raise OperationalError(statement, parameters, sqlite3.OperationalError("database is locked"))
+
+    event.listen(engine, "before_cursor_execute", before_cursor_execute)
+    return attempts, before_cursor_execute
+
+
+def test_sqlite_locked_update_retries_and_succeeds():
+    engine, session_factory = _build_test_db()
+    _clear_view_runtime_cache()
+    article_id = _seed_article(session_factory, views=10)
+    attempts, listener = _lock_update_event(engine, failures=1)
+    try:
+        with _build_test_client(session_factory) as client:
+            response = client.post(
+                f"/api/student/articles/{article_id}/view",
+                json={"viewer_id": "retry-once"},
+            )
+        assert response.status_code == 200
+        assert response.json()["views"] == 11
+        assert attempts["count"] == 2
+    finally:
+        if event.contains(engine, "before_cursor_execute", listener):
+            event.remove(engine, "before_cursor_execute", listener)
+
+
+def test_article_view_counter_executes_no_sql_after_commit():
+    engine, session_factory = _build_test_db()
+    article_id = _seed_article(session_factory, views=10)
+    db = session_factory()
+    committed = {"value": False}
+    post_commit_sql = {"count": 0}
+
+    def mark_committed(session):
+        committed["value"] = True
+
+    def reject_sql_after_commit(conn, cursor, statement, parameters, context, executemany):
+        if committed["value"]:
+            post_commit_sql["count"] += 1
+            raise AssertionError("SQL executed after the article view counter committed")
+
+    event.listen(db, "after_commit", mark_committed)
+    event.listen(engine, "before_cursor_execute", reject_sql_after_commit)
+    try:
+        assert student._increment_article_views_atomic(db, article_id) == 11
+        assert committed["value"] is True
+        assert post_commit_sql["count"] == 0
+    finally:
+        event.remove(db, "after_commit", mark_committed)
+        event.remove(engine, "before_cursor_execute", reject_sql_after_commit)
+        db.close()
+
+
+def test_sqlite_locked_update_exhaustion_returns_503_and_releases_token():
+    engine, session_factory = _build_test_db()
+    _clear_view_runtime_cache()
+    article_id = _seed_article(session_factory, views=10)
+    attempts, listener = _lock_update_event(engine, failures=99)
+    try:
+        with _build_test_client(session_factory) as client:
+            response = client.post(
+                f"/api/student/articles/{article_id}/view",
+                json={"viewer_id": "retry-exhausted"},
+            )
+        assert response.status_code == 503
+        assert response.headers["retry-after"] == "1"
+        assert attempts["count"] == 5
+        assert "viewer:retry-exhausted:" + str(article_id) not in student.ARTICLE_VIEW_IDEMPOTENCY
+        if event.contains(engine, "before_cursor_execute", listener):
+            event.remove(engine, "before_cursor_execute", listener)
+        with _build_test_client(session_factory) as client:
+            retried = client.post(
+                f"/api/student/articles/{article_id}/view",
+                json={"viewer_id": "retry-exhausted"},
+            )
+        assert retried.status_code == 200
+        assert retried.json()["views"] == 11
+    finally:
+        if event.contains(engine, "before_cursor_execute", listener):
+            event.remove(engine, "before_cursor_execute", listener)
+
+
+def test_non_lock_sqlite_operational_error_is_not_retried():
+    engine, session_factory = _build_test_db()
+    article_id = _seed_article(session_factory, views=10)
+    attempts = {"count": 0}
+
+    def fail_update(conn, cursor, statement, parameters, context, executemany):
+        if statement.lstrip().upper().startswith("UPDATE ARTICLES"):
+            attempts["count"] += 1
+            raise OperationalError(statement, parameters, sqlite3.OperationalError("disk I/O error"))
+
+    event.listen(engine, "before_cursor_execute", fail_update)
+    db = session_factory()
+    try:
+        with pytest.raises(OperationalError):
+            student._increment_article_views_atomic(db, article_id)
+        assert attempts["count"] == 1
+    finally:
+        db.close()
+        event.remove(engine, "before_cursor_execute", fail_update)

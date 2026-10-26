@@ -8,14 +8,14 @@
         </div>
 
         <el-alert v-if="articleLoadError" type="error" :closable="false" title="文章列表暂时无法加载。"><el-button text type="primary" @click="fetchArticles">重新加载</el-button></el-alert>
-        <div class="article-toolbar" v-if="articles.length">
-          <el-input v-model="articleSearch" clearable aria-label="搜索文章标题、摘要或来源" placeholder="搜索标题、摘要或来源" @input="articlePage = 1" />
-          <el-select v-model="articleCategory" aria-label="按分类筛选文章" @change="articlePage = 1">
+        <div class="article-toolbar">
+          <el-input v-model="articleSearch" maxlength="100" clearable aria-label="搜索文章标题、摘要或来源" placeholder="搜索标题、摘要或来源" />
+          <el-select v-model="articleCategory" aria-label="按分类筛选文章">
             <el-option label="全部分类" value="全部" />
             <el-option v-for="category in articleCategories" :key="category" :label="category" :value="category" />
           </el-select>
         </div>
-        <div class="business-table-wrap"><el-table :data="paginatedArticles" style="width: 100%" v-loading="loadingArticles" stripe :empty-text="articles.length ? '没有符合条件的文章。' : '还没有文章记录。'">
+        <div class="business-table-wrap"><el-table :data="articles" style="width: 100%" v-loading="loadingArticles" stripe :empty-text="loadingArticles ? '正在加载文章…' : articleLoadError ? '文章列表加载失败。' : total || hasArticleFilters ? '没有符合条件的文章。' : '还没有文章记录。'">
           <el-table-column prop="title" label="标题" min-width="200" />
           <el-table-column prop="category" label="分类" width="120" />
           <el-table-column prop="source" label="来源" width="150" />
@@ -33,11 +33,11 @@
           </el-table-column>
         </el-table>
         </div>
-        <div v-if="filteredArticles.length" class="pagination-wrapper">
+        <div v-if="!loadingArticles && !articleLoadError && total" class="pagination-wrapper">
           <el-pagination
             v-model:current-page="articlePage"
             :page-size="articlePageSize"
-            :total="filteredArticles.length"
+            :total="total"
             :pager-count="5"
             layout="total, prev, pager, next"
             :hide-on-single-page="true"
@@ -150,10 +150,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, nextTick } from 'vue'
+import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { ElMessage, ElMessageBox, ElTabs, ElTabPane, ElButton, ElTable, ElTableColumn, ElIcon, ElDialog, ElForm, ElFormItem, ElInput, ElUpload, ElInputNumber, ElAlert, ElSelect, ElOption, ElPagination, vLoading } from 'element-plus'
+import { useArticleCatalog } from '../../composables/useArticleCatalog'
 
 const router = useRouter()
 const currentTeacherId = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}').id } catch { return null } })()
@@ -187,32 +188,15 @@ const handleUploadSuccess = (res, file) => {
 }
 
 // Articles
-const articles = ref([])
-const loadingArticles = ref(false)
-const articleLoadError = ref(false)
+const articlePageSize = 12
+const catalog = useArticleCatalog({ endpoint: '/api/teacher/articles/page', pageSize: articlePageSize })
+const { items: articles, total, categories: articleCategories, query: articleSearch, category: articleCategory, page: articlePage, loading: loadingArticles, error: articleLoadError, fetchPage: fetchArticles, resetFilters } = catalog
+const hasArticleFilters = computed(() => Boolean(articleSearch.value.trim()) || articleCategory.value !== '全部')
 const articleDialogVisible = ref(false)
 const savingArticle = ref(false)
 const deletingArticleIds = ref([])
-const articleSearch = ref('')
-const articleCategory = ref('全部')
-const articlePage = ref(1)
-const articlePageSize = 12
 const pageRoot = ref(null)
 const scrollToArticles = () => nextTick(() => pageRoot.value?.scrollIntoView({ block: 'start' }))
-const articleCategories = computed(() => [...new Set(articles.value.map(article => article.category).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-CN')))
-const filteredArticles = computed(() => {
-  const query = articleSearch.value.trim().toLocaleLowerCase()
-  return articles.value.filter((article) => {
-    const matchesCategory = articleCategory.value === '全部' || article.category === articleCategory.value
-    const searchable = [article.title, article.summary, article.source].filter(Boolean).join(' ').toLocaleLowerCase()
-    return matchesCategory && (!query || searchable.includes(query))
-  })
-})
-const paginatedArticles = computed(() => filteredArticles.value.slice((articlePage.value - 1) * articlePageSize, articlePage.value * articlePageSize))
-watch(() => filteredArticles.value.length, (total) => {
-  const lastPage = Math.max(1, Math.ceil(total / articlePageSize))
-  if (articlePage.value > lastPage) articlePage.value = lastPage
-})
 const articleForm = ref({
   title: '',
   summary: '',
@@ -221,24 +205,6 @@ const articleForm = ref({
   category: '心理科普',
   source: ''
 })
-
-const fetchArticles = async () => {
-  loadingArticles.value = true
-  try {
-    const token = localStorage.getItem('token')
-    const res = await axios.get('/api/teacher/articles', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    articles.value = res.data
-    if (articleCategory.value !== '全部' && !articleCategories.value.includes(articleCategory.value)) articleCategory.value = '全部'
-    articleLoadError.value = false
-  } catch (error) {
-    articleLoadError.value = true
-    ElMessage.error('获取文章列表失败')
-  } finally {
-    loadingArticles.value = false
-  }
-}
 
 const openArticleDialog = () => {
   if (savingArticle.value) return
@@ -282,9 +248,7 @@ const submitArticle = async () => {
     })
     ElMessage.success('保存成功')
     articleDialogVisible.value = false
-    articleSearch.value = ''
-    articleCategory.value = '全部'
-    articlePage.value = 1
+    resetFilters()
     fetchArticles()
   } catch (error) {
     ElMessage.error('保存失败')

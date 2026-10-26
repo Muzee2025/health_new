@@ -7,10 +7,39 @@ import sys
 BACKEND=Path(__file__).resolve().parents[1]
 
 
+def block_outbound_network():
+    """Keep the local preview offline, allowing only asyncio's internal wakeup."""
+    import socket
+    import threading
+    state = threading.local()
+    original_socketpair = socket.socketpair
+
+    def internal_socketpair(*args, **kwargs):
+        state.active = True
+        try:
+            return original_socketpair(*args, **kwargs)
+        finally:
+            state.active = False
+
+    socket.socketpair = internal_socketpair
+
+    def audit(event, args):
+        if event == 'socket.connect' and getattr(state, 'active', False):
+            address = args[1]
+            if isinstance(address, tuple) and address[0] in {'127.0.0.1', '::1'}:
+                return
+        if event in {'socket.connect', 'socket.getaddrinfo'}:
+            raise RuntimeError('Offline local preview blocks outbound networking')
+
+    sys.addaudithook(audit)
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--env-file',required=True,type=Path)
     parser.add_argument('--port',type=int,default=18080)
+    parser.add_argument('--block-outbound',action='store_true',help='Offline preview: block provider and other outbound connections')
+    parser.add_argument('--isolated-storage',action='store_true',help='Keep uploads and logs beside the explicit deployment config')
     args=parser.parse_args()
     if args.env_file.is_symlink() or not args.env_file.is_file() or not 1024<=args.port<=65535:
         parser.exit(2,'A private environment file and valid local port are required\n')
@@ -41,8 +70,10 @@ def main():
             os.environ[key]=value
     os.environ['PYTHON_DOTENV_DISABLED']='1'
     dotenv.load_dotenv=lambda *args,**kwargs:False
-    os.chdir(BACKEND)
+    os.chdir(expected.parent if args.isolated_storage else BACKEND)
     sys.path.insert(0,str(BACKEND))
+    if args.block_outbound:
+        block_outbound_network()
     import uvicorn
     uvicorn.run('app.main:app',host='127.0.0.1',port=args.port,access_log=False,log_level='warning')
 

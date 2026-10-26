@@ -95,6 +95,8 @@ async function main() {
         const postPayloads = []
         const deleteIds = []
         let createMode = 'fail'
+        let failNextCatalog = false
+        let failedCatalogRequests = 0
         let nextId = 27
         const expectedConsole = (entry) => entry.expected === true
 
@@ -102,7 +104,7 @@ async function main() {
           if (message.type() === 'error' || message.type() === 'warning') {
             const text = message.text().slice(0, 500)
             consoleEvents.push({ type: message.type(), text,
-              expected: createMode === 'fail' && postPayloads.length > 0 && /^Failed to load resource:.*500/.test(text) })
+              expected: ((createMode === 'fail' && postPayloads.length > 0) || failedCatalogRequests > 0) && /^Failed to load resource:.*500/.test(text) })
           }
         })
         page.on('pageerror', (error) => pageErrors.push(String(error?.message || error).slice(0, 500)))
@@ -125,9 +127,31 @@ async function main() {
           if (url.pathname.startsWith('/api/')) {
             const method = request.method()
             const path = url.pathname
-            apiCalls.push({ method, path })
+            const apiCall = { method, path, query: Object.fromEntries(url.searchParams) }
+            apiCalls.push(apiCall)
 
-            if (path === '/api/student/articles' && method === 'GET') return json(route, articles)
+            if (/^\/api\/(student|teacher)\/articles\/page$/.test(path) && method === 'GET') {
+              if (failNextCatalog) {
+                failNextCatalog = false
+                failedCatalogRequests++
+                apiCall.expectedFailure = true
+                return json(route, { detail: 'Synthetic catalog failure' }, 500)
+              }
+              const q = (url.searchParams.get('q') || '').trim().toLocaleLowerCase()
+              const category = url.searchParams.get('category') || ''
+              const pageSize = Number(url.searchParams.get('page_size'))
+              assert.equal(pageSize, 12, 'The client must request a bounded page')
+              const matches = articles.filter(article => (!category || article.category === category)
+                && (!q || [article.title, article.summary, article.source].some(value => String(value || '').toLocaleLowerCase().includes(q))))
+              matches.sort((a, b) => (url.searchParams.get('sort') === 'most-read' ? (b.views || 0) - (a.views || 0) : 0)
+                || (Date.parse(b.created_at || '') || 0) - (Date.parse(a.created_at || '') || 0) || b.id - a.id)
+              const effectivePage = Math.max(1, Math.min(Number(url.searchParams.get('page')) || 1, Math.ceil(matches.length / pageSize) || 1))
+              const items = matches.slice((effectivePage - 1) * pageSize, effectivePage * pageSize).map(({ content, ...summary }) => summary)
+              apiCall.returnedItems = items.length
+              apiCall.bodyIncluded = items.some(item => 'content' in item)
+              return json(route, { items, total: matches.length, page: effectivePage, page_size: pageSize,
+                categories: [...new Set(articles.map(article => article.category).filter(Boolean))] })
+            }
             const detailMatch = path.match(/^\/api\/student\/articles\/(\d+)$/)
             if (detailMatch && method === 'GET') {
               const article = articles.find((item) => item.id === Number(detailMatch[1]))
@@ -143,7 +167,6 @@ async function main() {
               if (article) article.views = Math.max(0, Number(article.views) || 0) + 1
               return json(route, { article_id: id, views: article?.views ?? 1, counted: true, dedup_window_seconds: 300 })
             }
-            if (path === '/api/teacher/articles' && method === 'GET') return json(route, articles)
             if (path === '/api/teacher/teachers_profiles' && method === 'GET') return json(route, [])
             if (path === '/api/teacher/students' && method === 'GET') return json(route, [])
             if (path === '/api/teacher/articles' && method === 'POST') {
@@ -159,7 +182,7 @@ async function main() {
                 created_at: '2026-10-28T08:00:00.000Z',
               }
               articles.unshift(created)
-              return json(route, created, 201)
+              return json(route, created, 200)
             }
             const deleteMatch = path.match(/^\/api\/teacher\/articles\/(\d+)$/)
             if (deleteMatch && method === 'DELETE') {
@@ -239,6 +262,40 @@ async function main() {
           await page.waitForLoadState('load', { timeout: 10000 }).catch(() => {})
         }
 
+        // Wait for Vue's rendered result as well as the asynchronous page response.
+        const waitCatalog = async () => {
+          if (role === 'student') {
+            await page.locator('.article-loading').waitFor({ state: 'hidden' })
+          } else {
+            await page.locator('.el-tab-pane').first().locator('.el-loading-mask').waitFor({ state: 'hidden' })
+          }
+        }
+        const catalogAction = async (action) => {
+          const response = page.waitForResponse(value => new URL(value.url()).pathname === `/api/${role}/articles/page` && value.request().method() === 'GET')
+          await action()
+          await response
+          await waitCatalog()
+        }
+        const fillSearch = async (value) => {
+          const search = page.getByLabel('搜索文章标题、摘要或来源')
+          if (await search.inputValue() !== value) await catalogAction(() => search.fill(value))
+        }
+        const checkCatalogRecovery = async (entries) => {
+          failNextCatalog = true
+          await fillSearch('绝无匹配结果-retry-qa')
+          await page.getByRole('alert').waitFor({ state: 'visible' })
+          assert.equal(await entries.count(), 0, 'No stale rows after a failed request')
+          assert.equal(await page.locator('.el-pagination:visible').count(), 0)
+          await catalogAction(() => page.getByRole('button', { name: '重新加载', exact: true }).click())
+          assert.equal(await page.getByRole('alert').count(), 0)
+          assert.equal(await page.getByLabel('搜索文章标题、摘要或来源').inputValue(), '绝无匹配结果-retry-qa')
+          assert.equal(await entries.count(), 0)
+          await page.getByText(role === 'student' ? '没有找到符合条件的文章' : '没有符合条件的文章。', { exact: true }).waitFor()
+          await fillSearch('')
+          assert.equal(await entries.count(), 12)
+          return { staleRowsHidden: true, retryKeepsQuery: true, emptyResultIsNotAnEmptyDatabase: true, restoredRows: 12 }
+        }
+
         try {
           if (role === 'student') {
             await open('/student/articles')
@@ -250,7 +307,7 @@ async function main() {
               assert((await page.locator('.header-wrapper').boundingBox()).y >= -2, 'Pagination must return to list controls')
               const totalText = await page.locator('.el-pagination__total').innerText()
               assert.match(totalText, /26/)
-              await page.locator('.el-pagination .btn-next').click()
+              await catalogAction(() => page.locator('.el-pagination .btn-next').click())
               await page.locator('.el-pagination .el-pager .is-active').filter({ hasText: '2' }).waitFor()
               assert.equal(await cards.count(), 12)
               assert((await page.locator('.header-wrapper').boundingBox()).y >= -2, 'Pagination must return to list controls')
@@ -258,41 +315,42 @@ async function main() {
             })
 
             const search = page.getByLabel('搜索文章标题、摘要或来源')
+            await scenario('catalog-error-and-retry-retains-query', () => checkCatalogRecovery(cards))
             await scenario('search-title-summary-source', async () => {
-              await search.fill('标题线索-007')
+              await fillSearch('标题线索-007')
               assert.equal(await cards.count(), 1)
               assert.match(await cards.first().innerText(), /标题线索-007/)
-              await search.fill('摘要线索-011')
+              await fillSearch('摘要线索-011')
               assert.equal(await cards.count(), 1)
               assert.match(await cards.first().innerText(), /摘要线索-011/)
-              await search.fill('来源线索-020')
+              await fillSearch('来源线索-020')
               assert.equal(await cards.count(), 1)
               assert.match(await cards.first().innerText(), /来源线索-020/)
               return { fields: ['title', 'summary', 'source'], eachReturnedOneMatch: true }
             })
 
             await scenario('category-and-search-combination', async () => {
-              await search.fill('摘要线索-007')
-              await page.locator('.category-filter .el-radio-button').filter({ hasText: '情绪管理' }).click()
+              await fillSearch('摘要线索-007')
+              await catalogAction(() => page.locator('.category-filter .el-radio-button').filter({ hasText: '情绪管理' }).click())
               assert.equal(await cards.count(), 1)
               assert.match(await cards.first().innerText(), /摘要线索-007/)
               return { category: '情绪管理', searchField: 'summary', matches: 1 }
             })
 
             await scenario('most-read-sort-and-zero-views', async () => {
-              await search.fill('')
-              await page.locator('.category-filter .el-radio-button').filter({ hasText: '全部' }).click()
+              await fillSearch('')
+              await catalogAction(() => page.locator('.category-filter .el-radio-button').filter({ hasText: '全部' }).click())
               await page.locator('.article-filters .el-select').click()
-              await page.getByRole('option', { name: '阅读最多' }).click()
+              await catalogAction(() => page.getByRole('option', { name: '阅读最多' }).click())
               assert.match(await cards.first().innerText(), /标题线索-026/)
-              await search.fill('标题线索-001')
+              await fillSearch('标题线索-001')
               assert.equal(await cards.count(), 1)
               assert.match(await cards.first().locator('.views').innerText(), /0/)
               return { topArticle: 26, zeroViewDisplayed: true }
             })
 
             await scenario('long-title-and-empty-date-fixtures', async () => {
-              await search.fill('给忙碌的日常')
+              await fillSearch('给忙碌的日常')
               assert.equal(await cards.count(), 1)
               const lineClamp = await cards.first().locator('.article-title').evaluate((element) => getComputedStyle(element).webkitLineClamp)
               assert.equal(lineClamp, '2')
@@ -300,13 +358,13 @@ async function main() {
             })
 
             await scenario('no-match-clear-filters-and-reader-back', async () => {
-              await search.fill('绝无匹配结果-qa')
+              await fillSearch('绝无匹配结果-qa')
               await page.getByText('没有找到符合条件的文章', { exact: true }).waitFor({ state: 'visible' })
-              await page.getByRole('button', { name: '清空筛选' }).click()
+              await catalogAction(() => page.getByRole('button', { name: '清空筛选' }).click())
               assert.equal(await cards.count(), 12)
               assert.equal(await search.inputValue(), '')
 
-              await search.fill('标题线索-003')
+              await fillSearch('标题线索-003')
               assert.equal(await cards.count(), 1)
               await cards.first().click()
               await page.waitForURL(/\/article\/3$/)
@@ -339,25 +397,26 @@ async function main() {
             await scenario('teacher-list-12-and-pagination', async () => {
               assert.equal(await rows.count(), 12)
               assert.match(await page.locator('.el-pagination__total').innerText(), /26/)
-              await page.locator('.el-pagination .btn-next').click()
+              await catalogAction(() => page.locator('.el-pagination .btn-next').click())
               await page.locator('.el-pagination .el-pager .is-active').filter({ hasText: '2' }).waitFor()
               assert.equal(await rows.count(), 12)
               return { initialRowsPerPage: 12, total: 26, nextPage: 2 }
             })
 
             const search = page.getByLabel('搜索文章标题、摘要或来源')
+            await scenario('catalog-error-and-retry-retains-query', () => checkCatalogRecovery(rows))
             await scenario('teacher-search-and-category', async () => {
-              await search.fill('标题线索-008')
+              await fillSearch('标题线索-008')
               assert.equal(await rows.count(), 1)
               assert.match(await rows.first().innerText(), /标题线索-008/)
-              await search.fill('摘要线索-007')
+              await fillSearch('摘要线索-007')
               await page.locator('.article-toolbar .el-select').click()
-              await page.getByRole('option', { name: '情绪管理' }).click()
+              await catalogAction(() => page.getByRole('option', { name: '情绪管理' }).click())
               assert.equal(await rows.count(), 1)
               assert.match(await rows.first().innerText(), /标题线索-007/)
-              await search.fill('')
+              await fillSearch('')
               await page.locator('.article-toolbar .el-select').click()
-              await page.getByRole('option', { name: '全部分类' }).click()
+              await catalogAction(() => page.getByRole('option', { name: '全部分类' }).click())
               return { titleSearchMatched: true, categoryAndSearchMatched: true }
             })
 
@@ -428,7 +487,7 @@ async function main() {
               assert.equal(postPayloads.length, countBefore + 1)
               assert.equal(await dialog.locator('.el-dialog__headerbtn').count(), 0)
               const response = await postResponse
-              assert.equal(response.status(), 201)
+              assert.equal(response.status(), 200)
               await dialog.waitFor({ state: 'hidden' })
               const payload = postPayloads.at(-1)
               assert.equal(payload.title, '新增验收文章')
@@ -441,7 +500,7 @@ async function main() {
             })
 
             await scenario('delete-cancel-and-confirm-page-clamp', async () => {
-              await page.locator('.el-pagination .el-pager .number').last().click()
+              await catalogAction(() => page.locator('.el-pagination .el-pager .number').last().click())
               await page.locator('.el-pagination .el-pager .is-active').filter({ hasText: '3' }).waitFor()
               assert.equal(await rows.count(), 3)
               const deleteCountBeforeCancel = deleteIds.length
@@ -454,12 +513,13 @@ async function main() {
 
               const deleteOne = async () => {
                 const deletion = page.waitForResponse((response) => response.url().match(/\/api\/teacher\/articles\/\d+$/) && response.request().method() === 'DELETE')
-                const refreshed = page.waitForResponse((response) => new URL(response.url()).pathname === '/api/teacher/articles' && response.request().method() === 'GET')
+                const refreshed = page.waitForResponse((response) => new URL(response.url()).pathname === '/api/teacher/articles/page' && response.request().method() === 'GET')
                 await rows.first().getByRole('button', { name: '删除' }).click()
                 const confirmDialog = page.locator('.el-message-box')
                 await confirmDialog.waitFor({ state: 'visible' })
                 await confirmDialog.getByRole('button', { name: '确定', exact: true }).click()
                 await Promise.all([deletion, refreshed])
+                await waitCatalog()
               }
               await deleteOne()
               await deleteOne()
@@ -480,7 +540,8 @@ async function main() {
             role,
             viewport,
             name: 'context-summary',
-            passed: pageConsole === 0 && pageErrorCount === 0 && externalCount === 0 && unmappedApiCalls.length === 0,
+            passed: pageConsole === 0 && pageErrorCount === 0 && externalCount === 0 && unmappedApiCalls.length === 0
+              && apiCalls.filter(call => call.method === 'GET' && /\/articles\/page$/.test(call.path) && !call.expectedFailure).every(call => call.returnedItems <= 12 && call.bodyIncluded === false),
             counts: { consoleErrors: pageConsole, pageErrors: pageErrorCount, blockedExternalRequests: externalCount, apiCalls: apiCalls.length, unmappedApiCalls, blockedWebSockets: blockedSockets.length },
           })
           await context.close()

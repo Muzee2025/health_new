@@ -7,18 +7,18 @@
           <el-input
             v-model="searchQuery"
             class="article-search"
+            maxlength="100"
             clearable
             aria-label="搜索文章标题、摘要或来源"
             placeholder="搜索标题、摘要或来源"
-            @input="page = 1"
           />
-          <el-select v-model="sortOrder" aria-label="文章排序" @change="page = 1">
+          <el-select v-model="sortOrder" aria-label="文章排序">
             <el-option label="最新发布" value="newest" />
             <el-option label="阅读最多" value="most-read" />
           </el-select>
         </div>
         <div class="category-filter">
-          <el-radio-group v-model="selectedCategory" size="default" aria-label="按分类筛选文章" @change="page = 1">
+          <el-radio-group v-model="selectedCategory" size="default" aria-label="按分类筛选文章">
             <el-radio-button value="全部">全部</el-radio-button>
             <el-radio-button v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</el-radio-button>
           </el-radio-group>
@@ -27,10 +27,10 @@
       <el-alert v-if="loadError" type="error" :closable="false" show-icon title="文章暂时无法加载，请检查网络后重试。">
         <el-button link type="primary" @click="fetchArticles">重新加载</el-button>
       </el-alert>
-      <div v-else-if="loading" v-loading="loading" class="article-loading" role="status" aria-label="正在加载文章" />
+      <div v-if="loading && !loadError" v-loading="loading" class="article-loading" role="status" aria-label="正在加载文章" />
       
-      <el-row v-else-if="articles.length" :gutter="20">
-        <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="article in paginatedArticles" :key="article.id">
+      <el-row v-if="!loading && !loadError && articles.length" :gutter="20">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="article in articles" :key="article.id">
           <el-card shadow="hover" class="article-card" role="link" tabindex="0" :aria-label="`阅读文章：${article.title}`" @click="showArticle(article)" @keydown.enter.prevent="showArticle(article)" @keydown.space.prevent="showArticle(article)" :body-style="{ padding: '0px' }">
             <div class="image-wrapper">
               <img :src="article.cover_url || articleFallback" class="image" :alt="article.title" width="300" height="200" loading="lazy" @error="handleImageError" />
@@ -51,16 +51,16 @@
           </el-card>
         </el-col>
       </el-row>
-      <LibraryEmpty v-if="!loading && !loadError && !articles.length" description="暂时还没有文章" />
-      <div v-else-if="!loading && !loadError && !filteredArticles.length" class="empty-results">
-        <LibraryEmpty :description="selectedCategory === '全部' && !searchQuery.trim() ? '暂时还没有文章' : '没有找到符合条件的文章'" />
+      <LibraryEmpty v-if="!loading && !loadError && !total && selectedCategory === '全部' && !searchQuery.trim()" description="暂时还没有文章" />
+      <div v-else-if="!loading && !loadError && !total" class="empty-results">
+        <LibraryEmpty description="没有找到符合条件的文章" />
         <el-button v-if="selectedCategory !== '全部' || searchQuery" @click="clearFilters">清空筛选</el-button>
       </div>
-      <div v-if="!loading && !loadError && filteredArticles.length" class="pagination-wrapper">
+      <div v-if="!loading && !loadError && total" class="pagination-wrapper">
         <el-pagination
           v-model:current-page="page"
           :page-size="pageSize"
-          :total="filteredArticles.length"
+          :total="total"
           :pager-count="5"
           layout="total, prev, pager, next"
           :hide-on-single-page="true"
@@ -76,47 +76,18 @@
 import { getVisualAsset } from '../../design/asset-registry'
 const articleFallback = getVisualAsset('articleFallback').url
 
-import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 import { ElAlert, ElButton, ElCard, ElInput, ElSelect, ElOption, ElRadioGroup, ElRadioButton, ElRow, ElCol, ElTag, ElIcon, ElPagination } from 'element-plus'
+import { useArticleCatalog } from '../../composables/useArticleCatalog'
 
 const router = useRouter()
 
-const articles = ref([])
-const loading = ref(false)
-const loadError = ref(false)
-const categories = ref([])
-const selectedCategory = ref('全部')
-const searchQuery = ref('')
-const sortOrder = ref('newest')
-const page = ref(1)
 const pageSize = 12
+const catalog = useArticleCatalog({ endpoint: '/api/student/articles/page', pageSize })
+const { items: articles, total, categories, category: selectedCategory, query: searchQuery, sort: sortOrder, page, loading, error: loadError, fetchPage: fetchArticles, resetFilters } = catalog
 const pageRoot = ref(null)
 const scrollToArticles = () => nextTick(() => pageRoot.value?.scrollIntoView({ block: 'start' }))
-const publishedAt = (article) => Date.parse(article.created_at || '') || 0
-let articleRequest
-const normalizeArticleViews = (rows) => (rows || []).map(item => ({ ...item, views: Number.isFinite(Number(item.views)) ? Math.max(0, Number(item.views)) : 0 }))
-const filteredArticles = computed(() => {
-  const query = searchQuery.value.trim().toLocaleLowerCase()
-  const rows = articles.value.filter((article) => {
-    const matchesCategory = selectedCategory.value === '全部' || article.category === selectedCategory.value
-    const searchable = [article.title, article.summary, article.source].filter(Boolean).join(' ').toLocaleLowerCase()
-    return matchesCategory && (!query || searchable.includes(query))
-  })
-  return rows.sort((a, b) => sortOrder.value === 'most-read'
-    ? b.views - a.views || publishedAt(b) - publishedAt(a)
-    : publishedAt(b) - publishedAt(a))
-})
-const paginatedArticles = computed(() => {
-  const start = (page.value - 1) * pageSize
-  return filteredArticles.value.slice(start, start + pageSize)
-})
-
-watch(() => filteredArticles.value.length, (total) => {
-  const lastPage = Math.max(1, Math.ceil(total / pageSize))
-  if (page.value > lastPage) page.value = lastPage
-})
 
 onMounted(() => {
   fetchArticles()
@@ -124,39 +95,9 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  articleRequest?.abort()
   window.removeEventListener('article-view-updated', handleArticleViewUpdated)
 })
-
-const fetchArticles = async () => {
-  articleRequest?.abort()
-  const request = new AbortController()
-  articleRequest = request
-  loading.value = true
-  loadError.value = false
-  try {
-    const res = await axios.get('/api/student/articles', { signal: request.signal, timeout: 15000 })
-    if (request.signal.aborted) return
-    if (!Array.isArray(res.data)) throw new Error('invalid-articles')
-    const rows = normalizeArticleViews(res.data)
-    articles.value = rows
-    
-    // Extract unique categories
-    const cats = new Set(rows.map(a => a.category).filter(Boolean))
-    categories.value = Array.from(cats)
-    if (selectedCategory.value !== '全部' && !cats.has(selectedCategory.value)) selectedCategory.value = '全部'
-  } catch (error) {
-    if (!request.signal.aborted) loadError.value = true
-  } finally {
-    if (!request.signal.aborted) loading.value = false
-  }
-}
-
-const clearFilters = () => {
-  searchQuery.value = ''
-  selectedCategory.value = '全部'
-  page.value = 1
-}
+const clearFilters = () => resetFilters()
 
 const handleArticleViewUpdated = (event) => {
   const detail = event?.detail || {}
@@ -168,6 +109,7 @@ const handleArticleViewUpdated = (event) => {
     return { ...item, views }
   })
   articles.value = updateRows(articles.value)
+  if (sortOrder.value === 'most-read') fetchArticles()
 }
 
 const showArticle = (article) => {

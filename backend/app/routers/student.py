@@ -13,8 +13,12 @@ import random
 import re
 import string
 import hashlib
+import sqlite3
+import time
 from threading import Lock
+from sqlalchemy.exc import OperationalError
 from app.services.qwen_service import client as qwen_client
+from app.services.article_catalog import page_articles
 
 router = APIRouter(prefix="/api/student", tags=["Student"])
 
@@ -828,6 +832,39 @@ def _consume_view_token(viewer_key: str, article_id: int, now_ts: Optional[float
     return True
 
 
+def _consume_view_token_expiry(viewer_key: str, article_id: int) -> Optional[float]:
+    """Consume a token and return its expiry so a failed write can release only this token."""
+    now = datetime.now(timezone.utc).timestamp()
+    dedup_key = f"{viewer_key}:{article_id}"
+    with ARTICLE_VIEW_LOCK:
+        expires_at = ARTICLE_VIEW_IDEMPOTENCY.get(dedup_key, 0)
+        if expires_at > now:
+            return None
+        token_expiry = now + ARTICLE_VIEW_DEDUP_WINDOW_SECONDS
+        ARTICLE_VIEW_IDEMPOTENCY[dedup_key] = token_expiry
+        if len(ARTICLE_VIEW_IDEMPOTENCY) > 4096:
+            _cleanup_view_idempotency(now)
+        return token_expiry
+
+
+def _release_view_token(viewer_key: str, article_id: int, expected_expiry: float):
+    dedup_key = f"{viewer_key}:{article_id}"
+    with ARTICLE_VIEW_LOCK:
+        if ARTICLE_VIEW_IDEMPOTENCY.get(dedup_key) == expected_expiry:
+            ARTICLE_VIEW_IDEMPOTENCY.pop(dedup_key, None)
+
+
+def _is_sqlite_lock_error(exc: OperationalError) -> bool:
+    original = exc.orig
+    if not isinstance(original, sqlite3.OperationalError):
+        return False
+    code = getattr(original, "sqlite_errorcode", None)
+    if code is not None and code & 0xFF in {sqlite3.SQLITE_BUSY, sqlite3.SQLITE_LOCKED}:
+        return True
+    message = str(original).lower()
+    return "database is locked" in message or "database table is locked" in message or "database is busy" in message
+
+
 def _build_viewer_key(request: Request, viewer_id: Optional[str] = None) -> str:
     raw = (viewer_id or "").strip()
     if not raw:
@@ -851,17 +888,48 @@ def _ensure_article_views_initialized(db: Session):
 
 
 def _increment_article_views_atomic(db: Session, article_id: int) -> int:
-    affected = db.query(models.Article).filter(models.Article.id == article_id).update(
-        {models.Article.views: func.coalesce(models.Article.views, 0) + 1},
-        synchronize_session=False,
-    )
-    if not affected:
-        raise HTTPException(status_code=404, detail="Article not found")
-    db.commit()
-    row = db.query(models.Article.views).filter(models.Article.id == article_id).first()
-    updated = int(row[0]) if row else 0
+    # End the preceding read phase before writing; every retry also starts with
+    # a fresh transaction instead of retaining a failed SQLite transaction.
+    db.rollback()
+    max_attempts = 5
+    for attempt in range(max_attempts):
+        try:
+            affected = db.query(models.Article).filter(models.Article.id == article_id).update(
+                {models.Article.views: func.coalesce(models.Article.views, 0) + 1},
+                synchronize_session=False,
+            )
+            if not affected:
+                raise HTTPException(status_code=404, detail="Article not found")
+            row = db.query(models.Article.views).filter(models.Article.id == article_id).first()
+            updated = int(row[0]) if row else 0
+            db.commit()
+            break
+        except OperationalError as exc:
+            db.rollback()
+            if db.bind.dialect.name != "sqlite" or not _is_sqlite_lock_error(exc):
+                raise
+            if attempt + 1 >= max_attempts:
+                raise HTTPException(
+                    status_code=503,
+                    detail="文章阅读量暂时无法更新，请稍后重试",
+                    headers={"Retry-After": "1"},
+                ) from exc
+            time.sleep(min(0.01 * (2 ** attempt), 0.08))
     _touch_article_view_cache(article_id, updated)
     return updated
+
+
+@router.get("/articles/page", response_model=schemas.ArticlePage)
+def get_articles_page(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(12, ge=1, le=50),
+    q: str = Query("", max_length=100),
+    category: str = Query("", max_length=50),
+    sort: str = Query("newest", pattern="^(newest|most-read)$"),
+    db: Session = Depends(get_db),
+):
+    return page_articles(db, page=page, page_size=page_size, q=q.strip(),
+                         category=category.strip(), sort=sort)
 
 
 @router.get("/articles", response_model=List[schemas.ArticleResponse])
@@ -895,9 +963,14 @@ def track_article_view(
         raise HTTPException(status_code=404, detail="Article not found")
 
     viewer_key = _build_viewer_key(request, payload.viewer_id)
-    should_count = _consume_view_token(viewer_key, article_id)
+    token_expiry = _consume_view_token_expiry(viewer_key, article_id)
+    should_count = token_expiry is not None
     if should_count:
-        views = _increment_article_views_atomic(db, article_id)
+        try:
+            views = _increment_article_views_atomic(db, article_id)
+        except Exception:
+            _release_view_token(viewer_key, article_id, token_expiry)
+            raise
     else:
         article = db.query(models.Article).filter(models.Article.id == article_id).first()
         views = _read_article_views_cached(article_id, article.views if article else 0)

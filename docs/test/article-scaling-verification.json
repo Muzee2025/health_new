@@ -1,0 +1,312 @@
+{
+  "schemaVersion": 1,
+  "task": "SCALE-ARTICLES",
+  "completedDate": "2026-10-26",
+  "status": "feature-delivered-full-regression-blocked-by-windows-loopback",
+  "baseCommit": "7d374ac",
+  "branch": "codex/article-scaling",
+  "subagentModel": "gpt-6-luna",
+  "backend": {
+    "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py -rs",
+    "passed": 135,
+    "skipped": 3,
+    "warnings": 26,
+    "errors": 5,
+    "seconds": 76.36,
+    "exitCode": 1,
+    "errorScope": "Existing test_support_workflow.py fixture fails creating TestClient/asyncio socketpair, WinError 10013",
+    "evidence": "tmp/article-scaling-20261025/backend-agent-final.log",
+    "threeSkips": "Windows real symlink creation unavailable: backup_restore, content_catalog, support_workflow"
+  },
+  "targetedBackend": {
+    "catalogPassed": 6,
+    "launcherPassed": 2,
+    "counterExecutorPassed": 9,
+    "counterNewIndependentPassed": 4,
+    "independentCounterFullPassed": 5,
+    "independentCounterFullFailed": 4,
+    "independentCounterFullRuns": 2,
+    "independentCounterFullError": "WinError 10013 before TestClient portal starts; not counted as a passing full suite"
+  },
+  "frontend": {
+    "vitestPassed": 22,
+    "testFiles": 7,
+    "sourceNegativeTestsPassed": 7,
+    "assetsChecked": 131,
+    "legacyWarnings": 7,
+    "sourceFilesScanned": 56,
+    "sourceErrors": 0
+  },
+  "build": {
+    "modules": 2452,
+    "seconds": 23.96,
+    "maxJsBytes": 492110,
+    "exitCode": 0,
+    "path": "tmp/article-scaling-20261025/build"
+  },
+  "browser": {
+    "engine": "Edge / Playwright in new contexts",
+    "viewports": [
+      1440,
+      390
+    ],
+    "productionPages": {
+      "expectedPages": 38,
+      "capturedPages": 38,
+      "unknownApiCount": 0,
+      "pageErrorCount": 0,
+      "imageLoadFailureCount": 0,
+      "libraryIconFailureCount": 0,
+      "pagesOverLimit": []
+    },
+    "extendedInteractions": 92,
+    "legacyObservations": 2,
+    "failedInteractions": 0,
+    "contentScenarios": {
+      "scenarios": 30,
+      "failedScenarios": 0,
+      "contexts": 4,
+      "failedContexts": 0,
+      "screenshots": 30,
+      "externalRequests": 0,
+      "pageErrors": 0,
+      "consoleErrors": 0
+    },
+    "realHttpFinal": {
+      "status": "failed",
+      "noApiMocks": true,
+      "viewports": [
+        {
+          "width": 1440,
+          "passed": false
+        },
+        {
+          "width": 390,
+          "passed": false
+        }
+      ],
+      "database": "qa-final-20261026: new config/SQLite/uploads; synthetic registration only",
+      "evidence": "tmp/article-scaling-20261025/real-preview-ready-26.json"
+    }
+  },
+  "coldAuth": {
+    "status": "passed",
+    "budgetsEnforced": true,
+    "results": [
+      {
+        "route": "/login",
+        "width": 1440,
+        "status": "passed",
+        "scriptCount": 17,
+        "rawJsBytes": 405504,
+        "gzipJsBytes": 140227,
+        "servedJsBodyBytes": 140227
+      },
+      {
+        "route": "/register",
+        "width": 1440,
+        "status": "passed",
+        "scriptCount": 18,
+        "rawJsBytes": 406792,
+        "gzipJsBytes": 140730,
+        "servedJsBodyBytes": 140730
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "status": "passed",
+        "scriptCount": 17,
+        "rawJsBytes": 405504,
+        "gzipJsBytes": 140227,
+        "servedJsBodyBytes": 140227
+      },
+      {
+        "route": "/register",
+        "width": 390,
+        "status": "passed",
+        "scriptCount": 18,
+        "rawJsBytes": 406792,
+        "gzipJsBytes": 140730,
+        "servedJsBodyBytes": 140730
+      }
+    ],
+    "evidence": "tmp/article-scaling-20261025/cold.json",
+    "networkLatencyBenchmark": false
+  },
+  "syntheticPayloadComparison": {
+    "status": "passed",
+    "fixture": {
+      "article_count": 200,
+      "body_characters_per_article": 20000,
+      "database": "fresh pytest tmp_path SQLite; synthetic rows only"
+    },
+    "legacy_full_list": {
+      "http_status": 200,
+      "article_count": 200,
+      "response_bytes_uncompressed": 12044981,
+      "content_present_on_every_item": true
+    },
+    "paged_summary_first_page": {
+      "http_status": 200,
+      "total": 200,
+      "page": 1,
+      "page_size": 12,
+      "response_bytes_uncompressed": 2662,
+      "content_absent_on_every_item": true
+    },
+    "response_size_ratio_legacy_over_paged": 4524.786,
+    "search_contract": {
+      "query": "SCALE-MATCH",
+      "expected_matches": 3,
+      "actual_matches": 3,
+      "matches_title_summary_and_source": true
+    },
+    "timing_used_as_performance_claim": false
+  },
+  "databases": {
+    "guide_source": {
+      "tables": 27,
+      "triggers": 6,
+      "articles": 8,
+      "users": 0,
+      "assignments": 0,
+      "views": 0,
+      "quick_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "preview": {
+      "tables": 27,
+      "triggers": 6,
+      "articles": 8,
+      "users": 0,
+      "assignments": 0,
+      "views": 0,
+      "quick_check": "ok",
+      "foreign_key_violations": 0,
+      "readiness": {
+        "status": "ok",
+        "service": "health-new",
+        "schema_ready": true
+      }
+    },
+    "qa": {
+      "tables": 27,
+      "triggers": 6,
+      "articles": 8,
+      "users": 4,
+      "assignments": 0,
+      "views": 4,
+      "quick_check": "ok",
+      "foreign_key_violations": 0
+    },
+    "qa_final": {
+      "tables": 27,
+      "triggers": 6,
+      "articles": 8,
+      "users": 2,
+      "assignments": 0,
+      "views": 1,
+      "quick_check": "ok",
+      "foreign_key_violations": 0,
+      "readiness": {
+        "status": "ok",
+        "service": "health-new",
+        "schema_ready": true
+      }
+    },
+    "source_articles_preserved_in_preview": true,
+    "preview_storage": {
+      "uploads_private": true,
+      "logs_private": false
+    }
+  },
+  "preview": {
+    "url": "http://127.0.0.1:5180/register",
+    "backendPort": 18081,
+    "pythonOutboundGuardRetained": true,
+    "isolatedStorage": true,
+    "originalDatabaseConfigUploadsUntouched": true,
+    "existingUserTabUntouched": true,
+    "guideReview": "engineering only; no clinical approval",
+    "newAccountsInitially": 0
+  },
+  "finalRuntimeCheck": {
+    "clientDate": "2026-10-26",
+    "url": "http://127.0.0.1:5180/",
+    "readiness": {
+      "status": "ok",
+      "service": "health-new",
+      "schema_ready": true
+    },
+    "articleCount": 8,
+    "returned": 8,
+    "bodyIncluded": false,
+    "categories": [
+      "平台使用指南"
+    ],
+    "qaStopped": true,
+    "windowsLoopbackStable": false
+  },
+  "history": [
+    {
+      "evidence": "backend-final.log",
+      "summary": "Intermediate 135 passed/3 skipped; predates added launcher/counter cases; not final full gate"
+    },
+    {
+      "evidence": "backend-verified.log",
+      "summary": "1 failed/135 passed/3 skipped: SQLite busy on original 100-request counter; bounded recovery added"
+    },
+    {
+      "evidence": "backend-complete.log",
+      "summary": "4 failed/121 passed/3 skipped/15 errors: WinError 10013 during TestClient setup"
+    },
+    {
+      "evidence": "real-preview.json",
+      "summary": "First desktop Vite cold-load timeout; mobile passed"
+    },
+    {
+      "evidence": "real-preview-verified.json",
+      "summary": "Desktop registration proxy 500 before backend ready; mobile passed"
+    },
+    {
+      "evidence": "real-preview-final.json",
+      "summary": "Prior isolated QA real registration/login/reading passed both viewports, before counter patch"
+    },
+    {
+      "evidence": "real-preview-complete-26.json",
+      "summary": "Fresh Vite desktop/mobile form not rendered before locator timeout; later page inspection renders correctly"
+    },
+    {
+      "evidence": "real-preview-ready-26.json",
+      "summary": "Latest QA real auth/paging/detail partly succeeded, then Vite proxy connect EACCES caused a desktop reload and mobile search failure; both final scenarios are failed"
+    }
+  ],
+  "gates": {
+    "featureTargetedChecks": "passed",
+    "currentWholeBackendRegression": "blocked-environment-errors",
+    "windowsLoopbackStability": "unresolved intermittent WinError 10013; no firewall/guard changes",
+    "productionApproved": false
+  },
+  "remaining": [
+    "Windows loopback/portal startup variance and complete isolated regression rerun",
+    "Latest real UI repeat after Vite proxy EACCES is resolved",
+    "Linux target containers/TLS, capacity and independent restore",
+    "Real model/professional content evaluation and school operational approval"
+  ],
+  "sourceSha256": {
+    "backend/app/services/article_catalog.py": "39a2f630434eff420e40060b4c91d5d04867cc081e281490f7dc549e2a9ddb0f",
+    "backend/app/routers/student.py": "32094f87d332055aabfd43087d63e40502869242248e4268f3d0f848e17d5fe3",
+    "backend/app/routers/teacher.py": "aa148be1bc2301f4314e07b4d1caf70262958b75b20f57706fd94cfbb5320699",
+    "backend/app/schemas.py": "24b4fa78daf6d3a5757612a5c3fab5a08c9a83df484d8ab807b50cf4ce91bca6",
+    "backend/scripts/run-local-backend.py": "2025d9047e734fb78226352cb8a5a6df9df1c7e3f1cb65ad95db2f9fec3ba631",
+    "backend/tests/test_article_catalog_api.py": "38b0f332c6b91fc2da2fca84b9664b339e92edd0738c85248b1807fdb5d157cf",
+    "backend/tests/test_article_view_counter.py": "ff02d24877ea80e943e9127316eaae0de427013162f61ee0996da3b11cbfffb4",
+    "backend/tests/test_preview_network_guard.py": "071d2e4e254ed96f820936ef4b920b5f2caa675e0ffce218043e2d3fac0782b9",
+    "src/composables/useArticleCatalog.js": "6b9079732329af8415561db8be5041f1b890f56b238b98c4247a5cd58ccf0063",
+    "src/composables/useArticleCatalog.test.js": "10cddf01adb3fec4844b2b93433b5394aef6783c7119499c765a69bb5ef743e5",
+    "src/views/student/Articles.vue": "257ad19a8fb0a0e680bb110ae809d4fd9c86433d97664179f84cefa3d0271b11",
+    "src/views/teacher/ContentManagement.vue": "be499179dc5cee9c0b0a8f00fe32ba30999188dcc148b545ef815a7888b873e2",
+    "scripts/capture-w2-ui.mjs": "d44ee34755058894d5a04c349fde1407923e89c9b27294eb9343c19a4901973c",
+    "scripts/check-content-experience.mjs": "e1a8d6aaddaeecbea817520a161bfbb04401b81037669065355c0b61771d4747"
+  }
+}

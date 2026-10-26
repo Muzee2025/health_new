@@ -114,7 +114,13 @@ const selectedRoutes = selectedCases.length ? baseRoutes.filter(item => selected
 if (!selectedRoutes.length) throw new Error('No matching UI cases selected')
 const routes = selectedRoutes.flatMap(item => viewports.map(viewport => ({ ...item, viewport })))
 
-const fixtureFor = (path) => fixtureTable.find(([pattern]) => pattern.test(path))?.[1]()
+const fixtureFor = (path) => {
+  if (/^\/api\/(student|teacher)\/articles\/page$/.test(path)) {
+    const items = fixtureTable.find(([pattern]) => pattern.test(path.replace(/\/page$/, '')))?.[1]() || []
+    return { items, total: items.length, page: 1, page_size: 12, categories: [...new Set(items.map(item => item.category).filter(Boolean))] }
+  }
+  return fixtureTable.find(([pattern]) => pattern.test(path))?.[1]()
+}
 const isApi = (url) => new URL(url).pathname.startsWith('/api/')
 
 const results = []

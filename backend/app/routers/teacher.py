@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, status, UploadFile, File, Request
 import os
 import bcrypt
 import hashlib
@@ -29,6 +29,7 @@ from app.services.crisis_pending_service import (
     merge_pending_records,
     paginate_rows,
 )
+from app.services.article_catalog import page_articles
 
 router = APIRouter(prefix="/api/teacher", tags=["Teacher"])
 TEACHER_AVATAR_SUBDIR = "teacher_avatars"
@@ -974,6 +975,21 @@ def get_interventions(db: Session = Depends(get_db), current_user: models.User =
     return result
 
 # Content Management: Articles
+@router.get("/articles/page", response_model=schemas.ArticlePage)
+def get_articles_page(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(12, ge=1, le=50),
+    q: str = Query("", max_length=100),
+    category: str = Query("", max_length=50),
+    sort: str = Query("newest", pattern="^(newest|most-read)$"),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    check_teacher_role(current_user)
+    return page_articles(db, page=page, page_size=page_size, q=q.strip(),
+                         category=category.strip(), sort=sort)
+
+
 @router.get("/articles")
 def get_articles(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_teacher_role(current_user)

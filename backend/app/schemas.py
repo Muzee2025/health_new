@@ -96,6 +96,29 @@ class ArticleResponse(BaseModel):
         from_attributes = True
 
 
+class ArticleSummary(BaseModel):
+    id: int
+    title: str
+    summary: Optional[str]
+    cover_url: Optional[str]
+    category: Optional[str]
+    source: Optional[str]
+    views: int
+    created_at: datetime
+    source_url: Optional[str]
+
+    class Config:
+        from_attributes = True
+
+
+class ArticlePage(BaseModel):
+    items: List[ArticleSummary]
+    total: int
+    page: int
+    page_size: int
+    categories: List[str]
+
+
 class ArticleViewTrackRequest(BaseModel):
     viewer_id: Optional[str] = None
 
