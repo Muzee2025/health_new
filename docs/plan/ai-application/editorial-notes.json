@@ -1,0 +1,48 @@
+{
+  "owner": "A",
+  "updated": "2026-10-27",
+  "chapterSources": "Six frozen Luna chapters retained without edits; Lead harmonizes final assembly.",
+  "changes": [
+    {
+      "chapter": 1,
+      "change": "Replace unrelated weekly exercise row with free counselling awareness/use from registered service source; add separate description and figure.",
+      "source": "service",
+      "metrics": [
+        80.0,
+        2.8
+      ],
+      "scope": "Different questions; no conversion or national prevalence inference."
+    },
+    {
+      "chapters": [
+        2,
+        4,
+        5,
+        6
+      ],
+      "change": "Unify AI role as organizing confirmed descriptive facts; no clinical scale interpretation, diagnosis or risk adjudication."
+    },
+    {
+      "chapter": 2,
+      "change": "Condense source-code path inventory to reader-facing current capabilities; full engineering evidence retained in chapter-02-evidence.json."
+    },
+    {
+      "chapter": 5,
+      "change": "Expose existing prototype risk fields, keyword fallback and external raw-dialogue candidate paths as unvalidated limitations requiring review/restriction before approved use."
+    },
+    {
+      "chapters": [
+        1,
+        3
+      ],
+      "change": "Renumber in-text table cross-references to final document numbering; references use one global source list."
+    },
+    {
+      "chapter": 6,
+      "change": "Keep G0-G4 in the native stage table; omit its redundant figure from the document. The HTML diagram remains a reusable asset."
+    }
+  ],
+  "styleReview": "HTML preview awaiting user review; Figma image superseded.",
+  "status": "review-copy-ready-user-style-pending",
+  "formattingOnly": "After frozen handoff, Lead normalized EOF blank lines in three chapter MD inputs and one evidence JSON; chapter wording/JSON values unchanged. SVG trailing path whitespace normalized without changing text or geometry."
+}

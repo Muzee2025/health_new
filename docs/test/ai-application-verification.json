@@ -1,0 +1,394 @@
+{
+  "updated": "2026-10-27",
+  "status": "review-copy-ready-user-style-pending",
+  "document": "deliverables/心域智链项目申报材料_图表增强审阅稿.docx",
+  "sha256": "b63d02eef6a2db22fa6e68307fcc44d1f223394c2f632342a4355c4fea97c373",
+  "pages": 26,
+  "sections": 3,
+  "retainedForms": 3,
+  "bodyTables": 9,
+  "tables": [
+    {
+      "table": 1,
+      "rows": 15,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 2,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 3,
+      "rows": 7,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 4,
+      "rows": 4,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 5,
+      "rows": 6,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 6,
+      "rows": 4,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 7,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 8,
+      "rows": 4,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 9,
+      "rows": 6,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 10,
+      "rows": 4,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 11,
+      "rows": 8,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 12,
+      "rows": 6,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    }
+  ],
+  "bodyFigures": 8,
+  "registeredFigureAssets": [
+    {
+      "id": "fig01-youth",
+      "sha256": "ff8a83982ba018f1e0b33fefbc24e61228f13edacacfc5e620b0b08a795ccc56",
+      "pixels": [
+        1710,
+        975
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig02-pressure",
+      "sha256": "c9f2736745aa372cca690d4a3b0dcbe2a6b1075a64091ff46be8e45135f67991",
+      "pixels": [
+        1710,
+        825
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig03-education",
+      "sha256": "ded2b29eb7708d63c02fba643f2235ab638d14d93353254df647952009d43869",
+      "pixels": [
+        1710,
+        825
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig04-procurement",
+      "sha256": "8ca00ad1619695d8fa4e898341debd699511b68359bb8482756ffc04d1bd577b",
+      "pixels": [
+        1710,
+        960
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig05-mindmap",
+      "sha256": "72bf5a9dee03d1a112a7f55f00a06ae1d45b19e0e2d2e5f036f3c31ef624f27f",
+      "pixels": [
+        2120,
+        1174
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig06-architecture",
+      "sha256": "4bcfc5376abfbf1b4950b1ac22b70d7343cf1e2e86c8d823d0ade36f3ccd4f30",
+      "pixels": [
+        2000,
+        1466
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig07-ai-workflow",
+      "sha256": "befdeb0df434ebf0205513f451627e2a930a06e305181bc7f03601240ff36a9c",
+      "pixels": [
+        2000,
+        990
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig08-gates",
+      "sha256": "7ac8cf80abfab480e973c0e51be563176b580953f2469c517f32b0503345ccd4",
+      "pixels": [
+        2000,
+        632
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig09-service",
+      "sha256": "28e645fa6ed7dd0ccb90ef3e2b2f606856fd6ed238e091b6dac47103faa28343",
+      "pixels": [
+        1710,
+        825
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    }
+  ],
+  "sources": 11,
+  "metrics": 21,
+  "placeholderCount": 43,
+  "formPlaceholderCount": 42,
+  "userStyleReviewPending": true,
+  "scope": "Structural/data consistency only. Page images and independent review are separate evidence.",
+  "htmlReview": {
+    "path": "deliverables/心域智链申报书正文审阅版.html",
+    "sha256": "c4eed5447d6712c5dc15a111cbc3146612dd0b3d22c06e3695a216a761fd9910",
+    "checks": [
+      {
+        "width": 1440,
+        "title": "心域智链申报书正文审阅版",
+        "headings": 8,
+        "tables": 9,
+        "images": 8,
+        "imageFailures": 0,
+        "centered": true,
+        "rules": true,
+        "overflow": false,
+        "errors": [],
+        "outside": [],
+        "navigation": true
+      },
+      {
+        "width": 390,
+        "title": "心域智链申报书正文审阅版",
+        "headings": 8,
+        "tables": 9,
+        "images": 8,
+        "imageFailures": 0,
+        "centered": true,
+        "rules": true,
+        "overflow": false,
+        "errors": [],
+        "outside": [],
+        "navigation": true
+      }
+    ]
+  },
+  "visualReview": {
+    "documentSha256": "b63d02eef6a2db22fa6e68307fcc44d1f223394c2f632342a4355c4fea97c373",
+    "pages": [
+      {
+        "page": 1,
+        "sha256": "56075c277f5bebd1d6739bfd506ea59db9a4ed28a9863b68d96f40a13b549ff4",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v4-page-01.png"
+      },
+      {
+        "page": 2,
+        "sha256": "353c6c79efc63e27e066120a439f85bbc4ee4b45d7fd4e1fc93323d079a416e7",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v4-page-02.png"
+      },
+      {
+        "page": 3,
+        "sha256": "99df4e0ed9772e38160f58b152124bdc330425b7dcdab9c1e688c933c78a5672",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v4-page-03.png"
+      },
+      {
+        "page": 4,
+        "sha256": "6d8df9ad7d3ab8d5a7abf5cf2f826cd5a9ea981c6dfc443f2a62072081abfe11",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v4-page-04.png"
+      },
+      {
+        "page": 5,
+        "sha256": "f15dd0e437e6c90ba666efe8df40624e7562f06936f3c56a90db65f2e35fba51",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v4-page-05.png"
+      },
+      {
+        "page": 6,
+        "sha256": "7d4fb4752e50123277b18948d21b860e0b5026c18fcf8783b4d92d41c4891070",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-06.png"
+      },
+      {
+        "page": 7,
+        "sha256": "736a0c518337e548fb736c8ccaa268f57e21a89c2f0f2dc609d3c5000a1d19d3",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-07.png"
+      },
+      {
+        "page": 8,
+        "sha256": "90f55c940a1eb2f6eca44aa3346126053ba366b6793d38aa17eb3be7c46a2532",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v4-page-08.png"
+      },
+      {
+        "page": 9,
+        "sha256": "d932eacba2c82a420a5c156fd08bb3a43310ec7562690e6f92058c84614342ea",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-09.png"
+      },
+      {
+        "page": 10,
+        "sha256": "d219045bc736450ba5b4d20fc1ebca077c56d9b6ad5a2c3a7ce29f3d2269f7e7",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-10.png"
+      },
+      {
+        "page": 11,
+        "sha256": "050512cecd2444c88dfc03b8eaf87ec42aaff71a5e5f2aedab0fa4f6064958f8",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-11.png"
+      },
+      {
+        "page": 12,
+        "sha256": "77386e4e2cd38770beccd4eccea35d5c5c65170fcd1c9e4fef99c1fecfc3a1d5",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-12.png"
+      },
+      {
+        "page": 13,
+        "sha256": "3ac1e9aa16b8aeedab476c7dd28aa17eb464bb759e09129b76348a50ec1e6bef",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-13.png"
+      },
+      {
+        "page": 14,
+        "sha256": "c3399c70571fd05330615861408f09685310648d3f50483ac955e5a7bb4d84c6",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-14.png"
+      },
+      {
+        "page": 15,
+        "sha256": "3da01d99975cc499b8d633175479f5c11cf5bea30798177be674e650f7d7a359",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-15.png"
+      },
+      {
+        "page": 16,
+        "sha256": "ac49b6f040eac8fe8b7c9164ddf13b42ecf60a9c65c2c15cbc79162e9b2f01dd",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-16.png"
+      },
+      {
+        "page": 17,
+        "sha256": "ef8324c6056a69bb7933f591bd7cfc52bb7a8ed0ae8a6a0e2bd3504f456f4e31",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-17.png"
+      },
+      {
+        "page": 18,
+        "sha256": "8f2053df559a383c0e61159f33457cc5af4e8d430d0ca4c892d8134377649692",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-18.png"
+      },
+      {
+        "page": 19,
+        "sha256": "a824a85ff325592f54a3e5088a1ff444d9f8b4b2c4a924958c5c85c66c291a10",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-19.png"
+      },
+      {
+        "page": 20,
+        "sha256": "409655c7d62efb9c7820e71ad393218da28ea9ff7e687020cfaf501ada384147",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-20.png"
+      },
+      {
+        "page": 21,
+        "sha256": "905baec6120a54b45f0e1e542414a13c400c215b4938ed721a0bff09bce15bc4",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-21.png"
+      },
+      {
+        "page": 22,
+        "sha256": "833d6be681e5b07ad85e717d5e659c199f79acdce49fc42b2cdb12473df4df1e",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-22.png"
+      },
+      {
+        "page": 23,
+        "sha256": "a75d2b69f293b4e1d1398ea83a86068b8a0bc36e005404dff277e31388006991",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-23.png"
+      },
+      {
+        "page": 24,
+        "sha256": "32b69287154d347c06d38c06c8e61456376bf242dee5cb205c6afe935858069c",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-24.png"
+      },
+      {
+        "page": 25,
+        "sha256": "5a033ade6e1bafde9b03374ac34016cf02e646d1d54a95b6fb2d89508b5077dc",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v6-page-25.png"
+      },
+      {
+        "page": 26,
+        "sha256": "b0e79ef3198c1e88d2a56f8a7cede028ee9d58049559c8347124eaff6b103e13",
+        "viewedRendering": "tmp\\ai-application-20261027\\proposal-v7-page-26.png"
+      }
+    ],
+    "reviewer": "Lead",
+    "result": "pass",
+    "method": "Opened page images; earlier images reused only after byte-identical SHA256 comparison",
+    "userStyleApproval": false,
+    "scope": "Layout check of an explicitly marked review copy; user style review remains open."
+  },
+  "sourcesAndFigures": "docs/plan/ai-application/visual-manifest.json",
+  "independentReview": "docs/test/AI图表申报独立复核.md",
+  "finalGateProbe": {
+    "exitCode": 1,
+    "createdFinalFile": false,
+    "reason": "HTML diagram style awaiting user review"
+  }
+}

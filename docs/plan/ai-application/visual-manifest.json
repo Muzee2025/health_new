@@ -1,0 +1,370 @@
+{
+  "updated": "2026-10-27",
+  "palette": {
+    "brand": "#493354",
+    "purple": "#78558F",
+    "apricot": "#E8B185",
+    "sage": "#8BA696",
+    "pale": "#F7F3F8",
+    "warm": "#FCFAF7",
+    "ink": "#29332F",
+    "muted": "#56625C",
+    "grid": "#E3E8E1",
+    "white": "#FFFFFF"
+  },
+  "sources": {
+    "youth": {
+      "title": "郭菲等 2024年青少年心理健康与学业状况调查报告",
+      "url": "https://psy.china.com.cn/2025-05/27/content_43126660.htm",
+      "sample": "五万余名小学四年级至高中三年级学生",
+      "surveyYear": 2024
+    },
+    "pressure": {
+      "title": "李春玲、高云浩 学业和就业竞争压力下大学生社会心态特征",
+      "url": "https://sociology.cssn.cn/shxsw/swx_kycg/swx_xslw/202410/W020241025423030106787.pdf",
+      "sample": "2023中国大学生追踪调查，题项有效n未据公开摘录推定",
+      "surveyYear": 2023
+    },
+    "education": {
+      "title": "教育部2025年全国教育事业发展统计公报",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/sjzl_fztjgb/202607/t20260706_1442870.html",
+      "surveyYear": 2025
+    },
+    "telecom": {
+      "title": "四川邮电职业技术学院 N5100012026001455 成交公告",
+      "url": "https://www.ccgp.gov.cn/cggg/dfgg/zbgg/202607/t20260715_26941179.htm",
+      "published": "2026-07-15"
+    },
+    "labor": {
+      "title": "中国劳动关系学院 ZYZB-2026-0788 成交公告",
+      "url": "https://www.ccgp.gov.cn/cggg/zygg/cjgg/202609/t20260909_27295534.htm",
+      "published": "2026-09-09"
+    },
+    "longquan": {
+      "title": "龙泉驿区教育局2026年中小学生心理健康状况测评服务",
+      "url": "https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202605/t20260514_26566118.htm",
+      "published": "2026-05-14"
+    },
+    "chengdu": {
+      "title": "成都市教科院 N5101012026000770 成交公告",
+      "url": "https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202607/t20260701_26848948.htm",
+      "published": "2026-07-01"
+    },
+    "service": {
+      "title": "方圆等 2024年大学生心理健康状况调查报告 作者公开摘要",
+      "url": "https://psy.china.com.cn/2025-06/20/content_43141390.htm",
+      "surveyYear": 2024,
+      "published": "2025-06-20",
+      "sample": "2024年3—6月60,782名16—28岁本科生",
+      "scope": "作者公开摘要报告两道不同问题；没有交叉表，不计算知晓到使用转化率，也不将其视作互斥分布。"
+    }
+  },
+  "metrics": [
+    {
+      "group": "青少年经常或每天不想上学",
+      "indicator": "轻度风险组",
+      "value": 20.2,
+      "unit": "%",
+      "source": "youth"
+    },
+    {
+      "group": "青少年经常或每天不想上学",
+      "indicator": "高风险组",
+      "value": 45.4,
+      "unit": "%",
+      "source": "youth"
+    },
+    {
+      "group": "青少年经常或每天不想上学",
+      "indicator": "无风险组",
+      "value": null,
+      "unit": "%",
+      "source": "youth",
+      "upper_bound": 5,
+      "reported": "<5%",
+      "note": "不是精确点值"
+    },
+    {
+      "group": "学习问题",
+      "indicator": "无风险组不做或抄作业",
+      "value": 4,
+      "unit": "%",
+      "source": "youth"
+    },
+    {
+      "group": "学习问题",
+      "indicator": "高风险组不做或抄作业",
+      "value": 17.1,
+      "unit": "%",
+      "source": "youth"
+    },
+    {
+      "group": "学习问题",
+      "indicator": "无风险组考试作弊",
+      "value": 3.5,
+      "unit": "%",
+      "source": "youth"
+    },
+    {
+      "group": "学习问题",
+      "indicator": "高风险组考试作弊",
+      "value": 14,
+      "unit": "%",
+      "source": "youth"
+    },
+    {
+      "group": "大学生竞争感知",
+      "indicator": "竞争氛围浓厚",
+      "value": 90.3,
+      "unit": "%",
+      "source": "pressure"
+    },
+    {
+      "group": "大学生竞争感知",
+      "indicator": "同学竞争激烈",
+      "value": 84.1,
+      "unit": "%",
+      "source": "pressure"
+    },
+    {
+      "group": "大学生竞争感知",
+      "indicator": "学习互相较量",
+      "value": 85.4,
+      "unit": "%",
+      "source": "pressure"
+    },
+    {
+      "group": "大学生竞争感知",
+      "indicator": "害怕学习落后",
+      "value": 86.2,
+      "unit": "%",
+      "source": "pressure"
+    },
+    {
+      "group": "教育体量",
+      "indicator": "普通/职业本专科",
+      "value": 3953.96,
+      "unit": "万人",
+      "source": "education"
+    },
+    {
+      "group": "教育体量",
+      "indicator": "普通高中",
+      "value": 3039.5,
+      "unit": "万人",
+      "source": "education"
+    },
+    {
+      "group": "教育体量",
+      "indicator": "初中学段",
+      "value": 5509.34,
+      "unit": "万人",
+      "source": "education"
+    },
+    {
+      "group": "采购案例",
+      "indicator": "四川邮电单项软件",
+      "value": 11.47,
+      "unit": "万元",
+      "source": "telecom"
+    },
+    {
+      "group": "采购案例",
+      "indicator": "劳动关系学院综合系统",
+      "value": 45,
+      "unit": "万元",
+      "source": "labor"
+    },
+    {
+      "group": "采购案例",
+      "indicator": "龙泉驿测评包",
+      "value": 40.7,
+      "unit": "万元",
+      "source": "longquan"
+    },
+    {
+      "group": "采购案例",
+      "indicator": "龙泉驿干预包",
+      "value": 24.6,
+      "unit": "万元",
+      "source": "longquan"
+    },
+    {
+      "group": "采购案例",
+      "indicator": "成都教科院区域服务",
+      "value": 96.5,
+      "unit": "万元",
+      "source": "chengdu"
+    },
+    {
+      "group": "大学生免费心理咨询",
+      "indicator": "知晓学校免费心理咨询",
+      "value": 80,
+      "unit": "%",
+      "source": "service"
+    },
+    {
+      "group": "大学生免费心理咨询",
+      "indicator": "曾使用学校免费心理咨询",
+      "value": 2.8,
+      "unit": "%",
+      "source": "service"
+    }
+  ],
+  "figures": [
+    {
+      "n": 1,
+      "id": "fig01-youth",
+      "title": "青少年心理筛查风险与学习状态",
+      "kind": "data",
+      "sources": [
+        "youth"
+      ],
+      "scope": "同一调查不同风险组；无风险<5不作精确柱值",
+      "png": "figures/fig01-youth.png",
+      "svg": "figures/fig01-youth.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "includeInApplication": true
+    },
+    {
+      "n": 2,
+      "id": "fig02-pressure",
+      "title": "高校学生的学业竞争压力感知",
+      "kind": "data",
+      "sources": [
+        "pressure"
+      ],
+      "scope": "同源四题并列，不能相加或转换为心理风险",
+      "png": "figures/fig02-pressure.png",
+      "svg": "figures/fig02-pressure.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "includeInApplication": true
+    },
+    {
+      "n": 3,
+      "id": "fig03-education",
+      "title": "2025年高校与中学的学生服务体量",
+      "kind": "data",
+      "sources": [
+        "education"
+      ],
+      "scope": "按原学段口径，不把高校校数与本专科人数用于算校均",
+      "png": "figures/fig03-education.png",
+      "svg": "figures/fig03-education.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "includeInApplication": true
+    },
+    {
+      "n": 4,
+      "id": "fig04-procurement",
+      "title": "公开采购反映不同交付范围",
+      "kind": "data",
+      "sources": [
+        "telecom",
+        "labor",
+        "longquan",
+        "chengdu"
+      ],
+      "scope": "高校和区域分面，龙泉驿按包分解；不推单位价格",
+      "png": "figures/fig04-procurement.png",
+      "svg": "figures/fig04-procurement.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "includeInApplication": true
+    },
+    {
+      "n": 5,
+      "id": "fig05-mindmap",
+      "title": "AI+高校心理测评与持续支持逻辑图",
+      "kind": "html-concept",
+      "sources": [],
+      "scope": "用户参考布局：居中标题，四区按左上、右上、右下、左下连接；方案示意，不代表已完成能力或效果",
+      "png": "figures/fig05-mindmap.png",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "figmaUrl": "https://www.figma.com/design/A6bW9oHZ5EzlWg5nWyJyS0?node-id=1-2",
+      "tool": "Local HTML rendered with Playwright Edge",
+      "visualReview": "html-preview-pending-user-review",
+      "reviewPreview": "docs/design/申报逻辑图预览.html",
+      "userStyleApproved": false,
+      "editableSource": "docs/design/申报逻辑图预览.html",
+      "selector": "main",
+      "includeInApplication": true
+    },
+    {
+      "n": 6,
+      "id": "fig06-architecture",
+      "title": "系统与AI能力的分层关系",
+      "kind": "html-concept",
+      "sources": [],
+      "scope": "以仓库只读事实区分既有和拟增强/可选模块",
+      "png": "figures/fig06-architecture.png",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "tool": "Local HTML rendered with Playwright Edge",
+      "editableSource": "docs/design/申报技术图示.html",
+      "selector": "#architecture",
+      "visualReview": "lead-visual-check-passed",
+      "includeInApplication": true
+    },
+    {
+      "n": 7,
+      "id": "fig07-ai-workflow",
+      "title": "AI分析与大模型调用的人机协作流程",
+      "kind": "html-concept",
+      "sources": [],
+      "scope": "拟建设流程，不描述真实提供商已接通",
+      "png": "figures/fig07-ai-workflow.png",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "tool": "Local HTML rendered with Playwright Edge",
+      "editableSource": "docs/design/申报技术图示.html",
+      "selector": "#workflow",
+      "visualReview": "lead-visual-check-passed",
+      "includeInApplication": true
+    },
+    {
+      "n": 8,
+      "id": "fig08-gates",
+      "title": "从需求确认到持续运行的阶段门禁",
+      "kind": "html-concept",
+      "sources": [],
+      "scope": "条件式路线，不虚构日期/周期/批准",
+      "png": "figures/fig08-gates.png",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "tool": "Local HTML rendered with Playwright Edge",
+      "editableSource": "docs/design/申报技术图示.html",
+      "selector": "#gates",
+      "visualReview": "lead-visual-check-passed",
+      "includeInApplication": false
+    },
+    {
+      "n": 9,
+      "id": "fig09-service",
+      "title": "免费心理咨询服务的知晓与使用",
+      "kind": "data",
+      "sources": [
+        "service"
+      ],
+      "scope": "作者公开摘要报告两道不同问题；没有交叉表，不计算知晓到使用转化率，也不将其视作互斥分布。",
+      "png": "figures/fig09-service.png",
+      "svg": "figures/fig09-service.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; underlying facts attributed to listed primary sources",
+      "status": "engineering-reviewed",
+      "includeInApplication": true
+    }
+  ]
+}

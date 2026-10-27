@@ -1,0 +1,66 @@
+{
+  "task": "CH02",
+  "owner": "Luna",
+  "version": "1.0",
+  "status": "frozen-candidate",
+  "updated": "2026-10-27",
+  "chapter": "docs/plan/ai-application/chapter-02.md",
+  "evidence": [
+    {
+      "claim": "心理测评页面包含题目作答、结果展示和AI分析入口；界面自述结果不代替专业评估。",
+      "paths": ["src/views/student/Test.vue", "src/data/tests.js"]
+    },
+    {
+      "claim": "学生端仪表盘读取本人情绪趋势并绘制趋势和量表等图表。",
+      "paths": ["src/views/student/Dashboard.vue", "backend/app/routers/student.py"]
+    },
+    {
+      "claim": "对话情绪处理、趋势及失败默认值路径存在；属本地原型代码，不等价于专业评估。",
+      "paths": ["backend/app/routers/advanced_chat.py", "backend/app/teacher_analytics.py"]
+    },
+    {
+      "claim": "报告服务提供结构化报告构建、本人报告查询、快速本地结果及可选模型分析降级路径。",
+      "paths": ["backend/app/services/dialogue_analysis_service.py", "backend/app/routers/report_v1.py", "src/views/student/Report.vue"]
+    },
+    {
+      "claim": "RAG默认禁用；显式启用及嵌入模型下载许可等条件满足后才初始化，检索不可用返回空结果。",
+      "paths": ["backend/app/services/rag_service.py"]
+    },
+    {
+      "claim": "LLM gateway当前调用本地fallback函数，提供文本或结构化JSON回退，不证明外部模型已接通。",
+      "paths": ["backend/app/routers/llm_gateway.py", "backend/app/services/llm_fallback.py"]
+    },
+    {
+      "claim": "教师端按教师角色与明确分配学生范围限制问题读取、答复和跟进。",
+      "paths": ["backend/app/routers/teacher.py", "backend/app/student_access.py"]
+    },
+    {
+      "claim": "流程状态包括测评结果、求助问题、答复与跟进记录；面向学生的求助入口存在。",
+      "paths": ["src/views/student/Questions.vue", "src/views/teacher/StudentDetail.vue", "backend/app/routers/teacher.py"]
+    },
+    {
+      "claim": "AI离线12合成案例不构成临床验证；最新后端135通过/3条件跳过/5 WinError10013；最新UI代理EACCES未通过完整集成。",
+      "paths": ["docs/team/门禁记录.md", "docs/test/补齐任务验收.md", "docs/test/文章分页与预览验收.md"]
+    },
+    {
+      "claim": "申报计划书规定高校为首要验证场景，中学需另行适配，外部模型须确认提供商/版本/数据政策/审批。",
+      "paths": ["docs/plan/心域智链申报计划书.md"]
+    }
+  ],
+  "architecture_diagram_recommendation": {
+    "title": "测评与支持的AI辅助闭环",
+    "nodes": [
+      "学生测评/求助（知情与授权）",
+      "身份与角色权限校验",
+      "最小必要字段筛选与去标识",
+      "规则计分、数据质量检查与趋势统计",
+      "审核知识库检索（可选RAG）",
+      "经批准的大模型生成结构化草稿（可关闭）",
+      "字段/范围/依据校验",
+      "授权人员人工复核",
+      "学生可见说明、求助答复与后续跟进"
+    ],
+    "failure_path": "检索空/模型超时或停用/校验失败/授权不足 → 显示基础事实与状态，转人工处理；不生成高风险裁定",
+    "note": "将现有原型、可选未经评测模块、拟新增模块用不同线型或颜色标示，避免把目标架构误认为当前全量实现。"
+  }
+}

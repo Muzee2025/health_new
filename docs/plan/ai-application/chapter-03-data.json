@@ -1,0 +1,49 @@
+[
+  {
+    "id": "CH03-TABLE-1",
+    "title": "目标教育场景规模",
+    "unit": "学校数、万人",
+    "statistics_year": 2025,
+    "source_url": "https://www.moe.gov.cn/jyb_sjzl/sjzl_fztjgb/202607/t20260706_1442870.html",
+    "publisher": "中华人民共和国教育部",
+    "values": [
+      {"category": "高等教育", "schools": 3167, "schools_unit": "所", "students": 3953.96, "students_unit": "万人", "student_scope": "普通、职业本专科在校生", "school_scope": "普通本科、职业本科、高职专科、成人高校"},
+      {"category": "普通高中", "schools": 1.61, "schools_unit": "万所", "students": 3039.50, "students_unit": "万人", "student_scope": "普通高中在校生", "school_scope": "含高级中学、完全中学高中段及十二年一贯制高中段"},
+      {"category": "初中", "schools": 5.16, "schools_unit": "万所", "students": 5509.34, "students_unit": "万人", "student_scope": "初中阶段在校生", "school_scope": "含职业初中；学校数/学生数包含相关一贯制与完全中学学段口径"}
+    ],
+    "denominator": "分教育层级公报统计；高校学校数与普通职业本专科学生数覆盖范围不同。高中和初中学生为对应学段在校生。",
+    "limitations": ["不能计算高校校均人数或将学校/学生数当作采购客户数。", "数据不表示心理服务需求、测评覆盖、采购渗透率或收入。", "全国统计不包括港澳台。"]
+  },
+  {
+    "id": "CH03-TABLE-2",
+    "title": "心理健康测评及相关服务采购案例",
+    "unit": "万元",
+    "statistics_year": 2026,
+    "sources": [
+      {"case": "四川邮电职业技术学院", "url": "https://www.ccgp.gov.cn/cggg/dfgg/zbgg/202607/t20260715_26941179.htm"},
+      {"case": "中国劳动关系学院", "url": "https://www.ccgp.gov.cn/cggg/zygg/cjgg/202609/t20260909_27295534.htm"},
+      {"case": "成都市龙泉驿区教育局", "url": "https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202605/t20260514_26566118.htm"},
+      {"case": "成都市教育科学研究院", "url": "https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202607/t20260701_26848948.htm"}
+    ],
+    "values": [
+      {"case": "四川邮电职业技术学院", "amount": 11.47, "amount_type": "成交价", "scope": "心理健康测评系统应用软件1套", "denominator": "单项软件采购包", "limitation": "未披露可比服务人数及多年运维；不可视为行业均价"},
+      {"case": "中国劳动关系学院", "amount": 45.0, "amount_type": "总成交价", "scope": "学生访谈测评、职工场景适配、陪伴、模拟培训、管理平台、干预练习及部署等", "denominator": "单个综合采购项目", "limitation": "多模块服务包，不与单项软件直接比较"},
+      {"case": "成都市龙泉驿区教育局", "amount": 65.3, "amount_type": "两包成交合计", "components": [{"name": "测评", "amount": 40.7}, {"name": "筛查后干预", "amount": 24.6}], "scope": "约8.5万名学生全员测评/档案/培训；另含不少于1600人访谈、不少于300人个体咨询", "denominator": "区级综合测评及干预服务", "limitation": "两包服务内容不同，不按学生数外推单价"},
+      {"case": "成都市教育科学研究院", "amount": 96.5, "amount_type": "成交价", "scope": "不少于20万名抽样学生测评、分层报告及转介通道", "denominator": "区域专业服务与资源建设项目", "limitation": "不是单校软件订阅；采购范围特殊"}
+    ],
+    "limitations": ["均为公告成交金额，不代表合同履约验收或使用效果。", "采购对象、样本规模、软硬件/专业服务范围及服务期限不一致。", "不得计算同质均价、每生价格、市场收入或渗透率。"]
+  },
+  {
+    "id": "CH03-TABLE-3",
+    "title": "学段用户任务、采购角色与进入条件",
+    "unit": "定性分类",
+    "statistics_year": null,
+    "source_url": "https://www.moe.gov.cn/jyb_sjzl/sjzl_fztjgb/202607/t20260706_1442870.html",
+    "values": [
+      {"category": "高校", "users": ["学生", "心理中心/咨询人员"], "tasks": ["测评组织", "适当反馈", "支持预约", "人工复核", "咨询跟进", "汇总分析"], "buyers": ["心理中心/学生工作部门提出需求", "信息化/安全/采购/财务参与评审"], "entry_conditions": ["量表授权与适用依据", "校方试点和预算", "权限、部署及运维评审"], "current_boundary": "项目为原型；没有获批试点或正式客户承诺"},
+      {"category": "普通高中", "users": ["学生", "心理教师/学校管理团队"], "tasks": ["年龄适配测评", "教育支持", "线索人工复核", "教师培训", "必要转介"], "buyers": ["教育局/教科院区域统筹或采购", "学校实施"], "entry_conditions": ["适龄工具依据", "学生告知和自愿安排", "适用监护流程", "隐私权限、专业复核与转介"], "current_boundary": "无中学版本和获批试点"},
+      {"category": "初中", "users": ["学生", "心理教师/授权教师"], "tasks": ["低负担求助与支持", "成长支持", "家校沟通", "必要转介"], "buyers": ["区县教育部门或学校决策", "校方实施"], "entry_conditions": ["年龄适配", "避免标签化", "学生隐私与角色权限", "适用监护流程和转介责任"], "current_boundary": "无家长端和获批试点"}
+    ],
+    "limitations": ["角色和条件为市场进入分析，不代表已签约或获得校方授权。", "高校与中学应作为不同市场阶段；未证明项目适用于未成年人。"]
+  }
+]

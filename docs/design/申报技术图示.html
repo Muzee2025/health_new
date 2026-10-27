@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>申报书技术图示预览</title><link rel="icon" href="data:,"><link rel="stylesheet" href="../../src/styles/tokens.css">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--text-primary,#29332F);font-family:var(--font-sans,"Microsoft YaHei",sans-serif)}
+main{width:1000px;margin:auto}figure{margin:0;padding:35px 40px 30px;background:#fff}h1{font-size:28px;text-align:center;font-weight:600;margin:0 0 30px}
+.box{border:1px solid var(--border,#E3E8E1);padding:18px;text-align:center;line-height:1.7;font-size:20px}.proposed{border-style:dashed}
+strong{font-size:22px;font-weight:500;display:block}p{font-size:16px;line-height:1.7;text-align:center;color:var(--text-secondary,#56625C);margin:22px 0 0}
+.down{text-align:center;height:38px;line-height:38px;font-size:27px;color:var(--text-secondary,#56625C)}
+.workflow{display:grid;grid-template-columns:1fr 42px 1fr 42px 1fr;gap:0;align-items:stretch}.workflow .box{padding:18px 9px;font-size:18px}.workflow strong{font-size:20px}
+.arrow{font-size:27px;display:flex;align-items:center;justify-content:center;color:var(--text-secondary,#56625C)}
+.error{margin-top:26px;border-top:1px solid var(--border,#E3E8E1);padding-top:18px;font-size:18px;text-align:center}
+.gates{display:flex;gap:0;align-items:stretch}.gates .box{width:157px;padding:17px 6px;font-size:18px}.gates .arrow{width:34px}
+@media(max-width:700px){main{width:100%;overflow:auto}figure{width:1000px}}@media print{figure{break-after:page}main{width:100%}}
+</style></head><body><main>
+<figure id="architecture"><h1>系统与AI能力的分层关系</h1>
+<div class="box"><strong>业务工作区 Vue 3</strong>测评记录 · 求助预约 · 教师答复与跟进</div><div class="down">↓</div>
+<div class="box"><strong>授权接口与工程数据 FastAPI + SQLite</strong>身份与角色 · 明确师生分配 · 当前27表</div><div class="down">↓</div>
+<div class="box proposed"><strong>拟增强的数据分析</strong>质量检查 · 可复算统计 · 同口径趋势</div><div class="down">↓</div>
+<div class="box proposed"><strong>可选检索与大模型协作</strong>审核资料 · 文字草稿 · 来源校验 · 人工复核</div>
+<p>实线为既有工程原型；虚线为拟增强或可选且未完成真实模型评测的能力。</p></figure>
+<figure id="workflow"><h1>AI分析与大模型的人机协作流程</h1>
+<div class="workflow">
+<div class="box proposed"><strong>01 身份与目的核对</strong>核对角色、任务和授权</div><div class="arrow">→</div>
+<div class="box proposed"><strong>02 必要数据与统计</strong>筛选字段，检查并复算</div><div class="arrow">→</div>
+<div class="box proposed"><strong>03 审核资料与模型</strong>检索依据，按审批范围调用</div>
+<div></div><div></div><div></div><div></div><div class="down">↓</div>
+<div class="box proposed"><strong>06 答复与持续支持</strong>记录人工答复与跟进</div><div class="arrow">←</div>
+<div class="box proposed"><strong>05 授权人员复核</strong>核对事实，修正与确认</div><div class="arrow">←</div>
+<div class="box proposed"><strong>04 输出与来源校验</strong>核对结构、引用和限制</div></div>
+<div class="error">无资料、超时或校验失败 → 明示暂不可判断 → 转人工渠道</div>
+<p>此图为拟建设流程；AI仅整理已确认事实与审核资料，模型输出不自动形成诊断或现实处置。</p></figure>
+<figure id="gates"><h1>从需求确认到持续运行的阶段安排</h1>
+<div class="gates">
+<div class="box"><strong>G0</strong>责任与边界<br>工具与数据</div><div class="arrow">→</div>
+<div class="box"><strong>G1</strong>隔离技术复验<br>权限与恢复</div><div class="arrow">→</div>
+<div class="box"><strong>G2</strong>模型评测<br>专业审阅</div><div class="arrow">→</div>
+<div class="box"><strong>G3</strong>获批校内验证<br>人工支持承接</div><div class="arrow">→</div>
+<div class="box"><strong>G4</strong>生产评审<br>运维交接</div></div>
+<p>依据各阶段证据决定继续、调整或暂停；实际周期、人员与预算由负责人后期填写。</p></figure>
+</main></body></html>

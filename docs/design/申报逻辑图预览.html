@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>申报逻辑图 简洁预览</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../../src/styles/tokens.css">
+  <style>
+    /* Visual source: src/styles/tokens.css. Plain HTML, no external assets or requests. */
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--surface,#fff); color:var(--text-primary,#29332F);
+      font-family:var(--font-sans,"Microsoft YaHei",sans-serif); }
+    main { width:min(1060px,100%); margin:0 auto; padding:54px 48px 30px; }
+    header { text-align:center; margin-bottom:45px; }
+    h1 { font-size:30px; font-weight:600; line-height:1.5; margin:0 0 10px; }
+    header p { margin:0; color:var(--text-secondary,#56625C); font-size:16px; }
+    .flow { display:grid; grid-template-columns:1fr 94px 1fr; grid-template-rows:218px 78px 218px; }
+    .step { border:1px solid var(--border,#E3E8E1); padding:31px 24px 25px; display:flex;
+      flex-direction:column; align-items:center; justify-content:center; text-align:center; min-width:0; }
+    .step h2 { margin:0 0 19px; font-size:22px; line-height:1.55; font-weight:500; }
+    .number { font-size:14px; color:var(--text-secondary,#56625C); display:block; margin-bottom:8px; }
+    .step p { margin:0; font-size:17px; line-height:1.9; }
+    .first { grid-area:1 / 1; } .second { grid-area:1 / 3; }
+    .third { grid-area:3 / 3; } .fourth { grid-area:3 / 1; }
+    .arrow { display:flex; align-items:center; justify-content:center; font-size:37px;
+      font-family:Arial,sans-serif; font-weight:400; color:var(--text-secondary,#56625C); }
+    .to-second { grid-area:1 / 2; } .to-third { grid-area:2 / 3; } .to-fourth { grid-area:3 / 2; }
+    .boundary { text-align:center; margin:28px 0 0; font-size:14px; line-height:1.8; color:var(--text-secondary,#56625C); }
+    .tools { display:flex; align-items:center; justify-content:center; gap:22px; margin-top:26px; }
+    button { background:transparent; border:0; border-bottom:1px solid var(--border,#E3E8E1);
+      color:var(--text-secondary,#56625C); font:inherit; font-size:13px; padding:6px 3px; cursor:pointer; }
+    button:hover { color:var(--text-primary,#29332F); border-color:currentColor; }
+    button:focus-visible { outline:2px solid var(--brand-600,#604372); outline-offset:4px; }
+    .compact .flow { grid-template-rows:185px 58px 185px; }
+    .compact main { padding-top:32px; }
+    .compact header { margin-bottom:28px; }
+    .editing [contenteditable="true"] { outline:1px dashed var(--border,#E3E8E1); outline-offset:4px; }
+    @media(max-width:660px) {
+      main { padding:32px 20px; } h1 { font-size:23px; } header p { font-size:14px; }
+      header { margin-bottom:28px; } .flow,.compact .flow { display:flex; flex-direction:column; }
+      .step { min-height:170px; padding:23px 15px; } .step h2 { font-size:20px; margin-bottom:13px; }
+      .step p { font-size:16px; } .first { order:1; } .to-second { order:2; }
+      .second { order:3; } .to-third { order:4; } .third { order:5; } .to-fourth { order:6; } .fourth { order:7; }
+      .arrow { height:56px; } .to-second,.to-fourth { font-size:0; }
+      .to-second::after,.to-fourth::after { content:"↓"; font-size:33px; }
+      .boundary { font-size:13px; } .tools { margin-top:16px; }
+    }
+    @media print { @page { size:A4 portrait; margin:16mm; } main { width:100%; padding:0; }
+      header { margin-bottom:28px; } h1 { font-size:21pt; } .flow { grid-template-rows:50mm 18mm 50mm; grid-template-columns:1fr 16mm 1fr; }
+      .step { padding:12px; } .step h2 { font-size:14pt; } .step p { font-size:11pt; }
+      .tools { display:none; } .boundary { font-size:10pt; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1 data-edit>AI+高校心理测评与持续支持</h1>
+    <p data-edit>从青少年心理问题到高校支持协作</p>
+  </header>
+  <div class="flow" aria-label="顺序为问题背景、测评监测、AI协作、人工支持">
+    <section class="step first"><h2><span class="number">01</span><span data-edit>现实问题与高校压力</span></h2>
+      <p data-edit>青少年心理困扰<br>高校学业、就业与适应压力</p></section>
+    <span class="arrow to-second" aria-hidden="true">→</span>
+    <section class="step second"><h2><span class="number">02</span><span data-edit>心理测评与持续监测</span></h2>
+      <p data-edit>适用工具与知情授权<br>记录、趋势和变化线索</p></section>
+    <span class="arrow to-third" aria-hidden="true">↓</span>
+    <section class="step third"><h2><span class="number">03</span><span data-edit>AI分析与大模型协作</span></h2>
+      <p data-edit>数据质量检查与可复算统计<br>知识检索、辅助摘要与来源说明</p></section>
+    <span class="arrow to-fourth" aria-hidden="true">←</span>
+    <section class="step fourth"><h2><span class="number">04</span><span data-edit>人工复核与支持跟进</span></h2>
+      <p data-edit>授权教师复核和求助答复<br>预约、跟进与必要转介</p></section>
+  </div>
+  <p class="boundary" data-edit>AI提供分析辅助，授权人员负责复核与现实处置。<br>此图为方案逻辑预览，拟增强能力需另行审批与评测。</p>
+  <div class="tools" aria-label="预览工具">
+    <button id="density" type="button" aria-pressed="false">紧凑一点</button>
+    <button id="edit" type="button" aria-pressed="false">编辑文字</button>
+    <button id="print" type="button">打印</button>
+  </div>
+</main>
+<script>
+  document.querySelector('#density').addEventListener('click', function () {
+    const on=document.body.classList.toggle('compact'); this.setAttribute('aria-pressed',String(on));
+    this.textContent=on?'恢复间距':'紧凑一点';
+  });
+  document.querySelector('#edit').addEventListener('click', function () {
+    const on=document.body.classList.toggle('editing');this.setAttribute('aria-pressed',String(on));
+    document.querySelectorAll('[data-edit]').forEach(el=>el.setAttribute('contenteditable',String(on)));
+    this.textContent=on?'完成编辑':'编辑文字';
+  });
+  document.querySelector('#print').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>

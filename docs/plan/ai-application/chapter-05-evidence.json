@@ -1,0 +1,83 @@
+{
+  "chapter": "05",
+  "title": "方案实现",
+  "owner": "CH05",
+  "version": "0.1",
+  "status": "方案稿待统稿",
+  "updated": "2026-10-27",
+  "evidence": [
+    {
+      "claim": "知识库RAG为可选能力，受RAG_ENABLED控制；Embedding还要求显式允许模型初始化，检索失败返回空字符串，数据库知识记录仍为权威来源。",
+      "paths": [
+        {"path": "backend/app/services/rag_service.py", "lines": "1-42"},
+        {"path": "backend/app/services/rag_service.py", "lines": "50-71"},
+        {"path": "backend/app/services/rag_service.py", "lines": "80-125"}
+      ],
+      "classification": "current_implementation"
+    },
+    {
+      "claim": "报告分析按用户收集对话消息，基于情绪标签构造分值，并计算7日/30日序列、热图和雷达。",
+      "paths": [
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": "52-90"},
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": "102-155"},
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": "247-311"}
+      ],
+      "classification": "current_implementation"
+    },
+    {
+      "claim": "分析提示词要求模型输出risk_level、多个confidence字段及建议；本地回退依据关键词规则生成固定分值和风险字段。这些是工程计算/输出字段，未证明具有临床效度。",
+      "paths": [
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": "158-194"},
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": "262-310"},
+        {"path": "backend/app/services/llm_fallback.py", "lines": "23-63"}
+      ],
+      "classification": "current_implementation_and_limitation"
+    },
+    {
+      "claim": "报告API有快速非LLM报告及异步分析触发；AI解释使用最近若干对话片段，请求外部模型失败时返回本地固定解释。",
+      "paths": [
+        {"path": "backend/app/routers/report_v1.py", "lines": "84-132"},
+        {"path": "backend/app/routers/report_v1.py", "lines": "256-286"}
+      ],
+      "classification": "current_implementation"
+    },
+    {
+      "claim": "前端包含测评提交与结果字段、智能对话入口及学生报告展示；这些页面调用并显示数据不能代替模型验证。",
+      "paths": [
+        {"path": "src/views/student/Test.vue", "lines": "80-103"},
+        {"path": "src/views/student/Test.vue", "lines": "256-372"},
+        {"path": "src/views/student/Report.vue", "lines": "448-470"},
+        {"path": "src/views/student/Report.vue", "lines": "549-555"},
+        {"path": "src/views/student/Layout.vue", "lines": "27-28"}
+      ],
+      "classification": "current_implementation"
+    },
+    {
+      "claim": "离线评测工具读取合成案例、实际输出和独立人工评分，不访问模型服务；输出明示不能建立临床有效性。案例数12且全部为待专业复核合成案例。",
+      "paths": [
+        {"path": "scripts/evaluate-support-ai.py", "lines": "1-5"},
+        {"path": "scripts/evaluate-support-ai.py", "lines": "47-124"},
+        {"path": "docs/test/ai-evaluation-cases.jsonl", "lines": "1-12"},
+        {"path": "docs/test/AI评测与试点方案.md", "lines": "5-13"},
+        {"path": "docs/test/AI评测与试点方案.md", "lines": "15-21"}
+      ],
+      "classification": "current_tool_and_limitations"
+    }
+  ],
+  "acceptance": {
+    "latest_backend_regression": "135 passed; 3 conditionally skipped; 5 failures with Windows WinError 10013",
+    "latest_real_ui_integration": "blocked by Vite proxy connect EACCES; full integration not passed",
+    "real_model_evaluation": "not completed",
+    "synthetic_cases": 12,
+    "clinical_validity": "not established",
+    "personnel_budget_schedule": "pending manual confirmation"
+  },
+  "scope": {
+    "read_only_review": true,
+    "files_written": [
+      "docs/plan/ai-application/chapter-05.md",
+      "docs/plan/ai-application/chapter-05-evidence.json"
+    ],
+    "runtime_or_database_changed": false
+  }
+}
