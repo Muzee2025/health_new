@@ -1,0 +1,628 @@
+{
+  "status": "structural-checks-passed",
+  "updated": "2026-10-27",
+  "document": "C:\\University\\Code_total\\health_new_muzee2025\\tmp\\sci-application-20261027\\application-s5.docx",
+  "sha256": "285aa4fe96c65a2b71d75f5ad7b24b663c2850b72015161f8f487822112ce764",
+  "htmlSha256": "6fe2305486eea1c5e1c664c6684393d82a9179ec04b7844c2dc00e8f77193bf0",
+  "pages": 32,
+  "sections": 3,
+  "bodyTables": 16,
+  "bodyFigures": 13,
+  "nativeEquations": 5,
+  "references": 27,
+  "tableChecks": [
+    {
+      "table": 1,
+      "rows": 15,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 2,
+      "rows": 5,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 3,
+      "rows": 7,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 4,
+      "rows": 4,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 5,
+      "rows": 5,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 6,
+      "rows": 32,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 7,
+      "rows": 6,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 8,
+      "rows": 5,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 9,
+      "rows": 4,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 10,
+      "rows": 32,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 11,
+      "rows": 9,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 12,
+      "rows": 4,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 13,
+      "rows": 4,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 14,
+      "rows": 5,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 15,
+      "rows": 5,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 16,
+      "rows": 5,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 17,
+      "rows": 2,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 18,
+      "rows": 8,
+      "threeLines": true,
+      "centered": true
+    },
+    {
+      "table": 19,
+      "rows": 6,
+      "threeLines": true,
+      "centered": true
+    }
+  ],
+  "figures": [
+    {
+      "id": "fig01-youth",
+      "sha256": "6da2101fc17451661a15cb7071a74db55e1e4aeaafa99f42efff29a7d101b3c3",
+      "svgSha256": "de05f3788c9c52750b3c49a4350f41813768e9a0b3d8833bd38a3edb773ec58c",
+      "size": [
+        3425,
+        1590
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig02-pressure",
+      "sha256": "978526c693406f26ae6718f070c324103fcc7dca805615c0c6d2dd9c977acb95",
+      "svgSha256": "a18bd8e8a04f901e4c1892b32e786d3839b5a1adb966517abfc6ac2d8a9ce425",
+      "size": [
+        3425,
+        1410
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig03-education",
+      "sha256": "c2bd14d6648ac7c11d4f74a8efce0fbd30c1e5726cfe9b357df3b9d1da3561cd",
+      "svgSha256": "eb831d08c2be0d68a7552ca69c7737334faff4a2c070d68e1c1a90255de0520f",
+      "size": [
+        3425,
+        1320
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig04-procurement",
+      "sha256": "e0851ba99b7cd2816478db5bfc94fbe1dac4271fb7db50ef0a03d0db253f1da8",
+      "svgSha256": "27484a717b8645a2026178bf8b503cdc9b1dbc3398d6b4f724a17faeb07825dd",
+      "size": [
+        3425,
+        1530
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig05-mindmap",
+      "sha256": "579397462f72e7872c6955abf93eeab6f6adfdc6284ac3e3ccc2b76546bb52ae",
+      "svgSha256": "090d1c08148d2969cda2e5e9a9a9fb2fad656b22ec36391788d20de8e70414c3",
+      "size": [
+        3425,
+        1770
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig06-architecture",
+      "sha256": "49b306fb46ec8b5c2c99bb9cf18f80dfa1ac2eab63ab809ef4e63ae254268895",
+      "svgSha256": "1a17d28c325b4afa48cef51bf011e65eabc5cfcd6377f4390e5ea2cf7537a47f",
+      "size": [
+        3425,
+        1680
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig07-ai-workflow",
+      "sha256": "ea8a335acd158b2291ff88a81fd4f5d819022e731e821743e029dea32165277d",
+      "svgSha256": "540c9e1c07a79172dcfd6d7c9c174abf4ab5450d77578a05c53d90fc910e1e88",
+      "size": [
+        3425,
+        1680
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig09-service",
+      "sha256": "fa196cb459a9ba50c8895636838ff25e237b4c09692070b9fb02e891d7ae8c07",
+      "svgSha256": "21ceb4f2e7dbe1852a43859585fed8d5dac84f5f0c0144ce0a297c09548d93e6",
+      "size": [
+        3425,
+        1140
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig10-regional-college",
+      "sha256": "7ffebe30517b50f10c6a0fd8e908e0237689cf421105a8af653df7571898661b",
+      "svgSha256": "73b8be5e19808aee87e1e7def6e909366d7cb2b7c8aa259db58545b792c3831b",
+      "size": [
+        3425,
+        2130
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig11-hubei-neighbours",
+      "sha256": "c64f2deef25a7d7ba14ebcb9ef09578100dbeb508f7a53377235ff9547ea7c47",
+      "svgSha256": "49835aa4c981c79ae9562761dff99802072fb733047ae1542b9c1a34c592ec55",
+      "size": [
+        3425,
+        1890
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig12-literature-stage",
+      "sha256": "d25faaad687486ef5a4f3a232ff65c9c2d60bc1a8fb8c393f19735800eaf4eb1",
+      "svgSha256": "edb29216bf11fac2b9455be17281dd0c0d382c22c5f26d35ed41eb73c655048d",
+      "size": [
+        3425,
+        1410
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig13-literature-regions",
+      "sha256": "6d3028bd1125dd305ae160664f0cb516f2766acd1776ef31b5b8a33bbff7de32",
+      "svgSha256": "dc2bca76975713a9864a1ea3e058f649717d1fa6f9281883126cf4562d812d93",
+      "size": [
+        3425,
+        2790
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    },
+    {
+      "id": "fig14-education-lorenz",
+      "sha256": "7b449056af9aaf9a3fda84f2e118ed9f7fd077ebdffb666b30b1546ff9a2df7b",
+      "svgSha256": "8ade4ec3bba2d73a578743ee1ba586c544e1513d9836c5be4588567d71279d54",
+      "size": [
+        3425,
+        1950
+      ],
+      "dpi": [
+        599.9988,
+        599.9988
+      ],
+      "mode": "P",
+      "titleFreeChecked": true
+    }
+  ],
+  "educationRegions": 31,
+  "literatureRegions": 31,
+  "literatureOriginalRegions": 33,
+  "independentReview": "Data/method stages completed; final artifact review unavailable due to agent usage limit. Lead structural and visual checks recorded separately.",
+  "delivery": "deliverables\\心域智链项目申报材料_图表增强审阅稿.docx",
+  "deliverySha256": "285aa4fe96c65a2b71d75f5ad7b24b663c2850b72015161f8f487822112ce764",
+  "browserChecks": [
+    {
+      "width": 1440,
+      "title": "心域智链申报书正文审阅版",
+      "headings": 11,
+      "tables": 16,
+      "images": 13,
+      "imageFailures": 0,
+      "centered": true,
+      "rules": true,
+      "overflow": false,
+      "equations": 5,
+      "svgImages": 13,
+      "errors": [],
+      "outside": [],
+      "navigation": true,
+      "appendixNavigation": true,
+      "notesInAppendix": true
+    },
+    {
+      "width": 390,
+      "title": "心域智链申报书正文审阅版",
+      "headings": 11,
+      "tables": 16,
+      "images": 13,
+      "imageFailures": 0,
+      "centered": true,
+      "rules": true,
+      "overflow": false,
+      "equations": 5,
+      "svgImages": 13,
+      "errors": [],
+      "outside": [],
+      "navigation": true,
+      "appendixNavigation": true,
+      "notesInAppendix": true
+    }
+  ],
+  "pageVisualReview": [
+    {
+      "page": 1,
+      "file": "page-s5-01.png",
+      "sha256": "9529eadeda7d54c93af3e84aa1ce210b8ccc6aac3cc6a6dcafbed0ad6ff9a06e",
+      "method": "Prior R4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 2,
+      "file": "page-s5-02.png",
+      "sha256": "353c6c79efc63e27e066120a439f85bbc4ee4b45d7fd4e1fc93323d079a416e7",
+      "method": "Prior R4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 3,
+      "file": "page-s5-03.png",
+      "sha256": "eff3cf9f72ec9c692db33235839451202e44d369f03ab2d193bbda6d3dec4441",
+      "method": "Prior R4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 4,
+      "file": "page-s5-04.png",
+      "sha256": "6d8df9ad7d3ab8d5a7abf5cf2f826cd5a9ea981c6dfc443f2a62072081abfe11",
+      "method": "Prior R4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 5,
+      "file": "page-s5-05.png",
+      "sha256": "431f64e6207210d1d990918f8af6f52a5832e4f0fa5f4fb98b42743370d19f0d",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 6,
+      "file": "page-s5-06.png",
+      "sha256": "829e4455f8447553737792c0aec1ea480c61b0a03c3e764b11bd1e26091a886c",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 7,
+      "file": "page-s5-07.png",
+      "sha256": "0136cc3b6080e7a9cafea19f22976940f16e523c36ecd619f4d52ab65c0c2e0a",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 8,
+      "file": "page-s5-08.png",
+      "sha256": "73f53266a8cfc60f94357cf18abdebaa76eaf94e075122531a53e5a8a08ca0f9",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 9,
+      "file": "page-s5-09.png",
+      "sha256": "13b794c0bc828d61e1ba9405d5cf726ab05eca3e388619ca6adc85d5b49c0946",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 10,
+      "file": "page-s5-10.png",
+      "sha256": "0ce401593cad2133af8c77d78ec07741f0660bf92606e5e1172bd1cafdd4ca8f",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 11,
+      "file": "page-s5-11.png",
+      "sha256": "0f3282920dbf8b0bf6685ad7648d9e85841265053ea4143d591aff709611dfb7",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 12,
+      "file": "page-s5-12.png",
+      "sha256": "d0e558e5e6d2d4bd31df83a4dcc086c92fc36f33729e12ad0d768ffafadbdccf",
+      "method": "S3 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 13,
+      "file": "page-s5-13.png",
+      "sha256": "cf687be71ccf2c19840e31f23564f3a58ef01265b70e4cedea73c947ce0b14cd",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 14,
+      "file": "page-s5-14.png",
+      "sha256": "c796afec9fd43c93072aef8caa2fa258cf4c1b9fd26e5402a93b814c4f1cfb64",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 15,
+      "file": "page-s5-15.png",
+      "sha256": "7c74a27b5d4299971823bde4ed7140a6e245b460709e0f2358f8737cc854ac13",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 16,
+      "file": "page-s5-16.png",
+      "sha256": "de63f2c36ae0c16ca263033c6c7ed66c2b179e60586f7c20ec46a50e4bb551f7",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 17,
+      "file": "page-s5-17.png",
+      "sha256": "3f66fd9d7cec75e5741787e4ae979644864b5f5dfeef9dbe26faf3c3bbabee58",
+      "method": "S5 page directly viewed",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 18,
+      "file": "page-s5-18.png",
+      "sha256": "ea1339ad908eb8966230c1979694fdce34898894506676726fecbff3b3d54ea6",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 19,
+      "file": "page-s5-19.png",
+      "sha256": "88f90fcf748ab82ac37e43ef62d64176beedc9fdf16e0086e7eb7429a090dc49",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 20,
+      "file": "page-s5-20.png",
+      "sha256": "d527791274fd71adbdbbcdba9e0099bc24b23065506c4d892bd0c1bd4e2792e9",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 21,
+      "file": "page-s5-21.png",
+      "sha256": "88a4084006f355d51920c9beb127a0c6b25b9151fef96cf8c0863124ab9320b5",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 22,
+      "file": "page-s5-22.png",
+      "sha256": "1e8a4cab283b14acbedfed1c54f42565631a516d26ef006621fb572f5f4e7b15",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 23,
+      "file": "page-s5-23.png",
+      "sha256": "55c60be901fd5e96b61709d83af7f72cc0951dba5de157fdc75e655c5109f389",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 24,
+      "file": "page-s5-24.png",
+      "sha256": "5c15e2dee79f6ddc10c1f4b68c24602f873d7a5ea93b8a227589e1b9982d3bc2",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 25,
+      "file": "page-s5-25.png",
+      "sha256": "e1f86476c8bd76409f8c6208184e94de765c5478ace241838e0e13964922251c",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 26,
+      "file": "page-s5-26.png",
+      "sha256": "24e54ba158bbc3299e7d9594dc0becabab2f54372cd0397c24f8a3c61ada4a88",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 27,
+      "file": "page-s5-27.png",
+      "sha256": "7f4824747c784202a3a2398483889819237c86aa8ea9815881acd5b0e54219aa",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 28,
+      "file": "page-s5-28.png",
+      "sha256": "7d35c2c592c023cb9a12478ea5f204fa1e7912136cc132ca3986ffd05e947d48",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 29,
+      "file": "page-s5-29.png",
+      "sha256": "815cd019b81db6da33cc5c9c69859f524110d073cca38405f648044c0470ae19",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 30,
+      "file": "page-s5-30.png",
+      "sha256": "098c51d4be5d188d4231909cd4546771fa2fb2f1edc2db73f78406761a8a1bb8",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 31,
+      "file": "page-s5-31.png",
+      "sha256": "80f96152e985301ecb983b3eb9665b40e0ccfb6a26c44d5b04f5f37d48aaa7fb",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    },
+    {
+      "page": 32,
+      "file": "page-s5-32.png",
+      "sha256": "7974e5a2e444cd8fda6a21c185ca721501304711d673bca3504ab0eb13876080",
+      "method": "S4 page directly viewed, same SHA256",
+      "reviewedBy": "Lead",
+      "result": "pass"
+    }
+  ]
+}

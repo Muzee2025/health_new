@@ -1,0 +1,161 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "status": "复算完成，待统稿",
+  "updated": "2026-10-27",
+  "dataset": {
+    "year": 2024,
+    "regions": 31,
+    "scope": "中国大陆31省份"
+  },
+  "method": {
+    "sd": "population; denominator n",
+    "quartiles": "linear interpolation at h=(n-1)p (type 7)",
+    "cr5": "sum of five largest regional values / all-region total",
+    "gini": "(2*sum(i*x_i)/(n*sum(x)))-(n+1)/n, ascending x and i=1..n"
+  },
+  "totals_check": {
+    "regular_vocational_heis": 2870,
+    "academic_bachelor_students": 20859138,
+    "vocational_normal_short_students": 18053430,
+    "normal_vocational_undergraduates": 38912568,
+    "school_count_matches_2870": true,
+    "students_match_38912568": true
+  },
+  "postsecondary_national_bachelor_share": 0.536051437160354,
+  "hubei": {
+    "schools": 133,
+    "bachelor_students": 1057066,
+    "vocational_students": 858107,
+    "postsecondary_students": 1915173,
+    "bachelor_share_within_postsecondary": 0.5519428270970821,
+    "postsecondary_students_per_school": 14399.796992481202,
+    "stages": {
+      "本专科": {
+        "value": 1915173,
+        "share": 0.049217337699223554,
+        "rank": 6
+      },
+      "普通高中": {
+        "value": 1119712,
+        "share": 0.03831636474160223,
+        "rank": 11
+      },
+      "初中": {
+        "value": 1930337,
+        "share": 0.03583882111531697,
+        "rank": 12
+      }
+    }
+  },
+  "stage_statistics": {
+    "本专科": {
+      "n_regions": 31,
+      "total": 38912568,
+      "mean": 1255244.1290322582,
+      "median": 1149595.0,
+      "population_sd": 793480.1248563901,
+      "cv": 0.6321321139881616,
+      "q1_type7": 660864.5,
+      "q3_type7": 1750406.5,
+      "cr5": 0.3401317795320011,
+      "gini": 0.3544672798010211,
+      "top5_regions": [
+        {
+          "region": "河南",
+          "value": 3096419
+        },
+        {
+          "region": "山东",
+          "value": 2800358
+        },
+        {
+          "region": "广东",
+          "value": 2687595
+        },
+        {
+          "region": "江苏",
+          "value": 2383353
+        },
+        {
+          "region": "四川",
+          "value": 2267676
+        }
+      ]
+    },
+    "普通高中": {
+      "n_regions": 31,
+      "total": 29222814,
+      "mean": 942671.4193548387,
+      "median": 770432.0,
+      "population_sd": 673289.2924063308,
+      "cv": 0.7142353937781712,
+      "q1_type7": 435725.5,
+      "q3_type7": 1301942.0,
+      "cr5": 0.36338050811944395,
+      "gini": 0.3933572209447662,
+      "top5_regions": [
+        {
+          "region": "河南",
+          "value": 2743654
+        },
+        {
+          "region": "广东",
+          "value": 2354564
+        },
+        {
+          "region": "山东",
+          "value": 2083055
+        },
+        {
+          "region": "河北",
+          "value": 1905648
+        },
+        {
+          "region": "江苏",
+          "value": 1532080
+        }
+      ]
+    },
+    "初中": {
+      "n_regions": 31,
+      "total": 53861621,
+      "mean": 1737471.6451612904,
+      "median": 1451467.0,
+      "population_sd": 1317975.298790426,
+      "cv": 0.7585593137366439,
+      "q1_type7": 646230.0,
+      "q3_type7": 2452493.5,
+      "cr5": 0.3802053599537972,
+      "gini": 0.41224082177596943,
+      "top5_regions": [
+        {
+          "region": "河南",
+          "value": 5077253
+        },
+        {
+          "region": "广东",
+          "value": 5032962
+        },
+        {
+          "region": "山东",
+          "value": 4055035
+        },
+        {
+          "region": "河北",
+          "value": 3434615
+        },
+        {
+          "region": "江苏",
+          "value": 2878612
+        }
+      ]
+    }
+  },
+  "risk_group_bound": {
+    "high_risk_share": 0.454,
+    "no_risk_share_upper_bound_exclusive": 0.05,
+    "difference_percentage_points_lower_bound_exclusive": 40.4,
+    "interpretation": "差值严格大于40.4个百分点；无风险组报告为低于5%，不填入精确5%。样本分母未提供，不计算置信区间或显著性。"
+  }
+}

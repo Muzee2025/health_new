@@ -1,0 +1,487 @@
+{
+  "metadata": {
+    "owner": "SCI-LIT / gpt-6-luna",
+    "version": "1.0.0",
+    "status": "frozen-for-independent-review",
+    "updated": "2026-10-27",
+    "scope": "Extracted depression-symptom screening prevalence data only; do not interpret as diagnosis or province population risk.",
+    "primary_source": {
+      "citation": "Zhou J, Liu Y, Ma J, et al. Prevalence of depressive symptoms among children and adolescents in China: a systematic review and meta-analysis. Child Adolesc Psychiatry Ment Health. 2024;18:150.",
+      "doi": "10.1186/s13034-024-00841-w",
+      "publisher_url": "https://link.springer.com/article/10.1186/s13034-024-00841-w",
+      "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11577650/",
+      "supplementary_table_s2_url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1186%2Fs13034-024-00841-w/MediaObjects/13034_2024_841_MOESM4_ESM.pdf",
+      "accessed": "2026-10-27"
+    }
+  },
+  "study": {
+    "design": "Systematic review and random-effects meta-analysis of cross-sectional and cohort studies (baseline data only)",
+    "search_databases": [
+      "PubMed",
+      "EMBASE",
+      "CNKI",
+      "WANFANG Data"
+    ],
+    "search_cutoff": "2024-10-15",
+    "eligible_age_years": "6-24",
+    "included_studies_total": 439,
+    "included_participants_total": 1497524,
+    "publication_year_span_reported": "1988-2024",
+    "fieldwork_period": null,
+    "fieldwork_period_note": "No single fieldwork period for all included studies was reported in the reviewed article. The article reports publication years spanning 1988-2024; Supplementary Table S1 presents year-stratified counts, but it is not used here for a trend claim.",
+    "instruments": [
+      "BDI",
+      "CDI",
+      "CES-D",
+      "DSRSC",
+      "HAMD",
+      "KADS",
+      "PHQ",
+      "SDS"
+    ],
+    "cutoff_note": "The review included established/validated scales and extracted cutoffs, but thresholds varied. The authors explicitly state they did not conduct subgroup analyses by cutoff values for the same scale. Therefore no single threshold is assigned to the pooled estimates here.",
+    "overall": {
+      "estimate_percent": 26.17,
+      "ci95_lower_percent": 25.0,
+      "ci95_upper_percent": 27.41,
+      "i2_percent": 100,
+      "heterogeneity_p": "<0.001",
+      "estimate_type": "Random-effects pooled proportion of depressive-symptom screen positives across included studies; not a clinical diagnosis prevalence estimate"
+    },
+    "education_stage_subgroups": [
+      {
+        "stage": "Primary school",
+        "studies_k": 30,
+        "sample_n": 137116,
+        "estimate_percent": 16.97,
+        "ci95_lower_percent": 14.0,
+        "ci95_upper_percent": 20.56,
+        "i2_percent": 99
+      },
+      {
+        "stage": "Middle school",
+        "studies_k": 94,
+        "sample_n": 342082,
+        "estimate_percent": 24.15,
+        "ci95_lower_percent": 21.61,
+        "ci95_upper_percent": 27.0,
+        "i2_percent": 100
+      },
+      {
+        "stage": "High school",
+        "studies_k": 86,
+        "sample_n": 1069851,
+        "estimate_percent": 28.23,
+        "ci95_lower_percent": 25.58,
+        "ci95_upper_percent": 31.15,
+        "i2_percent": 100
+      },
+      {
+        "stage": "Undergraduate school",
+        "studies_k": 188,
+        "sample_n": 374996,
+        "estimate_percent": 27.72,
+        "ci95_lower_percent": 25.79,
+        "ci95_upper_percent": 29.79,
+        "i2_percent": 100
+      }
+    ],
+    "education_stage_test": {
+      "chi_square": 26.24,
+      "p": "<0.01",
+      "source": "Main article Table 1"
+    },
+    "stage_difference_descriptive_pp": {
+      "high_school_minus_primary": 11.26,
+      "calculation": "28.23 - 16.97 percentage points",
+      "interpretation": "Descriptive difference between pooled subgroup point estimates only; no pairwise significance is inferred."
+    },
+    "subgroup_denominator_note": "Study counts and sample sizes are subgroup totals reported in Table 1. Participants/studies can contribute to more than one subgroup; subgroup sample sizes do not sum to the overall 1,497,524 and must not be added as if mutually exclusive."
+  },
+  "geographic_subgroups": {
+    "source_table": "Supplementary Table S2, Prevalence of depressive symptoms of children and adolescents in provinces and municipalities",
+    "source_fields": {
+      "studies_k": "Studies",
+      "sample_n": "Sample",
+      "estimate_percent": "Proportion (converted from proportion scale to percent)",
+      "ci95_lower_percent": "95% CI lower bound",
+      "ci95_upper_percent": "95% CI upper bound",
+      "i2_percent": "I2"
+    },
+    "rows": [
+      {
+        "region": "Anhui",
+        "studies_k": 49,
+        "sample_n": 239972,
+        "estimate_percent": 27.85,
+        "ci95_lower_percent": 24.17,
+        "ci95_upper_percent": 32.1,
+        "i2_percent": 100
+      },
+      {
+        "region": "Beijing",
+        "studies_k": 21,
+        "sample_n": 42071,
+        "estimate_percent": 26.89,
+        "ci95_lower_percent": 22.17,
+        "ci95_upper_percent": 32.61,
+        "i2_percent": 100
+      },
+      {
+        "region": "Chongqing",
+        "studies_k": 17,
+        "sample_n": 51868,
+        "estimate_percent": 27.86,
+        "ci95_lower_percent": 20.81,
+        "ci95_upper_percent": 37.3,
+        "i2_percent": 100
+      },
+      {
+        "region": "Fujian",
+        "studies_k": 6,
+        "sample_n": 7362,
+        "estimate_percent": 39.55,
+        "ci95_lower_percent": 30.49,
+        "ci95_upper_percent": 51.31,
+        "i2_percent": 99
+      },
+      {
+        "region": "Gansu",
+        "studies_k": 4,
+        "sample_n": 10659,
+        "estimate_percent": 24.74,
+        "ci95_lower_percent": 15.63,
+        "ci95_upper_percent": 39.16,
+        "i2_percent": 97
+      },
+      {
+        "region": "Guangdong",
+        "studies_k": 33,
+        "sample_n": 90356,
+        "estimate_percent": 21.75,
+        "ci95_lower_percent": 18.7,
+        "ci95_upper_percent": 25.31,
+        "i2_percent": 99
+      },
+      {
+        "region": "Guangxi",
+        "studies_k": 4,
+        "sample_n": 3214,
+        "estimate_percent": 38.0,
+        "ci95_lower_percent": 32.4,
+        "ci95_upper_percent": 44.57,
+        "i2_percent": 88
+      },
+      {
+        "region": "Guizhou",
+        "studies_k": 10,
+        "sample_n": 32639,
+        "estimate_percent": 28.55,
+        "ci95_lower_percent": 23.52,
+        "ci95_upper_percent": 34.67,
+        "i2_percent": 98
+      },
+      {
+        "region": "Hainan",
+        "studies_k": 4,
+        "sample_n": 14020,
+        "estimate_percent": 25.99,
+        "ci95_lower_percent": 19.0,
+        "ci95_upper_percent": 35.54,
+        "i2_percent": 98
+      },
+      {
+        "region": "Hebei",
+        "studies_k": 11,
+        "sample_n": 16060,
+        "estimate_percent": 26.18,
+        "ci95_lower_percent": 19.7,
+        "ci95_upper_percent": 34.8,
+        "i2_percent": 99
+      },
+      {
+        "region": "Heilongjiang",
+        "studies_k": 12,
+        "sample_n": 21846,
+        "estimate_percent": 22.97,
+        "ci95_lower_percent": 18.48,
+        "ci95_upper_percent": 28.57,
+        "i2_percent": 98
+      },
+      {
+        "region": "Henan",
+        "studies_k": 19,
+        "sample_n": 31960,
+        "estimate_percent": 26.03,
+        "ci95_lower_percent": 20.54,
+        "ci95_upper_percent": 32.98,
+        "i2_percent": 100
+      },
+      {
+        "region": "Hong Kong",
+        "studies_k": 6,
+        "sample_n": 13345,
+        "estimate_percent": 27.06,
+        "ci95_lower_percent": 14.52,
+        "ci95_upper_percent": 50.44,
+        "i2_percent": 100
+      },
+      {
+        "region": "Hubei",
+        "studies_k": 19,
+        "sample_n": 39473,
+        "estimate_percent": 23.24,
+        "ci95_lower_percent": 18.48,
+        "ci95_upper_percent": 29.21,
+        "i2_percent": 100
+      },
+      {
+        "region": "Hunan",
+        "studies_k": 18,
+        "sample_n": 32791,
+        "estimate_percent": 24.07,
+        "ci95_lower_percent": 19.32,
+        "ci95_upper_percent": 29.98,
+        "i2_percent": 100
+      },
+      {
+        "region": "Jiangsu",
+        "studies_k": 26,
+        "sample_n": 145143,
+        "estimate_percent": 25.96,
+        "ci95_lower_percent": 20.14,
+        "ci95_upper_percent": 33.46,
+        "i2_percent": 100
+      },
+      {
+        "region": "Jiangxi",
+        "studies_k": 4,
+        "sample_n": 2317,
+        "estimate_percent": 37.46,
+        "ci95_lower_percent": 28.35,
+        "ci95_upper_percent": 49.49,
+        "i2_percent": 96
+      },
+      {
+        "region": "Jilin",
+        "studies_k": 6,
+        "sample_n": 7165,
+        "estimate_percent": 33.34,
+        "ci95_lower_percent": 25.95,
+        "ci95_upper_percent": 42.84,
+        "i2_percent": 98
+      },
+      {
+        "region": "Liaoning",
+        "studies_k": 14,
+        "sample_n": 56759,
+        "estimate_percent": 26.4,
+        "ci95_lower_percent": 20.93,
+        "ci95_upper_percent": 33.3,
+        "i2_percent": 100
+      },
+      {
+        "region": "Inner Mongolia",
+        "studies_k": 3,
+        "sample_n": 6242,
+        "estimate_percent": 18.43,
+        "ci95_lower_percent": 11.98,
+        "ci95_upper_percent": 28.36,
+        "i2_percent": 98
+      },
+      {
+        "region": "Ningxia",
+        "studies_k": 3,
+        "sample_n": 2162,
+        "estimate_percent": 31.85,
+        "ci95_lower_percent": 24.17,
+        "ci95_upper_percent": 41.99,
+        "i2_percent": 92
+      },
+      {
+        "region": "Qinghai",
+        "studies_k": 1,
+        "sample_n": 454,
+        "estimate_percent": 54.19,
+        "ci95_lower_percent": 49.79,
+        "ci95_upper_percent": 58.97,
+        "i2_percent": null,
+        "i2_source_text": "--"
+      },
+      {
+        "region": "Shaanxi",
+        "studies_k": 9,
+        "sample_n": 13624,
+        "estimate_percent": 29.28,
+        "ci95_lower_percent": 22.17,
+        "ci95_upper_percent": 38.67,
+        "i2_percent": 99
+      },
+      {
+        "region": "Shandong",
+        "studies_k": 28,
+        "sample_n": 41006,
+        "estimate_percent": 27.44,
+        "ci95_lower_percent": 23.49,
+        "ci95_upper_percent": 32.05,
+        "i2_percent": 99
+      },
+      {
+        "region": "Shanghai",
+        "studies_k": 18,
+        "sample_n": 53420,
+        "estimate_percent": 22.34,
+        "ci95_lower_percent": 17.69,
+        "ci95_upper_percent": 28.21,
+        "i2_percent": 100
+      },
+      {
+        "region": "Shanxi",
+        "studies_k": 10,
+        "sample_n": 39626,
+        "estimate_percent": 26.29,
+        "ci95_lower_percent": 17.57,
+        "ci95_upper_percent": 39.34,
+        "i2_percent": 100
+      },
+      {
+        "region": "Sichuan",
+        "studies_k": 13,
+        "sample_n": 26680,
+        "estimate_percent": 30.67,
+        "ci95_lower_percent": 23.6,
+        "ci95_upper_percent": 39.86,
+        "i2_percent": 99
+      },
+      {
+        "region": "Taiwan",
+        "studies_k": 1,
+        "sample_n": 625,
+        "estimate_percent": 32.64,
+        "ci95_lower_percent": 29.16,
+        "ci95_upper_percent": 36.53,
+        "i2_percent": null,
+        "i2_source_text": "--"
+      },
+      {
+        "region": "Xinjiang",
+        "studies_k": 8,
+        "sample_n": 43035,
+        "estimate_percent": 20.35,
+        "ci95_lower_percent": 13.61,
+        "ci95_upper_percent": 30.42,
+        "i2_percent": 100
+      },
+      {
+        "region": "Tibet",
+        "studies_k": 2,
+        "sample_n": 10584,
+        "estimate_percent": 47.5,
+        "ci95_lower_percent": 39.99,
+        "ci95_upper_percent": 56.42,
+        "i2_percent": 99
+      },
+      {
+        "region": "Yunnan",
+        "studies_k": 8,
+        "sample_n": 45178,
+        "estimate_percent": 25.41,
+        "ci95_lower_percent": 21.08,
+        "ci95_upper_percent": 30.64,
+        "i2_percent": 99
+      },
+      {
+        "region": "Zhejiang",
+        "studies_k": 24,
+        "sample_n": 112564,
+        "estimate_percent": 23.89,
+        "ci95_lower_percent": 19.85,
+        "ci95_upper_percent": 28.74,
+        "i2_percent": 100
+      },
+      {
+        "region": "Tianjin",
+        "studies_k": 1,
+        "sample_n": 9185,
+        "estimate_percent": 31.52,
+        "ci95_lower_percent": 30.58,
+        "ci95_upper_percent": 32.48,
+        "i2_percent": null,
+        "i2_source_text": "--",
+        "special_note": "Supplementary Table S2 says no study conducted solely in Tianjin was included; this estimate came from a study in which Tianjin was one of the important study sites."
+      }
+    ],
+    "region_count": 33,
+    "geography_coverage_note": "Supplementary Table S2 lists the 33 named rows transcribed above (including Hong Kong, Taiwan, and Tianjin). The article reports 33 of 34 provincial-level regions overall, excludes Macau from the map, and notes 29 articles with unspecified or multi-province locations were excluded from the map. The source does not support interpreting these pooled subgroups as representative province-level population risk rates.",
+    "subgroup_test": {
+      "chi_square": 288.64,
+      "p": "<0.01",
+      "source": "Supplementary Table S2"
+    },
+    "denominator_note": "Subgroup study/sample counts are source-reported; do not sum across regions as mutually exclusive records. Multi-site and multi-province studies can contribute to more than one geographic category."
+  },
+  "interpretation_and_chart_guidance": {
+    "allowed_language": "Pooled proportion of participants screening positive for depressive symptoms in the included studies; results vary by stage, region, instrument, and study context.",
+    "avoid": [
+      "diagnosed depression rate",
+      "representative province risk rate",
+      "causal explanation of regional differences",
+      "time trend comparison across different meta-analyses"
+    ],
+    "recommended_chart_1": "Forest/dot-and-whisker plot for all province/municipality rows, showing point estimate and 95% CI, with studies_k beside each row; sort alphabetically or by estimate but label as descriptive pooled study subgroup estimates.",
+    "recommended_chart_2": "Educational-stage dot-and-whisker plot for the four Table 1 stages with estimate and 95% CI; annotate overall subgroup difference test (chi-square 26.24, p<0.01), without implying every pair differs significantly.",
+    "map_guidance": "If a map is used, use neutral highlighting for included strata and show uncertainty/sample counts; avoid a red-to-green risk choropleth that suggests representative population rates. Mark regions with k=1-2 and Tianjin's multi-site caveat visibly.",
+    "calculated_descriptive_contrast": "High-school pooled point estimate minus primary-school pooled point estimate = 11.26 percentage points; not a causal effect and not a pairwise meta-analysis test."
+  },
+  "related_reviews_context_only": [
+    {
+      "citation": "Gao L, Xie Y, Jia C, Wang W. Prevalence of depression among Chinese university students: a systematic review and meta-analysis. Sci Rep. 2020;10:15897.",
+      "doi": "10.1038/s41598-020-72998-1",
+      "publisher_url": "https://www.nature.com/articles/s41598-020-72998-1",
+      "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7522998/",
+      "reported": {
+        "studies_k": 113,
+        "sample_n": 185787,
+        "estimate_percent": 28.4,
+        "ci95_lower_percent": 25.7,
+        "ci95_upper_percent": 31.2
+      },
+      "use_note": "University-only review, separate scope and study set. Context citation only; do not compare its estimate with another review as a temporal trend. Exact survey year span/cutoff not extracted for this task."
+    },
+    {
+      "citation": "Lei XY, Xiao LM, Liu YN, Li YM. Prevalence of Depression among Chinese University Students: A Meta-Analysis. PLoS ONE. 2016;11(4):e0153454.",
+      "doi": "10.1371/journal.pone.0153454",
+      "publisher_url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0153454",
+      "pmc_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4829172/",
+      "reported": {
+        "studies_k": 39,
+        "sample_n": 32694,
+        "estimate_percent": 23.8,
+        "ci95_lower_percent": 19.9,
+        "ci95_upper_percent": 28.5,
+        "study_year_span": "1997-2015"
+      },
+      "use_note": "University-only review; the source presents scale-screened 'depression' estimates. Context citation only; do not compare its estimate with another review as a temporal trend. Exact cutoff harmonization not established here."
+    }
+  ],
+  "evidence_log": {
+    "publisher_article_sections": [
+      "Abstract",
+      "Methods: Study criteria, Data extraction, Statistical analysis",
+      "Results: Study characteristics, Subgroup analyses and meta-regression",
+      "Quality assessment and publication bias",
+      "Table 1"
+    ],
+    "main_article_table": "Table 1: subgroup, category, studies, sample size, proportion [95% CI], I2 and subgroup test",
+    "supplementary_table": "Additional file 4, Table S2: province/municipality, Studies, Sample, Proportion [95%CI], I2",
+    "key_limits": [
+      "Overall I2=100%, p<0.001",
+      "The same-scale cutoff values were not analyzed as subgroups",
+      "Publication bias Egger z=-9.17, p<0.01",
+      "Only 8/439 studies clearly described non-responders",
+      "Authors report 141/439 (32.1%) lacked confidence intervals or subgroup details",
+      "One review’s subgroup results are not a census or representative local surveillance estimate",
+      "Abstract prose appears to assign k=2 to Qinghai and k=1 to Tibet by order; Supplementary Table S2 instead reports Qinghai k=1 and Tibet k=2. The structured geographic dataset follows Table S2 and preserves this source discrepancy for review."
+    ]
+  }
+}

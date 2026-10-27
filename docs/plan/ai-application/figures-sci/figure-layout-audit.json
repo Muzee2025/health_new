@@ -1,0 +1,283 @@
+{
+  "figures": 13,
+  "audits": [
+    {
+      "figure": "fig01-youth",
+      "issues": []
+    },
+    {
+      "figure": "fig02-pressure",
+      "issues": []
+    },
+    {
+      "figure": "fig03-education",
+      "issues": []
+    },
+    {
+      "figure": "fig04-procurement",
+      "issues": []
+    },
+    {
+      "figure": "fig05-mindmap",
+      "issues": []
+    },
+    {
+      "figure": "fig06-architecture",
+      "issues": []
+    },
+    {
+      "figure": "fig07-ai-workflow",
+      "issues": []
+    },
+    {
+      "figure": "fig09-service",
+      "issues": []
+    },
+    {
+      "figure": "fig10-regional-college",
+      "issues": []
+    },
+    {
+      "figure": "fig11-hubei-neighbours",
+      "issues": []
+    },
+    {
+      "figure": "fig12-literature-stage",
+      "issues": []
+    },
+    {
+      "figure": "fig13-literature-regions",
+      "issues": []
+    },
+    {
+      "figure": "fig14-education-lorenz",
+      "issues": []
+    }
+  ],
+  "files": [
+    {
+      "file": "fig01-youth.svg",
+      "bytes": 16388,
+      "format": "svg"
+    },
+    {
+      "file": "fig01-youth.pdf",
+      "bytes": 34935,
+      "format": "pdf"
+    },
+    {
+      "file": "fig01-youth.png",
+      "bytes": 74535,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig02-pressure.svg",
+      "bytes": 9842,
+      "format": "svg"
+    },
+    {
+      "file": "fig02-pressure.pdf",
+      "bytes": 27280,
+      "format": "pdf"
+    },
+    {
+      "file": "fig02-pressure.png",
+      "bytes": 54951,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig03-education.svg",
+      "bytes": 9524,
+      "format": "svg"
+    },
+    {
+      "file": "fig03-education.pdf",
+      "bytes": 24367,
+      "format": "pdf"
+    },
+    {
+      "file": "fig03-education.png",
+      "bytes": 47071,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig04-procurement.svg",
+      "bytes": 13715,
+      "format": "svg"
+    },
+    {
+      "file": "fig04-procurement.pdf",
+      "bytes": 37622,
+      "format": "pdf"
+    },
+    {
+      "file": "fig04-procurement.png",
+      "bytes": 71392,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig05-mindmap.svg",
+      "bytes": 4930,
+      "format": "svg"
+    },
+    {
+      "file": "fig05-mindmap.pdf",
+      "bytes": 17703,
+      "format": "pdf"
+    },
+    {
+      "file": "fig05-mindmap.png",
+      "bytes": 74857,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig06-architecture.svg",
+      "bytes": 5093,
+      "format": "svg"
+    },
+    {
+      "file": "fig06-architecture.pdf",
+      "bytes": 23004,
+      "format": "pdf"
+    },
+    {
+      "file": "fig06-architecture.png",
+      "bytes": 89938,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig07-ai-workflow.svg",
+      "bytes": 8345,
+      "format": "svg"
+    },
+    {
+      "file": "fig07-ai-workflow.pdf",
+      "bytes": 23246,
+      "format": "pdf"
+    },
+    {
+      "file": "fig07-ai-workflow.png",
+      "bytes": 104134,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig09-service.svg",
+      "bytes": 8055,
+      "format": "svg"
+    },
+    {
+      "file": "fig09-service.pdf",
+      "bytes": 23606,
+      "format": "pdf"
+    },
+    {
+      "file": "fig09-service.png",
+      "bytes": 46169,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig10-regional-college.svg",
+      "bytes": 18335,
+      "format": "svg"
+    },
+    {
+      "file": "fig10-regional-college.pdf",
+      "bytes": 27856,
+      "format": "pdf"
+    },
+    {
+      "file": "fig10-regional-college.png",
+      "bytes": 86490,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig11-hubei-neighbours.svg",
+      "bytes": 28539,
+      "format": "svg"
+    },
+    {
+      "file": "fig11-hubei-neighbours.pdf",
+      "bytes": 34915,
+      "format": "pdf"
+    },
+    {
+      "file": "fig11-hubei-neighbours.png",
+      "bytes": 84017,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig12-literature-stage.svg",
+      "bytes": 11959,
+      "format": "svg"
+    },
+    {
+      "file": "fig12-literature-stage.pdf",
+      "bytes": 26808,
+      "format": "pdf"
+    },
+    {
+      "file": "fig12-literature-stage.png",
+      "bytes": 48171,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig13-literature-regions.svg",
+      "bytes": 57961,
+      "format": "svg"
+    },
+    {
+      "file": "fig13-literature-regions.pdf",
+      "bytes": 49999,
+      "format": "pdf"
+    },
+    {
+      "file": "fig13-literature-regions.png",
+      "bytes": 154050,
+      "format": "png",
+      "mode": "indexed-256"
+    },
+    {
+      "file": "fig14-education-lorenz.svg",
+      "bytes": 20022,
+      "format": "svg"
+    },
+    {
+      "file": "fig14-education-lorenz.pdf",
+      "bytes": 26707,
+      "format": "pdf"
+    },
+    {
+      "file": "fig14-education-lorenz.png",
+      "bytes": 112744,
+      "format": "png",
+      "mode": "indexed-256"
+    }
+  ],
+  "png_total_bytes": 1048519,
+  "all_layout_audits_clear": true,
+  "target_width_mm": 145,
+  "dpi_png": 600,
+  "png_palette": "indexed color, up to 256 colors",
+  "max_file_bytes": 2097152,
+  "font_policy": [
+    "Arial",
+    "SimSun"
+  ],
+  "source_data": {
+    "chart": "docs/plan/ai-application/chart-data.csv",
+    "regional": "docs/plan/ai-application/revision-20261027/regional-education-2024.csv",
+    "literature": "docs/plan/ai-application/sci-revision-20261027/literature-data.json",
+    "palette": "src/styles/tokens.css"
+  }
+}

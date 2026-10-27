@@ -1,0 +1,426 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "status": "rendered-review",
+  "updated": "2026-10-27",
+  "figures": [
+    {
+      "number": 1,
+      "id": "fig01-youth",
+      "caption_zh": "青少年筛查风险组的上学意愿与自陈学习行为",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "轻度与高风险组经常或每天不想上学的比例",
+          "y_unit": "%"
+        },
+        {
+          "panel": "b",
+          "meaning": "无风险与高风险组自陈不做/抄作业及考试作弊比例",
+          "y_unit": "%"
+        }
+      ],
+      "units": "%",
+      "chart_type": "分组柱状图（并列）",
+      "grayscale_readability": "绿色与紫色明度不同；面板b另以斜线纹理编码高风险组。",
+      "external_caption_notes": "仅绘制报道的精确百分比；<5%的无风险组不画柱、不推算点值。相关性比较，不作诊断或因果解释。",
+      "size_in": [
+        5.7087,
+        2.65
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig01-youth.svg",
+        "pdf": "../figures-sci/fig01-youth.pdf",
+        "png": "../figures-sci/fig01-youth.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "chart-data.csv"
+      ]
+    },
+    {
+      "number": 2,
+      "id": "fig02-pressure",
+      "caption_zh": "大学生对学业竞争的感知",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "四项学业竞争感知题项的报告比例",
+          "x_unit": "%"
+        }
+      ],
+      "units": "%",
+      "chart_type": "水平柱状图",
+      "grayscale_readability": "单色柱配合数值标签，灰度打印仍可比较柱长。",
+      "external_caption_notes": "四项为不同问项，不相加；不是焦虑或抑郁症状/诊断率。",
+      "size_in": [
+        5.7087,
+        2.35
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig02-pressure.svg",
+        "pdf": "../figures-sci/fig02-pressure.pdf",
+        "png": "../figures-sci/fig02-pressure.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "chart-data.csv"
+      ]
+    },
+    {
+      "number": 3,
+      "id": "fig03-education",
+      "caption_zh": "全国普通本专科、普通高中及初中在校生规模",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "三个教育学段报告在校生总量",
+          "x_unit": "万人"
+        }
+      ],
+      "units": "万人",
+      "chart_type": "水平柱状图",
+      "grayscale_readability": "三种色相与直接数值标签共同区分学段。",
+      "external_caption_notes": "按教育统计原学段口径；没有报告置信区间，不添加区间。",
+      "size_in": [
+        5.7087,
+        2.2
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig03-education.svg",
+        "pdf": "../figures-sci/fig03-education.pdf",
+        "png": "../figures-sci/fig03-education.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "chart-data.csv"
+      ]
+    },
+    {
+      "number": 4,
+      "id": "fig04-procurement",
+      "caption_zh": "公开采购案例的标的金额与交付范围",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "高校单项软件与综合系统公告金额",
+          "x_unit": "万元"
+        },
+        {
+          "panel": "b",
+          "meaning": "龙泉驿测评及干预分包金额与成都区域服务金额",
+          "x_unit": "万元"
+        }
+      ],
+      "units": "万元",
+      "chart_type": "分面水平条形图；区域测评/干预采用堆叠",
+      "grayscale_readability": "面板b使用色相和干预斜线纹理；各金额均有数值标签。",
+      "external_caption_notes": "四项采购的标的和服务周期不同，不计算均价，不代表本项目报价。",
+      "size_in": [
+        5.7087,
+        2.55
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig04-procurement.svg",
+        "pdf": "../figures-sci/fig04-procurement.pdf",
+        "png": "../figures-sci/fig04-procurement.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "chart-data.csv"
+      ]
+    },
+    {
+      "number": 5,
+      "id": "fig05-mindmap",
+      "caption_zh": "AI+校园心理测评与持续支持逻辑",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "由左上经右上、右下到左下的四步工作顺序"
+        }
+      ],
+      "units": "不适用",
+      "chart_type": "四区顺序逻辑图",
+      "grayscale_readability": "细线方框与顺序箭头；不依赖颜色识别方向。",
+      "external_caption_notes": "概念框描述项目构想，不代表功能已经实现或效果已经验证。",
+      "size_in": [
+        5.7087,
+        2.95
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig05-mindmap.svg",
+        "pdf": "../figures-sci/fig05-mindmap.pdf",
+        "png": "../figures-sci/fig05-mindmap.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "Original project concept and current engineering records"
+      ]
+    },
+    {
+      "number": 6,
+      "id": "fig06-architecture",
+      "caption_zh": "系统业务、数据与拟增强AI模块的层级关系",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "既有原型层与拟增强/可选能力的边界"
+        }
+      ],
+      "units": "不适用",
+      "chart_type": "分层架构示意图",
+      "grayscale_readability": "实线框表示既有原型范围，虚线框表示拟增强或可选能力；文字和线型双重编码。",
+      "external_caption_notes": "图中技术状态依据当前仓库记录；虚线能力未表示已部署或已完成模型评测。",
+      "size_in": [
+        5.7087,
+        2.8
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig06-architecture.svg",
+        "pdf": "../figures-sci/fig06-architecture.pdf",
+        "png": "../figures-sci/fig06-architecture.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "Original project concept and current engineering records"
+      ]
+    },
+    {
+      "number": 7,
+      "id": "fig07-ai-workflow",
+      "caption_zh": "受控AI分析与大模型协作的人机工作流",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "授权、数据检查、模型校验和人工支持的顺序"
+        }
+      ],
+      "units": "不适用",
+      "chart_type": "流程图",
+      "grayscale_readability": "连续主流程用实线箭头；异常回退用虚线。",
+      "external_caption_notes": "拟建设的人机协作流程；模型输出不自动形成诊断或现实处置。",
+      "size_in": [
+        5.7087,
+        2.8
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig07-ai-workflow.svg",
+        "pdf": "../figures-sci/fig07-ai-workflow.pdf",
+        "png": "../figures-sci/fig07-ai-workflow.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "Original project concept and current engineering records"
+      ]
+    },
+    {
+      "number": 9,
+      "id": "fig09-service",
+      "caption_zh": "大学生对校内免费心理咨询的知晓与使用报告",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "知晓学校提供免费咨询的报告比例",
+          "x_unit": "%"
+        },
+        {
+          "panel": "b",
+          "meaning": "曾使用学校免费咨询的报告比例",
+          "x_unit": "%"
+        }
+      ],
+      "units": "%",
+      "chart_type": "水平柱状图（两项独立报告）",
+      "grayscale_readability": "两条柱采用不同明度的紫/绿；直接标注数值。",
+      "external_caption_notes": "两项问项分别报告；不把知晓率转换为使用率，也不推断服务质量或总体使用分布。",
+      "size_in": [
+        5.7087,
+        1.9
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig09-service.svg",
+        "pdf": "../figures-sci/fig09-service.pdf",
+        "png": "../figures-sci/fig09-service.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "chart-data.csv"
+      ]
+    },
+    {
+      "number": 10,
+      "id": "fig10-regional-college",
+      "caption_zh": "2024年普通本专科在校生规模居前的12个地区",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "31个省级地区中普通本科与职业本专科在校生合计前12位",
+          "x_unit": "万人"
+        }
+      ],
+      "units": "万人",
+      "chart_type": "按值排序的水平条形图",
+      "grayscale_readability": "首位用灰绿色强调，其余同色；标签与排序支持灰度阅读。",
+      "external_caption_notes": "合计由普通本科在校生与职业本专科在校生相加；只显示前12位。",
+      "size_in": [
+        5.7087,
+        3.55
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig10-regional-college.svg",
+        "pdf": "../figures-sci/fig10-regional-college.pdf",
+        "png": "../figures-sci/fig10-regional-college.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "revision-20261027/regional-education-2024.csv"
+      ]
+    },
+    {
+      "number": 11,
+      "id": "fig11-hubei-neighbours",
+      "caption_zh": "湖北及相邻地区2024年学生规模对照",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "普通本专科在校生",
+          "x_unit": "万人"
+        },
+        {
+          "panel": "b",
+          "meaning": "普通高中在校生",
+          "x_unit": "万人"
+        },
+        {
+          "panel": "c",
+          "meaning": "初中在校生",
+          "x_unit": "万人"
+        }
+      ],
+      "units": "万人",
+      "chart_type": "三面板分组水平条形图",
+      "grayscale_readability": "各教育学段使用相同横轴范围与刻度，不同token色相和直接数值标签。",
+      "external_caption_notes": "地区包含湖北与六个相邻省级地区；各面板量纲和横轴范围相同。",
+      "size_in": [
+        5.7087,
+        3.15
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig11-hubei-neighbours.svg",
+        "pdf": "../figures-sci/fig11-hubei-neighbours.pdf",
+        "png": "../figures-sci/fig11-hubei-neighbours.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "revision-20261027/regional-education-2024.csv"
+      ]
+    },
+    {
+      "number": 12,
+      "id": "fig12-literature-stage",
+      "caption_zh": "中国儿童青少年抑郁症状筛查阳性率的学段亚组Meta分析结果",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "同一系统综述按教育阶段报告的合并比例与原报95%置信区间；右侧k为研究数",
+          "x_unit": "%"
+        }
+      ],
+      "units": "%（95%置信区间）",
+      "chart_type": "水平森林图",
+      "grayscale_readability": "统一实心圆点、细置信区间线与端帽；灰度下依靠位置和形状可辨。",
+      "external_caption_notes": "来源：Zhou等2024年系统综述与Meta分析。k为纳入研究数；学段样本与研究可重叠，不将各组n/k相加。筛查阳性不是临床诊断率。",
+      "size_in": [
+        5.7087,
+        2.35
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig12-literature-stage.svg",
+        "pdf": "../figures-sci/fig12-literature-stage.pdf",
+        "png": "../figures-sci/fig12-literature-stage.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "sci-revision-20261027/literature-data.json"
+      ]
+    },
+    {
+      "number": 13,
+      "id": "fig13-literature-regions",
+      "caption_zh": "中国大陆省级地区儿童青少年抑郁症状筛查合并比例",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "依2024年教育统计顺序排列的前16个大陆省级地区；空心点表示k=1",
+          "x_unit": "%（95%置信区间）"
+        },
+        {
+          "panel": "b",
+          "meaning": "同序排列的其余15个大陆省级地区；空心点表示k=1",
+          "x_unit": "%（95%置信区间）"
+        }
+      ],
+      "units": "%（95%置信区间）；右侧k为研究数",
+      "chart_type": "双面板水平森林图（31省级地区；16/15分面）",
+      "grayscale_readability": "x轴两面板共用0–100%范围；k=1以空心圆表示并在侧栏标研究数。",
+      "external_caption_notes": "来源：同一系统综述补充表S2；仅含大陆31省级地区，按教育统计CSV原序而非效应值排序。该图汇总纳入研究，不是省级人口风险地图；研究/样本可重叠。",
+      "size_in": [
+        5.7087,
+        4.65
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig13-literature-regions.svg",
+        "pdf": "../figures-sci/fig13-literature-regions.pdf",
+        "png": "../figures-sci/fig13-literature-regions.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "sci-revision-20261027/literature-data.json"
+      ]
+    },
+    {
+      "number": 14,
+      "id": "fig14-education-lorenz",
+      "caption_zh": "2024年31个省级地区分学段在校生规模的Lorenz曲线",
+      "panels": [
+        {
+          "panel": "a",
+          "meaning": "各省级地区按本学段在校生数升序排列后的累计地区份额与累计在校生份额",
+          "x_unit": "%",
+          "y_unit": "%"
+        }
+      ],
+      "units": "%（横轴为省级地区份额；纵轴为在校生份额）",
+      "chart_type": "Lorenz曲线（本专科、普通高中、初中）",
+      "grayscale_readability": "灰色虚线为平等线；三学段使用不同token色相、线型和标记形状。",
+      "external_caption_notes": "每个省级地区在横轴等权；每条曲线按对应学段地区值独立排序。该图描述31地区分布，不表示个体或校级差异。",
+      "size_in": [
+        5.7087,
+        3.25
+      ],
+      "outputs": {
+        "svg": "../figures-sci/fig14-education-lorenz.svg",
+        "pdf": "../figures-sci/fig14-education-lorenz.pdf",
+        "png": "../figures-sci/fig14-education-lorenz.png"
+      },
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical facts attributed to cited primary sources; publisher figures not copied",
+      "sourceFiles": [
+        "revision-20261027/regional-education-2024.csv"
+      ]
+    }
+  ]
+}

@@ -1,8 +1,11 @@
 """Create a self-contained, plain HTML review copy of the application body."""
-import base64, html, re
+import argparse, base64, html, re
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--prefer-svg',action='store_true',help='Embed vector artwork when available')
+args=parser.parse_args()
 source=ROOT/'docs/plan/心域智链申报计划书.md'
 lines=source.read_text(encoding='utf-8').splitlines()
 
@@ -33,8 +36,12 @@ while i<len(lines):
     image=re.fullmatch(r'!\[([^\]]*)\]\(([^)]+)\)',line)
     if image:
         file=(source.parent/image[2]).resolve();file.relative_to(ROOT)
+        if args.prefer_svg and file.with_suffix('.svg').exists():file=file.with_suffix('.svg')
         data=base64.b64encode(file.read_bytes()).decode()
-        blocks.append(f'<img src="data:image/png;base64,{data}" alt="{html.escape(image[1])}">');continue
+        mime='image/svg+xml' if file.suffix=='.svg' else 'image/png'
+        blocks.append(f'<img src="data:{mime};base64,{data}" alt="{html.escape(image[1])}">');continue
+    if line.startswith('$$') and line.endswith('$$'):
+        blocks.append(f'<p class="equation">{inline(line[2:-2])}</p>');continue
     cls='caption' if re.match(r'^[图表]\d+\s',line) else 'source' if line.startswith(('来源：','项目方案示意')) else ''
     blocks.append(f'<p class="{cls}">{inline(line)}</p>')
 
@@ -46,6 +53,7 @@ h2{font-size:23px;font-weight:600;margin:45px 0 22px;text-align:center;scroll-ma
 p{font-size:16px;line-height:1.95;margin:13px 0;overflow-wrap:anywhere}nav{font-size:14px;text-align:center;line-height:2.2;margin:0 0 38px;color:#56625C}
 a{color:inherit;text-underline-offset:3px;overflow-wrap:anywhere}img{display:block;max-width:100%;height:auto;margin:20px auto 10px}
 .caption{text-align:center;font-size:14px;margin:20px 0 12px}.source{font-size:13px;color:#56625C;line-height:1.8;margin-bottom:28px}
+.equation{text-align:center;font-family:"Cambria Math","Times New Roman",serif;line-height:1.7;margin:20px 0}
 .table-wrap{overflow-x:auto;margin:16px 0 26px}table{border-collapse:collapse;width:100%;border-top:2px solid #29332F;border-bottom:2px solid #29332F;font-size:14px;line-height:1.7}
 thead{border-bottom:1px solid #29332F}th,td{padding:13px 12px;text-align:center;vertical-align:middle;border:0}th{font-weight:600}
 .review{font-size:13px;color:#56625C;text-align:center;margin:0 0 18px}
