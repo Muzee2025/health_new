@@ -1,0 +1,378 @@
+{
+  "year": 2024,
+  "regions": 31,
+  "sources": {
+    "bachelor": {
+      "title": "高等教育普通本科学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431199.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431199.html",
+      "sha256": "0e8439b80ef2304ec8ecd274d1ada4ae1390e2282741e44642d4b5a80b1a35ea",
+      "valueColumnIndex": 4,
+      "nationalTotal": 20859138,
+      "regions": 31
+    },
+    "vocational": {
+      "title": "高等教育职业本专科学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431198.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431198.html",
+      "sha256": "0666d62b1c47ef4e6a4032ce0116660de77b9735a7c323f65e0ebea6432708a2",
+      "valueColumnIndex": 8,
+      "nationalTotal": 18053430,
+      "regions": 31
+    },
+    "schools": {
+      "title": "高等教育学校（机构）数",
+      "year": 2024,
+      "unit": "所",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431201.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431201.html",
+      "sha256": "d60821141357c8bd3e08b8c8b4b766d3f64a9a1309f30ee8cd51aa597de501ac",
+      "valueColumnIndex": 0,
+      "nationalTotal": 2870,
+      "regions": 31
+    },
+    "senior": {
+      "title": "普通高中教育学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431390.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431390.html",
+      "sha256": "73b2b1a6f0ab31693118a2f96b1d513d40e82896593d791cc18a07c907bd88fd",
+      "valueColumnIndex": 2,
+      "nationalTotal": 29222814,
+      "regions": 31
+    },
+    "junior": {
+      "title": "初中教育学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431404.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431404.html",
+      "sha256": "3d5f6804c11182f72988f7791ba46e9de7e8fdfff8de9a66d12a82cb0ae4851a",
+      "valueColumnIndex": 2,
+      "nationalTotal": 53861621,
+      "regions": 31
+    }
+  },
+  "records": [
+    {
+      "region": "北京",
+      "year": 2024,
+      "regular_vocational_heis": 92,
+      "academic_bachelor_students": 582387,
+      "vocational_normal_short_students": 83025,
+      "normal_vocational_undergraduates": 665412,
+      "regular_senior_students": 236345,
+      "junior_students": 411444
+    },
+    {
+      "region": "天津",
+      "year": 2024,
+      "regular_vocational_heis": 56,
+      "academic_bachelor_students": 383836,
+      "vocational_normal_short_students": 221524,
+      "normal_vocational_undergraduates": 605360,
+      "regular_senior_students": 240225,
+      "junior_students": 418314
+    },
+    {
+      "region": "河北",
+      "year": 2024,
+      "regular_vocational_heis": 129,
+      "academic_bachelor_students": 1007071,
+      "vocational_normal_short_students": 895239,
+      "normal_vocational_undergraduates": 1902310,
+      "regular_senior_students": 1905648,
+      "junior_students": 3434615
+    },
+    {
+      "region": "山西",
+      "year": 2024,
+      "regular_vocational_heis": 83,
+      "academic_bachelor_students": 553472,
+      "vocational_normal_short_students": 413983,
+      "normal_vocational_undergraduates": 967455,
+      "regular_senior_students": 698157,
+      "junior_students": 1143831
+    },
+    {
+      "region": "内蒙古",
+      "year": 2024,
+      "regular_vocational_heis": 54,
+      "academic_bachelor_students": 298490,
+      "vocational_normal_short_students": 254192,
+      "normal_vocational_undergraduates": 552682,
+      "regular_senior_students": 437358,
+      "junior_students": 677149
+    },
+    {
+      "region": "辽宁",
+      "year": 2024,
+      "regular_vocational_heis": 114,
+      "academic_bachelor_students": 787129,
+      "vocational_normal_short_students": 400049,
+      "normal_vocational_undergraduates": 1187178,
+      "regular_senior_students": 629098,
+      "junior_students": 953399
+    },
+    {
+      "region": "吉林",
+      "year": 2024,
+      "regular_vocational_heis": 67,
+      "academic_bachelor_students": 551533,
+      "vocational_normal_short_students": 285578,
+      "normal_vocational_undergraduates": 837111,
+      "regular_senior_students": 434093,
+      "junior_students": 589528
+    },
+    {
+      "region": "黑龙江",
+      "year": 2024,
+      "regular_vocational_heis": 78,
+      "academic_bachelor_students": 610972,
+      "vocational_normal_short_students": 338057,
+      "normal_vocational_undergraduates": 949029,
+      "regular_senior_students": 531173,
+      "junior_students": 769059
+    },
+    {
+      "region": "上海",
+      "year": 2024,
+      "regular_vocational_heis": 69,
+      "academic_bachelor_students": 430622,
+      "vocational_normal_short_students": 156691,
+      "normal_vocational_undergraduates": 587313,
+      "regular_senior_students": 224186,
+      "junior_students": 615311
+    },
+    {
+      "region": "江苏",
+      "year": 2024,
+      "regular_vocational_heis": 172,
+      "academic_bachelor_students": 1315065,
+      "vocational_normal_short_students": 1068288,
+      "normal_vocational_undergraduates": 2383353,
+      "regular_senior_students": 1532080,
+      "junior_students": 2878612
+    },
+    {
+      "region": "浙江",
+      "year": 2024,
+      "regular_vocational_heis": 109,
+      "academic_bachelor_students": 750983,
+      "vocational_normal_short_students": 567164,
+      "normal_vocational_undergraduates": 1318147,
+      "regular_senior_students": 927009,
+      "junior_students": 1828243
+    },
+    {
+      "region": "安徽",
+      "year": 2024,
+      "regular_vocational_heis": 125,
+      "academic_bachelor_students": 808140,
+      "vocational_normal_short_students": 758160,
+      "normal_vocational_undergraduates": 1566300,
+      "regular_senior_students": 1286645,
+      "junior_students": 2361215
+    },
+    {
+      "region": "福建",
+      "year": 2024,
+      "regular_vocational_heis": 88,
+      "academic_bachelor_students": 612357,
+      "vocational_normal_short_students": 556586,
+      "normal_vocational_undergraduates": 1168943,
+      "regular_senior_students": 888608,
+      "junior_students": 1654188
+    },
+    {
+      "region": "江西",
+      "year": 2024,
+      "regular_vocational_heis": 111,
+      "academic_bachelor_students": 771590,
+      "vocational_normal_short_students": 850960,
+      "normal_vocational_undergraduates": 1622550,
+      "regular_senior_students": 1256678,
+      "junior_students": 2072887
+    },
+    {
+      "region": "山东",
+      "year": 2024,
+      "regular_vocational_heis": 161,
+      "academic_bachelor_students": 1289383,
+      "vocational_normal_short_students": 1510975,
+      "normal_vocational_undergraduates": 2800358,
+      "regular_senior_students": 2083055,
+      "junior_students": 4055035
+    },
+    {
+      "region": "河南",
+      "year": 2024,
+      "regular_vocational_heis": 174,
+      "academic_bachelor_students": 1474776,
+      "vocational_normal_short_students": 1621643,
+      "normal_vocational_undergraduates": 3096419,
+      "regular_senior_students": 2743654,
+      "junior_students": 5077253
+    },
+    {
+      "region": "湖北",
+      "year": 2024,
+      "regular_vocational_heis": 133,
+      "academic_bachelor_students": 1057066,
+      "vocational_normal_short_students": 858107,
+      "normal_vocational_undergraduates": 1915173,
+      "regular_senior_students": 1119712,
+      "junior_students": 1930337
+    },
+    {
+      "region": "湖南",
+      "year": 2024,
+      "regular_vocational_heis": 140,
+      "academic_bachelor_students": 961391,
+      "vocational_normal_short_students": 916872,
+      "normal_vocational_undergraduates": 1878263,
+      "regular_senior_students": 1522172,
+      "junior_students": 2753017
+    },
+    {
+      "region": "广东",
+      "year": 2024,
+      "regular_vocational_heis": 165,
+      "academic_bachelor_students": 1398000,
+      "vocational_normal_short_students": 1289595,
+      "normal_vocational_undergraduates": 2687595,
+      "regular_senior_students": 2354564,
+      "junior_students": 5032962
+    },
+    {
+      "region": "广西",
+      "year": 2024,
+      "regular_vocational_heis": 89,
+      "academic_bachelor_students": 679267,
+      "vocational_normal_short_students": 836237,
+      "normal_vocational_undergraduates": 1515504,
+      "regular_senior_students": 1317239,
+      "junior_students": 2543772
+    },
+    {
+      "region": "海南",
+      "year": 2024,
+      "regular_vocational_heis": 26,
+      "academic_bachelor_students": 136272,
+      "vocational_normal_short_students": 151362,
+      "normal_vocational_undergraduates": 287634,
+      "regular_senior_students": 228300,
+      "junior_students": 433287
+    },
+    {
+      "region": "重庆",
+      "year": 2024,
+      "regular_vocational_heis": 73,
+      "academic_bachelor_students": 559297,
+      "vocational_normal_short_students": 568563,
+      "normal_vocational_undergraduates": 1127860,
+      "regular_senior_students": 684043,
+      "junior_students": 1047057
+    },
+    {
+      "region": "四川",
+      "year": 2024,
+      "regular_vocational_heis": 139,
+      "academic_bachelor_students": 1179764,
+      "vocational_normal_short_students": 1087912,
+      "normal_vocational_undergraduates": 2267676,
+      "regular_senior_students": 1526797,
+      "junior_students": 2771618
+    },
+    {
+      "region": "贵州",
+      "year": 2024,
+      "regular_vocational_heis": 80,
+      "academic_bachelor_students": 417319,
+      "vocational_normal_short_students": 493849,
+      "normal_vocational_undergraduates": 911168,
+      "regular_senior_students": 968762,
+      "junior_students": 2023131
+    },
+    {
+      "region": "云南",
+      "year": 2024,
+      "regular_vocational_heis": 91,
+      "academic_bachelor_students": 579448,
+      "vocational_normal_short_students": 570147,
+      "normal_vocational_undergraduates": 1149595,
+      "regular_senior_students": 1060575,
+      "junior_students": 1918151
+    },
+    {
+      "region": "西藏",
+      "year": 2024,
+      "regular_vocational_heis": 7,
+      "academic_bachelor_students": 30994,
+      "vocational_normal_short_students": 12894,
+      "normal_vocational_undergraduates": 43888,
+      "regular_senior_students": 79395,
+      "junior_students": 165340
+    },
+    {
+      "region": "陕西",
+      "year": 2024,
+      "regular_vocational_heis": 97,
+      "academic_bachelor_students": 805593,
+      "vocational_normal_short_students": 518242,
+      "normal_vocational_undergraduates": 1323835,
+      "regular_senior_students": 770432,
+      "junior_students": 1451467
+    },
+    {
+      "region": "甘肃",
+      "year": 2024,
+      "regular_vocational_heis": 50,
+      "academic_bachelor_students": 345948,
+      "vocational_normal_short_students": 322228,
+      "normal_vocational_undergraduates": 668176,
+      "regular_senior_students": 583028,
+      "junior_students": 985609
+    },
+    {
+      "region": "青海",
+      "year": 2024,
+      "regular_vocational_heis": 13,
+      "academic_bachelor_students": 52130,
+      "vocational_normal_short_students": 34458,
+      "normal_vocational_undergraduates": 86588,
+      "regular_senior_students": 134742,
+      "junior_students": 251526
+    },
+    {
+      "region": "宁夏",
+      "year": 2024,
+      "regular_vocational_heis": 22,
+      "academic_bachelor_students": 113135,
+      "vocational_normal_short_students": 70241,
+      "normal_vocational_undergraduates": 183376,
+      "regular_senior_students": 180778,
+      "junior_students": 296471
+    },
+    {
+      "region": "新疆",
+      "year": 2024,
+      "regular_vocational_heis": 63,
+      "academic_bachelor_students": 315708,
+      "vocational_normal_short_students": 340609,
+      "normal_vocational_undergraduates": 656317,
+      "regular_senior_students": 638263,
+      "junior_students": 1317793
+    }
+  ],
+  "definitions": {
+    "normal_vocational_undergraduates": "普通本科在校生＋职业本专科在校生，不含研究生、成人与网络本专科",
+    "regular_vocational_heis": "普通、职业高校，不含成人高等学校",
+    "scope": "31省份，不含港澳台；各学段按教育部表口径。数值是教育规模，非心理问题检出率。"
+  }
+}

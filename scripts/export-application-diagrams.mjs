@@ -25,6 +25,7 @@ try {
    ['申报技术图示.html','#gates','fig08-gates',false]]) {
   await page.goto(pathToFileURL(path.join(root,'docs/design',html)).href);
   await page.evaluate(on=>{document.querySelector('.tools')?.remove();if(on)document.body.classList.add('compact')},compact);
+  await page.evaluate(()=>document.querySelectorAll('.boundary,#architecture>p,#workflow>p,#gates>p').forEach(n=>n.remove()));
   if(compact)await page.addStyleTag({content:'.compact main{padding-top:18px;padding-bottom:12px}.compact header{margin-bottom:20px}.compact .flow{grid-template-rows:170px 50px 170px}.compact .step{padding:14px 18px}.compact .step h2{margin-bottom:10px}.compact .step p{line-height:1.7}.compact .boundary{margin-top:20px}'});
   const png=await page.locator(selector).screenshot({path:path.join(output,stem+'.png')});
   await sharp(png).withMetadata({density:300}).png().toFile(path.join(root,'docs/plan/ai-application/figures',stem+'.png'));

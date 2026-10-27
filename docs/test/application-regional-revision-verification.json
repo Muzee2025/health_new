@@ -1,0 +1,560 @@
+{
+  "updated": "2026-10-27",
+  "status": "revision-structural-checks-passed",
+  "document": "C:\\University\\Code_total\\health_new_muzee2025\\tmp\\application-revision-20261027\\application-r4.docx",
+  "sha256": "cff1ab080a4d33ece42e2052f874418830925fdf2b28d5c8f2f72973d4d937ce",
+  "htmlSha256": "488140b3e51deec5172dbeb4431e822cbe37fb5b6a8520ef1f69eee2259d7406",
+  "pages": 26,
+  "sections": 3,
+  "retainedForms": 3,
+  "formPlaceholders": 42,
+  "bodyTables": 12,
+  "tableChecks": [
+    {
+      "table": 1,
+      "rows": 15,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 2,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 3,
+      "rows": 7,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 4,
+      "rows": 4,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 5,
+      "rows": 6,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 6,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 7,
+      "rows": 4,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 8,
+      "rows": 32,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 9,
+      "rows": 9,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 10,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 11,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 12,
+      "rows": 5,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 13,
+      "rows": 2,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 14,
+      "rows": 8,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    },
+    {
+      "table": 15,
+      "rows": 6,
+      "rules": 3,
+      "horizontal": "center",
+      "vertical": "center"
+    }
+  ],
+  "bodyFigures": 10,
+  "references": 24,
+  "regions": 31,
+  "serviceCases": 8,
+  "appendices": [
+    "A",
+    "B"
+  ],
+  "figureAssets": [
+    {
+      "id": "fig01-youth",
+      "sha256": "5152b5cc2b9bf01ceeec8415f697c97223be8bd51aed7d4eb7d8d0f1baf6b43e",
+      "pixels": [
+        1710,
+        975
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig02-pressure",
+      "sha256": "a546f9ac50b9182e54c6de859991d2ed00cc26e3cf506f8a61240d42e34e82f8",
+      "pixels": [
+        1710,
+        825
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig03-education",
+      "sha256": "a9d7f31c8d38c93bbf87e47b448ad1def51627f1cecce3c45ff68b56bf4d3af7",
+      "pixels": [
+        1710,
+        825
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig04-procurement",
+      "sha256": "44071766cb458b1763758e7a0ca5811c9757bc7f86766632a3630547f4d5dca1",
+      "pixels": [
+        1710,
+        960
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig05-mindmap",
+      "sha256": "81fc99b8468d3bba850d4d6f69e1465fe23ab3cfa306ef503d93a3dd3e51b065",
+      "pixels": [
+        2120,
+        1032
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig06-architecture",
+      "sha256": "e686d349bf082a7df6090834086a47e5d9f0aec016160267157b5004b3f48999",
+      "pixels": [
+        2000,
+        1368
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig07-ai-workflow",
+      "sha256": "3a12b535e06fa8cfe8d43a14c46f63b4e5c4288892d0489d9ecadc9cdf72a8e6",
+      "pixels": [
+        2000,
+        890
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig08-gates",
+      "sha256": "47938be26f18f29fd7bec38168a2e2e6d820191dfe7bcf0589513ad28c39bfb9",
+      "pixels": [
+        2000,
+        536
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig09-service",
+      "sha256": "5f36656ac9f35a353238dc47e7da5d8285c6965a007cd73c5e94d5510a356e1d",
+      "pixels": [
+        1710,
+        825
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig10-regional-college",
+      "sha256": "730179f5900e4bcf2a7a691f575570ef1491a36a6a975e44a97c865969452f15",
+      "pixels": [
+        1710,
+        1260
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "id": "fig11-hubei-neighbours",
+      "sha256": "50940de2f6c6ff486a9893ef20158d9ef7dcde8b57b8030260774b2615d03ad5",
+      "pixels": [
+        1710,
+        1080
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    }
+  ],
+  "scope": "Checks source preservation, native table formatting, data display and appendix placement. Visual and independent reviews recorded separately.",
+  "delivery": "deliverables\\心域智链项目申报材料_图表增强审阅稿.docx",
+  "deliverySha256": "cff1ab080a4d33ece42e2052f874418830925fdf2b28d5c8f2f72973d4d937ce",
+  "browserChecks": [
+    {
+      "width": 1440,
+      "title": "心域智链申报书正文审阅版",
+      "headings": 10,
+      "tables": 12,
+      "images": 10,
+      "imageFailures": 0,
+      "centered": true,
+      "rules": true,
+      "overflow": false,
+      "errors": [],
+      "outside": [],
+      "navigation": true,
+      "appendixNavigation": true,
+      "notesInAppendix": true
+    },
+    {
+      "width": 390,
+      "title": "心域智链申报书正文审阅版",
+      "headings": 10,
+      "tables": 12,
+      "images": 10,
+      "imageFailures": 0,
+      "centered": true,
+      "rules": true,
+      "overflow": false,
+      "errors": [],
+      "outside": [],
+      "navigation": true,
+      "appendixNavigation": true,
+      "notesInAppendix": true
+    }
+  ],
+  "pageVisualReview": [
+    {
+      "page": 1,
+      "sha256": "9529eadeda7d54c93af3e84aa1ce210b8ccc6aac3cc6a6dcafbed0ad6ff9a06e",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-01.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 2,
+      "sha256": "353c6c79efc63e27e066120a439f85bbc4ee4b45d7fd4e1fc93323d079a416e7",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-02.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 3,
+      "sha256": "eff3cf9f72ec9c692db33235839451202e44d369f03ab2d193bbda6d3dec4441",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-03.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 4,
+      "sha256": "6d8df9ad7d3ab8d5a7abf5cf2f826cd5a9ea981c6dfc443f2a62072081abfe11",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-04.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 5,
+      "sha256": "c0478c00c934b6bd1b67750547560413b35453b7d8341159d93e21149b1526b9",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-05.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 6,
+      "sha256": "0cf5e5cf4747412d21788b217e6351abe667a85d7d4c7ba1014a17fe3b0510ee",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-06.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 7,
+      "sha256": "b9492dbc495bd79e927066039b4cc0e1c5b1a6d7c1e4759dba9d3370971e9eb0",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-07.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 8,
+      "sha256": "6ef6094ca81d314e918c7a88b2d6917879e30f277372f74099e8e0bfc66a75bf",
+      "sameAsR3": false,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-08.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 9,
+      "sha256": "66b1ebe1558bea5812977caa0e61c91f8f7fa8a823e9343c327653e0fa6211b4",
+      "sameAsR3": false,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-09.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 10,
+      "sha256": "1b86dfdcfc7a4751c04349754b992b735c72c5253694e2a5f0beafc1483532f9",
+      "sameAsR3": false,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-10.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 11,
+      "sha256": "04bf84a38d707441290a14fafc39a36c1fe5c2bcfd1e37ae99a0899895e0677f",
+      "sameAsR3": false,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-11.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 12,
+      "sha256": "dc38f9e95b7910f3b403d4bc2276757ec81d21101f339be327fbe4fae0f3da6f",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-12.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 13,
+      "sha256": "e05951c35667986007418bf2b9f8827092a9066a184d675f7dafb07be15d70ec",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-13.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 14,
+      "sha256": "9bc91e7105dd6be37cf9e8367e0d49d04a43bb0f49f96d36cdfce426249270df",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-14.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 15,
+      "sha256": "e7c6cc855b5d014bfca65c419e4f600cd42a3aa808b8977e86ccd66db45664b9",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-15.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 16,
+      "sha256": "d223650c2e25cc99aecddc1e9d09ed35890995c749b6be38872de961d5f6d664",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-16.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 17,
+      "sha256": "8009435f3c0cb40afa20c6daa85997f83554696c7f90558eff84d6cca1f59bf5",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-17.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 18,
+      "sha256": "cc5082ae65b0ad474a46fbec49ef7df24e881dea966cea9785c929fe2403e189",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-18.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 19,
+      "sha256": "bda7105fda8812ecf06a75e65281d4036135a05f71fca89cdd54f80e650b1a7c",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-19.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 20,
+      "sha256": "824f93ed2d3ef0ab074db31cf757640e11ee91f32ea75d92736c0d73804aa656",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": true,
+      "file": "proposal-r4-page-20.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "Byte-identical to directly viewed R3 page"
+    },
+    {
+      "page": 21,
+      "sha256": "8482374a314962d95889dadf35c02f8c7139f73b9af655188cb210312265566b",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": false,
+      "file": "proposal-r4-page-21.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 22,
+      "sha256": "8ec2ce2fdc1035bd58340484a16486d4af11c9d6646248cbbe06aa4b9ceb3673",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": false,
+      "file": "proposal-r4-page-22.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 23,
+      "sha256": "2d5bb2573f73083cec603c558c6c607b96ac6810f72b4ec8de5b3414d47b525c",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": false,
+      "file": "proposal-r4-page-23.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 24,
+      "sha256": "8d6c6a669ba7b9b1afa84c0b1a83200b145467fc990b84aef3dcfe1e6687b689",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": false,
+      "file": "proposal-r4-page-24.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 25,
+      "sha256": "7c2cd83e59c4f9ab3a0ed1487db1c0e176c77227812865ecb423f2c9ab2a083a",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": false,
+      "file": "proposal-r4-page-25.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    },
+    {
+      "page": 26,
+      "sha256": "62f00e17fdd5eea4fff777d22d52ac63a98876efeecf41cda0c56ff441c581f2",
+      "sameAsR3": true,
+      "r3PreviouslyViewed": false,
+      "file": "proposal-r4-page-26.png",
+      "reviewedBy": "Lead",
+      "result": "pass",
+      "method": "R4 page directly viewed"
+    }
+  ]
+}

@@ -57,6 +57,61 @@
       "published": "2025-06-20",
       "sample": "2024年3—6月60,782名16—28岁本科生",
       "scope": "作者公开摘要报告两道不同问题；没有交叉表，不计算知晓到使用转化率，也不将其视作互斥分布。"
+    },
+    "regional_bachelor": {
+      "title": "高等教育普通本科学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431199.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431199.html",
+      "sha256": "0e8439b80ef2304ec8ecd274d1ada4ae1390e2282741e44642d4b5a80b1a35ea",
+      "valueColumnIndex": 4,
+      "nationalTotal": 20859138,
+      "regions": 31
+    },
+    "regional_vocational": {
+      "title": "高等教育职业本专科学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431198.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431198.html",
+      "sha256": "0666d62b1c47ef4e6a4032ce0116660de77b9735a7c323f65e0ebea6432708a2",
+      "valueColumnIndex": 8,
+      "nationalTotal": 18053430,
+      "regions": 31
+    },
+    "regional_schools": {
+      "title": "高等教育学校（机构）数",
+      "year": 2024,
+      "unit": "所",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431201.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431201.html",
+      "sha256": "d60821141357c8bd3e08b8c8b4b766d3f64a9a1309f30ee8cd51aa597de501ac",
+      "valueColumnIndex": 0,
+      "nationalTotal": 2870,
+      "regions": 31
+    },
+    "regional_senior": {
+      "title": "普通高中教育学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431390.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431390.html",
+      "sha256": "73b2b1a6f0ab31693118a2f96b1d513d40e82896593d791cc18a07c907bd88fd",
+      "valueColumnIndex": 2,
+      "nationalTotal": 29222814,
+      "regions": 31
+    },
+    "regional_junior": {
+      "title": "初中教育学生数",
+      "year": 2024,
+      "unit": "人",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431404.html",
+      "downloadUrl": "https://hudong.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431404.html",
+      "sha256": "3d5f6804c11182f72988f7791ba46e9de7e8fdfff8de9a66d12a82cb0ae4851a",
+      "valueColumnIndex": 2,
+      "nationalTotal": 53861621,
+      "regions": 31
     }
   },
   "metrics": [
@@ -215,7 +270,7 @@
     {
       "n": 1,
       "id": "fig01-youth",
-      "title": "青少年心理筛查风险与学习状态",
+      "title": "2024年青少年抑郁筛查分组与学习状态",
       "kind": "data",
       "sources": [
         "youth"
@@ -231,7 +286,7 @@
     {
       "n": 2,
       "id": "fig02-pressure",
-      "title": "高校学生的学业竞争压力感知",
+      "title": "2023年大学生学业竞争感知",
       "kind": "data",
       "sources": [
         "pressure"
@@ -263,7 +318,7 @@
     {
       "n": 4,
       "id": "fig04-procurement",
-      "title": "公开采购反映不同交付范围",
+      "title": "2026年四项心理服务采购案例",
       "kind": "data",
       "sources": [
         "telecom",
@@ -353,7 +408,7 @@
     {
       "n": 9,
       "id": "fig09-service",
-      "title": "免费心理咨询服务的知晓与使用",
+      "title": "2024年大学生免费咨询知晓与使用",
       "kind": "data",
       "sources": [
         "service"
@@ -364,6 +419,44 @@
       "visualSource": "src/styles/tokens.css",
       "license": "Original project rendering; underlying facts attributed to listed primary sources",
       "status": "engineering-reviewed",
+      "includeInApplication": true
+    },
+    {
+      "n": 10,
+      "id": "fig10-regional-college",
+      "title": "2024年本专科在校生规模前12位省份",
+      "kind": "data",
+      "sources": [
+        "regional_bachelor",
+        "regional_vocational",
+        "regional_senior",
+        "regional_junior"
+      ],
+      "scope": "普通本科与职业本专科人数合计，按省份排序取前12位，完整31省份见正文表；不含成人和研究生。",
+      "png": "figures/fig10-regional-college.png",
+      "svg": "figures/fig10-regional-college.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical data attributed to Ministry of Education",
+      "status": "source-reviewed",
+      "includeInApplication": true
+    },
+    {
+      "n": 11,
+      "id": "fig11-hubei-neighbours",
+      "title": "2024年湖北及周边六省市在校生规模",
+      "kind": "data",
+      "sources": [
+        "regional_bachelor",
+        "regional_vocational",
+        "regional_senior",
+        "regional_junior"
+      ],
+      "scope": "湖北、河南、安徽、江西、湖南、重庆、陕西；三个学段同年、同单位并使用相同横轴范围。",
+      "png": "figures/fig11-hubei-neighbours.png",
+      "svg": "figures/fig11-hubei-neighbours.svg",
+      "visualSource": "src/styles/tokens.css",
+      "license": "Original project rendering; numerical data attributed to Ministry of Education",
+      "status": "source-reviewed",
       "includeInApplication": true
     }
   ]

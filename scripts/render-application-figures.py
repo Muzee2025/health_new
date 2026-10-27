@@ -32,7 +32,7 @@ audits = []
 def save(fig, stem, note):
     entry = next(f for f in manifest['figures'] if f['id'] == stem)
     fig.text(.5, .93, entry['title'], ha='center', fontsize=11, fontweight='bold')
-    fig.text(.5, .025, note, ha='center', fontsize=7.7)
+    # Full source/scope notes belong in the report appendix.
     audits.append({'id':stem, 'issues':[list(i) for i in audit_layout(fig)]})
     export_figure(fig, str(DATA / 'figures' / stem), formats=['png','svg'], dpi=300,
                   size_inches=tuple(fig.get_size_inches()), tight=False, grayscale_preview=False)
@@ -59,7 +59,7 @@ vals = [values[k] for k in ['轻度风险组','高风险组']]
 ax[0].bar(['轻度风险','高风险'], vals, color=[colors['sage'],colors['purple']])
 for i, v in enumerate(vals): ax[0].text(i, v+1, f'{v:.1f}%', ha='center', fontsize=9)
 ax[0].set(ylim=(0,55), ylabel='样本内比例（%）', title='经常或每天不想上学')
-ax[0].text(.5, -.22, '无风险组：<5%（精确值未报告）', transform=ax[0].transAxes, ha='center', fontsize=8)
+ax[0].text(.5, -.22, '无抑郁风险组：<5%', transform=ax[0].transAxes, ha='center', fontsize=8)
 for offset, risk, shade in [(-.17,'无风险',colors['sage']),(.17,'高风险',colors['purple'])]:
     vals = [values[risk+'组'+k] for k in ['不做或抄作业','考试作弊']]
     positions = [offset, 1+offset]

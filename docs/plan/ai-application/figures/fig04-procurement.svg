@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-27T08:08:00.341413</dc:date>
+    <dc:date>2026-10-27T10:00:46.013146</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -43,7 +43,7 @@ L 114.184006 59.170909
 L 114.184006 85.003636
 L 94.392 85.003636
 z
-" clip-path="url(#pf5b8d57a4d)" style="fill: #8ba696"/>
+" clip-path="url(#p6c9af2f29a)" style="fill: #8ba696"/>
    </g>
    <g id="patch_4">
     <path d="M 94.392 110.836364
@@ -51,18 +51,18 @@ L 172.041545 110.836364
 L 172.041545 136.669091
 L 94.392 136.669091
 z
-" clip-path="url(#pf5b8d57a4d)" style="fill: #78558f"/>
+" clip-path="url(#p6c9af2f29a)" style="fill: #78558f"/>
    </g>
    <g id="matplotlib.axis_1">
     <g id="xtick_1">
      <g id="line2d_1">
       <defs>
-       <path id="m520a72e781" d="M 0 0
+       <path id="m08a8749882" d="M 0 0
 L 0 3.5
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#m520a72e781" x="94.392" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m08a8749882" x="94.392" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_1">
@@ -72,7 +72,7 @@ L 0 3.5
     <g id="xtick_2">
      <g id="line2d_2">
       <g>
-       <use xlink:href="#m520a72e781" x="128.902909" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m08a8749882" x="128.902909" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_2">
@@ -82,7 +82,7 @@ L 0 3.5
     <g id="xtick_3">
      <g id="line2d_3">
       <g>
-       <use xlink:href="#m520a72e781" x="163.413818" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m08a8749882" x="163.413818" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_3">
@@ -97,12 +97,12 @@ L 0 3.5
     <g id="ytick_1">
      <g id="line2d_4">
       <defs>
-       <path id="m1249255ad1" d="M 0 0
+       <path id="m709d64cc16" d="M 0 0
 L -3.5 0
 " style="stroke: #000000; stroke-width: 0.8"/>
       </defs>
       <g>
-       <use xlink:href="#m1249255ad1" x="94.392" y="72.087273" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m709d64cc16" x="94.392" y="72.087273" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_5">
@@ -112,7 +112,7 @@ L -3.5 0
     <g id="ytick_2">
      <g id="line2d_5">
       <g>
-       <use xlink:href="#m1249255ad1" x="94.392" y="123.752727" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m709d64cc16" x="94.392" y="123.752727" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_6">
@@ -155,7 +155,7 @@ L 336.771117 59.170909
 L 336.771117 85.003636
 L 303.183 85.003636
 z
-" clip-path="url(#p001b5db2d0)" style="fill: #78558f"/>
+" clip-path="url(#p85930391b2)" style="fill: #78558f"/>
    </g>
    <g id="patch_9">
     <path d="M 303.183 110.836364
@@ -163,7 +163,7 @@ L 382.820674 110.836364
 L 382.820674 136.669091
 L 303.183 136.669091
 z
-" clip-path="url(#p001b5db2d0)" style="fill: #8ba696"/>
+" clip-path="url(#p85930391b2)" style="fill: #8ba696"/>
    </g>
    <g id="patch_10">
     <path d="M 336.771117 59.170909
@@ -171,13 +171,13 @@ L 357.072535 59.170909
 L 357.072535 85.003636
 L 336.771117 85.003636
 z
-" clip-path="url(#p001b5db2d0)" style="fill: url(#h9db1a57e53)"/>
+" clip-path="url(#p85930391b2)" style="fill: url(#hc273c5a3d9)"/>
    </g>
    <g id="matplotlib.axis_3">
     <g id="xtick_4">
      <g id="line2d_6">
       <g>
-       <use xlink:href="#m520a72e781" x="303.183" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m08a8749882" x="303.183" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_10">
@@ -187,7 +187,7 @@ z
     <g id="xtick_5">
      <g id="line2d_7">
       <g>
-       <use xlink:href="#m520a72e781" x="344.446043" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m08a8749882" x="344.446043" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_11">
@@ -197,7 +197,7 @@ z
     <g id="xtick_6">
      <g id="line2d_8">
       <g>
-       <use xlink:href="#m520a72e781" x="385.709087" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m08a8749882" x="385.709087" y="140.544" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_12">
@@ -212,7 +212,7 @@ z
     <g id="ytick_3">
      <g id="line2d_9">
       <g>
-       <use xlink:href="#m1249255ad1" x="303.183" y="72.087273" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m709d64cc16" x="303.183" y="72.087273" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_14">
@@ -222,7 +222,7 @@ z
     <g id="ytick_4">
      <g id="line2d_10">
       <g>
-       <use xlink:href="#m1249255ad1" x="303.183" y="123.752727" style="stroke: #000000; stroke-width: 0.8"/>
+       <use xlink:href="#m709d64cc16" x="303.183" y="123.752727" style="stroke: #000000; stroke-width: 0.8"/>
       </g>
      </g>
      <g id="text_15">
@@ -258,22 +258,19 @@ L 398.088 140.544
    <text style="font-size: 7.8px; font-family: 'Microsoft YaHei'; fill: #29332f" transform="translate(84.3 202.752)">龙泉驿：测评40.7＋干预24.6；成都教科院：区域测评、报告与转介。</text>
   </g>
   <g id="text_21">
-   <text style="font-weight: 700; font-size: 11px; font-family: 'Microsoft YaHei'; text-anchor: middle; fill: #29332f" x="205.2" y="16.128" transform="rotate(-0 205.2 16.128)">公开采购反映不同交付范围</text>
-  </g>
-  <g id="text_22">
-   <text style="font-size: 7.7px; font-family: 'Microsoft YaHei'; text-anchor: middle; fill: #29332f" x="205.2" y="224.64" transform="rotate(-0 205.2 224.64)">四项2026年官方公告；范围与周期不同，不计算均价或本项目报价。</text>
+   <text style="font-weight: 700; font-size: 11px; font-family: 'Microsoft YaHei'; text-anchor: middle; fill: #29332f" x="205.2" y="16.128" transform="rotate(-0 205.2 16.128)">2026年四项心理服务采购案例</text>
   </g>
  </g>
  <defs>
-  <clipPath id="pf5b8d57a4d">
+  <clipPath id="p6c9af2f29a">
    <rect x="94.392" y="55.296" width="94.905" height="85.248"/>
   </clipPath>
-  <clipPath id="p001b5db2d0">
+  <clipPath id="p85930391b2">
    <rect x="303.183" y="55.296" width="94.905" height="85.248"/>
   </clipPath>
  </defs>
  <defs>
-  <pattern id="h9db1a57e53" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72">
+  <pattern id="hc273c5a3d9" patternUnits="userSpaceOnUse" x="0" y="0" width="72" height="72">
    <rect x="0" y="0" width="73" height="73" fill="#e8b185"/>
    <path d="M -36 36
 L 36 -36
