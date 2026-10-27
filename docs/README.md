@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 2.3 ｜ status: 评审 ｜ updated: 2026-10-27
+> owner: A ｜ version: 2.4 ｜ status: 评审 ｜ updated: 2026-10-27
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
@@ -102,7 +102,7 @@
 | [地区与附录修订输入](plan/ai-application/revision-20261027/README.md) | 六章冻结，统稿完成 | 新六章、31地CSV/来源、8地建设资料与正文移动记录 |
 | [地区数据修订验收](test/申报书地区数据修订验收.md) | 本次修订交付 | R4 26页/15居中三线表/10图；[机器摘要](test/application-regional-revision-verification.json)、[独立复核](test/申报书地区比较与文风复核.md) |
 | [科研图与分析输入](plan/ai-application/sci-revision-20261027/README.md) | 科研图审阅 | 数学计算、原文文献数据、13图规范、来源与导出格式 |
-| [科研图与数学分析验收](test/申报书科研图与数学分析验收.md) | S5审阅副本，整稿独立复核未完成 | 32页/19居中三线表/13图/5公式；[机器证据](test/application-sci-verification.json)、[数据方法阶段复核](test/申报书数学分析与科研图复核.md) |
+| [科研图与数学分析验收](test/申报书科研图与数学分析验收.md) | S5整稿独立复核完成 | 32页/19居中三线表/13图/5公式；[机器证据](test/application-sci-verification.json)、[独立复核v1.4](test/申报书数学分析与科研图复核.md)；交付字节保持 |
 | [学生心理测评市场分析](plan/学生心理测评市场分析.md) | 来源核验完成 | 学生样本/学校建设、三学段统计及4项采购；[来源元数据](plan/市场分析来源.json)与[待填字段](plan/申报表字段.json) |
 | [申报材料验收](test/申报材料验收.md) | 上轮格式交付 | 历史申报16页/8三线表及4页大纲，原生Word逐页核对；[机器摘要](test/application-delivery-verification.json)；不替代新增图表版验收 |
 | [申报材料独立复核](test/申报材料独立复核.md) | 独立内容与结构复核 | 亲查来源/成品结构，区分Lead渲染证据；不代替资格及学校批准 |

@@ -1,5 +1,5 @@
 {
-  "status": "structural-checks-passed",
+  "status": "review-copy-checks-passed",
   "updated": "2026-10-27",
   "document": "C:\\University\\Code_total\\health_new_muzee2025\\tmp\\sci-application-20261027\\application-s5.docx",
   "sha256": "285aa4fe96c65a2b71d75f5ad7b24b663c2850b72015161f8f487822112ce764",
@@ -326,7 +326,15 @@
   "educationRegions": 31,
   "literatureRegions": 31,
   "literatureOriginalRegions": 33,
-  "independentReview": "Data/method stages completed; final artifact review unavailable due to agent usage limit. Lead structural and visual checks recorded separately.",
+  "independentReview": {
+    "status": "passed",
+    "report": "docs\\test\\申报书数学分析与科研图复核.md",
+    "reportSha256": "679146a913a9d3293a0eb34d0b72aa5b1e4c22ea67b76847da495f6f6e630cdf",
+    "reviewedDocumentSha256": "285aa4fe96c65a2b71d75f5ad7b24b663c2850b72015161f8f487822112ce764",
+    "reviewedHtmlSha256": "6fe2305486eea1c5e1c664c6684393d82a9179ec04b7844c2dc00e8f77193bf0",
+    "reviewedMarkdownSha256": "9871d8db1e6c85931990320f98bbf7a32e62a5d8feeb9ad4c3f72003e39cc69b",
+    "scope": "Independent content/OOXML/data checks and selected rendered pages; full page/browser evidence by Lead."
+  },
   "delivery": "deliverables\\心域智链项目申报材料_图表增强审阅稿.docx",
   "deliverySha256": "285aa4fe96c65a2b71d75f5ad7b24b663c2850b72015161f8f487822112ce764",
   "browserChecks": [

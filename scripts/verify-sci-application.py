@@ -9,7 +9,7 @@ NS={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main','m':'http
 W='{'+NS['w']+'}'
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def txt(e):return ''.join(e.xpath('.//w:t/text()',namespaces=NS))
-def verify(docx,render,report,delivery=None,browser_report=None,page_review=None):
+def verify(docx,render,report,delivery=None,browser_report=None,page_review=None,review_report=None):
     original=Path('C:/University/Files/附件.docx')
     assert sha(original)=='2531a2432493e4592d0759473fb3add5b6e1770e3c69ef1ee501d31b1943202a'
     with ZipFile(docx) as z,ZipFile(original) as oz:
@@ -93,7 +93,7 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
     result={'status':'structural-checks-passed','updated':'2026-10-27','document':str(docx),'sha256':sha(docx),
       'htmlSha256':sha(html),'pages':rendered['pages'],'sections':3,'bodyTables':16,'bodyFigures':13,'nativeEquations':5,
       'references':27,'tableChecks':table_checks,'figures':figures,'educationRegions':31,'literatureRegions':31,
-      'literatureOriginalRegions':33,'independentReview':'Data/method stages completed; final artifact review unavailable due to agent usage limit. Lead structural and visual checks recorded separately.'}
+      'literatureOriginalRegions':33,'independentReview':{'status':'not-bound-by-this-invocation'}}
     if delivery:
         assert sha(delivery)==sha(docx);result.update(delivery=str(delivery.relative_to(ROOT)),deliverySha256=sha(delivery))
     if browser_report:
@@ -109,10 +109,21 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
             assert c['reviewedBy']=='Lead' and c['result']=='pass'
             assert sha(page_review.parent/c['file'])==c['sha256']
         result['pageVisualReview']=checks
+    if review_report:
+        review=review_report.read_text(encoding='utf-8')
+        mdpath=ROOT/'docs/plan/心域智链申报计划书.md'
+        assert '**S5内容、结构与交付哈希独立复核通过。**' in review
+        assert all(value in review for value in [sha(docx),sha(html),sha(mdpath)])
+        result['independentReview']={'status':'passed','report':str(review_report.resolve().relative_to(ROOT)),
+          'reportSha256':sha(review_report),'reviewedDocumentSha256':sha(docx),
+          'reviewedHtmlSha256':sha(html),'reviewedMarkdownSha256':sha(mdpath),
+          'scope':'Independent content/OOXML/data checks and selected rendered pages; full page/browser evidence by Lead.'}
+        result['status']='review-copy-checks-passed'
     report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({k:result[k] for k in ['status','pages','bodyTables','bodyFigures','nativeEquations']}))
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--docx',required=True,type=Path)
     p.add_argument('--render',required=True,type=Path);p.add_argument('--report',required=True,type=Path);p.add_argument('--delivery',type=Path)
     p.add_argument('--browser-report',type=Path);p.add_argument('--page-review',type=Path)
-    a=p.parse_args();verify(a.docx.resolve(),a.render,a.report,a.delivery.resolve() if a.delivery else None,a.browser_report,a.page_review)
+    p.add_argument('--review-report',type=Path)
+    a=p.parse_args();verify(a.docx.resolve(),a.render,a.report,a.delivery.resolve() if a.delivery else None,a.browser_report,a.page_review,a.review_report)
