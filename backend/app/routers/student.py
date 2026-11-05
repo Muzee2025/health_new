@@ -7,9 +7,10 @@ from .auth import get_current_user
 from app.security import require_roles, get_optional_user
 from app.student_access import assigned_teacher_ids
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import json
 import random
+import os
 import re
 import string
 import hashlib
@@ -22,6 +23,21 @@ from app.services.article_catalog import page_articles
 
 router = APIRouter(prefix="/api/student", tags=["Student"])
 
+
+def _json_object(raw):
+    """Parse legacy JSON defensively; only object payloads are trusted metadata."""
+    try:
+        value = json.loads(raw or "{}")
+    except (TypeError, ValueError):
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def _assessment_provenance(row):
+    detail = _json_object(getattr(row, "result_json", None))
+    provenance = detail.get("provenance")
+    return provenance if isinstance(provenance, dict) else {}
+
 def check_student_role(user: models.User):
     if user.role != "student":
         raise HTTPException(status_code=403, detail="Not enough permissions")
@@ -31,12 +47,13 @@ def check_student_role(user: models.User):
 def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
 
-    latest_test = db.query(models.TestResult).filter(
+    test_candidates = db.query(models.TestResult).filter(
         models.TestResult.user_id == current_user.id,
         models.TestResult.test_type.in_(["SDS", "SAS"])
-    ).order_by(models.TestResult.created_at.desc()).first()
+    ).order_by(models.TestResult.created_at.desc()).all()
+    latest_test = next((row for row in test_candidates if _assessment_is_current(row)), None)
 
-    emotion_index = 100
+    emotion_index = None
     if latest_test and latest_test.standard_score:
         emotion_index = max(0, min(100, 100 - (latest_test.standard_score - 20)))
 
@@ -64,9 +81,9 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
     word_cloud = [{"name": k, "value": v} for k, v in sorted_words]
 
     return {
-        "emotion_index": int(emotion_index),
+        "emotion_index": int(emotion_index) if emotion_index is not None else None,
         "test_count": test_count,
-        "red_energy": current_user.energy_points if current_user.energy_points > 0 else 350,
+        "red_energy": current_user.energy_points if current_user.energy_points > 0 else None,
         "pending_appointments": pending_appointments,
         "word_cloud": word_cloud
     }
@@ -75,21 +92,8 @@ from datetime import date, datetime, timedelta, timezone
 from sqlalchemy import func
 
 def _adjust_liming_emotion_index(original_index: int, created_at: datetime, current_user: models.User) -> int:
-    """
-    仅对学生“李明”(student)在 4月9日之前的数据做更陡峭的趋势放大。
-    后续日期保持原值，确保新生成数据不受影响。
-    """
-    if not created_at:
-        return int(original_index)
-    if current_user.username != "student" or (current_user.name or "") != "李明":
-        return int(original_index)
-    created_cmp = created_at.replace(tzinfo=None) if getattr(created_at, "tzinfo", None) else created_at
-    cutoff = datetime(created_cmp.year, 4, 9)
-    if created_cmp >= cutoff:
-        return int(original_index)
-    delta = original_index - 50
-    adjusted = int(round(50 + delta * 1.8))
-    return max(15, min(95, adjusted))
+    # Preserve the legacy response shape without user-specific fabricated adjustment.
+    return int(original_index)
 
 @router.get("/dashboard/emotion_trend")
 def get_emotion_trend(
@@ -121,6 +125,11 @@ def get_emotion_trend(
 
     result = []
     for t in tests:
+        try:
+            if _assessment_provenance(t).get("scoring_version") != ASSESSMENT_ENGINE_VERSION:
+                continue
+        except (TypeError, ValueError):
+            continue
         if t.standard_score:
             original_index = max(0, min(100, 100 - (t.standard_score - 20)))
             date_key = t.created_at.strftime("%Y-%m-%d")
@@ -151,6 +160,11 @@ def get_emotion_trend_compare(db: Session = Depends(get_db), current_user: model
 
     compare = []
     for t in tests:
+        try:
+            if _assessment_provenance(t).get("scoring_version") != ASSESSMENT_ENGINE_VERSION:
+                continue
+        except (TypeError, ValueError):
+            continue
         if not t.standard_score or not t.created_at:
             continue
         original_index = max(0, min(100, 100 - (t.standard_score - 20)))
@@ -168,37 +182,29 @@ def get_latest_scores(db: Session = Depends(get_db), current_user: models.User =
     check_student_role(current_user)
 
     result = []
-    sds = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.test_type == "SDS").order_by(models.TestResult.created_at.desc()).first()
+    sds = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.test_type == "SDS").order_by(models.TestResult.created_at.desc()).all()
+    sds = next((row for row in sds if _assessment_is_current(row)), None)
     if sds:
-        result.append({"name": "SDS", "score": sds.standard_score or sds.score, "norm": 41})
+        result.append({"name": "SDS", "score": sds.standard_score or sds.score, "norm": None})
 
-    sas = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.test_type == "SAS").order_by(models.TestResult.created_at.desc()).first()
+    sas = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.test_type == "SAS").order_by(models.TestResult.created_at.desc()).all()
+    sas = next((row for row in sas if _assessment_is_current(row)), None)
     if sas:
-        result.append({"name": "SAS", "score": sas.standard_score or sas.score, "norm": 40})
-
-    ma = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.test_type == "MentalAge").order_by(models.TestResult.created_at.desc()).first()
-    if ma:
-        result.append({"name": "心理年龄", "score": ma.score, "norm": 45})
+        result.append({"name": "SAS", "score": sas.standard_score or sas.score, "norm": None})
 
     return result
+
+
+def _assessment_is_current(row):
+    return _assessment_provenance(row).get("scoring_version") == ASSESSMENT_ENGINE_VERSION
 
 @router.get("/dashboard/red_energy")
 def get_red_energy(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
     today = date.today()
     result = []
-    base_score = max(150, current_user.energy_points - 100)
-    for i in range(6, 0, -1):
-        d = today - timedelta(days=i)
-        base_score += random.randint(5, 15)
-        result.append({
-            "date": d.strftime("%m-%d"),
-            "score": base_score
-        })
-    result.append({
-        "date": today.strftime("%m-%d"),
-        "score": current_user.energy_points if current_user.energy_points > 0 else base_score + random.randint(5, 15)
-    })
+    if current_user.energy_points > 0:
+        result.append({"date": today.strftime("%m-%d"), "score": current_user.energy_points})
     return result
 
 @router.get("/dashboard/treehole_words")
@@ -364,25 +370,96 @@ def cancel_appointment(appointment_id: int, db: Session = Depends(get_db), curre
     db.commit()
     return {"message": "预约已取消"}
 
-@router.post("/tests/submit", response_model=schemas.TestResponse)
+ASSESSMENT_ENGINE_VERSION = "health-new-muzee2025-assessment-engine-2026-10-31-v1"
+ASSESSMENT_QUESTION_BANK_SHA256 = "ab811c96af47cb88e76a842beac42984aa6ab23d0047fb59386cd11dbc2822f8"
+ASSESSMENT_SUBMISSION_LOCK = Lock()
+_ASSESSMENT_FORMS = {
+    "SDS": {"count": 20, "version": "question-bank-2026-10-31-v1", "reverse": {2, 5, 6, 11, 12, 14, 16, 17, 18, 20}},
+    "SAS": {"count": 20, "version": "question-bank-2026-10-31-v1", "reverse": {5, 9, 13, 17, 19}},
+    "MBTI": {"count": 28, "version": "question-bank-2026-10-31-v1", "groups": ["EI"] * 7 + ["SN"] * 7 + ["TF"] * 7 + ["JP"] * 7},
+    "MentalAge": {"count": 15, "version": "question-bank-2026-10-31-v1"},
+}
+
+
+def _score_assessment(test_type: str, answers: dict):
+    form = _ASSESSMENT_FORMS.get(test_type)
+    if not form:
+        raise HTTPException(status_code=422, detail="未知测评工具")
+    expected = {str(i) for i in range(form["count"])}
+    if set(answers) != expected:
+        raise HTTPException(status_code=422, detail="答题题数或题目编号不匹配")
+    normalized = {}
+    for key in sorted(expected, key=int):
+        value = answers[key]
+        if isinstance(value, bool):
+            raise HTTPException(status_code=422, detail="答题选项无效")
+        normalized[key] = value
+    result_level = None
+    standard_score = None
+    risk_level = None
+    if test_type in ("SDS", "SAS"):
+        if any(type(normalized[str(i)]) is not int or normalized[str(i)] not in (1, 2, 3, 4) for i in range(form["count"])):
+            raise HTTPException(status_code=422, detail="答题选项超出题本范围")
+        score = sum((5 - normalized[str(i)]) if (i + 1) in form["reverse"] else normalized[str(i)] for i in range(form["count"]))
+        standard_score = int(score * 1.25)
+        eligibility = "pending_professional_review"
+        result_level = "待专业复核"
+        explanation = "已按当前登记题本完成工程计分；正式解释和界值尚待专业复核。"
+    elif test_type == "MBTI":
+        if any(type(normalized[str(i)]) is not str or normalized[str(i)] not in form["groups"][i] for i in range(form["count"])):
+            raise HTTPException(status_code=422, detail="答题选项超出题本范围")
+        dimensions = []
+        for offset, (left, right) in zip((0, 7, 14, 21), (("E", "I"), ("S", "N"), ("T", "F"), ("J", "P"))):
+            vals = [normalized[str(i)] for i in range(offset, offset + 7)]
+            dimensions.append(left if vals.count(left) > vals.count(right) else right)
+        score, result_level, eligibility = 100, "".join(dimensions), "entertainment_only"
+        explanation = "此为娱乐性自我探索结果，不是心理测量或诊断。"
+    else:
+        allowed = {1, 3, 5}
+        if any(type(normalized[str(i)]) is not int or normalized[str(i)] not in allowed for i in range(form["count"])):
+            raise HTTPException(status_code=422, detail="答题选项超出题本范围")
+        score = sum(normalized.values())
+        result_level = "纯真孩童" if score <= 25 else "青春少年" if score <= 50 else "成熟青年" if score <= 65 else "稳重长者"
+        eligibility = "entertainment_only"
+        explanation = "此为娱乐性自我探索结果，不是心理测量或诊断。"
+    form_snapshot = {key: value for key, value in form.items()}
+    form_hash = hashlib.sha256(json.dumps(form_snapshot, sort_keys=True, ensure_ascii=False,
+        default=lambda value: sorted(value) if isinstance(value, set) else str(value)).encode("utf-8")).hexdigest()
+    provenance = {"instrument_id": test_type, "form_version": form["version"], "form_hash": form_hash,
+        "question_bank_source_sha256": ASSESSMENT_QUESTION_BANK_SHA256,
+        "scoring_version": ASSESSMENT_ENGINE_VERSION, "eligibility": eligibility}
+    detail = {"desc": explanation, "provenance": provenance, "scoring": {"score": score, "standard_score": standard_score}}
+    return score, standard_score, result_level, risk_level, eligibility, detail, normalized
+
+
+@router.post("/tests/submit")
 def submit_test(test_data: schemas.TestSubmit, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
-
-    test_result = models.TestResult(
-        user_id=current_user.id,
-        test_type=test_data.test_type,
-        score=test_data.score,
-        standard_score=test_data.standard_score,
-        result_level=test_data.result_level,
-        answers=test_data.answers,
-        result_json=test_data.result_json,
-        risk_level=test_data.risk_level
-    )
-    db.add(test_result)
-    db.commit()
-    db.refresh(test_result)
+    score, standard_score, result_level, risk_level, eligibility, detail, normalized = _score_assessment(test_data.test_type, test_data.answers)
+    detail["provenance"]["submission_id"] = test_data.submission_id
+    with ASSESSMENT_SUBMISSION_LOCK:
+        prior = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.test_type == test_data.test_type).order_by(models.TestResult.id.desc()).limit(200).all()
+        test_result = next((row for row in prior if _submission_id(row.result_json) == test_data.submission_id), None)
+        if test_result is not None and (test_result.answers or "") != json.dumps(normalized, ensure_ascii=False):
+            raise HTTPException(status_code=409, detail="submission_id 已用于不同答卷")
+        if test_result is None:
+            test_result = models.TestResult(user_id=current_user.id, test_type=test_data.test_type, score=score,
+                standard_score=standard_score, result_level=result_level, answers=json.dumps(normalized, ensure_ascii=False),
+                result_json=json.dumps(detail, ensure_ascii=False), risk_level=risk_level)
+            db.add(test_result)
+            db.commit()
+            db.refresh(test_result)
     _invalidate_user_report_cache(db, current_user.id)
-    return test_result
+    return {"id": test_result.id, "test_id": test_result.id, "user_id": test_result.user_id,
+        "test_type": test_result.test_type, "score": score, "standard_score": standard_score,
+        "result_level": result_level, "risk_level": risk_level, "answers": test_result.answers,
+        "result_json": test_result.result_json, "assessment_status": eligibility,
+        "scoring": detail["provenance"], "created_at": test_result.created_at}
+
+
+def _submission_id(result_json):
+    provenance = _json_object(result_json).get("provenance")
+    return provenance.get("submission_id") if isinstance(provenance, dict) else None
 
 @router.get("/tests/history", response_model=List[schemas.TestResponse])
 def get_test_history(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
@@ -391,31 +468,8 @@ def get_test_history(db: Session = Depends(get_db), current_user: models.User = 
 
 
 class TestAiAnalyzeRequest(BaseModel):
-    test_id: Optional[int] = None
-
-
-def _build_test_ai_prompt(test_row: models.TestResult) -> str:
-    answers_text = (test_row.answers or "").strip()
-    if len(answers_text) > 1500:
-        answers_text = answers_text[:1500] + "..."
-    result_json_text = (test_row.result_json or "").strip()
-    if len(result_json_text) > 1500:
-        result_json_text = result_json_text[:1500] + "..."
-
-    return (
-        "请你作为高校心理健康评估助手，对以下量表结果做简明专业解读，严格按中文输出：\n"
-        "1）先给出一句总体判断；\n"
-        "2）给出3条可执行建议（学习、作息、求助路径）；\n"
-        "3）如果风险偏高，给出温和且明确的求助提醒；\n"
-        "4）不要输出医学诊断结论，不要夸大。\n\n"
-        f"量表类型: {test_row.test_type}\n"
-        f"原始分: {test_row.score}\n"
-        f"标准分: {test_row.standard_score if test_row.standard_score is not None else '无'}\n"
-        f"结果等级: {test_row.result_level}\n"
-        f"风险等级: {test_row.risk_level}\n"
-        f"答题明细(JSON): {answers_text or '无'}\n"
-        f"系统描述(JSON): {result_json_text or '无'}\n"
-    )
+    model_config = {"extra": "forbid"}
+    test_id: int = Field(strict=True, gt=0)
 
 
 @router.post("/tests/ai-analyze")
@@ -426,39 +480,63 @@ async def ai_analyze_test_result(
 ):
     check_student_role(current_user)
 
-    query = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id)
-    if req.test_id is not None:
-        test_row = query.filter(models.TestResult.id == req.test_id).first()
-    else:
-        test_row = query.order_by(models.TestResult.created_at.desc()).first()
+    test_row = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id, models.TestResult.id == req.test_id).first()
 
     if not test_row:
         raise HTTPException(status_code=404, detail="未找到可分析的测评结果")
 
-    prompt = _build_test_ai_prompt(test_row)
-    model_name = "qwen3.6-plus"
-    try:
-        response = await qwen_client.chat.completions.create(
-            model=model_name,
-            messages=[
-                {"role": "system", "content": "你是高校心理测评结果解读助手，请输出温和、清晰、可执行的建议。"},
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.4,
-            max_tokens=700,
-        )
-        analysis = (response.choices[0].message.content or "").strip()
-        if not analysis:
-            analysis = "当前模型未返回有效内容，请稍后重试。"
-    except Exception as exc:
-        raise HTTPException(status_code=502, detail=f"AI解析失败: {exc}") from exc
+    detail = _json_object(test_row.result_json)
+    provenance = _assessment_provenance(test_row)
+    sources = [{"type": "scoring_provenance", "label": "本地计分规则记录（非外部文献）",
+        "tool_id": test_row.test_type, "form_version": provenance.get("form_version"),
+        "scoring_version": provenance.get("scoring_version"), "form_hash": provenance.get("form_hash"),
+        "question_bank_source_sha256": provenance.get("question_bank_source_sha256"), "external": False}]
+    if test_row.test_type not in _ASSESSMENT_FORMS or provenance.get("scoring_version") != ASSESSMENT_ENGINE_VERSION:
+        content = {"summary": "这条历史记录的题本或计分版本未知，资料不足，暂不能生成可靠解读。", "observations": [], "limitations": ["历史版本未登记；不推断正式心理结论。"], "next_steps": ["如需了解当前状态，请使用已登记题本重新作答或联系校内专业人员。"]}
+    elif test_row.test_type in ("SDS", "SAS"):
+        content = {"summary": "本次结果仅为当前题本的工程计分，正式解释尚待专业复核。", "observations": [f"服务器记录的原始分为 {test_row.score}。"], "limitations": ["当前未配置经批准的界值和解释规则；此结果不是诊断。"], "next_steps": ["如有困扰，可主动向校内心理服务人员咨询。"]}
+    else:
+        content = {"summary": "这是娱乐性自我探索结果，可作为轻松的自我观察话题。", "observations": [f"工具给出的类型为 {test_row.result_level}。"], "limitations": ["该工具不具备心理风险筛查或诊断用途。"], "next_steps": ["结合自身体验自行参考，不据此作重要决定。"]}
+    enabled = os.getenv("AI_EXTERNAL_ENABLED", "").strip().lower() in {"1", "true", "yes"}
+    if enabled and qwen_client is not None:
+        try:
+            response = await qwen_client.chat.completions.create(
+                model="qwen-plus", temperature=0.2, max_tokens=500,
+                messages=[
+                    {"role": "system", "content": "你提供非诊断性的自我观察说明。仅输出JSON，字段 summary:string, observations:string[], limitations:string[], next_steps:string[]。没有依据时明确写资料不足，不推断风险，不建议诊断。"},
+                    {"role": "user", "content": json.dumps({"tool": test_row.test_type, "score": test_row.score if test_row.test_type in ("SDS", "SAS") else None,
+                        "standard_score": test_row.standard_score if test_row.test_type in ("SDS", "SAS") else None,
+                        "eligibility": provenance.get("eligibility", "unknown"),
+                        "rule_summary": content}, ensure_ascii=False)},
+                ],
+            )
+            parsed = _json_object(response.choices[0].message.content)
+            if _valid_interpretation_content(parsed):
+                content = parsed
+                model_id = getattr(response, "model", None)
+                if not isinstance(model_id, str) or not model_id.strip() or len(model_id) > 120:
+                    model_id = None
+                return {"status": "completed", "source": "provider", "model_id": model_id, "test_id": test_row.id,
+                    "content": content, "sources": sources, "notice": "模型生成的非诊断性说明；未发送逐题答卷、姓名、学号或树洞原文。"}
+        except Exception:
+            # Provider errors and malformed output degrade to the explicit local result.
+            pass
+    return {"status": "fallback", "source": "local_rule", "model_id": None, "test_id": test_row.id,
+        "content": content, "sources": sources, "notice": "本地规则说明，非大模型生成；当前无可用且获准的模型响应。"}
 
-    return {
-        "status": "success",
-        "model": model_name,
-        "test_id": test_row.id,
-        "analysis": analysis,
-    }
+
+def _valid_interpretation_content(value):
+    if not isinstance(value, dict) or set(value) != {"summary", "observations", "limitations", "next_steps"} or not isinstance(value.get("summary"), str):
+        return False
+    if not value["summary"].strip() or len(value["summary"]) > 500:
+        return False
+    for key in ("observations", "limitations", "next_steps"):
+        items = value.get(key)
+        if not isinstance(items, list) or len(items) > 8:
+            return False
+        if any(not isinstance(item, str) or not item.strip() or len(item) > 240 for item in items):
+            return False
+    return True
 
 DEFAULT_REPORT_TYPE = "student_mental_report"
 REPORT_CACHE_TTL_SECONDS = 15 * 60
@@ -496,7 +574,9 @@ def _invalidate_user_report_cache(db: Session, user_id: int):
 
 
 def _generate_report_analysis_payload(db: Session, current_user: models.User):
-    latest_test = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id).order_by(models.TestResult.created_at.desc()).first()
+    candidate_tests = db.query(models.TestResult).filter(models.TestResult.user_id == current_user.id,
+        models.TestResult.test_type.in_(["SDS", "SAS"])).order_by(models.TestResult.created_at.desc()).all()
+    latest_test = next((row for row in candidate_tests if _assessment_is_current(row)), None)
     recent_treehole = db.query(models.TreeholePost).filter(models.TreeholePost.user_id == current_user.id).order_by(models.TreeholePost.created_at.desc()).first()
 
     all_tests = db.query(models.TestResult).filter(
@@ -506,7 +586,11 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
 
     score_distribution = {"SDS": [], "SAS": []}
     for t in all_tests:
-        if t.test_type in score_distribution:
+        try:
+            provenance = _assessment_provenance(t)
+        except (TypeError, ValueError):
+            provenance = {}
+        if t.test_type in score_distribution and provenance.get("scoring_version") == ASSESSMENT_ENGINE_VERSION:
             score_distribution[t.test_type].append({
                 "date": t.created_at.strftime("%Y-%m-%d"),
                 "score": t.standard_score or t.score,
@@ -516,11 +600,21 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
 
     risk_stats = {"red": 0, "yellow": 0, "green": 0}
     for t in all_tests:
+        try:
+            if _assessment_provenance(t).get("scoring_version") != ASSESSMENT_ENGINE_VERSION:
+                continue
+        except (TypeError, ValueError):
+            continue
         if t.risk_level in risk_stats:
             risk_stats[t.risk_level] += 1
 
     category_scores = {}
     for t in all_tests:
+        try:
+            if _assessment_provenance(t).get("scoring_version") != ASSESSMENT_ENGINE_VERSION:
+                continue
+        except (TypeError, ValueError):
+            continue
         if t.test_type not in category_scores:
             category_scores[t.test_type] = []
         category_scores[t.test_type].append(t.standard_score or t.score)
@@ -539,7 +633,7 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
     if latest_test:
         analysis_basis["data_sources"].append(f"最新{latest_test.test_type}测评（标准分：{latest_test.standard_score or latest_test.score}）")
         analysis_basis["key_parameters"].append(f"评估等级：{latest_test.result_level}，风险级别：{latest_test.risk_level}")
-        analysis_basis["logic_path"].append(f"根据{latest_test.test_type}标准分{latest_test.standard_score or latest_test.score}，对照常模标准判定为{latest_test.result_level}")
+        analysis_basis["logic_path"].append(f"按当前登记规则完成{latest_test.test_type}工程计分；常模与解释待专业复核")
 
     if recent_treehole:
         analysis_basis["data_sources"].append("树洞倾诉记录")
@@ -547,14 +641,12 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
             analysis_basis["key_parameters"].append(f"情绪关键词：{recent_treehole.emotion_keywords}")
             analysis_basis["logic_path"].append(f"从树洞内容中提取到「{recent_treehole.emotion_keywords}」等情绪关键词")
 
-    analysis_basis["data_sources"].append("心理知识库RAG检索")
-    analysis_basis["logic_path"].append("结合知识库相关内容生成个性化建议")
+    rag_context = ""
 
     user_context = "用户基本情况：\n"
     if latest_test:
         user_context += f"最新测评({latest_test.test_type})结果：标准分 {latest_test.standard_score or latest_test.score}，评估等级：{latest_test.result_level}，风险级别：{latest_test.risk_level}\n"
     if recent_treehole:
-        user_context += f"最近一次树洞倾诉内容：{recent_treehole.content}\n"
         if recent_treehole.emotion_keywords:
             user_context += f"提取的情绪关键词：{recent_treehole.emotion_keywords}\n"
 
@@ -564,32 +656,16 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
         rag_context = query_rag(query=user_context, n_results=3)
     except Exception:
         pass
+    if rag_context:
+        analysis_basis["data_sources"].append("心理知识库检索结果（存在返回内容）")
+        analysis_basis["logic_path"].append("检索返回相关片段，尚未逐条专业核验；不代表临床依据")
 
-    try:
-        from ..services.deepseek_service import call_deepseek
-        system_prompt = (
-            "你是一名专业的心理健康辅导AI助手。请根据用户的测评结果和树洞倾诉记录，生成一段专业、温暖、具有安抚性的心理分析报告。\n"
-            f"{rag_context}\n\n"
-            "要求：\n"
-            "1. 语言要温暖、共情，像心理老师一样。\n"
-            "2. 结合用户的测评结果和情绪词进行分析。\n"
-            "3. 给出1-3条切实可行的建议（必须参考提供的知识库片段）。\n"
-            "4. 结尾要给予鼓励，字数控制在300字左右。"
-        )
-        ai_analysis_text = call_deepseek(user_context, system_prompt)
-    except Exception as e:
-        print(f"DeepSeek API call failed: {e}")
-        ai_analysis_text = "根据您最近的活动记录，您的心理状态整体平稳。"
-        if latest_test:
-            if latest_test.risk_level == "red":
-                ai_analysis_text = "我们注意到您最近的测评结果显示出较高的压力水平（红灯预警）。您的焦虑值偏高，建议尝试每天进行15分钟的正念呼吸练习。如果感觉难以承受，请务必在【心理预约】板块联系专业的心理老师进行倾诉，我们始终在您身边支持您。"
-            elif latest_test.risk_level == "yellow":
-                ai_analysis_text = "您近期的测评处于中等风险（黄灯提示）。可能是近期的学业或生活带来了一些困扰，建议合理规划时间，保证充足的睡眠，多与朋友交流或者去操场散散步会有帮助哦。"
-            else:
-                ai_analysis_text = "太棒了！您近期的测评显示您的心理状态非常健康（绿灯）。继续保持这种积极向上的生活态度吧，如果遇到不开心的事，也欢迎随时来树洞倾诉。"
-
-        if recent_treehole and recent_treehole.emotion_keywords:
-            ai_analysis_text += f"\n\n此外，从您最近在树洞的分享中，我们提取到了「{recent_treehole.emotion_keywords}」等情绪词。请接纳自己的每一种情绪，它们都是你内心真实的声音。"
+    # This legacy aggregate endpoint is a local summary. Per-assessment model
+    # explanation has its own explicit, ID-bound and minimized-input endpoint.
+    generation = {"source": "local_rules", "status": "fallback" if latest_test or recent_treehole else "insufficient", "model_id": None}
+    ai_analysis_text = (f"当前有{sum(len(rows) for rows in score_distribution.values())}条带计分版本的自我观察记录。"
+                        "这里显示本地汇总说明，未调用外部模型。分数和关键词不能判断疾病或排除困扰；"
+                        "可在本次测评结果页查看辅助说明，或根据需要选择人工求助。")
 
     treehole_analysis = db.query(models.TreeholeAnalysis).filter(models.TreeholeAnalysis.user_id == current_user.id).order_by(models.TreeholeAnalysis.created_at.desc()).all()
 
@@ -620,6 +696,8 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
 
     payload = {
         "ai_analysis": ai_analysis_text,
+        "generation": generation,
+        "data_status": "available" if latest_test or recent_treehole else "insufficient",
         "analysis_basis": analysis_basis,
         "recent_themes": recent_themes,
         "deep_moment": deep_moment_data,
@@ -987,7 +1065,7 @@ EMOTION_KEYWORDS = ["焦虑", "失眠", "压力", "崩溃", "难过", "抑郁", 
 def generate_anonymous_id():
     return "深海旅人_" + ''.join(random.choices(string.digits, k=4))
 
-def _mock_ai_analysis(content: str, tags: list):
+def _rule_based_treehole_summary(content: str, tags: list):
     emotion = "平静"
     if any(kw in content for kw in ["焦虑", "压力", "紧张"]): emotion = "焦虑"
     elif any(kw in content for kw in ["难过", "崩溃", "哭"]): emotion = "低落"
@@ -1015,11 +1093,12 @@ def create_treehole_post(post_data: schemas.TreeholeCreate, db: Session = Depend
 
     reply_tip = None
     if matched_keywords:
-        reply_tip = "抱抱你，我们检测到你可能有些情绪波动。请记住，你不是一个人，学校的心理老师随时愿意倾听你的心声。如果需要，可以预约老师聊聊。"
+        reply_tip = "看到你提到了一些不容易的感受。关键词提示仅供参考，不代表风险判断；如果你需要支持，可以通过学校公布的官方渠道联系心理服务人员。"
 
     tags_str = ",".join(post_data.tags) if post_data.tags else ""
     is_deep = len(content) > 100 or ("#人生意义" in tags_str) or ("#自我成长" in tags_str) or ("#红色精神与我" in tags_str)
 
+    prior_energy = current_user.energy_points
     if is_deep:
         current_user.energy_points += 5
 
@@ -1033,18 +1112,18 @@ def create_treehole_post(post_data: schemas.TreeholeCreate, db: Session = Depend
         user_id=current_user.id if current_user.real_identity_flag else None
     )
     db.add(post)
-    db.commit()
-    db.refresh(post)
-
-    emotion, core_values = _mock_ai_analysis(content, post_data.tags or [])
-    analysis = models.TreeholeAnalysis(
-        post_id=post.id,
-        user_id=current_user.id,
-        emotion_category=emotion,
-        core_values=core_values
-    )
-    db.add(analysis)
-    db.commit()
+    try:
+        db.flush()
+        emotion, core_values = _rule_based_treehole_summary(content, post_data.tags or [])
+        analysis = models.TreeholeAnalysis(post_id=post.id, user_id=current_user.id,
+            emotion_category=emotion, core_values=core_values)
+        db.add(analysis)
+        db.commit()
+        db.refresh(post)
+    except Exception:
+        db.rollback()
+        current_user.energy_points = prior_energy
+        raise
     _invalidate_user_report_cache(db, current_user.id)
 
     return schemas.TreeholeResponse(

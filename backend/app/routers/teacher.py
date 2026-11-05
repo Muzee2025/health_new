@@ -738,35 +738,14 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
     students = db.query(models.User).filter(models.User.role == "student", models.User.id.in_(assigned_student_ids(db, current_user.id))).all()
     result = []
     for s in students:
-        # Get latest AI chat to calculate risk
-        latest_session = db.query(models.AIChatSession).filter(models.AIChatSession.user_id == s.id).order_by(models.AIChatSession.created_at.desc()).first()
-        
+        # A dialogue tag is not an independently measured clinical risk score.
         risk_level = None
         latest_time = None
         score = None
-        
-        if latest_session:
-            latest_ai_msg = db.query(models.AIChatMessage).filter(
-                models.AIChatMessage.session_id == latest_session.id,
-                models.AIChatMessage.role == "ai",
-                models.AIChatMessage.emotion_tags != None
-            ).order_by(models.AIChatMessage.created_at.desc()).first()
-            
-            if latest_ai_msg:
-                latest_time = latest_ai_msg.created_at
-                try:
-                    tags = json.loads(latest_ai_msg.emotion_tags)
-                    stress = (tags.get("sadness", 0) + tags.get("fear", 0) + tags.get("anger", 0)) / 3
-                    score = round(stress * 100)
-                    
-                    if latest_ai_msg.is_crisis or stress > 0.7:
-                        risk_level = "red"
-                    elif stress > 0.4:
-                        risk_level = "yellow"
-                    else:
-                        risk_level = "green"
-                except:
-                    pass
+        latest_test = (db.query(models.TestResult).filter(models.TestResult.user_id == s.id,
+                       models.TestResult.test_type.in_(["SDS", "SAS"]))
+                       .order_by(models.TestResult.created_at.desc()).first())
+        latest_time = latest_test.created_at if latest_test else None
         
         profile = db.query(models.StudentProfile).filter(models.StudentProfile.user_id == s.id).first()
         pending_crisis_query = db.query(models.CrisisWarning).filter(

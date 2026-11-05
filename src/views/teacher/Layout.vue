@@ -85,7 +85,6 @@
           placeholder="请选择学生"
           filterable
           style="width: 100%;"
-          @change="handleStudentChange"
         >
           <el-option
             v-for="stu in students"
@@ -102,8 +101,9 @@
         </div>
       </el-form-item>
 
+      <el-alert type="info" :closable="false" title="风险类型和干预级别由教师结合已核验记录与专业判断手工填写；系统不会根据情绪标签自动预填。" class="mb-16" />
       <el-form-item label="风险类型" prop="risk_type">
-        <el-input v-model="interventionForm.risk_type" placeholder="如：学业压力、危机倾向等" />
+        <el-input v-model="interventionForm.risk_type" placeholder="请填写已核验记录中的关注事项" />
       </el-form-item>
 
       <el-form-item label="干预级别" prop="intervention_level">
@@ -228,7 +228,7 @@ const interventionFormRef = ref(null)
 const interventionForm = ref({
   student_id: null,
   risk_type: '',
-  intervention_level: '重点关注',
+  intervention_level: '',
   measures: '',
   date_range: [],
   owner: ''
@@ -265,27 +265,12 @@ const selectedStudentInfo = computed(() => {
   return `${stu.name || '未命名'} / ${stu.student_id || '无学号'} / ${stu.class_name || '未分班'}`
 })
 
-const inferredRiskType = (student) => {
-  if (!student) return ''
-  if (student.risk_level === 'red') return '高风险预警'
-  if (student.risk_level === 'yellow') return '中风险关注'
-  if (student.risk_level === 'green') return '低风险观察'
-  return ''
-}
-
-const inferredInterventionLevel = (student) => {
-  if (!student) return '重点关注'
-  if (student.risk_level === 'red') return '紧急干预'
-  if (student.risk_level === 'yellow') return '重点关注'
-  return '持续观察'
-}
-
 const openInterventionDialog = async (payload = null) => {
   if (!students.value.length) {
     await fetchStudents()
   }
   if (!students.value.length) {
-    ElMessage.warning('请先完成风险评估或检查学生数据后再添加干预')
+    ElMessage.warning('暂无已分配学生，暂不能添加干预记录')
     return
   }
   const today = new Date().toISOString().split('T')[0]
@@ -297,8 +282,8 @@ const openInterventionDialog = async (payload = null) => {
 
   interventionForm.value = {
     student_id: targetStudent?.id || null,
-    risk_type: payload?.risk_type || inferredRiskType(targetStudent),
-    intervention_level: payload?.intervention_level || inferredInterventionLevel(targetStudent),
+    risk_type: payload?.risk_type || '',
+    intervention_level: payload?.intervention_level || '',
     measures: payload?.measures || '',
     date_range: [today, today],
     owner: user.value.name || user.value.username || ''
@@ -306,16 +291,6 @@ const openInterventionDialog = async (payload = null) => {
   interventionDialogVisible.value = true
 }
 
-const handleStudentChange = (studentId) => {
-  const stu = students.value.find(s => s.id === studentId)
-  if (!stu) return
-  if (!interventionForm.value.risk_type) {
-    interventionForm.value.risk_type = inferredRiskType(stu)
-  }
-  if (!interventionForm.value.intervention_level) {
-    interventionForm.value.intervention_level = inferredInterventionLevel(stu)
-  }
-}
 
 const fetchStudents = async () => {
   try {

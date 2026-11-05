@@ -17,9 +17,9 @@ def _generate(req: GenerateRequest):
     wants_structured_json = "严格JSON" in prompt or "risk_level" in prompt or "chart_insights" in prompt
     if wants_structured_json:
         text = json.dumps(_build_structured_fallback(prompt), ensure_ascii=False)
-        return {"text": text, "result": text}
+        return {"text": text, "result": text, "source": "local_rules", "status": "fallback", "model_id": None}
     text = _build_interpretation_fallback(prompt)
-    return {"text": text, "result": text}
+    return {"text": text, "result": text, "source": "local_rules", "status": "fallback", "model_id": None}
 
 
 @router.post("/generate")

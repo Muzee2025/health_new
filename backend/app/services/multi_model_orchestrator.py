@@ -88,7 +88,7 @@ class MultiModelOrchestrator:
         self._alerts: List[Dict[str, Any]] = []
         # 用户要求协同链路真实调用，默认关闭缓存，确保每次都会触发外部模型计费。
         self._cache_ttl_sec = 0
-        self._dashscope_key = os.getenv("QWEN_API_KEY", "XXXXXXX")
+        self._dashscope_key = os.getenv("DASHSCOPE_API_KEY", "") or os.getenv("QWEN_API_KEY", "")
         self._emohaa_service = ZhipuEmohaaService()
 
     @staticmethod
@@ -649,7 +649,7 @@ class MultiModelOrchestrator:
             f"上游线索:{json.dumps(upstream, ensure_ascii=False)[:1000]}\n"
             f"最近历史:{history_text[:1000]}"
         ).strip()
-        logger.info("orchestrator_emohaa_enter text_len=%s preview=%s", len(emotion_input), emotion_input[:120])
+        logger.info("orchestrator_emohaa_enter text_len=%s", len(emotion_input))
         emotion_tags = await self._emohaa_service.analyze_emotion_tags(emotion_input, retry=1)
         sorted_tags = sorted(emotion_tags.items(), key=lambda x: x[1], reverse=True)
         top_two = "、".join([f"{k}:{round(v, 3)}" for k, v in sorted_tags[:2]])

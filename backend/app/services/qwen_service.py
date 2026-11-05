@@ -1,15 +1,22 @@
 import json
 import logging
+import os
 from typing import Dict, Any, List
 import openai
 
 logger = logging.getLogger(__name__)
 
-# 配置通义千问大模型客户端
-client = openai.AsyncOpenAI(
-    api_key="XXXXXXX",
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1"
-)
+def _configured_client():
+    """External provider calls stay disabled unless explicitly enabled and configured."""
+    if os.getenv("AI_EXTERNAL_ENABLED", "").strip().lower() not in {"1", "true", "yes"}:
+        return None
+    api_key = os.getenv("DASHSCOPE_API_KEY", "").strip()
+    if not api_key:
+        return None
+    return openai.AsyncOpenAI(api_key=api_key, base_url="https://dashscope.aliyuncs.com/compatible-mode/v1", timeout=12.0, max_retries=0)
+
+
+client = _configured_client()
 
 class QwenAiService:
     """通义千问 LLM 交互服务，注入 3 层安全护栏与 CBT 话术"""
@@ -35,7 +42,7 @@ class QwenAiService:
 
         system_prompt += (
             "【安全护栏】：如果用户提及自杀、自残、严重暴力或政治敏感话题，请立即停止心理分析，"
-            "并回复：'我感受到您现在非常痛苦，请务必保护好自己。请立即拨打校内24小时心理危机热线：400-123-4567。'"
+            "并回复：'我感受到您现在非常痛苦。请先联系身边可信任的人或当地紧急服务；如有校内心理服务，请通过学校公布的官方渠道联系。系统目前无法核验热线号码或值守时段。'"
         )
 
         messages = [{"role": "system", "content": system_prompt}]
@@ -44,6 +51,8 @@ class QwenAiService:
         
         messages.append({"role": "user", "content": message})
 
+        if client is None:
+            return "当前未配置可用的外部模型服务，不能把本地回复标记为AI结果。你可以稍后再试，或通过学校公布的官方渠道联系心理服务人员。"
         try:
             response = await client.chat.completions.create(
                 model="qwen-plus",
@@ -53,7 +62,7 @@ class QwenAiService:
             )
             return response.choices[0].message.content
         except Exception as e:
-            logger.error(f"Qwen API Error: {str(e)}")
+            logger.error("Qwen API unavailable (%s)", type(e).__name__)
             return "抱歉，我现在有些走神（网络波动），能重新说一遍吗？"
 
     async def generate_report_from_chats(self, chat_logs: List[str]) -> Dict[str, Any]:
@@ -62,45 +71,76 @@ class QwenAiService:
         """
         if not chat_logs:
             return {
-                "overall_status": "数据不足，建议多和我聊聊天哦。",
+                "status": "insufficient_data",
+                "source": "local_rule",
+                "model_id": None,
+                "overall_status": "数据不足，暂不能形成综合判断。",
                 "chart_interpretations": {
                     "emotion_trend": "暂无足够数据分析情绪趋势。",
                     "stress_index": "暂无足够数据分析压力指数。",
-                    "risk_level": "当前状态平稳。"
+                    "risk_level": "暂无足够数据判断风险状态。"
                 }
             }
 
-        chat_context = "\n".join(chat_logs[-30:]) # 取最近的聊天记录防止超长
+        if client is None:
+            return {"status": "fallback", "source": "local_rule", "model_id": None,
+                "overall_status": "当前未配置可用的外部模型服务，未生成模型报告。", "chart_interpretations": {
+                "emotion_trend": "数据仅供本人观察，当前未执行模型分析。", "stress_index": "资料不足，未执行模型分析。", "risk_level": "暂无足够数据判断风险状态。"}}
 
-        prompt = f"""
-        请根据以下学生近期的真实聊天记录，生成一份心理健康评估报告，并对图表含义进行解读。
-        聊天记录：
-        {chat_context}
+        record_count = sum(1 for entry in chat_logs if isinstance(entry, str) and entry.strip())
+        if record_count == 0:
+            return {"status": "insufficient_data", "source": "local_rule", "model_id": None,
+                "overall_status": "数据不足，暂不能形成综合判断。", "chart_interpretations": {
+                    "emotion_trend": "暂无足够数据分析情绪趋势。", "stress_index": "暂无足够数据分析压力变化。", "risk_level": "暂无足够数据判断风险状态。"}}
 
-        请以严格的JSON格式返回，包含以下字段：
-        1. "overall_status": 基于聊天记录的一段综合评价（不超过150字，以第二人称对学生说）。
-        2. "chart_interpretations": 一个对象，包含对以下三个图表的具体解读（结合聊天内容）：
-           - "emotion_trend": 情绪趋势图解读，说明为何有情绪波动。
-           - "stress_index": 压力指数变化解读，点出压力主要来源。
-           - "risk_level": 风险预警等级解读，解释当前处于什么等级（正常/关注/预警）以及建议。
-        """
+        # Only an aggregate count is sent. Chat text, names and identifiers stay local.
+        prompt = json.dumps({
+            "record_count": record_count,
+            "instruction": "条数本身不足以推断心理状态、趋势、因果或风险；请明确资料不足，给出通用且非诊断性的自我观察提示。",
+            "required_json": {"overall_status": "string, max 300 chars", "chart_interpretations": {
+                "emotion_trend": "string", "stress_index": "string", "risk_level": "string"}},
+        }, ensure_ascii=False)
 
         try:
             response = await client.chat.completions.create(
                 model="qwen-plus",
-                messages=[{"role": "user", "content": prompt}],
+                messages=[
+                    {"role": "system", "content": "只输出满足要求的JSON。不得推断诊断、风险等级、趋势或因果；计数不是心理证据。"},
+                    {"role": "user", "content": prompt},
+                ],
                 temperature=0.5,
                 response_format={"type": "json_object"}
             )
             content = response.choices[0].message.content
-            return json.loads(content)
+            result = json.loads(content)
+            interpretations = result.get("chart_interpretations") if isinstance(result, dict) else None
+            if (not isinstance(result, dict) or set(result) != {"overall_status", "chart_interpretations"}
+                    or not isinstance(result.get("overall_status"), str)
+                    or not result["overall_status"].strip() or len(result["overall_status"]) > 300
+                    or not isinstance(interpretations, dict)
+                    or set(interpretations) != {"emotion_trend", "stress_index", "risk_level"}
+                    or any(not isinstance(interpretations.get(key), str) or not interpretations[key].strip() or len(interpretations[key]) > 300
+                           for key in ("emotion_trend", "stress_index", "risk_level"))):
+                raise ValueError("invalid report schema")
+            all_text = " ".join([result["overall_status"], *interpretations.values()])
+            unsupported_claims = ("平稳", "正常", "上升", "下降", "波动", "高风险", "低风险", "预警", "诊断", "导致", "因为", "主要来源", "概率")
+            if any(claim in all_text for claim in unsupported_claims):
+                raise ValueError("unsupported interpretation from aggregate-only input")
+            model_id = getattr(response, "model", None)
+            if not isinstance(model_id, str) or not model_id.strip() or len(model_id) > 120:
+                model_id = None
+            result.update({"status": "completed", "source": "provider", "model_id": model_id})
+            return result
         except Exception as e:
-            logger.error(f"Qwen Report Generation Error: {str(e)}")
+            logger.error("Qwen report unavailable (%s)", type(e).__name__)
             return {
-                "overall_status": "生成报告时遇到网络波动，请稍后再试。",
+                "status": "fallback",
+                "source": "local_rule",
+                "model_id": None,
+                "overall_status": "模型未返回符合约定的内容，已降级到本地说明。",
                 "chart_interpretations": {
-                    "emotion_trend": "AI 分析生成中...",
-                    "stress_index": "AI 分析生成中...",
-                    "risk_level": "AI 分析生成中..."
+                    "emotion_trend": "资料不足，暂不能解读趋势。",
+                    "stress_index": "资料不足，暂不能解读压力变化。",
+                    "risk_level": "暂无足够数据判断风险状态。"
                 }
             }

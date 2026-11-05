@@ -21,54 +21,32 @@ def is_local_fallback_url(url: str) -> bool:
 
 
 def _build_structured_fallback(prompt: str) -> Dict[str, Any]:
-    negative_tokens = ("自杀", "自残", "崩溃", "绝望", "活不下去", "痛苦", "失眠", "焦虑", "抑郁")
-    medium_tokens = ("压力", "烦躁", "紧张", "低落")
-    level = "LOW"
-    if any(token in prompt for token in negative_tokens):
-        level = "HIGH"
-    elif any(token in prompt for token in medium_tokens):
-        level = "MEDIUM"
-
-    base_map = {
-        "LOW": (28, 35, 20),
-        "MEDIUM": (56, 62, 35),
-        "HIGH": (82, 86, 68),
-    }
-    depression, anxiety, suicide = base_map[level]
-    emotion_score = min(100, max(depression, anxiety) - 10)
-    cognition_score = min(100, max(20, anxiety - 8))
-    behavior_score = min(100, max(20, depression - 5))
-
+    # Keywords in an instruction or a conversation are not calibrated scores.
+    # In particular, never infer HIGH from the diagnostic words in the prompt.
     return {
-        "emotion_score": emotion_score,
-        "cognition_score": cognition_score,
-        "behavior_score": behavior_score,
-        "depression_confidence": depression,
-        "anxiety_confidence": anxiety,
-        "suicide_confidence": suicide,
-        "risk_level": level,
+        "emotion_score": None,
+        "cognition_score": None,
+        "behavior_score": None,
+        "depression_confidence": None,
+        "anxiety_confidence": None,
+        "suicide_confidence": None,
+        "risk_level": "UNKNOWN",
+        "source": "local_rules",
+        "status": "fallback",
+        "model_id": None,
         "interventions": [
-            "先把今天的目标缩减到1-2件最重要的小事，降低心理负荷。",
-            "今晚固定留出20分钟放松时段（散步、拉伸或呼吸训练）。",
-            "若连续两天情绪明显恶化，尽快预约学校心理咨询。",
+            "可以先记录此刻最想讨论的一件事，按自己的节奏决定是否继续。",
+            "如果需要支持，可查看系统中的求助或预约入口，并确认实际服务时间。",
+            "如果正面临即时安全危险，请尽快联系身边可信任的人或当地紧急服务。",
         ],
-        "chart_insights": {
-            "bar": "风险维度呈中高压状态，建议优先处理睡眠与学习节奏。",
-            "pie": "负性情绪占比偏高，近期需要增加恢复性活动和支持性互动。",
-            "heatmap": "高压时段有聚集迹象，建议在高峰前安排短时减压。",
-            "trend": "趋势存在波动，短期先以稳定作息与降低透支为目标。",
-            "network": "情绪与认知互相放大，建议使用记录法中断反刍。",
-            "histogram": "中高风险区出现频率提升，建议设置预警阈值并及时求助。",
-        },
+        "chart_insights": {key: "当前为本地说明，尚无足够依据解释该图；空缺记录不代表零风险。"
+                           for key in ("bar", "pie", "heatmap", "trend", "network", "histogram")},
     }
 
 
 def _build_interpretation_fallback(prompt: str) -> str:
-    clean_text = re.sub(r"\s+", " ", prompt).strip()
-    if len(clean_text) > 180:
-        clean_text = clean_text[:180] + "..."
     return (
-        "从这段对话看，你近期压力感偏高，情绪在疲惫和担忧之间波动。"
-        "建议先把学习任务拆小并固定休息节律，每天留出可恢复精力的活动；"
-        "如果连续出现失眠、明显低落或无助感，请尽快预约心理咨询。"
+        "当前显示本地支持性说明，未调用外部模型。有限的对话记录不足以判断心理状态或疾病风险。"
+        "你可以先记录最想讨论的一件事，或通过求助、预约入口寻找人工支持；请确认实际服务时间。"
+        "这段说明不是诊断，也不能替代专业人员与你的沟通。"
     )

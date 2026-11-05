@@ -1,5 +1,6 @@
 import json
 import logging
+import math
 import os
 import time
 from collections import defaultdict
@@ -27,12 +28,8 @@ PERF_METRICS: Dict[str, Any] = {
     "full_report_breach": 0,
 }
 DEFAULT_CHART_EXPLANATIONS: Dict[str, str] = {
-    "bar": "当前风险维度整体偏高，建议优先处理睡眠和压力管理，每天固定放松时段并减少连续高压学习。",
-    "pie": "负性情绪占比高于中性/积极，说明近期心理负荷偏重。建议增加稳定支持来源，如固定运动和社交支持。",
-    "heatmap": "近7天高强度情绪有集中时段，提示存在阶段性压力峰值。建议在高峰日前提前安排减压活动。",
-    "trend": "7天趋势若持续上升代表风险累积，若下降说明调节有效。建议保留有效策略并每周复盘一次情绪日志。",
-    "network": "情绪与认知因子耦合明显，提示“想法-情绪”相互放大。建议使用认知重评法，先记录触发事件再修正自动化负面想法。",
-    "histogram": "分布右偏说明高压力时段增多。建议设置预警阈值（如连续2天高分即主动预约咨询）。",
+    key: "目前没有足够的可核验数据解释该图。空缺不代表零风险，规则线索也不是诊断概率。"
+    for key in ("bar", "pie", "heatmap", "trend", "network", "histogram")
 }
 
 
@@ -46,25 +43,26 @@ def _safe_json_loads(raw: str | None, fallback: Any):
 
 
 def _extract_keywords_from_heatmap(heatmap: List[Dict[str, Any]]) -> List[str]:
-    return [str(item.get("token", "")).strip() for item in heatmap if item.get("is_keyword")]
+    if not isinstance(heatmap, list):
+        return []
+    return [str(item.get("token", "")).strip() for item in heatmap
+            if isinstance(item, dict) and item.get("is_keyword")]
 
 
 def _collect_messages(db: Session, user_id: int, max_messages: int | None = None) -> List[Dict[str, Any]]:
-    sessions = db.query(models.AIChatSession).filter(models.AIChatSession.user_id == user_id).all()
+    # Select the most recent bounded window across sessions, then sort oldest first.
+    rows = (db.query(models.AIChatMessage)
+            .join(models.AIChatSession, models.AIChatMessage.session_id == models.AIChatSession.id)
+            .filter(models.AIChatSession.user_id == user_id)
+            .order_by(models.AIChatMessage.created_at.desc(), models.AIChatMessage.id.desc())
+            .limit(max_messages or 5000).all())
     records: List[Dict[str, Any]] = []
-    for session in sessions:
-        msgs = (
-            db.query(models.AIChatMessage)
-            .filter(models.AIChatMessage.session_id == session.id)
-            .order_by(models.AIChatMessage.created_at.asc())
-            .all()
-        )
-        for msg in msgs:
+    for msg in reversed(rows):
             emotion = _safe_json_loads(msg.emotion_tags, {})
             heatmap = _safe_json_loads(msg.heatmap, [])
             records.append(
                 {
-                    "session_id": session.id,
+                    "session_id": msg.session_id,
                     "role": msg.role,
                     "content": msg.content,
                     "created_at": msg.created_at.isoformat() if msg.created_at else "",
@@ -73,19 +71,20 @@ def _collect_messages(db: Session, user_id: int, max_messages: int | None = None
                     "is_crisis": bool(msg.is_crisis),
                 }
             )
-            if max_messages and len(records) >= max_messages:
-                return records
     return records
 
 
 def _score_from_message(message: Dict[str, Any]) -> Optional[float]:
     emotion = message.get("emotion_tags") or {}
-    if not emotion:
+    if not isinstance(emotion, dict) or not emotion:
         return None
-    sadness = float(emotion.get("sadness", 0))
-    fear = float(emotion.get("fear", 0))
-    anger = float(emotion.get("anger", 0))
-    joy = float(emotion.get("joy", 0))
+    try:
+        values = [float(emotion.get(key, 0)) for key in ("sadness", "fear", "anger", "joy")]
+    except (TypeError, ValueError):
+        return None
+    if not all(math.isfinite(value) and 0 <= value <= 1 for value in values):
+        return None
+    sadness, fear, anger, joy = values
     raw = (sadness + fear + anger) * 100 - joy * 40
     return max(0.0, min(100.0, raw))
 
@@ -109,7 +108,7 @@ def _build_time_series(messages: List[Dict[str, Any]], days: int) -> List[Dict[s
             ts = _normalize_to_utc(ts)
         except Exception:
             continue
-        if (now - ts).days >= days:
+        if ts > now or (now - ts).days >= days:
             continue
         score = _score_from_message(item)
         if score is None:
@@ -120,55 +119,51 @@ def _build_time_series(messages: List[Dict[str, Any]], days: int) -> List[Dict[s
     for i in range(days - 1, -1, -1):
         d = (now - timedelta(days=i)).strftime("%Y-%m-%d")
         scores = bucket.get(d, [])
-        value = round(sum(scores) / len(scores), 2) if scores else 0.0
-        series.append({"date": d, "score": value})
+        value = round(sum(scores) / len(scores), 2) if scores else None
+        series.append({"date": d, "score": value, "sample_count": len(scores)})
     return series
 
 
 def _build_radar(messages: List[Dict[str, Any]]) -> Dict[str, int]:
     scored = [s for s in (_score_from_message(item) for item in messages) if s is not None]
     if not scored:
-        return {"emotion": 0, "cognition": 0, "behavior": 0, "depression": 0, "anxiety": 0}
+        return {key: None for key in ("emotion", "cognition", "behavior", "depression", "anxiety")}
     avg = sum(scored) / len(scored)
     return {
         "emotion": int(max(0, min(100, avg))),
-        "cognition": int(max(0, min(100, avg * 0.9 + 5))),
-        "behavior": int(max(0, min(100, avg * 0.85 + 8))),
-        "depression": int(max(0, min(100, avg * 0.95))),
-        "anxiety": int(max(0, min(100, avg * 1.02))),
+        "cognition": None,
+        "behavior": None,
+        "depression": None,
+        "anxiety": None,
     }
 
 
 def _build_heatmap(messages: List[Dict[str, Any]], days: int = 7) -> List[Dict[str, Any]]:
-    base = _build_time_series(messages, days)
-    data = []
-    for row in base:
-        score = row["score"]
-        data.append(
-            {
-                "date": row["date"],
-                "depression": round(score * 0.95, 2),
-                "anxiety": round(min(100, score * 1.05), 2),
-                "suicide": round(score * 0.65, 2),
-            }
-        )
-    return data
+    # Dialogue tags do not measure these clinical constructs separately.
+    return []
 
 
 def _llm_analyze(messages: List[Dict[str, Any]], *, deadline_ts: float | None = None) -> Dict[str, Any]:
-    sample = messages[-30:]
+    fallback = _build_structured_fallback("")
+    fallback["_generation"] = {"source": "local_rules", "status": "fallback", "model_id": None}
+    if not messages:
+        fallback["_generation"]["status"] = "insufficient"
+        return fallback
+    if os.getenv("REPORT_AI_ENABLED", "false").lower() != "true":
+        return fallback
+    # External explanation uses aggregate facts only, never conversation text.
+    facts = {"message_count": len(messages),
+             "tagged_message_count": sum(_score_from_message(item) is not None for item in messages)}
     prompt = (
-        "你是中文心理对话分析引擎。请基于输入的真实对话记录，输出严格JSON，字段必须包含："
-        "emotion_score(0-100), cognition_score(0-100), behavior_score(0-100), "
-        "depression_confidence(0-100), anxiety_confidence(0-100), suicide_confidence(0-100), "
-        "risk_level(LOW|MEDIUM|HIGH), interventions(数组, 3条中文建议), "
-        "chart_insights(对象，键为bar/pie/heatmap/trend/network/histogram；每项必须包含“趋势判断+对应建议”，每项<=120字)。\n"
-        f"对话数据: {json.dumps(sample, ensure_ascii=False)}"
+        "请根据以下统计事实输出支持性说明，严格JSON：summary、interventions（最多3条）、"
+        "chart_insights（只解释有依据的图）。不得推断症状、疾病、风险概率、因果或虚构趋势。"
+        "没有内容依据时明确资料不足，不生成评分。\n"
+        f"统计事实: {json.dumps(facts, ensure_ascii=False)}"
     )
     retry_timeouts = [1.0, 1.8, 3.0]
     llm_urls = [LLM_URL] if LLM_URL and not is_local_fallback_url(LLM_URL) else []
     if not llm_urls:
-        return _build_structured_fallback(prompt)
+        return fallback
     # 去重并保持顺序
     llm_urls = list(dict.fromkeys([u for u in llm_urls if u]))
     last_error = ""
@@ -182,20 +177,36 @@ def _llm_analyze(messages: List[Dict[str, Any]], *, deadline_ts: float | None = 
                     last_error = f"{llm_url}:http_{resp.status_code}"
                     continue
                 payload = resp.json()
+                if not isinstance(payload, dict) or payload.get("source") in {"local_rules", "local_rule"}:
+                    continue
                 text = payload.get("text") or payload.get("result") or "{}"
                 parsed = _safe_json_loads(text, {})
-                if isinstance(parsed, dict):
-                    return parsed
+                if isinstance(parsed, dict) and isinstance(parsed.get("summary"), str) and parsed["summary"].strip():
+                    advice = parsed.get("interventions")
+                    insights = parsed.get("chart_insights")
+                    return {
+                        "summary": parsed["summary"].strip()[:1500],
+                        "interventions": [s[:500] for s in advice[:3] if isinstance(s, str) and s.strip()]
+                            if isinstance(advice, list) else fallback["interventions"],
+                        "chart_insights": {key: value[:500] for key, value in insights.items()
+                            if key in DEFAULT_CHART_EXPLANATIONS and isinstance(value, str) and value.strip()}
+                            if isinstance(insights, dict) else {},
+                        "_generation": {"source": "provider", "status": "completed",
+                                        "model_id": payload.get("model_id") if isinstance(payload.get("model_id"), str) else None},
+                    }
                 last_error = f"{llm_url}:non_dict_payload"
             except Exception as exc:
                 last_error = f"{llm_url}:{str(exc)}"
                 time.sleep(0.15)
     logger.warning("LLM analyze degraded to local rule fallback")
-    return _build_structured_fallback(prompt)
+    return fallback
 
 
 def ensure_chart_explanations(report: Dict[str, Any]) -> Dict[str, Any]:
-    output = dict(report or {})
+    output = dict(report) if isinstance(report, dict) else {}
+    if not isinstance(output.get("generation"), dict):
+        output["generation"] = {"source": "unknown", "status": "unverified", "model_id": None}
+        output["data_status"] = "insufficient"
     existing = output.get("chart_insights") or output.get("chart_explanations")
     merged = dict(existing) if isinstance(existing, dict) else {}
     for key, value in DEFAULT_CHART_EXPLANATIONS.items():
@@ -228,19 +239,15 @@ def _build_trend_advice_payload(
     anxiety: int,
     suicide: int,
 ) -> Dict[str, str]:
-    s7 = [float(x.get("score", 0)) for x in last7]
-    s30 = [float(x.get("score", 0)) for x in last30]
+    s7 = [float(x["score"]) for x in last7 if x.get("score") is not None]
+    s30 = [float(x["score"]) for x in last30 if x.get("score") is not None]
     dir7 = _series_direction(s7)
     dir30 = _series_direction(s30)
-    risk_peak = max(depression, anxiety, suicide)
-
     return {
-        "trend": f"近7天风险趋势{dir7}，近30天{dir30}。建议每晚固定10分钟情绪复盘，若连续2天升高立即降低任务强度并寻求支持。",
-        "heatmap": f"高强度情绪在近期出现聚集，提示短期压力峰值。建议在高峰时段前安排呼吸放松与短时步行，避免持续透支。",
-        "bar": f"当前抑郁/焦虑风险峰值约{risk_peak}分，说明心理负荷偏高。建议优先修复睡眠与作息，减少夜间高认知任务。",
-        "pie": f"当前情绪结构偏向负性占比，说明恢复资源不足。建议每周至少2次稳定社交或运动，增加积极体验输入。",
-        "network": "因子联动较强，压力会通过认知反刍放大情绪波动。建议使用“触发事件-自动想法-替代想法”三步记录法。",
-        "histogram": f"分布显示中高风险区间出现频率偏高（风险等级{risk_level}）。建议设置个人预警线并在超线时主动预约咨询。",
+        "trend": (f"近7天有{len(s7)}个有效日期，近30天有{len(s30)}个有效日期。"
+                  + (f"规则标签展示值近7天{dir7}；" if len(s7) >= 2 else "有效日期不足，暂不判断趋势；")
+                  + "空缺日期未补零，该展示不能说明疾病风险或改善效果。"),
+        **{key: value for key, value in DEFAULT_CHART_EXPLANATIONS.items() if key != "trend"},
     }
 
 
@@ -259,15 +266,11 @@ def build_structured_report(
     last30 = _build_time_series(messages, 30)
     heatmap = _build_heatmap(messages, 7)
 
-    depression = int(llm.get("depression_confidence", radar["depression"]))
-    anxiety = int(llm.get("anxiety_confidence", radar["anxiety"]))
-    suicide = int(llm.get("suicide_confidence", max(0, radar["depression"] - 20)))
-    max_risk = max(depression, anxiety, suicide)
-    risk_level = llm.get("risk_level")
-    if risk_level not in {"LOW", "MEDIUM", "HIGH"}:
-        risk_level = "HIGH" if max_risk >= 75 else "MEDIUM" if max_risk >= 45 else "LOW"
+    # Neither a generic LLM nor heuristic tags provide calibrated disease risk.
+    depression = anxiety = suicide = None
+    risk_level = "UNKNOWN"
     chart_insights = llm.get("chart_insights", {}) if isinstance(llm.get("chart_insights"), dict) else {}
-    if not chart_insights:
+    if not chart_insights or llm.get("_generation", {}).get("source") != "provider":
         chart_insights = _build_trend_advice_payload(
             last7=last7,
             last30=last30,
@@ -278,14 +281,20 @@ def build_structured_report(
         )
 
     base_report = {
+        "data_status": "available" if messages else "insufficient",
+        "summary": llm.get("summary") or (f"本次汇总{len(messages)}条对话记录，仅提供统计事实与本地支持性说明。"
+                                         if messages else "暂无可分析的对话记录。你可以先记录自己的近况，或直接选择人工求助。"),
+        "generation": llm.get("_generation", {"source": "local_rules", "status": "fallback" if messages else "insufficient", "model_id": None}),
         "source": {
             "message_count": len(messages),
             "messages": messages,
+            "method": "dialogue_tag_rules_v1",
+            "score_meaning": "规则标签展示值，不是临床量表或疾病概率",
         },
         "scores": {
-            "emotion": int(llm.get("emotion_score", radar["emotion"])),
-            "cognition": int(llm.get("cognition_score", radar["cognition"])),
-            "behavior": int(llm.get("behavior_score", radar["behavior"])),
+            "emotion": radar["emotion"],
+            "cognition": radar["cognition"],
+            "behavior": radar["behavior"],
         },
         "risk": {
             "risk_level": risk_level,
@@ -306,7 +315,8 @@ def build_structured_report(
         "chart_insights": chart_insights,
         "chart_explanations": chart_insights,
         "updated_at": datetime.now(timezone.utc).isoformat(),
-        "generated_mode": "full" if include_llm else "quick",
+        "generated_mode": ("provider" if llm.get("_generation", {}).get("source") == "provider"
+                           else "local_rules" if include_llm else "quick"),
     }
     return ensure_chart_explanations(base_report)
 
@@ -321,7 +331,7 @@ def save_report(db: Session, user_id: int, report: Dict[str, Any]) -> models.Psy
     if not row:
         row = models.PsychologicalReport(user_id=user_id, report_date=today, analysis_json="{}")
         db.add(row)
-    row.risk_level = report.get("risk", {}).get("risk_level", "LOW")
+    row.risk_level = report.get("risk", {}).get("risk_level", "UNKNOWN")
     row.analysis_json = json.dumps(report, ensure_ascii=False)
     db.commit()
     db.refresh(row)
@@ -401,7 +411,7 @@ def run_dialogue_analysis_for_user(user_id: int):
 def enqueue_dialogue_analysis(user_id: int, *, force: bool = False):
     with JOB_LOCK:
         state = ANALYSIS_JOBS.get(user_id, {})
-        if not force and state.get("status") in {"queued", "running"}:
+        if state.get("status") in {"queued", "running"}:
             return state
         ANALYSIS_JOBS[user_id] = {
             "status": "queued",

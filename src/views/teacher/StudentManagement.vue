@@ -15,10 +15,9 @@
         </template>
       </el-input>
       
-      <el-select v-model="filterRisk" placeholder="风险等级" aria-label="按风险等级筛选" clearable class="filter-select">
-        <el-option label="高风险 (红)" value="red" />
-        <el-option label="中风险 (黄)" value="yellow" />
-        <el-option label="低风险 (绿)" value="green" />
+      <el-select v-model="filterRisk" placeholder="预警与评估状态" aria-label="按预警与评估状态筛选" clearable class="filter-select">
+        <el-option label="存在待处理预警" value="pending" />
+        <el-option label="待人工评估" value="unassessed" />
       </el-select>
 
       <el-select v-model="filterClass" placeholder="辅导员" aria-label="按辅导员筛选当前列表" clearable class="filter-select">
@@ -53,20 +52,16 @@
         </el-table-column>
         <el-table-column prop="class_name" label="班级" width="120" />
         <el-table-column prop="advisor" label="辅导员" width="120" />
-        <el-table-column label="风险等级" width="120">
+        <el-table-column label="预警与评估状态" min-width="175">
           <template #default="scope">
-            <el-tag v-if="scope.row.risk_level === 'red'" type="danger" effect="dark">高风险</el-tag>
-            <el-tag v-else-if="scope.row.risk_level === 'yellow'" type="warning" effect="dark">中风险</el-tag>
-            <el-tag v-else-if="scope.row.risk_level === 'green'" type="success" effect="dark">低风险</el-tag>
-            <el-tag v-else type="info" effect="dark">未测评</el-tag>
+            <el-tag v-if="scope.row.has_pending_crisis" type="warning">有待处理预警（{{ scope.row.pending_crisis_count || 1 }}）</el-tag>
+            <el-tag v-else-if="scope.row.risk_level == null" type="info">待人工评估</el-tag>
+            <el-tag v-else type="info">有服务器状态记录</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="最近测评时间" width="200">
-          <template #default="scope">
-            {{ formatDate(scope.row.latest_test_time) }}
-          </template>
+        <el-table-column label="最近记录时间" width="200">
+          <template #default="scope">{{ formatDate(scope.row.latest_test_time) }}</template>
         </el-table-column>
-        <el-table-column prop="latest_test_score" label="最近得分" width="100" />
         <el-table-column label="操作" align="right">
           <template #default="scope">
             <el-button type="warning" size="small" plain @click="openIntervention(scope.row)">添加干预</el-button>
@@ -193,7 +188,7 @@ const filteredData = computed(() => {
   return students.value.filter(s => {
     const matchSearch = (s.name && s.name.includes(searchQuery.value)) || 
                         (s.student_id && s.student_id.includes(searchQuery.value))
-    const matchRisk = filterRisk.value ? s.risk_level === filterRisk.value : true
+    const matchRisk = !filterRisk.value || (filterRisk.value === 'pending' ? Boolean(s.has_pending_crisis) : filterRisk.value === 'unassessed' ? s.risk_level == null : false)
     const matchClass = filterClass.value ? s.advisor === filterClass.value : true
     
     return matchSearch && matchRisk && matchClass
@@ -223,16 +218,11 @@ const getSurname = (name) => {
 
 const openIntervention = (row) => {
   if (!row?.id) {
-    ElMessage.warning('请先完成风险评估')
+    ElMessage.warning('没有可用的学生记录')
     return
   }
-  const level = row.risk_level === 'red' ? '紧急干预' : (row.risk_level === 'yellow' ? '重点关注' : '持续观察')
   window.dispatchEvent(new CustomEvent('open-intervention-dialog', {
-    detail: {
-      student_id: row.id,
-      risk_type: row.risk_level === 'red' ? '高风险预警' : (row.risk_level === 'yellow' ? '中风险预警' : '低风险观察'),
-      intervention_level: level
-    }
+    detail: { student_id: row.id }
   }))
 }
 

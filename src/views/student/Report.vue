@@ -1,21 +1,24 @@
 <template>
   <div class="report-container business-page">
-    <el-alert v-if="loadError" type="error" :closable="false" show-icon title="报告暂时无法加载，请稍后重试。">
-      <el-button link type="primary" @click="fetchLatest">重新加载报告</el-button>
+    <el-alert v-if="loadError" type="error" :closable="false" show-icon :title="processingError || '报告暂时无法加载，请稍后重试。'">
+      <el-button link type="primary" @click="fetchLatest({ retryTrigger: true })">{{ processingError ? "重新尝试分析" : "重新加载报告" }}</el-button>
     </el-alert>
     <div class="header-container">
       <div>
         <h2 class="page-title">我的心理报告（对话驱动）</h2>
-        <p class="page-desc">基于智能心理助手真实对话（文本、时间、情绪标签、关键词）实时分析。</p>
+        <p class="page-desc">汇总已保存记录与本地规则线索；可用字段、具体来源和资料范围会在报告中注明，不代替专业评估。</p>
       </div>
       <div class="actions">
-        <el-button :loading="refreshing || collabRunning" :disabled="collabRunning" type="primary" @click="refreshReport">
-          {{ collabRunning ? "分析中..." : "重新分析" }}
+        <el-button v-if="collabEnabled" :loading="refreshing || collabRunning" :disabled="collabRunning" type="primary" @click="refreshReport">
+          {{ collabRunning ? "分析中..." : "重新运行协同分析" }}
         </el-button>
-        <el-button @click="openPrintPreview">打印报告</el-button>
+        <span v-else class="collab-status" role="status">多模型协同未启用</span>
+        <el-button :disabled="loading || loadError || (!reportData && !collaborativeReport)" @click="openPrintPreview">打印报告</el-button>
         <el-button @click="shareReport">分享说明</el-button>
       </div>
     </div>
+
+    <el-alert v-if="!collabEnabled" class="collab-safety-note" type="info" :closable="false" show-icon title="当前可查看本地汇总和已保存记录；多模型协同未启用。" />
 
     <el-skeleton :loading="loading" animated>
       <template #template>
@@ -24,15 +27,35 @@
       <template #default>
         <el-card class="summary-card" v-if="reportData">
           <h3>
-            当前风险等级：
+            风险状态：
             <span :class="`risk-${riskLevel.toLowerCase()}`">{{ riskLevel }}</span>
           </h3>
-          <p>情绪维度 {{ reportData.scores?.emotion || 0 }} / 认知维度 {{ reportData.scores?.cognition || 0 }} / 行为维度 {{ reportData.scores?.behavior || 0 }}</p>
-          <p>抑郁 {{ reportData.risk?.depression_confidence || 0 }}，焦虑 {{ reportData.risk?.anxiety_confidence || 0 }}，自杀风险 {{ reportData.risk?.suicide_confidence || 0 }}</p>
-          <p>{{ (reportData.interventions || []).join(" ") }}</p>
+          <p>情绪维度 {{ displayValue(reportData.scores?.emotion) }} / 认知维度 {{ displayValue(reportData.scores?.cognition) }} / 行为维度 {{ displayValue(reportData.scores?.behavior) }}</p>
+          <p>抑郁 {{ displayValue(reportData.risk?.depression_confidence) }}，焦虑 {{ displayValue(reportData.risk?.anxiety_confidence) }}，自杀风险 {{ displayValue(reportData.risk?.suicide_confidence) }}</p>
+          <p v-if="reportData.data_status === 'insufficient'">当前没有足够的已记录对话数据，暂不生成风险结论。</p>
+          <p v-else-if="reportData.generated_mode">本报告生成方式：{{ generationModeLabel }}<template v-if="reportData.generation?.status">；状态：{{ generationStatusLabel }}</template></p>
+          <p v-if="reportData.interventions?.length">{{ reportData.interventions.join(" ") }}</p>
         </el-card>
       </template>
     </el-skeleton>
+
+    <el-card v-if="!loading && !loadError && !reportData" class="report-empty" shadow="never">
+      <LibraryEmpty role="emptyReport" description="还没有可汇总的对话记录" :image-size="110">
+        <p class="report-empty-copy">有已保存的记录后，这里会展示来源、变化与报告说明。</p>
+        <div class="business-actions">
+          <el-button type="primary" @click="$router.push('/student/advanced-chat')">查看智能助手</el-button>
+          <el-button plain @click="$router.push('/student/questions')">向老师留言</el-button>
+        </div>
+      </LibraryEmpty>
+    </el-card>
+
+    <section v-if="reportData" class="interpretation-section" aria-labelledby="interpretation-title">
+      <div class="interpretation-heading">
+        <div><h3 id="interpretation-title">报告说明</h3><p>按需获取简要说明。服务只接收已保存记录的位置，不发送对话原文。</p></div>
+        <el-button type="primary" :loading="interpretationLoading" :disabled="interpretationLoading || latestReportRecordId === null" @click="requestInterpretation">{{ interpretationLoading ? "正在整理…" : "请求说明" }}</el-button>
+      </div>
+      <AIInterpretCard :text="interpretation?.text || ''" :status="interpretation?.status || 'idle'" :source="interpretation?.source || ''" :model-id="interpretation?.model_id || ''" :error-message="interpretationError" :empty-message="interpretationEmptyMessage" />
+    </section>
 
     <el-dialog
       v-model="collabVisible"
@@ -77,7 +100,7 @@
         </el-card>
 
         <el-card class="collab-card collab-flow-card">
-          <template #header><span>模型数据流向图</span></template>
+          <template #header><span>本次模型调用状态</span></template>
           <div ref="collabFlowRef" class="chart-box flow-box"></div>
         </el-card>
       </div>
@@ -96,9 +119,9 @@
         <div class="modern-metric-grid">
           <div class="modern-card metric-card">
             <div class="metric-label">总置信度</div>
-            <div class="metric-value">{{ Math.round((collaborativeReport.confidence || 0) * 100) }}%</div>
-            <div class="metric-progress-track">
-              <div class="metric-progress-fill" :style="{ width: `${Math.round((collaborativeReport.confidence || 0) * 100)}%` }"></div>
+            <div class="metric-value">{{ displayConfidence(collaborativeReport.confidence) }}</div>
+            <div v-if="isPresentNumber(collaborativeReport.confidence)" class="metric-progress-track">
+              <div class="metric-progress-fill" :style="{ width: `${Math.round(Number(collaborativeReport.confidence) * 100)}%` }"></div>
             </div>
           </div>
           <div class="modern-card metric-card">
@@ -137,10 +160,11 @@
 
         <div class="modern-two-col-grid core-stack-grid">
           <section class="modern-card report-section">
-            <h4 class="section-title">模型贡献度</h4>
-            <div class="confidence-canvas-wrap">
+            <h4 class="section-title">模型置信度字段</h4>
+            <div v-if="hasModelConfidenceRows" class="confidence-canvas-wrap">
               <canvas ref="collabConfidenceCanvasRef" class="confidence-canvas" />
             </div>
+            <p v-else class="diag-empty">本次报告没有可展示的置信度值。</p>
           </section>
 
           <section class="modern-card report-section">
@@ -150,9 +174,9 @@
                 <div class="core-detail-top">
                   <span class="model-cell">{{ row.model }}</span>
                   <div class="table-progress-row">
-                    <span class="table-progress-label">{{ Math.round((row.confidence || 0) * 100) }}%</span>
-                    <div class="table-progress-track">
-                      <div class="table-progress-fill" :style="{ width: `${Math.round((row.confidence || 0) * 100)}%` }"></div>
+                    <span class="table-progress-label">{{ displayConfidence(row.confidence) }}</span>
+                    <div v-if="isPresentNumber(row.confidence)" class="table-progress-track">
+                      <div class="table-progress-fill" :style="{ width: `${Math.round(Number(row.confidence) * 100)}%` }"></div>
                     </div>
                   </div>
                 </div>
@@ -180,7 +204,7 @@
               <span class="diag-fix">{{ item.fix }}</span>
             </div>
           </div>
-          <p v-else class="diag-empty">本次全部模型调用正常</p>
+          <p v-else class="diag-empty">{{ (collaborativeReport.modelResults || []).length ? "本次未发现已报告异常" : "本次没有模型调用记录" }}</p>
         </section>
       </div>
     </el-dialog>
@@ -197,7 +221,7 @@
           <header class="print-header">
             <h1>心理报告（图表与 AI 针对性分析）</h1>
             <p>生成时间：{{ printPayload.generatedAt }}</p>
-            <p>风险等级：{{ printPayload.riskLevel }}</p>
+            <p>风险状态：{{ printPayload.riskLevel }}</p>
           </header>
 
           <section class="print-section" v-if="printPayload.targetedAnalysis.length">
@@ -224,7 +248,7 @@
               <p class="print-caption">{{ item.caption }}</p>
               <img v-if="item.image" :src="item.image" :alt="item.title" class="print-chart-image" />
               <p v-else class="print-chart-missing">图表暂不可用（当前会话未完成渲染）。</p>
-              <p class="print-analysis"><strong>AI 分析：</strong>{{ item.analysis }}</p>
+              <p class="print-analysis"><strong>图表说明：</strong>{{ item.analysis }}</p>
             </article>
           </section>
         </section>
@@ -237,46 +261,51 @@
       </template>
     </el-dialog>
 
-    <div class="charts-grid">
-      <el-card class="chart-card">
-        <template #header><span>柱状图：心理指标对比</span></template>
-        <div ref="barRef" class="chart-box"></div>
+    <el-card v-if="reportData && !hasAnyChartData" class="chart-card">
+      <LibraryEmpty role="emptyReport" description="还没有足够的记录生成图表。你可以先记录近况，或直接选择人工求助。" />
+      <el-button type="primary" @click="$router.push('/student/advanced-chat')">先记录近况</el-button>
+    </el-card>
+    <div v-if="hasAnyChartData" class="charts-grid">
+      <el-card v-if="hasMetricData" class="chart-card">
+        <template #header><span>已有记录展示值</span></template>
+        <div v-if="hasMetricData" ref="barRef" class="chart-box"></div>
+        <div v-else class="chart-empty">当前没有可绘制的指标数据。</div>
         <p class="chart-ai">{{ chartExplanation("bar") }}</p>
       </el-card>
-      <el-card class="chart-card">
-        <template #header><span>饼图：心理状态占比</span></template>
-        <div ref="pieRef" class="chart-box"></div>
+      <el-card v-if="hasEmotionSamples" class="chart-card">
+        <template #header><span>对话规则标签占比</span></template>
+        <div v-if="hasEmotionSamples" ref="pieRef" class="chart-box"></div>
+        <div v-else class="chart-empty">当前没有带情绪标注的对话记录。</div>
         <p class="chart-ai">{{ chartExplanation("pie") }}</p>
       </el-card>
-      <el-card class="chart-card">
+      <el-card v-if="hasHeatmapData" class="chart-card">
         <template #header><span>热图：情绪强度与时间</span></template>
-        <div ref="heatmapRef" class="chart-box"></div>
+        <div v-if="hasHeatmapData" ref="heatmapRef" class="chart-box"></div>
+        <div v-else class="chart-empty">当前没有足够的时间序列数据。</div>
         <p class="chart-ai">{{ chartExplanation("heatmap") }}</p>
       </el-card>
-      <el-card class="chart-card">
-        <template #header><span>趋势折线图：心理指标变化</span></template>
-        <div ref="trendRef" class="chart-box"></div>
+      <el-card v-if="hasTrendData" class="chart-card">
+        <template #header><span>时间序列：规则展示值</span></template>
+        <div v-if="hasTrendData" ref="trendRef" class="chart-box"></div>
+        <div v-else class="chart-empty">当前没有可展示的历史趋势点。</div>
         <p class="chart-ai">{{ chartExplanation("trend") }}</p>
       </el-card>
-      <el-card class="chart-card">
-        <template #header><span>网络关系图：心理因子关联</span></template>
-        <div ref="networkRef" class="chart-box"></div>
-        <p class="chart-ai">{{ chartExplanation("network") }}</p>
-      </el-card>
-      <el-card class="chart-card">
+      <el-card v-if="hasDistributionSamples" class="chart-card">
         <template #header><span>直方图：心理数据分布</span></template>
-        <div ref="histogramRef" class="chart-box"></div>
+        <div v-if="hasDistributionSamples" ref="histogramRef" class="chart-box"></div>
+        <div v-else class="chart-empty">当前没有服务端返回的数值样本。</div>
         <p class="chart-ai">{{ chartExplanation("histogram") }}</p>
       </el-card>
     </div>
 
-    <el-card class="chart-card">
+    <el-card v-if="hasModelConfidenceRows" class="chart-card">
       <template #header>
         <div class="model-compare-header">
-          <span>模型置信度分布（实时）</span>
+          <span>本次协同报告模型结果</span>
           <div class="model-compare-actions">
             <el-select
               v-model="selectedModels"
+              :disabled="!hasModelConfidenceRows"
               multiple
               collapse-tags
               collapse-tags-tooltip
@@ -287,6 +316,7 @@
             </el-select>
             <el-segmented
               v-model="compareChartType"
+              :disabled="!hasModelConfidenceRows"
               :options="[
                 { label: '柱状图', value: 'bar' },
                 { label: '雷达图', value: 'radar' }
@@ -295,12 +325,13 @@
           </div>
         </div>
       </template>
-      <div ref="collabCompareRef" class="chart-box"></div>
-      <p class="chart-ai">支持悬停查看每个模型实时置信度，结合筛选对比各模型贡献差异。</p>
+      <div v-if="hasModelConfidenceRows" ref="collabCompareRef" class="chart-box"></div>
+      <div v-else class="chart-empty">当前没有可比较的模型置信度记录。</div>
+      <p class="chart-ai">图表展示本次报告返回的置信度字段；缺失值不会按零显示。</p>
     </el-card>
 
-    <el-card class="chart-card">
-      <template #header><span>对话源数据（实时）</span></template>
+    <el-card v-if="dialogueRows.length" class="chart-card">
+      <template #header><span>本次报告依据的对话记录</span></template>
       <el-table :data="dialogueRows" stripe height="320">
         <el-table-column prop="created_at" label="时间戳" width="180" />
         <el-table-column prop="role" label="角色" width="90" />
@@ -308,6 +339,7 @@
         <el-table-column label="情绪标签" min-width="180">
           <template #default="{ row }">
             <div class="emotion-tag-row">
+              <span v-if="!formatEmotionTags(row.emotion_tags).length" class="emotion-empty">未提供</span>
               <template v-for="(tag, idx) in formatEmotionTags(row.emotion_tags)" :key="`${tag.key}-${idx}`">
                 <span class="emotion-chip" :class="`chip-${tag.key}`">{{ tag.label }} {{ tag.percent }}%</span>
                 <span v-if="idx < formatEmotionTags(row.emotion_tags).length - 1" class="emotion-sep">|</span>
@@ -325,7 +357,7 @@
       <header class="print-header">
         <h1>心理报告（图表与 AI 针对性分析）</h1>
         <p>生成时间：{{ printPayload.generatedAt }}</p>
-        <p>风险等级：{{ printPayload.riskLevel }}</p>
+        <p>风险状态：{{ printPayload.riskLevel }}</p>
       </header>
 
       <section class="print-section" v-if="printPayload.targetedAnalysis.length">
@@ -352,7 +384,7 @@
           <p class="print-caption">{{ item.caption }}</p>
           <img v-if="item.image" :src="item.image" :alt="item.title" class="print-chart-image" />
           <p v-else class="print-chart-missing">图表暂不可用（当前会话未完成渲染）。</p>
-          <p class="print-analysis"><strong>AI 分析：</strong>{{ item.analysis }}</p>
+          <p class="print-analysis"><strong>图表说明：</strong>{{ item.analysis }}</p>
         </article>
       </section>
     </section>
@@ -364,15 +396,21 @@ import { setLibraryChartOption, createLibraryChartJsConfig, libraryChartFont } f
 import { businessAlpha, businessColor, businessPalette } from '../../styles/business-theme.js'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import axios from "axios"
-import * as echarts from '../../design/charts/report'
-import Chart from '../../design/charts/confidence'
 import { ElMessage, ElButton, ElSkeleton, ElSkeletonItem, ElCard, ElDialog, ElProgress, ElTag, ElSelect, ElOption, ElSegmented, ElTable, ElTableColumn, ElAlert } from 'element-plus'
 import { computeRenderStrategy, parseSseBlocks } from "@/services/reportStream"
+import { getReportPollDelayMs, shouldPollReportAgain } from "@/services/reportPolling"
+import { finiteNumberOrNull, isPresentNumber } from "@/services/reportNumbers"
+import AIInterpretCard from "@/components/AIInterpretCard.vue"
 
 const loading = ref(false)
 const loadError = ref(false)
 const refreshing = ref(false)
 const reportData = ref(null)
+const interpretation = ref(null)
+const interpretationLoading = ref(false)
+const interpretationError = ref("")
+let interpretationController = null
+let interpretationEpoch = 0
 const barRef = ref(null)
 const pieRef = ref(null)
 const heatmapRef = ref(null)
@@ -391,6 +429,9 @@ let histogramChart = null
 let collabFlowChart = null
 let collabConfidenceChart = null
 let collabCompareChart = null
+let echartsRuntime = null
+let echartsRuntimePromise = null
+let chartJsRuntimePromise = null
 let realtimeTimer = null
 let esAbort = null
 let collabAbort = null
@@ -398,10 +439,17 @@ let reportSnapshot = null
 let assistantEventHandler = null
 let unmounted = false
 let processingRetryTimer = null
+let reportLoadController = null
+let metadataController = null
+let reportLoadEpoch = 0
+let reportProcessingTriggered = false
+const processingError = ref("")
+let reportIdentity = readReportIdentity()
 let collabFadeTimer = null
 let collabCloseTimer = null
 const collabVisible = ref(false)
 const collabRunning = ref(false)
+const collabEnabled = ref(false)
 const collabFading = ref(false)
 const reportVisible = ref(false)
 const shouldOpenReportAfterCollab = ref(false)
@@ -415,56 +463,67 @@ const collaborativeReport = ref(null)
 const collabSteps = ref([])
 const compareChartType = ref("bar")
 const selectedModels = ref([])
-const primaryModelName = ref("qwen3.6-plus")
-const legacyPrimaryModelAlias = ref("qvq-max-2025-03-25")
+const primaryModelName = ref("当前模型")
+const legacyPrimaryModelAlias = ref("")
 const printPreviewVisible = ref(false)
 const printPayload = ref({
   generatedAt: "-",
-  riskLevel: "LOW",
+  riskLevel: "UNKNOWN",
   targetedAnalysis: [],
   indicators: [],
   charts: [],
 })
 
-const BASE_MODEL_CHAIN = [
-  { model: "qwen3.6-plus", stage: "文本理解与逻辑推理" },
-  { model: "wanx-v1", stage: "图像/视频内容分析" },
-  { model: "qwen3.5-omni-plus-2026-03-15", stage: "多模态数据融合" },
-  { model: "qwen3-tts-vd-2026-01-26", stage: "音频内容处理" },
-  { model: "gte-rerank-v2", stage: "语义检索与重排序" },
-  { model: "emohaa", stage: "情感倾向分析" },
-]
-const MODEL_CHAIN = computed(() => {
-  const rows = BASE_MODEL_CHAIN.map((x) => ({ ...x }))
-  rows[0].model = primaryModelName.value
-  return rows
-})
 
 const normalizeModelName = (name) => {
   if (name === legacyPrimaryModelAlias.value) return primaryModelName.value
   return name
 }
 
-const riskLevel = computed(() => reportData.value?.risk?.risk_level || "LOW")
+const riskLevel = computed(() => {
+  const value = String(reportData.value?.risk?.risk_level || "UNKNOWN").toUpperCase()
+  return ({ UNKNOWN: "待人工评估", LOW: "低", MEDIUM: "中", HIGH: "高" })[value] || value
+})
+const generationModeLabel = computed(() => {
+  const mode = reportData.value?.generation?.source || reportData.value?.generated_mode
+  return ({ quick: "快速汇总", local_rules: "本地规则", provider: "模型服务" })[mode] || "未注明"
+})
+const generationStatusLabel = computed(() => ({ completed: "已完成", fallback: "本地回退", insufficient: "资料不足", unverified: "来源未核验" })[reportData.value?.generation?.status] || "状态未注明")
+const displayValue = (value) => !isPresentNumber(value) ? "暂无数据" : Number(value).toFixed(1)
+const hasMetricData = computed(() => {
+  const scores = reportData.value?.scores || {}
+  const risk = reportData.value?.risk || {}
+  return [scores.emotion, scores.cognition, scores.behavior, risk.depression_confidence, risk.anxiety_confidence, risk.suicide_confidence].some(isPresentNumber)
+})
+const hasEmotionSamples = computed(() => dialogueRows.value.some(row => formatEmotionTags(row?.emotion_tags).length > 0))
+const hasDistributionSamples = computed(() => dialogueRows.value.some(row => isPresentNumber(row?.score) && Number(row.score) >= 0 && Number(row.score) <= 100))
+const hasHeatmapData = computed(() => (reportData.value?.trends?.heatmap || []).some(row => row && [row.depression, row.anxiety, row.suicide].some(isPresentNumber)))
+const hasTrendData = computed(() => [...(reportData.value?.trends?.seven_days || []), ...(reportData.value?.trends?.thirty_days || [])].some(row => isPresentNumber(row?.score)))
+const hasAnyChartData = computed(() => hasMetricData.value || hasEmotionSamples.value || hasHeatmapData.value || hasTrendData.value || hasDistributionSamples.value)
 const dialogueRows = computed(() => reportData.value?.source?.messages || [])
+const latestReportRecordId = computed(() => dialogueRows.value.length > 0 && dialogueRows.value.length - 1 <= 5000 ? dialogueRows.value.length - 1 : null)
+const interpretationEmptyMessage = computed(() => dialogueRows.value.length === 0 ? "暂无已保存对话可供说明。" : "当前记录数量超出说明服务范围，暂不能生成说明。")
 const modelConfidenceRows = computed(() => {
   const rows = collaborativeReport.value?.modelResults || []
   if (!selectedModels.value.length) return rows
   return rows.filter((x) => selectedModels.value.includes(x.model))
 })
+const hasModelConfidenceRows = computed(() => modelConfidenceRows.value.some(row => isPresentNumber(row.confidence)))
 const modelSelectOptions = computed(() => {
   const rows = collaborativeReport.value?.modelResults || []
   return rows.map((x) => ({ label: normalizeModelName(x.model), value: normalizeModelName(x.model) }))
 })
 const readTotalTokens = (row) => {
-  const fromTop = Number(row?.totalTokens || 0)
-  const fromUsage = Number(row?.usage?.total_tokens || row?.detail?.usage?.total_tokens || 0)
-  return fromTop || fromUsage || 0
+  const fromTop = row?.totalTokens
+  const fromUsage = row?.usage?.total_tokens ?? row?.detail?.usage?.total_tokens
+  const value = fromTop ?? fromUsage
+  return isPresentNumber(value) && Number(value) >= 0 ? Number(value) : null
 }
 const totalTokens = computed(() => {
-  const rows = collaborativeReport.value?.modelResults || []
-  return rows.reduce((sum, row) => sum + readTotalTokens(row), 0)
+  const values = (collaborativeReport.value?.modelResults || []).map(readTotalTokens).filter(value => value !== null)
+  return values.length ? values.reduce((sum, value) => sum + value, 0) : "暂无数据"
 })
+const displayConfidence = (value) => isPresentNumber(value) ? `${Math.round(Number(value) * 100)}%` : "暂无数据"
 const topModelRows = computed(() => {
   const rows = [...(collaborativeReport.value?.modelResults || [])]
   return rows.sort((a, b) => Number(b.confidence || 0) - Number(a.confidence || 0)).slice(0, 3)
@@ -498,12 +557,13 @@ const modelDiagRows = computed(() => {
   const rows = collaborativeReport.value?.modelResults || []
   const bad = rows.filter((x) => {
     const raw = String(x?.detail?.raw?.error || "")
-    const status = String(x?.detail?.status || "")
-    return raw || (status !== "skipped" && Number(x?.confidence || 0) <= 0.4)
+    const status = String(x?.detail?.status || "").toLowerCase()
+    return raw || ["error", "failed", "timeout", "unavailable"].includes(status)
   })
   return bad.map((x) => {
     const raw = String(x?.detail?.raw?.error || "")
-    let reason = raw || "该模型结果置信度偏低"
+    const status = String(x?.detail?.status || "")
+    let reason = raw || `服务状态：${status || "异常"}`
     let fix = "建议检查模型可用性与入参配置。"
     if (reason.includes("does not support http call")) {
       fix = "当前账号未开通该模型HTTP调用权限，请在DashScope控制台开通或更换可用模型。"
@@ -520,62 +580,156 @@ const modelDiagRows = computed(() => {
   })
 })
 const localExplainFallback = {
-  bar: "柱状图展示当前核心心理指标，得分越高表示压力线索越明显。",
-  pie: "饼图反映不同心理状态占比，帮助识别主要情绪结构。",
-  heatmap: "热图呈现一周内情绪强度变化，颜色越深代表风险越高。",
-  trend: "趋势线展示7天和30天波动方向，用于判断是否持续改善。",
-  network: "网络图展示因子关联强度，边越粗说明耦合越明显。",
-  histogram: "直方图展示历史分值分布，便于观察极端波动区间。",
+  bar: "图中数值来自当前报告返回的指标字段；未提供的指标不会按零分解释。",
+  pie: "图中占比按已有情绪标注汇总，不代表诊断或风险概率。",
+  heatmap: "图中只显示服务端返回的时间点；空白表示没有可用记录。",
+  trend: "图中按服务端提供的日期和分值绘制，不推断缺失日期的变化。",
+  network: "当前没有可核验的因子关联数据，因此不生成关系图。",
+  histogram: "分布仅概括服务端返回的对话分值，不代表临床量表结果。",
 }
 const PRINT_CHART_META = [
-  { key: "bar", title: "心理测评柱状图", caption: "展示情绪、认知、行为及风险维度的当前分值对比。" },
+  { key: "bar", title: "已有记录展示值", caption: "仅显示报告实际提供的规则展示值，空缺不按零分解释。" },
   { key: "pie", title: "心理状态占比饼图", caption: "展示对话样本中的主要情绪结构占比。" },
-  { key: "heatmap", title: "情绪强度热图", caption: "展示时间轴上抑郁、焦虑与自杀风险强度变化。" },
-  { key: "trend", title: "心理趋势折线图", caption: "对比近 7 天与 30 天心理变化趋势。" },
-  { key: "network", title: "心理因子关联网络图", caption: "展示核心心理因子之间的关联关系强度。" },
-  { key: "histogram", title: "心理数据分布直方图", caption: "展示风险分值在不同区间的分布情况。" },
-  { key: "compare", title: "模型置信度对比图", caption: "展示多模型协同分析中的模型贡献差异。" },
+  { key: "heatmap", title: "记录热图", caption: "仅在存在可核验记录时展示，不能解释为疾病风险强度。" },
+  { key: "trend", title: "规则展示值时间序列", caption: "按实际日期展示近7天与30天的已有记录，缺失日期保留空缺。" },
+  { key: "network", title: "关联记录", caption: "当前没有可核验的因子关联数据，不生成关系结论。" },
+  { key: "histogram", title: "已有展示值分布", caption: "只统计有效记录，不包含空值，不代表临床量表分布。" },
+  { key: "compare", title: "解析来源记录", caption: "仅列实际提供的解析元信息，不将模型自述置信度解释为准确率。" },
 ]
 
-const fetchLatest = async (force = false) => {
+function readReportIdentity() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "null")
+    return user?.id == null ? "" : String(user.id)
+  } catch { return "" }
+}
+
+
+const handleReportStorageChange = (event) => {
+  if (!['user', 'token', 'access_token'].includes(event.key) || readReportIdentity() === reportIdentity) return
+  reportIdentity = readReportIdentity()
+  reportLoadEpoch += 1
+  reportLoadController?.abort()
+  reportLoadController = null
+  metadataController?.abort()
+  collabEnabled.value = false
+  interpretationEpoch += 1
+  interpretationController?.abort()
+  interpretationController = null
+  interpretationLoading.value = false
+  clearTimeout(processingRetryTimer)
+  if (collabAbort) collabAbort.abort()
+  reportData.value = null
+  interpretationController?.abort()
+  interpretationController = null
+  interpretation.value = null
+  interpretationLoading.value = false
+  interpretationError.value = ""
+  collaborativeReport.value = null
+  disposeReportCharts()
+  reportSnapshot = null
+  printPayload.value = { generatedAt: "-", riskLevel: "UNKNOWN", targetedAnalysis: [], indicators: [], charts: [] }
+  printPreviewVisible.value = false
+  reportVisible.value = false
+  collabVisible.value = false
+  shouldOpenReportAfterCollab.value = false
+  clearTimeout(collabFadeTimer)
+  clearTimeout(collabCloseTimer)
+  exitPrintMode()
+  loading.value = false
+  refreshing.value = false
+  collabRunning.value = false
+  loadError.value = true
+  processingError.value = "登录身份已变化，请重新进入报告页查看当前账号的数据。"
+}
+
+const fetchLatest = async ({ retryTrigger = false, sequence = null, attempt = 0 } = {}) => {
   if (unmounted) return
+  if (sequence === null) {
+    clearTimeout(processingRetryTimer)
+    reportLoadController?.abort()
+    sequence = ++reportLoadEpoch
+    if (retryTrigger) reportProcessingTriggered = false
+  }
+  if (sequence !== reportLoadEpoch) return
+  if (reportIdentity !== readReportIdentity()) { handleReportStorageChange({ key: "user" }); return }
   loading.value = true
   loadError.value = false
+  processingError.value = ""
+  const controller = new AbortController()
+  reportLoadController = controller
   try {
-    const before = reportData.value
-      ? { risk: reportData.value?.risk, msgCount: reportData.value?.source?.message_count, updated_at: reportData.value?.updated_at }
-      : null
-    console.log("[Report] fetchLatest before:", before)
     const res = await axios.get("/api/v1/report/analysis/latest", {
-      params: { _t: Date.now() }, // 强制绕过浏览器/中间层缓存
+      timeout: 15000,
+      params: { _t: Date.now() },
       headers: { "Cache-Control": "no-cache" },
+      signal: controller.signal,
     })
-    if (unmounted) return
+    if (unmounted || sequence !== reportLoadEpoch) return
     if (res.data.status === "processing") {
-      await axios.post("/api/v1/report/analysis/trigger")
-      if (unmounted) return
-      clearTimeout(processingRetryTimer)
-      processingRetryTimer = setTimeout(() => fetchLatest(true), 1500)
+      if (!reportProcessingTriggered) {
+        reportProcessingTriggered = true
+        await axios.post("/api/v1/report/analysis/trigger", {}, { timeout: 15000, signal: controller.signal })
+        if (unmounted || sequence !== reportLoadEpoch) return
+      }
+      if (!shouldPollReportAgain(attempt)) {
+        processingError.value = "报告仍在生成，已暂停自动检查。你可以稍后手动重试。"
+        loadError.value = true
+        return
+      }
+      const delay = getReportPollDelayMs(attempt)
+      processingRetryTimer = setTimeout(() => fetchLatest({ sequence, attempt: attempt + 1 }), delay)
       return
     }
+    reportProcessingTriggered = false
+    interpretationEpoch += 1
+    interpretationController?.abort()
+    interpretationController = null
+    interpretation.value = null
+    interpretationError.value = ""
+    interpretationLoading.value = false
     reportData.value = res.data.data
-    console.log("[Report] fetchLatest after:", {
-      risk: reportData.value?.risk,
-      msgCount: reportData.value?.source?.message_count,
-      updated_at: reportData.value?.updated_at,
-    })
     await nextTick()
-    renderCharts()
+    await renderCharts()
   } catch (error) {
-    if (unmounted) return
+    if (unmounted || sequence !== reportLoadEpoch || error?.name === "CanceledError" || error?.code === "ERR_CANCELED") return
     loadError.value = true
     ElMessage.error("报告加载失败")
   } finally {
-    loading.value = false
+    if (sequence === reportLoadEpoch) {
+      loading.value = false
+      if (reportLoadController === controller) reportLoadController = null
+    }
+  }
+}
+
+const requestInterpretation = async () => {
+  if (latestReportRecordId.value === null || interpretationLoading.value) return
+  interpretationController?.abort()
+  const requestId = ++interpretationEpoch
+  interpretationController = new AbortController()
+  interpretationLoading.value = true
+  interpretationError.value = ""
+  interpretation.value = { status: "loading", text: "" }
+  const identity = reportIdentity
+  try {
+    const response = await axios.post("/api/v1/report/ai-interpret", { recordId: latestReportRecordId.value }, { timeout: 15000, signal: interpretationController.signal })
+    if (unmounted || requestId !== interpretationEpoch || identity !== reportIdentity || identity !== readReportIdentity()) return
+    interpretation.value = response?.data || { status: "insufficient", source: "local_rules", text: "暂无可用说明。" }
+  } catch (error) {
+    if (error?.code === "ERR_CANCELED" || unmounted || requestId !== interpretationEpoch || identity !== reportIdentity) return
+    interpretation.value = { status: "error", text: "" }
+    interpretationError.value = error?.response?.data?.detail || "报告说明获取失败，请稍后重试。"
+  } finally {
+    if (requestId === interpretationEpoch && identity === reportIdentity) {
+      interpretationLoading.value = false
+      interpretationController = null
+    }
   }
 }
 
 const refreshReport = async () => {
+  if (!collabEnabled.value) { ElMessage.info("多模型协同未启用，可继续查看本地报告。"); return }
   if (collabRunning.value) return
   refreshing.value = true
   await startCollaborativeAnalysis()
@@ -599,7 +753,7 @@ const toEmotionObject = (emotion) => {
 
 const formatEmotionTags = (emotion) => {
   const emoObj = toEmotionObject(emotion)
-  if (!emoObj) return [{ key: "neutral", label: "neutral", percent: 100 }]
+  if (!emoObj) return []
 
   const order = ["joy", "sadness", "neutral", "fear", "anxiety", "anger"]
   const entries = order
@@ -607,7 +761,7 @@ const formatEmotionTags = (emotion) => {
     .filter(([, v]) => Number.isFinite(v))
 
   const total = entries.reduce((sum, [, v]) => sum + Math.max(0, v), 0)
-  if (total <= 0) return [{ key: "neutral", label: "neutral", percent: 100 }]
+  if (total <= 0) return []
 
   // 按权重排序，优先展示占比更高的情绪，避免固定显示前三个维度导致“全是0”的错觉
   return [...entries]
@@ -621,19 +775,33 @@ const formatEmotionTags = (emotion) => {
 }
 
 const chartExplanation = (key) => {
-  return reportData.value?.chart_insights?.[key] || reportData.value?.chart_explanations?.[key] || localExplainFallback[key] || "AI 趋势分析暂不可用"
-}
-
-const scoreFromMessage = (row) => {
-  const emo = row?.emotion_tags || {}
-  return Math.max(0, Math.min(100, ((Number(emo.sadness || 0) + Number(emo.fear || 0) + Number(emo.anger || 0)) * 100) - Number(emo.joy || 0) * 40))
+  const supplied = reportData.value?.chart_insights?.[key] || reportData.value?.chart_explanations?.[key]
+  return supplied || localExplainFallback[key] || "暂无说明"
 }
 
 const initChart = (container, chart) => {
-  if (unmounted || !container) return null
+  if (unmounted || !container || !echartsRuntime) return null
   if (chart && !chart.isDisposed?.()) return chart
   const renderer = window.matchMedia("print").matches ? "svg" : "canvas"
-  return echarts.init(container, 'xinyu-business', { renderer })
+  return echartsRuntime.init(container, 'xinyu-business', { renderer })
+}
+
+const loadEchartsRuntime = async () => {
+  if (!echartsRuntimePromise) {
+    echartsRuntimePromise = import('../../design/charts/report')
+      .then((runtime) => { echartsRuntime = runtime; return runtime })
+      .catch((error) => { echartsRuntimePromise = null; throw error })
+  }
+  return echartsRuntimePromise
+}
+
+const loadChartJsRuntime = async () => {
+  if (!chartJsRuntimePromise) {
+    chartJsRuntimePromise = import('../../design/charts/confidence')
+      .then((runtime) => runtime.default)
+      .catch((error) => { chartJsRuntimePromise = null; throw error })
+  }
+  return chartJsRuntimePromise
 }
 
 const renderBar = () => {
@@ -642,7 +810,7 @@ const renderBar = () => {
   const scores = reportData.value?.scores || {}
   const risk = reportData.value?.risk || {}
   const x = ["情绪", "认知", "行为", "抑郁", "焦虑", "自杀风险"]
-  const y = [scores.emotion || 0, scores.cognition || 0, scores.behavior || 0, risk.depression_confidence || 0, risk.anxiety_confidence || 0, risk.suicide_confidence || 0]
+  const y = [scores.emotion, scores.cognition, scores.behavior, risk.depression_confidence, risk.anxiety_confidence, risk.suicide_confidence].map(value => isPresentNumber(value) ? Number(value) : null)
   setLibraryChartOption(barChart, {
     tooltip: { trigger: "axis" },
     xAxis: { type: "category", data: x },
@@ -654,10 +822,10 @@ const renderBar = () => {
 const renderPie = () => {
   pieChart = initChart(pieRef.value, pieChart)
   if (!pieChart) return
-  const rows = dialogueRows.value
+  const rows = dialogueRows.value.filter(row => formatEmotionTags(row?.emotion_tags).length > 0)
   const bucket = { joy: 0, sadness: 0, fear: 0, anger: 0, neutral: 0 }
   rows.forEach((row) => {
-    const emo = row.emotion_tags || {}
+    const emo = toEmotionObject(row.emotion_tags) || {}
     Object.keys(bucket).forEach((key) => {
       bucket[key] += Number(emo[key] || 0)
     })
@@ -682,7 +850,7 @@ const renderHeatmap = () => {
   const values = []
   heat.forEach((item, x) => {
     dims.forEach((dim, y) => {
-      values.push([x, y, item[dim] || 0])
+      if (isPresentNumber(item[dim])) values.push([x, y, Number(item[dim])])
     })
   })
   setLibraryChartOption(heatmapChart, {
@@ -705,49 +873,17 @@ const renderTrend = () => {
     xAxis: { type: "category", data: thirty.map((x) => x.date.slice(5)) },
     yAxis: { type: "value", min: 0, max: 100 },
     series: [
-      { name: "30天", type: "line", smooth: true, data: thirty.map((x) => x.score), lineStyle: { width: 3 } },
-      { name: "7天", type: "line", smooth: true, data: [...Array(Math.max(0, 30 - seven.length)).fill(null), ...seven.map((x) => x.score)], lineStyle: { width: 3, type: "dashed" } },
+      { name: "30天", type: "line", smooth: true, connectNulls: false, data: thirty.map((row) => finiteNumberOrNull(row.score)), lineStyle: { width: 3 } },
+      { name: "7天", type: "line", smooth: true, connectNulls: false, data: thirty.map((day) => finiteNumberOrNull(seven.find(item => item.date === day.date)?.score)), lineStyle: { width: 3, type: "dashed" } },
     ],
   })
 }
 
-const renderNetwork = () => {
-  networkChart = initChart(networkRef.value, networkChart)
-  if (!networkChart) return
-  const scores = reportData.value?.scores || {}
-  const risk = reportData.value?.risk || {}
-  const nodes = [
-    { name: "情绪", value: scores.emotion || 0, symbolSize: 20 + (scores.emotion || 0) * 0.3 },
-    { name: "认知", value: scores.cognition || 0, symbolSize: 20 + (scores.cognition || 0) * 0.3 },
-    { name: "行为", value: scores.behavior || 0, symbolSize: 20 + (scores.behavior || 0) * 0.3 },
-    { name: "抑郁", value: risk.depression_confidence || 0, symbolSize: 20 + (risk.depression_confidence || 0) * 0.3 },
-    { name: "焦虑", value: risk.anxiety_confidence || 0, symbolSize: 20 + (risk.anxiety_confidence || 0) * 0.3 },
-    { name: "自杀风险", value: risk.suicide_confidence || 0, symbolSize: 20 + (risk.suicide_confidence || 0) * 0.3 },
-  ]
-  const links = [
-    ["情绪", "认知"], ["情绪", "行为"], ["认知", "行为"], ["抑郁", "焦虑"], ["焦虑", "自杀风险"], ["情绪", "抑郁"],
-  ].map(([source, target]) => ({ source, target }))
-  setLibraryChartOption(networkChart, {
-    tooltip: {},
-    series: [{
-      type: "graph",
-      layout: "force",
-      roam: true,
-      draggable: true,
-      force: { repulsion: 140, edgeLength: 90 },
-      label: { show: true },
-      data: nodes,
-      links,
-      lineStyle: { color: businessColor('text-secondary'), width: 1.5 },
-      itemStyle: { color: businessColor('data-primary') },
-    }],
-  })
-}
 
 const renderHistogram = () => {
   histogramChart = initChart(histogramRef.value, histogramChart)
   if (!histogramChart) return
-  const rawScores = dialogueRows.value.map(scoreFromMessage)
+  const rawScores = dialogueRows.value.map(row => finiteNumberOrNull(row?.score)).filter(value => value !== null && value >= 0 && value <= 100)
   const bins = [0, 0, 0, 0, 0]
   rawScores.forEach((s) => {
     if (s < 20) bins[0] += 1
@@ -764,8 +900,18 @@ const renderHistogram = () => {
   })
 }
 
-const renderCharts = () => {
+const renderCharts = async () => {
+  const identity = reportIdentity
+  const epoch = reportLoadEpoch
   if (!reportData.value) return
+  if (!hasMetricData.value && barChart) { barChart.dispose(); barChart = null }
+  if (!hasEmotionSamples.value && pieChart) { pieChart.dispose(); pieChart = null }
+  if (!hasDistributionSamples.value && histogramChart) { histogramChart.dispose(); histogramChart = null }
+  if (!hasHeatmapData.value && heatmapChart) { heatmapChart.dispose(); heatmapChart = null }
+  if (!hasTrendData.value && trendChart) { trendChart.dispose(); trendChart = null }
+  if (!hasAnyChartData.value) return
+  await loadEchartsRuntime()
+  if (unmounted || epoch !== reportLoadEpoch || identity !== readReportIdentity() || !reportData.value || !hasAnyChartData.value) return
   const nextSnapshot = {
     updated_at: reportData.value?.updated_at,
     msgCount: reportData.value?.source?.message_count,
@@ -778,18 +924,17 @@ const renderCharts = () => {
   if (strategy === "skip") return
   if (strategy === "incremental") {
     // 大会话优先增量更新核心时序图，避免每次重建全部图造成“视觉无差异”与性能浪费。
-    renderTrend()
-    renderHeatmap()
-    renderPie()
-    renderHistogram()
+    if (hasTrendData.value) renderTrend()
+    if (hasHeatmapData.value) renderHeatmap()
+    if (hasEmotionSamples.value) renderPie()
+  if (hasDistributionSamples.value) renderHistogram()
     return
   }
-  renderBar()
-  renderPie()
-  renderHeatmap()
-  renderTrend()
-  renderNetwork()
-  renderHistogram()
+  if (hasMetricData.value) renderBar()
+  if (hasEmotionSamples.value) renderPie()
+  if (hasDistributionSamples.value) renderHistogram()
+  if (hasHeatmapData.value) renderHeatmap()
+  if (hasTrendData.value) renderTrend()
 }
 
 const safeExportChart = (chart) => {
@@ -807,6 +952,10 @@ const safeExportChart = (chart) => {
 }
 
 const buildPrintPayload = () => {
+  if (reportIdentity !== readReportIdentity() || (!reportData.value && !collaborativeReport.value)) {
+    printPayload.value = { generatedAt: "-", riskLevel: "UNKNOWN", targetedAnalysis: [], indicators: [], charts: [] }
+    return
+  }
   const scores = reportData.value?.scores || {}
   const risk = reportData.value?.risk || {}
   const interventions = Array.isArray(reportData.value?.interventions) ? reportData.value.interventions : []
@@ -830,22 +979,22 @@ const buildPrintPayload = () => {
   const charts = PRINT_CHART_META.map((meta) => ({
     ...meta,
     analysis: meta.key === "compare"
-      ? "该图用于识别多模型分析中可信度较高的模型，帮助解释最终结论来源。"
+      ? "该图显示本次协同报告返回的模型字段。"
       : chartExplanation(meta.key),
     image: chartImageMap[meta.key] || "",
-  })).filter((item) => item.image || item.analysis)
+  })).filter((item) => item.image)
 
   printPayload.value = {
     generatedAt: new Date().toLocaleString(),
     riskLevel: riskLevel.value,
     targetedAnalysis,
     indicators: [
-      { label: "情绪维度", value: `${scores.emotion || 0}` },
-      { label: "认知维度", value: `${scores.cognition || 0}` },
-      { label: "行为维度", value: `${scores.behavior || 0}` },
-      { label: "抑郁风险", value: `${risk.depression_confidence || 0}` },
-      { label: "焦虑风险", value: `${risk.anxiety_confidence || 0}` },
-      { label: "自杀风险", value: `${risk.suicide_confidence || 0}` },
+      { label: "情绪维度", value: displayValue(scores.emotion) },
+      { label: "认知维度", value: displayValue(scores.cognition) },
+      { label: "行为维度", value: displayValue(scores.behavior) },
+      { label: "抑郁字段", value: displayValue(risk.depression_confidence) },
+      { label: "焦虑字段", value: displayValue(risk.anxiety_confidence) },
+      { label: "自杀风险字段", value: displayValue(risk.suicide_confidence) },
     ],
     charts,
   }
@@ -859,50 +1008,48 @@ const resetCollabState = () => {
   collabCurrentStage.value = ""
   collabEtaSec.value = 0
   collabMiddle.value = []
-  collabSteps.value = MODEL_CHAIN.value.map((x) => ({
-    model: x.model,
-    stage: x.stage,
-    status: "queued",
-    statusText: "等待中",
-  }))
+  collabSteps.value = []
 }
 
-const renderCollabFlow = () => {
+const renderCollabFlow = async () => {
+  if (!collabFlowRef.value || !collabSteps.value.length) return
+  const identity = reportIdentity
+  const epoch = reportLoadEpoch
+  await loadEchartsRuntime()
+  if (unmounted || epoch !== reportLoadEpoch || identity !== readReportIdentity() || !collabFlowRef.value) return
   collabFlowChart = initChart(collabFlowRef.value, collabFlowChart)
   if (!collabFlowChart) return
-  const statusMap = new Map(collabSteps.value.map((x) => [x.model, x.status]))
-  const colorByStatus = (s) => {
-    if (s === "done") return businessColor('data-risk-low')
-    if (s === "running") return businessColor('data-risk-mid')
-    if (s === "error") return businessColor('data-risk-high')
+  const colorByStatus = (status) => {
+    if (status === "done") return businessColor('data-risk-low')
+    if (status === "running") return businessColor('data-risk-mid')
+    if (status === "error") return businessColor('data-risk-high')
     return businessColor('text-secondary')
   }
-  const nodes = MODEL_CHAIN.value.map((x, i) => ({
-    id: x.model,
-    name: x.model,
-    x: 80 + i * 130,
-    y: 120 + (i % 2) * 50,
+  const nodes = collabSteps.value.map((step, index) => ({
+    id: step.model,
+    name: step.model,
+    x: 80 + index * 130,
+    y: 120 + (index % 2) * 50,
     symbolSize: 46,
-    itemStyle: { color: colorByStatus(statusMap.get(x.model)) },
-    label: { show: true, fontSize: 12, formatter: x.model.replace("-2026-03-15", "") },
-  }))
-  const links = MODEL_CHAIN.value.slice(0, -1).map((x, i) => ({
-    source: x.model,
-    target: MODEL_CHAIN.value[i + 1].model,
-    lineStyle: { color: businessColor('text-secondary'), width: 1.4 },
+    itemStyle: { color: colorByStatus(step.status) },
+    label: { show: true, fontSize: 12, formatter: step.model },
   }))
   setLibraryChartOption(collabFlowChart, {
-    animationDurationUpdate: 250,
-    xAxis: { show: false, min: 0, max: 900 },
+    animationDurationUpdate: 200,
+    xAxis: { show: false, min: 0, max: Math.max(260, nodes.length * 130) },
     yAxis: { show: false, min: 0, max: 260 },
-    series: [{ type: "graph", coordinateSystem: null, roam: false, data: nodes, links }],
+    series: [{ type: "graph", coordinateSystem: null, roam: false, data: nodes, links: [] }],
   })
 }
 
-const renderCollabConfidence = () => {
+const renderCollabConfidence = async () => {
   if (!collaborativeReport.value) return
   const canvas = collabConfidenceCanvasRef.value
-  if (!canvas) return
+  if (!canvas || !hasModelConfidenceRows.value) return
+  const identity = reportIdentity
+  const epoch = reportLoadEpoch
+  const Chart = await loadChartJsRuntime()
+  if (unmounted || epoch !== reportLoadEpoch || identity !== readReportIdentity() || canvas !== collabConfidenceCanvasRef.value || !collaborativeReport.value) return
   if (collabConfidenceChart) {
     collabConfidenceChart.destroy()
     collabConfidenceChart = null
@@ -918,7 +1065,7 @@ const renderCollabConfidence = () => {
     }
     return chunks
   }
-  const values = rows.map((x) => Number(x.confidence || 0))
+  const values = rows.map((x) => isPresentNumber(x.confidence) ? Number(x.confidence) : null)
   collabConfidenceChart = new Chart(canvas, createLibraryChartJsConfig({
     type: "bar",
     data: {
@@ -938,7 +1085,7 @@ const renderCollabConfidence = () => {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: (ctx) => `置信度：${Math.round(Number(ctx.raw || 0) * 100)}%`,
+            label: (ctx) => isPresentNumber(ctx.raw) ? `置信度：${Math.round(Number(ctx.raw) * 100)}%` : "置信度：暂无数据",
           },
         },
       },
@@ -973,8 +1120,9 @@ const renderCollabConfidence = () => {
         ctx.font = libraryChartFont()
         ctx.textAlign = "center"
         meta.data.forEach((bar, index) => {
-          const value = values[index] || 0
-          ctx.fillText(`${Math.round(value * 100)}%`, bar.x, bar.y - 8)
+          const value = values[index]
+          if (!isPresentNumber(value)) return
+          ctx.fillText(`${Math.round(Number(value) * 100)}%`, bar.x, bar.y - 8)
         })
         ctx.restore()
       },
@@ -982,14 +1130,15 @@ const renderCollabConfidence = () => {
   }))
 }
 
-const renderModelCompare = () => {
+const renderModelCompare = async () => {
+  const rows = modelConfidenceRows.value
+  if (!rows.length || !collabCompareRef.value) return
+  const identity = reportIdentity
+  const epoch = reportLoadEpoch
+  await loadEchartsRuntime()
+  if (unmounted || epoch !== reportLoadEpoch || identity !== readReportIdentity() || !collabCompareRef.value) return
   collabCompareChart = initChart(collabCompareRef.value, collabCompareChart)
   if (!collabCompareChart) return
-  const rows = modelConfidenceRows.value
-  if (!rows.length) {
-    collabCompareChart.clear()
-    return
-  }
   if (compareChartType.value === "radar") {
     collabCompareChart.clear()
     setLibraryChartOption(collabCompareChart, {
@@ -1003,7 +1152,7 @@ const renderModelCompare = () => {
         type: "radar",
         areaStyle: { color: businessAlpha('data-primary', 0.2) },
         lineStyle: { color: businessColor('data-primary'), width: 2 },
-        data: [{ value: rows.map((x) => x.confidence || 0), name: "置信度" }],
+        data: [{ value: rows.map((x) => isPresentNumber(x.confidence) ? Number(x.confidence) : null), name: "置信度" }],
       }],
     }, true)
     return
@@ -1025,7 +1174,7 @@ const renderModelCompare = () => {
     yAxis: { type: "value", min: 0, max: 1 },
     series: [{
       type: "bar",
-      data: rows.map((x) => x.confidence || 0),
+      data: rows.map((x) => isPresentNumber(x.confidence) ? Number(x.confidence) : null),
       barWidth: "50%",
       itemStyle: { color: businessColor('data-primary'), borderRadius: [6, 6, 0, 0] },
       emphasis: { itemStyle: { color: businessColor('data-primary') } },
@@ -1035,8 +1184,8 @@ const renderModelCompare = () => {
 
 const updateCollabStep = (payload) => {
   const normalizedModel = normalizeModelName(payload.model)
+  if (!normalizedModel) return
   const idx = collabSteps.value.findIndex((x) => x.model === normalizedModel)
-  if (idx < 0) return
   const statusTextMap = {
     queued: "等待中",
     running: "运行中",
@@ -1045,35 +1194,36 @@ const updateCollabStep = (payload) => {
     skipped: "已跳过",
     error: "异常",
   }
-  collabSteps.value[idx] = {
-    ...collabSteps.value[idx],
+  const existing = idx >= 0 ? collabSteps.value[idx] : { model: normalizedModel }
+  const next = {
+    ...existing,
     ...payload,
     model: normalizedModel,
-    statusText: statusTextMap[payload.status] || collabSteps.value[idx].statusText,
+    statusText: statusTextMap[payload.status] || existing.statusText || "处理中",
   }
+  if (idx >= 0) collabSteps.value[idx] = next
+  else collabSteps.value.push(next)
   renderCollabFlow()
 }
 
 const fetchCurrentModelMeta = async () => {
-  try {
-    const res = await axios.get("/api/v1/model/current", {
-      params: { _t: Date.now() },
-      headers: { "Cache-Control": "no-cache" },
-    })
-    const data = res?.data?.data || {}
-    if (typeof data.model_name === "string" && data.model_name) {
-      primaryModelName.value = data.model_name
-    }
-    if (typeof data.legacy_alias === "string" && data.legacy_alias) {
-      legacyPrimaryModelAlias.value = data.legacy_alias
-    }
-  } catch {
-    // 元信息接口失败时使用前端默认值，不阻断主流程
-  }
+  metadataController?.abort()
+  const controller = new AbortController()
+  metadataController = controller
+  const identity = reportIdentity
+  const [model, health] = await Promise.allSettled([
+    axios.get("/api/v1/model/current", { timeout: 8000, signal: controller.signal, params: { _t: Date.now() }, headers: { "Cache-Control": "no-cache" } }),
+    axios.get("/api/v1/report/analysis/collab/health", { timeout: 8000, signal: controller.signal }),
+  ])
+  if (unmounted || controller.signal.aborted || identity !== readReportIdentity()) return
+  const data = model.status === "fulfilled" ? model.value?.data?.data || {} : {}
+  if (typeof data.model_name === "string" && data.model_name) primaryModelName.value = data.model_name
+  if (typeof data.legacy_alias === "string" && data.legacy_alias) legacyPrimaryModelAlias.value = data.legacy_alias
+  collabEnabled.value = health.status === "fulfilled" && health.value?.data?.collaboration_enabled === true
 }
 
 const startCollaborativeAnalysis = async () => {
-  if (collabRunning.value) return
+  if (!collabEnabled.value || collabRunning.value) return
   clearTimeout(collabFadeTimer)
   clearTimeout(collabCloseTimer)
   collabVisible.value = true
@@ -1202,9 +1352,9 @@ const handleResize = () => {
 }
 
 const handleBeforePrint = () => {
+  if (reportIdentity !== readReportIdentity()) { handleReportStorageChange({ key: "user" }); return }
   enterPrintMode()
-  renderCharts()
-  renderModelCompare()
+  // Native beforeprint does not await promises. Export already-rendered charts only.
   buildPrintPayload()
 }
 
@@ -1215,13 +1365,18 @@ const handleAfterPrint = () => {
 const waitForFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()))
 
 const preparePrintPayload = async () => {
-  renderCharts()
-  renderModelCompare()
+  const identity = reportIdentity
+  const epoch = reportLoadEpoch
+  if (identity !== readReportIdentity() || (!reportData.value && !collaborativeReport.value)) return false
+  await renderCharts()
+  await renderModelCompare()
   await nextTick()
   await waitForFrame()
+  if (unmounted || epoch !== reportLoadEpoch || identity !== readReportIdentity()) return false
   buildPrintPayload()
   await nextTick()
   await waitForFrame()
+  return !unmounted && epoch === reportLoadEpoch && identity === readReportIdentity()
 }
 
 const enterPrintMode = () => {
@@ -1233,12 +1388,12 @@ const exitPrintMode = () => {
 }
 
 const openPrintPreview = async () => {
-  await preparePrintPayload()
+  if (!await preparePrintPayload()) return
   printPreviewVisible.value = true
 }
 
 const downloadReport = async () => {
-  await preparePrintPayload()
+  if (!await preparePrintPayload()) return
   enterPrintMode()
   window.print()
 }
@@ -1263,71 +1418,88 @@ const shareReport = async () => {
 }
 
 onMounted(async () => {
-  await fetchCurrentModelMeta()
-  if (unmounted) return
+  window.addEventListener("storage", handleReportStorageChange)
+  void fetchCurrentModelMeta()
   await fetchLatest()
   if (unmounted) return
   assistantEventHandler = () => {
-    console.log("[Report] receive assistant-message-saved event")
-    fetchLatest(true)
+    if (!loading.value) fetchLatest()
   }
   window.addEventListener("assistant-message-saved", assistantEventHandler)
   window.addEventListener("resize", handleResize)
   window.addEventListener("beforeprint", handleBeforePrint)
   window.addEventListener("afterprint", handleAfterPrint)
-  realtimeTimer = setInterval(() => fetchLatest(true), 20000)
 })
 
 watch([modelConfidenceRows, compareChartType], async () => {
   await nextTick()
-  renderModelCompare()
+  await renderModelCompare()
 }, { deep: true })
 
 watch(collaborativeReport, async () => {
   await nextTick()
-  renderModelCompare()
+  await renderModelCompare()
 })
 
 watch(reportVisible, async (visible) => {
   if (!visible) return
   await nextTick()
-  renderCollabConfidence()
+  await renderCollabConfidence()
 })
+
+const disposeReportCharts = () => {
+  for (const chart of [barChart, pieChart, heatmapChart, trendChart, networkChart, histogramChart, collabFlowChart, collabCompareChart]) chart?.dispose()
+  collabConfidenceChart?.destroy()
+  barChart = pieChart = heatmapChart = trendChart = networkChart = histogramChart = collabFlowChart = collabCompareChart = null
+  collabConfidenceChart = null
+}
 
 onBeforeUnmount(() => {
   unmounted = true
+  metadataController?.abort()
+  reportLoadEpoch += 1
+  reportLoadController?.abort()
+  reportLoadController = null
+  interpretationEpoch += 1
+  interpretationController?.abort()
+  interpretationController = null
+  interpretationLoading.value = false
   clearTimeout(processingRetryTimer)
   clearTimeout(collabFadeTimer)
   clearTimeout(collabCloseTimer)
   if (esAbort) esAbort.abort()
   if (collabAbort) collabAbort.abort()
   if (assistantEventHandler) window.removeEventListener("assistant-message-saved", assistantEventHandler)
+  window.removeEventListener("storage", handleReportStorageChange)
   window.removeEventListener("resize", handleResize)
   window.removeEventListener("beforeprint", handleBeforePrint)
   window.removeEventListener("afterprint", handleAfterPrint)
   exitPrintMode()
   if (realtimeTimer) clearInterval(realtimeTimer)
-  if (barChart) barChart.dispose()
-  if (pieChart) pieChart.dispose()
-  if (heatmapChart) heatmapChart.dispose()
-  if (trendChart) trendChart.dispose()
-  if (networkChart) networkChart.dispose()
-  if (histogramChart) histogramChart.dispose()
-  if (collabFlowChart) collabFlowChart.dispose()
-  if (collabConfidenceChart) collabConfidenceChart.destroy()
-  if (collabCompareChart) collabCompareChart.dispose()
+  disposeReportCharts()
 })
 </script>
 
 <style scoped>
 .report-container { display: flex; flex-direction: column; gap: 16px; }
-.header-container { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.report-empty-copy { margin: 0 0 var(--space-4); color: var(--text-secondary); line-height: 1.6; }
+.report-empty :deep(.el-empty) { min-height: 320px; }
+.report-empty .business-actions { justify-content: center; }
+.collab-safety-note { margin-bottom: 2px; }
+.interpretation-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 4px 0 10px; }
+.interpretation-heading h3 { margin: 0; font-size: 18px; }
+.interpretation-heading p { margin: 5px 0 0; color: var(--text-secondary); line-height: 1.6; }
+@media (max-width: 600px) { .interpretation-heading { align-items: stretch; flex-direction: column; } .interpretation-heading :deep(.el-button) { min-height: 44px; margin: 0; } }
+.header-container { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: nowrap; }
+.actions :deep(.el-button) { min-height: 36px; margin: 0; }
+.collab-status { display: inline-flex; align-items: center; min-height: 32px; padding: 0 10px; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); font-size: 13px; white-space: nowrap; }
 .page-title { margin: 0; font-size: 24px; }
 .page-desc { margin: 6px 0 0; color: var(--text-secondary); }
 .summary-card, .chart-card { border-radius: 12px; box-shadow: 0 4px 12px 0 color-mix(in srgb, var(--gray-900) 8%, transparent); }
 .charts-grid { display: grid; grid-template-columns: repeat(2, minmax(320px, 1fr)); gap: 12px; }
 .chart-box { width: 100%; height: 320px; }
+.chart-empty { min-height: 180px; display: grid; place-items: center; padding: 18px; color: var(--text-secondary); text-align: center; background: var(--surface-subtle); border-radius: 8px; }
 .flow-box { height: 160px; }
 .model-compare-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .model-compare-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -1619,6 +1791,7 @@ onBeforeUnmount(() => {
   gap: 6px;
   line-height: 1.6;
 }
+.emotion-empty { color: var(--text-secondary); font-size: 12px; }
 .emotion-chip {
   display: inline-flex;
   align-items: center;
@@ -1780,7 +1953,10 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 768px) {
-  .header-container { flex-direction: column; }
+  .header-container { align-items: stretch; flex-direction: column; }
+  .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .actions :deep(.el-button) { width: 100%; min-height: 44px; margin: 0; }
+  .collab-status { grid-column: 1 / -1; justify-content: center; min-height: 36px; }
   .charts-grid { grid-template-columns: 1fr; }
   .chart-box { height: 280px; }
   .model-compare-header { flex-direction: column; align-items: flex-start; }
@@ -1812,8 +1988,6 @@ onBeforeUnmount(() => {
 
 @media (max-width: 390px) {
   .header-container { gap: 12px; }
-  .actions { display: grid; grid-template-columns: 1fr; width: 100%; }
-  .actions :deep(.el-button) { width: 100%; min-height: 44px; margin: 0; }
   .page-title { font-size: 20px; overflow-wrap: anywhere; }
   .collab-meta { flex-direction: column; gap: 6px; }
 }

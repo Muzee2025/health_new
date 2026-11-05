@@ -35,6 +35,10 @@ CRISIS_KEYWORDS = (
     "跳楼", "轻生", "自杀", "不想活", "不想再活下去", "结束生命", "结束这一切", "一了百了", "一死了之",
     "想死", "去死", "割腕", "服毒", "上吊"
 )
+CRISIS_SUPPORT_MESSAGE = (
+    "听到你正经历这样的感受，请先保护自己的安全。若面临即时危险，请尽快联系身边可信任的人或当地紧急服务。"
+    "校内心理支持请通过学校公布的官方渠道联系；本系统不能确认值守时段、教师是否已查看或是否已采取行动。"
+)
 
 # --- 模型 ---
 class SessionCreate(BaseModel):
@@ -67,6 +71,7 @@ class ChatResponse(BaseModel):
     model_invoked: bool = False
     model_latency_ms: float = 0.0
     trace_id: Optional[str] = None
+    warning_state: str = "not_applicable"
 
 
 def _default_emotion_tags() -> Dict[str, float]:
@@ -740,10 +745,10 @@ async def create_chat_session(
         title=(req.title or "新对话")[:100]
     )
     db.add(new_session)
-    
+
     # 引导式聊天：AI 优先发起话题
     initial_prompt = "你好呀！我是心域智链。今天过得怎么样？有没有什么特别的事情想和我分享，或者只是想随便聊聊？" if req.mode == "daily" else "你好，我是你的专属AI心理助手。最近在学习、生活或是人际关系上，有没有遇到什么让你感到困扰或有压力的事情？我们可以一起探讨一下。"
-    
+
     initial_msg = AIChatMessage(
         session_id=new_session.id,
         role="ai",
@@ -867,7 +872,7 @@ async def get_session_messages(
     session = db.query(AIChatSession).filter(AIChatSession.id == session_id, AIChatSession.user_id == current_user.id).first()
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
-    
+
     query = db.query(AIChatMessage).filter(AIChatMessage.session_id == session_id)
     if target_date:
         try:
@@ -970,8 +975,10 @@ async def ai_chat_interaction(
         # 更新用户消息的热图
         user_msg.heatmap = json.dumps(heatmap, ensure_ascii=False)
 
+    warning_state = "not_applicable"
     if is_crisis:
-        reply = "我感受到您现在非常痛苦，请务必保护好自己。请立即拨打校内24小时心理危机热线：400-123-4567。您也可以随时来心理中心，老师现在就在等您。"
+        warning_state = "anonymous" if req.anonymous else "not_created"
+        reply = CRISIS_SUPPORT_MESSAGE
         # 保存预警并广播
         if not req.anonymous and 'session' in locals() and session:
             try:
@@ -985,7 +992,7 @@ async def ai_chat_interaction(
                 )
                 db.add(ai_msg)
                 db.flush()
-                
+
                 trigger_kw = kw_trigger or (keywords[0]["word"] if keywords else "未知关键字")
                 risk_level = "high"
                 warning = CrisisWarning(
@@ -997,6 +1004,7 @@ async def ai_chat_interaction(
                 )
                 db.add(warning)
                 db.commit()
+                warning_state = "created"
                 db.refresh(warning)
 
                 # 广播给教师端（实时链路）
@@ -1022,7 +1030,8 @@ async def ai_chat_interaction(
                     }
                 }, db=db, student_id=current_user.id))
             except Exception as e:
-                logger.error(f"Failed to create warning: {e}")
+                db.rollback()
+                logger.error("Warning persistence unavailable (%s)", type(e).__name__)
     else:
         start_ts = time.perf_counter()
         if req.deep_think:
@@ -1132,6 +1141,7 @@ async def ai_chat_interaction(
         model_invoked=model_invoked,
         model_latency_ms=model_latency_ms,
         trace_id=trace_id if req.deep_think else None,
+        warning_state=warning_state,
     )
 
 
@@ -1209,7 +1219,7 @@ async def ai_chat_stream(
                 user_msg.emotion_tags = json.dumps(emotions or _default_emotion_tags(), ensure_ascii=False)
 
             if is_crisis:
-                crisis_reply = "我感受到您现在非常痛苦，请务必保护好自己。请立即拨打校内24小时心理危机热线：400-123-4567。您也可以随时来心理中心，老师现在就在等您。"
+                crisis_reply = CRISIS_SUPPORT_MESSAGE
                 yield _sse_event("phase", "response")
                 for i in range(0, len(crisis_reply), 16):
                     yield _sse_event("message_chunk", {"text": crisis_reply[i:i+16]})
@@ -1218,6 +1228,7 @@ async def ai_chat_stream(
                     "id": str(uuid.uuid4()),
                     "reply": crisis_reply,
                     "is_crisis": True,
+                    "warning_state": "anonymous" if req.anonymous else "not_created",
                     "emotion_tags": emotions,
                     "keywords": analysis.get("keywords", []),
                     "attention_heatmap": heatmap,
@@ -1226,64 +1237,69 @@ async def ai_chat_stream(
                     "confidence": confidence,
                 }
                 if not req.anonymous and session is not None:
-                    ai_msg = AIChatMessage(
-                        session_id=session.id,
-                        role="ai",
-                        content=crisis_reply,
-                        is_crisis=True,
-                        emotion_tags=json.dumps(emotions or _default_emotion_tags(), ensure_ascii=False),
-                    )
-                    db.add(ai_msg)
-                    db.flush()
-                    
-                    trigger_kw = kw_trigger or (analysis.get("keywords")[0]["word"] if analysis.get("keywords") else "未知关键字")
-                    risk_level = "high"
-                    warning = CrisisWarning(
-                        student_id=current_user.id,
-                        chat_message_id=user_msg.id,
-                        trigger_keyword=trigger_kw,
-                        risk_level=risk_level,
-                        status="pending"
-                    )
-                    db.add(warning)
-                    db.commit()
-                    db.refresh(warning)
-
-                    asyncio.create_task(manager.broadcast_to_teachers({
-                        "type": "new_warning",
-                        "data": {
-                            "id": warning.id,
-                            "student_id": current_user.id,
-                            "studentId": str(current_user.student_id or current_user.id),
-                            "session_id": session.id,
-                            "student_name": current_user.name or current_user.username,
-                            "studentName": current_user.name or current_user.username,
-                            "class_name": current_user.class_name or "未知班级",
-                            "className": current_user.class_name or "未知班级",
-                            "trigger_keyword": trigger_kw,
-                            "description": req.message,
-                            "risk_level": risk_level,
-                            "riskLevel": risk_level,
-                            "trigger_msg": req.message,
-                            "created_at": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
-                            "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
-                            "status": "pending",
-                        }
-                    }, db=db, student_id=current_user.id))
-
-                    if user_msg is not None:
-                        _archive_dialogue(
-                            db=db,
-                            user_id=current_user.id,
+                    try:
+                        ai_msg = AIChatMessage(
                             session_id=session.id,
-                            user_msg=user_msg,
-                            ai_msg=ai_msg,
-                            history=history,
-                            emotions=emotions,
+                            role="ai",
+                            content=crisis_reply,
+                            is_crisis=True,
+                            emotion_tags=json.dumps(emotions or _default_emotion_tags(), ensure_ascii=False),
                         )
-                    session.updated_at = func.now()
-                    db.commit()
-                    background_tasks.add_task(enqueue_dialogue_analysis, current_user.id)
+                        db.add(ai_msg)
+                        db.flush()
+
+                        trigger_kw = kw_trigger or (analysis.get("keywords")[0]["word"] if analysis.get("keywords") else "未知关键字")
+                        risk_level = "high"
+                        warning = CrisisWarning(
+                            student_id=current_user.id,
+                            chat_message_id=user_msg.id,
+                            trigger_keyword=trigger_kw,
+                            risk_level=risk_level,
+                            status="pending"
+                        )
+                        db.add(warning)
+                        db.commit()
+                        final_payload["warning_state"] = "created"
+                        db.refresh(warning)
+
+                        asyncio.create_task(manager.broadcast_to_teachers({
+                            "type": "new_warning",
+                            "data": {
+                                "id": warning.id,
+                                "student_id": current_user.id,
+                                "studentId": str(current_user.student_id or current_user.id),
+                                "session_id": session.id,
+                                "student_name": current_user.name or current_user.username,
+                                "studentName": current_user.name or current_user.username,
+                                "class_name": current_user.class_name or "未知班级",
+                                "className": current_user.class_name or "未知班级",
+                                "trigger_keyword": trigger_kw,
+                                "description": req.message,
+                                "risk_level": risk_level,
+                                "riskLevel": risk_level,
+                                "trigger_msg": req.message,
+                                "created_at": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
+                                "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
+                                "status": "pending",
+                            }
+                        }, db=db, student_id=current_user.id))
+
+                        if user_msg is not None:
+                            _archive_dialogue(
+                                db=db,
+                                user_id=current_user.id,
+                                session_id=session.id,
+                                user_msg=user_msg,
+                                ai_msg=ai_msg,
+                                history=history,
+                                emotions=emotions,
+                            )
+                        session.updated_at = func.now()
+                        db.commit()
+                        background_tasks.add_task(enqueue_dialogue_analysis, current_user.id)
+                    except Exception as exc:
+                        db.rollback()
+                        logger.warning("Crisis stream storage unavailable (%s)", type(exc).__name__)
                 yield _sse_event("done", final_payload)
                 return
 
@@ -1475,45 +1491,46 @@ async def get_chat_based_report(
     根据用户的所有聊天记录生成心理报告（不再基于测试量表）
     """
     # 1. 收集用户最近的聊天记录
-    sessions = db.query(AIChatSession).filter(AIChatSession.user_id == current_user.id).order_by(AIChatSession.created_at.desc()).limit(5).all()
-    
+    messages = (db.query(AIChatMessage)
+                .join(AIChatSession, AIChatMessage.session_id == AIChatSession.id)
+                .filter(AIChatSession.user_id == current_user.id)
+                .order_by(AIChatMessage.created_at.desc(), AIChatMessage.id.desc())
+                .limit(300).all())
+
     chat_logs = []
     emotion_history = []
-    
-    for s in sessions:
-        msgs = db.query(AIChatMessage).filter(AIChatMessage.session_id == s.id).order_by(AIChatMessage.created_at.asc()).all()
-        for m in msgs:
+
+    for m in reversed(messages):
             role_name = "学生" if m.role == "user" else "AI"
             chat_logs.append(f"{role_name}: {m.content}")
             if m.role == "ai" and m.emotion_tags:
                 try:
-                    emotion_history.append(json.loads(m.emotion_tags))
-                except:
+                    emotion = json.loads(m.emotion_tags)
+                    keys = ("sadness", "fear", "anger", "joy")
+                    if not isinstance(emotion, dict) or not emotion:
+                        continue
+                    values = [emotion.get(key, 0) for key in keys]
+                    if not all(isinstance(value, (int, float)) and not isinstance(value, bool)
+                               and 0 <= value <= 1 for value in values):
+                        continue
+                    emotion_history.append((m.created_at.isoformat() if m.created_at else "", emotion))
+                except (ValueError, TypeError):
                     pass
 
     # 2. 计算情感趋势和压力指数 (基于 RoBERTa 提取的历史 emotion_tags)
     # 模拟近7次对话的趋势
-    trend_length = min(len(emotion_history), 7)
-    if trend_length < 7:
-        # 补齐
-        emotion_history = [{"sadness": 0.1, "fear": 0.1, "joy": 0.5}] * (7 - trend_length) + emotion_history
-    
     recent_7_emotions = emotion_history[-7:]
-    
+
     trend_data = {
-        "dates": [f"对话 {i+1}" for i in range(7)],
-        "joy": [round(e.get("joy", 0), 2) for e in recent_7_emotions],
-        "stress": [round((e.get("sadness", 0) + e.get("fear", 0) + e.get("anger", 0)) / 3, 2) for e in recent_7_emotions]
+        "dates": [date for date, _ in recent_7_emotions],
+        "joy": [round(e.get("joy", 0), 2) for _, e in recent_7_emotions],
+        "stress": [round((e.get("sadness", 0) + e.get("fear", 0) + e.get("anger", 0)) / 3, 2) for _, e in recent_7_emotions],
+        "sample_count": len(recent_7_emotions),
+        "method": "stored_rule_tags_not_clinical_scores",
     }
 
     # 风险预警等级
-    latest_stress = trend_data["stress"][-1]
-    if latest_stress > 0.7:
-        risk_level = "预警 (红)"
-    elif latest_stress > 0.4:
-        risk_level = "关注 (黄)"
-    else:
-        risk_level = "正常 (绿)"
+    risk_level = "待人工评估"
 
     # 3. 调用 Qwen AI 生成图表解读
     ai_report = await qwen_service.generate_report_from_chats(chat_logs)
@@ -1525,7 +1542,11 @@ async def get_chat_based_report(
             "trend_data": trend_data,
             "risk_level": risk_level,
             "interpretations": ai_report.get("chart_interpretations", {})
-        }
+        },
+        "data_status": "available" if messages else "insufficient",
+        "generation": {"source": ai_report.get("source", "local_rules"),
+                       "status": ai_report.get("status", "fallback" if messages else "insufficient"),
+                       "model_id": ai_report.get("model_id")},
     }
 
 @router.post("/chat/upload")
@@ -1537,5 +1558,4 @@ async def upload_image_or_audio(
         raise HTTPException(status_code=400, detail="Invalid media type, only image is supported")
     # Authentication and bounded content validation happen before model work.
     await read_image_upload(file)
-    emotion_vector = nlp_engine.extract_image_emotion_clip()
-    return {"status": "success", "emotion_5d": emotion_vector, "message": "Image features extracted"}
+    raise HTTPException(status_code=503, detail="图片内容解析暂未开放，请使用文字描述；本次文件未保留。")

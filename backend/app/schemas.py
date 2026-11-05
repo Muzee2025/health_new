@@ -47,13 +47,10 @@ class AppointmentResponse(BaseModel):
         from_attributes = True
 
 class TestSubmit(BaseModel):
-    test_type: str = "general"
-    score: int
-    standard_score: Optional[int] = None
-    result_level: Optional[str] = None
-    answers: Optional[str] = None
-    result_json: Optional[str] = None
-    risk_level: Optional[str] = None
+    model_config = {"extra": "forbid"}
+    test_type: Literal["SDS", "SAS", "MBTI", "MentalAge"]
+    answers: dict[str, object]
+    submission_id: str = Field(min_length=8, max_length=80, pattern=r"^[A-Za-z0-9_-]+$")
     
 class TestResponse(BaseModel):
     id: int

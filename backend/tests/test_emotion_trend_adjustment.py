@@ -8,12 +8,13 @@ from app import models
 from app.routers import student
 
 
-def test_liming_pre_0409_emotion_trend_is_steeper():
+def test_legacy_named_user_before_cutoff_preserves_measured_value():
     user = models.User(username="student", name="李明", role="student")
     original = 62
     before_0409 = datetime(2026, 4, 8, 10, 0, 0)
     adjusted = student._adjust_liming_emotion_index(original, before_0409, user)
-    assert adjusted > original
+    # Historical presentation must not amplify a particular person's records.
+    assert adjusted == original
 
 
 def test_liming_after_0409_emotion_trend_not_changed():

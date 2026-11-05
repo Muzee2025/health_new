@@ -158,14 +158,20 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.questions-page { display: grid; gap: 24px; max-width: 920px; margin: 0 auto; }
+.questions-page { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: var(--space-5); width: 100%; max-width: var(--content-max-width); margin: 0; }
 .page-intro, .section-heading, .compose-footer, .entry-meta { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.page-intro { grid-column: 1 / -1; align-items: center; }
+.page-intro > div { min-width: 0; }
+.page-intro > :deep(.el-button) { flex-shrink: 0; margin: 0; }
+.page-intro p { max-width: 68ch; }
+.questions-page > :deep(.el-alert) { grid-column: 1 / -1; }
 .page-intro h2, .section-heading h3 { margin: 0; color: var(--text-primary); }
 .page-intro p, .section-heading p, .compose-footer p { color: var(--text-secondary); margin: 6px 0 0; line-height: 1.6; }
 .question-compose, .question-history { padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
 .question-label { display: block; margin-bottom: 8px; color: var(--text-primary); font-weight: 600; }
-.compose-footer { align-items: center; margin-top: 14px; }
-.compose-footer p { max-width: 600px; font-size: 13px; }
+.compose-footer { align-items: stretch; flex-direction: column; margin-top: var(--space-4); }
+.compose-footer p { max-width: 64ch; margin: 0; font-size: 13px; }
+.compose-footer > :deep(.el-button) { min-height: 44px; margin: 0; align-self: flex-start; padding-inline: var(--space-6); }
 .question-history { min-height: 240px; }
 .question-list { list-style: none; padding: 0; margin: 18px 0 0; }
 .question-entry { padding: 18px 0; border-top: 1px solid var(--border); }
@@ -178,6 +184,12 @@ onUnmounted(() => {
 .assignment-note, .pending-note { margin: 14px 0 0; padding: 12px 14px; border-radius: var(--radius-md); background: var(--warning-100); color: var(--warning-text); line-height: 1.6; }
 .pending-note { background: var(--surface-subtle); color: var(--text-secondary); }
 .history-loading { padding: 28px; text-align: center; color: var(--text-secondary); }
+@media (min-width: 1200px) {
+  .questions-page { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
+  .question-compose, .question-history { height: 100%; min-width: 0; }
+  .compose-footer > :deep(.el-button) { width: 100%; }
+  .question-list { margin-top: var(--space-4); }
+}
 @media (max-width: 600px) {
   .page-intro { align-items: stretch; flex-direction: column; }
   .page-intro > :deep(.el-button) { align-self: flex-start; }

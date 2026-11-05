@@ -9,6 +9,7 @@ _lock = RLock()
 _collection = None
 _embedding = None
 _initialization_error = None
+_invalidated_documents = set()
 
 
 class RagUnavailable(RuntimeError):
@@ -80,13 +81,19 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]
 def add_document_to_rag(doc_id: int, title: str, content: str) -> bool:
     """Best-effort optional index; SQL knowledge records remain authoritative."""
     chunks = chunk_text(content)
-    store = _get_collection() if chunks else None
+    store = _get_collection()
     if store is None:
         return False
     try:
-        store.upsert(documents=chunks,
-                     metadatas=[{"doc_id": doc_id, "title": title, "chunk_index": i} for i in range(len(chunks))],
-                     ids=[f"{doc_id}_chunk_{i}" for i in range(len(chunks))])
+        with _lock:
+            _invalidated_documents.add(doc_id)
+            # Upsert alone leaves stale tail chunks after shortening a document.
+            store.delete(where={"doc_id": doc_id})
+            if chunks:
+                store.upsert(documents=chunks,
+                             metadatas=[{"doc_id": doc_id, "title": title, "chunk_index": i} for i in range(len(chunks))],
+                             ids=[f"{doc_id}_chunk_{i}" for i in range(len(chunks))])
+            _invalidated_documents.discard(doc_id)
         return True
     except Exception as exc:
         logger.warning("Optional RAG indexing unavailable (%s)", type(exc).__name__)
@@ -98,7 +105,10 @@ def delete_document_from_rag(doc_id: int) -> bool:
     if store is None:
         return False
     try:
-        store.delete(where={"doc_id": doc_id})
+        with _lock:
+            _invalidated_documents.add(doc_id)
+            store.delete(where={"doc_id": doc_id})
+            _invalidated_documents.discard(doc_id)
         return True
     except Exception as exc:
         logger.warning("Optional RAG removal unavailable (%s)", type(exc).__name__)
@@ -118,8 +128,13 @@ def query_rag(query: str, n_results: int = 3) -> str:
         results = store.query(query_texts=[query], n_results=min(n_results, count))
         documents = (results.get("documents") or [[]])[0] or []
         metadata = (results.get("metadatas") or [[]])[0] or []
-        return "\n\n".join(f"【{(metadata[i] or {}).get('title', '知识库') if i < len(metadata) else '知识库'}】片段:\n{doc}"
-                            for i, doc in enumerate(documents))
+        snippets = []
+        for i, doc in enumerate(documents):
+            meta = metadata[i] if i < len(metadata) and isinstance(metadata[i], dict) else {}
+            if meta.get("doc_id") in _invalidated_documents:
+                continue
+            snippets.append(f"【{meta.get('title', '知识库')}】片段:\n{doc}")
+        return "\n\n".join(snippets)
     except Exception as exc:
         logger.warning("Optional RAG query unavailable (%s)", type(exc).__name__)
         return ""

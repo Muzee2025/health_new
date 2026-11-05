@@ -75,7 +75,7 @@
           <div v-if="crisisBannerVisible" class="crisis-banner">
             <el-icon><LibraryIcon name="alert"  /></el-icon>
             <strong>高危预警</strong>
-            <span>检测到高风险表达，系统已启动安全干预流程。</span>
+            <span>检测到需要关注的求助信息。系统无法确认人工服务是否已接收，请优先联系实际人工支持。</span>
           </div>
 
           <template v-for="(msg, index) in chatHistory" :key="index">
@@ -135,14 +135,7 @@
         </div>
 
         <aside class="analysis-panel">
-          <div class="panel-card">
-            <div class="panel-title-row">
-              <h4>风险因子五维评估</h4>
-              <el-button text @click="refreshRiskRadar">重试</el-button>
-            </div>
-            <div ref="radarRef" class="radar-box"></div>
-            <p v-if="latestEmotion" class="risk-result" :class="riskClass">当前风险等级：{{ riskLevelText }}</p><p v-else class="risk-result">暂无会话分析数据</p>
-          </div>
+          <RiskFactorFiveDimension />
         </aside>
       </div>
 
@@ -184,16 +177,15 @@
 </template>
 
 <script setup>
-import { setLibraryChartOption } from '../../design/chart-registry'
 import { getVisualAsset } from '../../design/asset-registry'
 const userAvatar = getVisualAsset('studentAvatar').url
 const anonymousAvatar = getVisualAsset('anonymousAvatar').url
 
-import { businessAlpha, businessColor } from '../../styles/business-theme.js'
+import { businessAlpha } from '../../styles/business-theme.js'
 import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { ElMessage, ElMessageBox, ElButton, ElInput, ElDropdown, ElDropdownMenu, ElDropdownItem, ElSwitch, ElIcon, ElAvatar, vLoading } from 'element-plus'
 import axios from 'axios'
-import * as echarts from '../../design/charts/radar'
+import RiskFactorFiveDimension from '../../components/RiskFactorFiveDimension.vue'
 import { createChatStorage } from '@/services/chatIndexedDb'
 import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
 
@@ -240,13 +232,10 @@ const currentSessionId = ref(null)
 const currentMode = ref('daily')
 
 const chatHistory = ref([])
-const latestEmotion = ref(null)
 const chatScrollRef = ref(null)
 const crisisBannerVisible = ref(false)
 let crisisBannerTimer = null
 
-const radarRef = ref(null)
-let radarChart = null
 
 
 const filteredSessions = computed(() => {
@@ -255,24 +244,6 @@ const filteredSessions = computed(() => {
   return base.filter((s) => s.title.includes(searchQuery.value))
 })
 
-const negativeScore = computed(() => {
-  if (!latestEmotion.value) return 0
-  const e = latestEmotion.value
-  return ((e.sadness || 0) + (e.fear || 0) + (e.anger || 0)) / 3
-})
-
-const riskLevelText = computed(() => {
-  if (negativeScore.value >= 0.75) return '极高'
-  if (negativeScore.value >= 0.55) return '较高'
-  if (negativeScore.value >= 0.35) return '中等'
-  return '较低'
-})
-
-const riskClass = computed(() => {
-  if (negativeScore.value >= 0.75) return 'risk-high'
-  if (negativeScore.value >= 0.55) return 'risk-mid'
-  return 'risk-low'
-})
 
 const ws = ref(null)
 
@@ -323,29 +294,21 @@ onMounted(async () => {
   if (sessions.value.length > 0) await loadSession(sessions.value[0].id)
   else await createNewChat('daily')
   if (!chatSession.isActive()) return
-  initRadar()
-  window.addEventListener('resize', resizeRadar)
   initWebSocket()
 })
 
 onBeforeUnmount(() => {
   sessionAbort.abort()
   clearTimeout(wsReconnectTimer)
-  if (radarChart) radarChart.dispose()
   if (crisisBannerTimer) clearTimeout(crisisBannerTimer)
-  window.removeEventListener('resize', resizeRadar)
   if (ws.value) ws.value.close()
 })
 
-watch(latestEmotion, () => {
-  updateTrendAndRadar()
-})
 
 watch(isAnonymous, async (val) => {
   if (val) {
     // 匿名模式：仅保留当前内存对话，不做任何持久化。
     chatHistory.value = []
-    latestEmotion.value = null
     crisisBannerVisible.value = false
     inputText.value = ''
     await scrollToBottom()
@@ -615,7 +578,6 @@ const createNewChat = async (mode) => {
   currentSessionId.value = conversationId
   currentMode.value = mode
   chatHistory.value = []
-  latestEmotion.value = null
   crisisBannerVisible.value = false
   try {
     const res = await sessionHttp.post('/api/advanced-ai/sessions', { mode, conversation_id: conversationId })
@@ -633,7 +595,6 @@ const createNewChat = async (mode) => {
       updated_at: new Date().toISOString(),
       archived: false,
     })
-    latestEmotion.value = null
     crisisBannerVisible.value = false
     await loadSessionsFromLocal()
     await restoreUiState(conversationId)
@@ -683,8 +644,6 @@ const loadSession = async (id) => {
       })
     }
     crisisBannerVisible.value = false
-    const lastAiMsg = [...chatHistory.value].reverse().find((m) => m.role === 'ai' && m.emotion_tags)
-    latestEmotion.value = lastAiMsg ? lastAiMsg.emotion_tags : null
     await restoreUiState(id)
   } catch (error) {
     if (!chatSession.isActive()) return
@@ -856,7 +815,6 @@ const sendMessage = async () => {
       aiLocal.is_crisis = Boolean(data.is_crisis)
       aiLocal.emotion_tags = data.emotion_tags || null
     }
-    latestEmotion.value = data.emotion_tags || null
     if (!isAnonymous.value) {
       await putMessage({
         id: aiLocal.id,
@@ -880,7 +838,9 @@ const sendMessage = async () => {
     }
     if (data.is_crisis) {
       triggerCrisisBanner()
-      ElMessage.error({ message: '触发高危预警，已启动干预流程', duration: 5000 })
+      ElMessage.warning({ message: data.warning_state === 'created'
+        ? '需关注的提示已记录；尚不代表教师已查看或处理，请优先寻求实际人工支持。'
+        : '检测到需关注的信息，尚未确认预警已保存，请优先联系实际人工支持。', duration: 7000 })
     }
     if (!isAnonymous.value) {
       window.dispatchEvent(new CustomEvent('assistant-message-saved', {
@@ -1052,65 +1012,6 @@ const getHeatmapStyle = (tokenObj) => {
 
 const isDangerText = (text) => /跳楼|自杀|轻生|不想活|结束生命/.test(text || '')
 
-const initRadar = () => {
-  if (!radarRef.value) return
-  radarChart = echarts.init(radarRef.value, 'xinyu-business')
-  drawRadar([])
-}
-
-const resizeRadar = () => {
-  if (radarChart) radarChart.resize()
-}
-
-const drawRadar = (vals) => {
-  if (!radarChart) return
-  setLibraryChartOption(radarChart, {
-    radar: {
-      radius: '65%',
-      splitNumber: 4,
-      axisName: { color: businessColor('text-secondary'), fontSize: 12 },
-      splitLine: { lineStyle: { color: businessColor('border') } },
-      splitArea: { areaStyle: { color: [businessColor('surface'), businessColor('surface-warm')] } },
-      indicator: [
-        { name: '学业', max: 100 },
-        { name: '人际', max: 100 },
-        { name: '家庭', max: 100 },
-        { name: '情绪', max: 100 },
-        { name: '身体', max: 100 }
-      ]
-    },
-    series: [
-      {
-        type: 'radar',
-        data: [
-          {
-            value: vals,
-            areaStyle: { color: businessAlpha('data-primary', 0.24) },
-            lineStyle: { color: businessColor('data-risk-high'), width: 2 },
-            itemStyle: { color: businessColor('data-risk-high') }
-          }
-        ]
-      }
-    ]
-  })
-}
-
-const updateTrendAndRadar = () => {
-  if (!latestEmotion.value) return
-  const e = latestEmotion.value
-  const radarVals = [
-    Math.round(((e.fear || 0) * 0.6 + (e.sadness || 0) * 0.4) * 100),
-    Math.round(((e.anger || 0) * 0.7 + (e.fear || 0) * 0.3) * 100),
-    Math.round(((e.sadness || 0) * 0.6 + (e.neutral || 0) * 0.4) * 100),
-    Math.round((((e.sadness || 0) + (e.anger || 0) + (e.fear || 0)) / 3) * 100),
-    Math.round(((e.fear || 0) * 0.5 + (e.disgust || 0) * 0.5) * 100)
-  ]
-  drawRadar(radarVals)
-}
-
-const refreshRiskRadar = () => {
-  updateTrendAndRadar()
-}
 
 const scrollToBottom = async () => {
   await nextTick()

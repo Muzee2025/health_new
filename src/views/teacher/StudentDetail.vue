@@ -231,26 +231,16 @@ const riskTimelineData = computed(() => {
   // Add test results
   if (studentData.value.test_history) {
     studentData.value.test_history.forEach(test => {
-      let color = businessColor('data-risk-low')
-      let type = 'success'
-      let title = '心理测评 (健康)'
-      if (test.risk_level === 'red' || test.score >= 60) {
-        color = businessColor('data-risk-high')
-        type = 'danger'
-        title = '心理测评 (高风险)'
-      } else if (test.risk_level === 'yellow' || test.score >= 50) {
-        color = businessColor('data-risk-mid')
-        type = 'warning'
-        title = '心理测评 (亚健康)'
-      }
-      
+      const pendingReview = test.assessment_status === 'pending_professional_review' || (test.risk_level == null && ['SDS', 'SAS'].includes(test.test_type))
+      const entertainmentOnly = test.assessment_status === 'entertainment_only'
+      const riskLabel = test.risk_level != null ? `；服务器状态：${test.risk_level}` : ''
       timeline.push({
         id: `test_${test.id}`,
         date: test.created_at,
-        type,
-        color,
-        title,
-        score: test.score
+        type: pendingReview ? 'warning' : entertainmentOnly ? 'info' : 'primary',
+        color: pendingReview ? businessColor('data-risk-mid') : businessColor('data-primary'),
+        title: entertainmentOnly ? '趣味问答记录' : pendingReview ? '测评记录 · 待专业复核' : `测评记录${riskLabel}`,
+        score: test.score,
       })
     })
   }

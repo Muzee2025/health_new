@@ -42,7 +42,8 @@
           <template #default="{row}">
             <el-tag type="danger" effect="dark" v-if="row.riskLevel === 'high'">高危</el-tag>
             <el-tag type="warning" effect="dark" v-else-if="row.riskLevel === 'medium'">中危</el-tag>
-            <el-tag type="info" effect="dark" v-else>低危</el-tag>
+            <el-tag type="info" effect="dark" v-else-if="row.riskLevel === 'low'">低危</el-tag>
+            <el-tag type="info" v-else>待核验</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="预警描述" min-width="320">
@@ -260,7 +261,7 @@ const normalizeWsWarning = (payload) => {
     studentId: payload.studentId || String(payload.student_id || ''),
     studentName: payload.studentName || payload.student_name || '未知',
     className: payload.className || payload.class_name || '未知',
-    riskLevel: payload.riskLevel || payload.risk_level || 'high',
+    riskLevel: payload.riskLevel || payload.risk_level || 'unknown',
     description: payload.description || payload.trigger_msg || '',
     status: payload.status || 'pending',
     highlight: true

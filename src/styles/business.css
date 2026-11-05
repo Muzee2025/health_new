@@ -59,6 +59,9 @@ body { margin: 0; }
 /* Element Plus controls share the palette and remain readable at touch sizes. */
 .xy-business { --el-color-primary: var(--brand-600); --el-color-primary-light-3: var(--brand-500); --el-color-primary-light-5: var(--accent-sage); --el-color-primary-light-7: var(--brand-100); --el-color-primary-light-8: var(--brand-100); --el-color-primary-light-9: var(--brand-50); --el-color-primary-dark-2: var(--brand-700); --el-color-success: var(--success-text); --el-color-warning: var(--warning-text); --el-color-danger: var(--danger-text); --el-text-color-primary: var(--text-primary); --el-text-color-regular: var(--text-secondary); --el-border-color: var(--border); --el-border-color-light: var(--border); --el-border-color-lighter: var(--gray-100); --el-fill-color-blank: var(--surface); --el-bg-color: var(--surface); --el-font-family: var(--font-sans); --el-border-radius-base: var(--radius-md); --el-box-shadow-light: var(--shadow-sm); }
 .xy-business .el-button { min-height: 40px; }
+.xy-business .el-button > span { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-width: 0; }
+.xy-business :is(.business-actions, .header-actions, .action-links, .actions, .appointment-actions) > .el-button + .el-button { margin-left: 0; }
+.xy-business :is(.business-actions, .header-actions, .action-links, .actions, .appointment-actions) > .el-button { flex-shrink: 0; }
 .xy-business .el-button--small { min-height: 36px; }
 .xy-business .el-input__wrapper, .xy-business .el-select__wrapper, .xy-business .el-date-editor.el-input__wrapper { min-height: 42px; }
 .xy-business .el-empty__description p { color: var(--text-secondary); }

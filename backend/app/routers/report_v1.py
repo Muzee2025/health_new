@@ -10,7 +10,7 @@ from typing import Optional
 import requests
 from fastapi import APIRouter, Depends, HTTPException, Response
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -32,12 +32,12 @@ router = APIRouter(prefix="/api/v1/report", tags=["report-v1"])
 logger = logging.getLogger(__name__)
 LLM_URL = os.getenv("LLM_GENERATE_URL", "")
 
-FALLBACK_TEXT = "AI 解读生成中，请稍后再试"
+FALLBACK_TEXT = "暂无可解释的对话记录。可先记录近况，或直接选择人工求助。"
 THOUGHT_LOG = Path("logs") / "report_thought_process.log"
 
 
 class AiInterpretRequest(BaseModel):
-    recordId: int
+    recordId: int = Field(ge=0, le=5000)
 
 class MultiModelSubmitRequest(BaseModel):
     visualHints: Optional[list] = None
@@ -78,7 +78,16 @@ def _latest_report_row(db: Session, user_id: int):
 
 
 def _llm_url_candidates():
+    if os.getenv("REPORT_AI_ENABLED", "false").lower() != "true":
+        return []
     return [LLM_URL] if LLM_URL and not is_local_fallback_url(LLM_URL) else []
+
+
+def _collaboration_enabled():
+    # The legacy fusion fabricates multimodal confidence from absent inputs.
+    # Do not expose that experimental chain until it has a validated task contract.
+    # Single-assessment text explanation is available through its separate route.
+    return False
 
 
 @router.post("/analysis/trigger")
@@ -106,7 +115,8 @@ def get_latest_analysis(
         if elapsed_ms > 30000:
             mark_first_screen_breach()
             logger.warning("first_screen_sla_breach request_id=%s user_id=%s duration_ms=%.2f", request_id, current_user.id, elapsed_ms)
-        state = enqueue_dialogue_analysis(current_user.id, force=True)
+        state = (enqueue_dialogue_analysis(current_user.id) if quick["source"]["message_count"]
+                 else {"status": "insufficient"})
         logger.info(
             "report_quick_fallback request_id=%s user_id=%s duration_ms=%.2f queue_status=%s",
             request_id,
@@ -163,22 +173,22 @@ def stream_analysis(
             yield _sse("step", step1_done)
 
             step2_t0 = time.perf_counter()
-            step2 = {"step": "风险评级", "model": "qwen", "promptTokens": 0, "status": "running", "thought": "正在进行风险评级与建议生成..."}
+            step2 = {"step": "资料说明", "model": "pending", "promptTokens": 0, "status": "running", "thought": "正在核对资料范围与解释来源..."}
             _append_thought_log(current_user.id, request_id, step2)
             yield _sse("step", step2)
 
             try:
                 full = build_structured_report(db, current_user.id, include_llm=True, deadline_ts=time.time() + 30, max_messages=5000)
-                status = "done"
-                thought = "模型风险评级完成。"
+                status = "done" if full.get("generation", {}).get("source") == "provider" else "degraded"
+                thought = "模型支持性解释已生成，尚需人工核对。" if status == "done" else "已提供本地说明，未完成外部模型分析。"
             except Exception as exc:
                 full = quick
                 status = "degraded"
                 thought = "Model temporarily unavailable; using local rules."
             step2_ms = round((time.perf_counter() - step2_t0) * 1000, 2)
             step2_done = {
-                "step": "风险评级",
-                "model": "qwen",
+                "step": "资料说明",
+                "model": full.get("generation", {}).get("model_id") or "local_rules",
                 "promptTokens": 0,
                 "status": status,
                 "elapsedMs": step2_ms,
@@ -192,7 +202,8 @@ def stream_analysis(
             yield _sse("step", step2_done)
 
             step3_t0 = time.perf_counter()
-            step3 = {"step": "建议生成", "model": "qwen", "promptTokens": 0, "status": "running", "thought": "正在整理可执行建议与干预优先级..."}
+            explanation_model = full.get("generation", {}).get("model_id") or "local_rules"
+            step3 = {"step": "建议生成", "model": explanation_model, "promptTokens": 0, "status": "running", "thought": "正在整理支持性建议与可选下一步..."}
             _append_thought_log(current_user.id, request_id, step3)
             yield _sse("step", step3)
 
@@ -200,18 +211,18 @@ def stream_analysis(
             step3_ms = round((time.perf_counter() - step3_t0) * 1000, 2)
             step3_done = {
                 "step": "建议生成",
-                "model": "qwen",
+                "model": explanation_model,
                 "promptTokens": 0,
-                "status": "done" if step3_ms <= 30000 else "degraded",
+                "status": "done" if full.get("generation", {}).get("source") == "provider" and step3_ms <= 30000 else "degraded",
                 "elapsedMs": step3_ms,
-                "thought": "建议已生成。" if step3_ms <= 30000 else "建议生成耗时过长，已降级输出基础建议。",
+                "thought": "已整理支持性建议，请结合实际需求决定下一步。",
                 "result": {"interventions": interventions},
             }
             _append_thought_log(current_user.id, request_id, step3_done)
             yield _sse("step", step3_done)
 
             step4_t0 = time.perf_counter()
-            step4 = {"step": "可视化摘要", "model": "qwen", "promptTokens": 0, "status": "running", "thought": "正在生成图表解读与摘要..."}
+            step4 = {"step": "可视化摘要", "model": explanation_model, "promptTokens": 0, "status": "running", "thought": "正在整理实际记录和图表说明..."}
             _append_thought_log(current_user.id, request_id, step4)
             yield _sse("step", step4)
 
@@ -220,11 +231,11 @@ def stream_analysis(
             step4_ms = round((time.perf_counter() - step4_t0) * 1000, 2)
             step4_done = {
                 "step": "可视化摘要",
-                "model": "qwen",
+                "model": explanation_model,
                 "promptTokens": 0,
-                "status": "done" if step4_ms <= 30000 else "degraded",
+                "status": "done" if full.get("generation", {}).get("source") == "provider" and step4_ms <= 30000 else "degraded",
                 "elapsedMs": step4_ms,
-                "thought": "图表解释已生成，准备输出最终报告。" if step4_ms <= 30000 else "图表解释耗时较长，已返回精简版摘要。",
+                "thought": "已整理模型解释及资料局限。" if full.get("generation", {}).get("source") == "provider" else "已整理本地统计与资料不足说明，未执行模型解读。",
                 "result": {"chart_insights": full.get("chart_insights", {})},
             }
             _append_thought_log(current_user.id, request_id, step4_done)
@@ -261,13 +272,19 @@ def generate_ai_interpret(
 ):
     row = _latest_report_row(db, current_user.id)
     if not row:
-        return {"text": FALLBACK_TEXT}
-    report = json.loads(row.analysis_json or "{}")
+        return {"text": FALLBACK_TEXT, "source": "local_rules", "status": "insufficient", "model_id": None}
+    try:
+        report = json.loads(row.analysis_json or "{}")
+    except (ValueError, TypeError):
+        report = {}
+    if not isinstance(report, dict):
+        report = {}
     messages = report.get("source", {}).get("messages", [])
-    sample = messages[max(0, req.recordId - 5): req.recordId + 1]
-    prompt = "请用 200 字以内白话解释以下心理对话片段，说明情绪变化、潜在风险和可执行建议。\n" + json.dumps(
-        sample, ensure_ascii=False
-    )
+    sample = messages[max(0, req.recordId - 5): req.recordId + 1] if isinstance(messages, list) else []
+    if not sample:
+        return {"text": FALLBACK_TEXT, "source": "local_rules", "status": "insufficient", "model_id": None}
+    prompt = (f"当前选择范围包含{len(sample)}条已存对话，但未提供原文。请只说明资料局限与可选的求助下一步，"
+              "不要推断心理状态、疾病、概率或虚构风险。")
     for llm_url in _llm_url_candidates():
         try:
             resp = requests.post(
@@ -280,10 +297,12 @@ def generate_ai_interpret(
             payload = resp.json()
             text = payload.get("text") or payload.get("result") or ""
             if text.strip():
-                return {"text": text.strip()}
+                if payload.get("source") in {"local_rules", "local_rule"}:
+                    break
+                return {"text": text.strip(), "source": "provider", "status": "completed", "model_id": payload.get("model_id")}
         except Exception:
             continue
-    return {"text": _build_interpretation_fallback(prompt)}
+    return {"text": _build_interpretation_fallback(prompt), "source": "local_rules", "status": "fallback", "model_id": None}
 
 
 @router.get("/analysis/diagnostics")
@@ -321,9 +340,14 @@ async def submit_collab_analysis(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    if not _collaboration_enabled():
+        raise HTTPException(status_code=503, detail="扩展模型解析当前未启用，可继续查看本地结果或选择人工求助。")
     report = build_structured_report(db, current_user.id, include_llm=False, max_messages=5000)
+    if report.get("data_status") != "available":
+        raise HTTPException(status_code=409, detail="暂无可用于扩展解析的记录。")
     payload = {
-        "messages": report.get("source", {}).get("messages", []),
+        "messages": [],
+        "facts": {"message_count": report.get("source", {}).get("message_count", 0)},
         "visualHints": req.visualHints or [],
         "audioHints": req.audioHints or [],
     }
@@ -374,6 +398,7 @@ async def get_collab_health(
 ):
     return {
         "status": "ok",
+        "collaboration_enabled": _collaboration_enabled(),
         "user_id": current_user.id,
         "metrics": orchestrator.get_metrics(),
     }
