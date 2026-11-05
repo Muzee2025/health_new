@@ -1,0 +1,47 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "purpose": "立项答辩模型与任务分工配图候选；未修改原PPT，未部署模型",
+  "method": "Original deterministic SVG; rendered by sharp. No generative image provider.",
+  "license": "LicenseRef-Project-Original",
+  "visualSource": "src/styles/tokens.css",
+  "reference": "User supplied six-box sketch, this chat, 2026-11-01",
+  "hardware": {
+    "os": "Windows",
+    "gpu": "RTX 4070",
+    "count": 2,
+    "vramPerGpuGiBPlanningAssumption": 12
+  },
+  "modelCandidates": [
+    {
+      "id": "Qwen/Qwen3-8B-GGUF",
+      "quantizationCandidate": "Q4_K_M",
+      "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF",
+      "status": "proposed-not-tested"
+    },
+    {
+      "id": "Qwen/Qwen3-Embedding-0.6B",
+      "url": "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B",
+      "status": "proposed-not-tested"
+    },
+    {
+      "id": "Qwen/Qwen3-Reranker-0.6B",
+      "url": "https://huggingface.co/Qwen/Qwen3-Reranker-0.6B",
+      "status": "proposed-not-tested"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/ppt/local-agents-20261101/local-agent-collaboration-v1.svg",
+      "bytes": 8950,
+      "sha256": "f32337aa92c9a0d2ae36b77f709491ee9eac853e507c2563aab9d9453e8e5552"
+    },
+    {
+      "path": "docs/ppt/local-agents-20261101/local-agent-collaboration-v1.png",
+      "bytes": 552125,
+      "sha256": "864f5d496fe12a6b01e0d57706ed45b7cfeea77ac21f7036c8feec6a964279b5"
+    }
+  ]
+}

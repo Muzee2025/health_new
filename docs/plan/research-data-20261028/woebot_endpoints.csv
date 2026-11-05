@@ -1,0 +1,9 @@
+﻿source_id,outcome,arm,endpoint,mean,standard_error,ci95_lower,ci95_upper,f_reported,p_reported,cohen_d_reported,source_location,limitation
+FITZ2017,PHQ-9,信息对照,T2；ITT分析,13.67,0.81,12.07,15.27,6.03,0.017,0.44,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,PHQ-9,Woebot,T2；ITT分析,11.14,0.71,9.74,12.32,6.03,0.017,0.44,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,GAD-7,信息对照,T2；ITT分析,16.84,0.67,15.52,18.56,0.38,0.581,0.14,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,GAD-7,Woebot,T2；ITT分析,17.35,0.6,16.16,18.13,0.38,0.581,0.14,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,PANAS positive affect,信息对照,T2；ITT分析,26.02,1.45,23.17,28.86,0.17,0.707,0.02,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,PANAS positive affect,Woebot,T2；ITT分析,26.88,1.29,24.35,29.41,0.17,0.707,0.02,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,PANAS negative affect,信息对照,T2；ITT分析,27.53,1.42,24.73,30.32,0.91,0.912,0.344,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正
+FITZ2017,PANAS negative affect,Woebot,T2；ITT分析,25.98,1.24,23.54,28.42,0.91,0.912,0.344,Table 2；a脚注为pooled mean(SE),SE不是SD；不据此计算原始配对变化；部分原文F/p/CI疑有冲突，未自行修正

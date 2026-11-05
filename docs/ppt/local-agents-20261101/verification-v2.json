@@ -1,0 +1,25 @@
+{
+  "owner": "A / Lead",
+  "version": "2.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "allText": {
+    "family": "Microsoft YaHei, sans-serif",
+    "sizePx": 28,
+    "weight": 400,
+    "anchor": "middle"
+  },
+  "cardsHorizontallyAndVerticallyCentered": 6,
+  "maxTextWidthPx": 649.94,
+  "cardInnerWidthPx": 752,
+  "finalOutputText": "输出结果",
+  "pngDimensions": [
+    3840,
+    2160
+  ],
+  "fullyOpaqueBackground": true,
+  "hashesAndDeliveryCopies": "pass",
+  "v1AndOriginalPptxUnchanged": true,
+  "leadVisualReview": "pass; six cards readable and no clipping observed",
+  "independentReview": "not performed; user-review candidate"
+}

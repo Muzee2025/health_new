@@ -1,0 +1,77 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "1.0",
+  "updated": "2026-10-29",
+  "status": "synthetic-project-captures",
+  "assets": [
+    {
+      "id": "student-ui",
+      "path": "docs/ppt/six-chapters-20261029/project-screenshots/student-questions-1440.png",
+      "sha256": "8fce687f317d7d1c0548a4d1fab6505949ce19abebb6837e02e5e1d4170904ac",
+      "license": "LicenseRef-Project-Original",
+      "source": "Project Vue frontend rendered by isolated Edge/Playwright with synthetic API; no real backend, student data or model calls",
+      "registry": "docs/ppt/six-chapters-20261029/project-screenshots/manifest.json",
+      "pages": [
+        4
+      ],
+      "use": "实际项目学生留言与答复页面，合成API"
+    },
+    {
+      "id": "teacher-ui",
+      "path": "docs/ppt/six-chapters-20261029/project-screenshots/teacher-support-1440.png",
+      "sha256": "48d66b4a01d697d1607428139b6478fa0599148d2e7f44e20edac2ac41be6d02",
+      "license": "LicenseRef-Project-Original",
+      "source": "Project Vue frontend rendered by isolated Edge/Playwright with synthetic API; no real backend, student data or model calls",
+      "registry": "docs/ppt/six-chapters-20261029/project-screenshots/manifest.json",
+      "pages": [
+        5
+      ],
+      "use": "实际项目教师求助答复页面，合成API，未发送"
+    },
+    {
+      "id": "followup-ui",
+      "path": "docs/ppt/six-chapters-20261029/project-screenshots/teacher-followups-1440.png",
+      "sha256": "dc614e1c8a5374967131e687e03418bead5a4b7095924ef038e37bf3066833e7",
+      "license": "LicenseRef-Project-Original",
+      "source": "Project Vue frontend rendered by isolated Edge/Playwright with synthetic API; no real backend, student data or model calls",
+      "registry": "docs/ppt/six-chapters-20261029/project-screenshots/manifest.json",
+      "pages": [
+        5
+      ],
+      "use": "实际项目教师内部跟进页面，合成API"
+    }
+  ],
+  "captureTool": "Playwright isolated fresh Edge contexts",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "watermark": "合成数据 · 答辩界面演示",
+  "sourceFiles": [
+    {
+      "path": "src/views/student/Questions.vue",
+      "sha256": "2e007b7c61dfb37f013b6c7c086f326723beb0eb690d10ea007b99f4fd6c38b9"
+    },
+    {
+      "path": "src/views/teacher/SupportWorkspace.vue",
+      "sha256": "50e4105ab26c706693e794c64d306ade6d2b95c2173c8ad10349e00b0bd0bb69"
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "sha256": "4bd0a11bd0540f7115f13fb519fb4a60e713cfac7b0b8513fda155ca1b3bb087"
+    }
+  ],
+  "captureSummary": {
+    "expectedPages": 2,
+    "capturedPages": 2,
+    "unknownApiCount": 0,
+    "pageErrorCount": 0,
+    "imageLoadFailureCount": 0,
+    "libraryIconFailureCount": 0,
+    "pagesOverLimit": []
+  },
+  "actualModelCalls": 0,
+  "actualNotifications": 0,
+  "actualStudentData": false,
+  "sourceServiceTouched": false
+}

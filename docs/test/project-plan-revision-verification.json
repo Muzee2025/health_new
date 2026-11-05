@@ -1,0 +1,481 @@
+{
+  "owner": "A",
+  "updated": "2026-10-29",
+  "base": "C:\\University\\Code_total\\health_new_muzee2025\\deliverables\\心域智链项目计划书_系统内容与截图补充_20261029.docx",
+  "baseSha256": "b57452d9cf98353e58c862778a7f4ba9fe7b804317db481c6ad000fe63e3641e",
+  "output": "C:\\University\\Code_total\\health_new_muzee2025\\deliverables\\心域智链项目策划书_内容完善修订稿_20261029.docx",
+  "sha256": "619839668667f936dbf82318b5d6cc781d6b2ee77504fc24f61b4aa592ab7cc3",
+  "tables": 20,
+  "originalTablesUnchanged": 18,
+  "originalTableChanged": {
+    "index": 6,
+    "before": [
+      "学校",
+      "对学生的心理情况进行长期监控",
+      "AI进行数据处理与敏感性分析，检索出敏感数据并标注"
+    ],
+    "after": [
+      "学校（规划）",
+      "在明确授权和管理范围内查看汇总情况",
+      "拟提供按口径汇总的统计信息；数据使用和展示范围需经校方确认"
+    ]
+  },
+  "newTableCaption": "表16 预期成果与检查方法",
+  "mediaPreserved": 25,
+  "sectionsPreserved": 3,
+  "formulaNodesPreserved": 4,
+  "nonBodyPartsBytePreserved": 36,
+  "paragraphChanges": [
+    {
+      "before": "表11 四项学校心理服务采购案例",
+      "after": "表11 四项学校心理服务采购案例 [5]—[8]"
+    },
+    {
+      "before": "数据准备方面，已整理本地数据库变量清单，并完成公开论文数据的下载、清理与来源登记，形成可筛选的Excel工作簿和公开资料包。整理结果区分原文数值、处理后的指标及可能解释，作为项目论证和后续评测的资料基础；这些研究数据独立保存，未直接写入业务数据库。",
+      "after": "数据准备方面，已形成数据库变量工作簿、文献数据工作簿和公开资料包。字段字典以独立预览库的27表198字段为参考，并登记不同历史库的结构差异；文献整理覆盖6篇论文及26份去重下载文件，保留出处、单位、原文数值和处理说明。这些资料支持项目论证和后续复算，研究数据与业务数据库分开保存。"
+    },
+    {
+      "before": "项目由研发、数据治理、专业审阅、校内业务和运行维护等角色协作完成。",
+      "after": "项目按研发、数据整理、专业审阅、校内业务和运行维护划分职责。研发人员完善原型、权限与接口，保留测试和问题修复记录；数据整理人员维护字段口径、资料来源和处理版本；相关专业人员确认测评工具的适用范围、结果说明及案例；校内业务与运维责任方分别确认人工承接、访问权限、部署和恢复安排。具体承接人员、导师和实施周期由负责人核实后填写。"
+    },
+    {
+      "before": "附录 系统截图与实现范围说明",
+      "after": "附录A 系统截图与实现范围说明"
+    }
+  ],
+  "referencesRestored": [
+    {
+      "number": 1,
+      "title": "郭菲等 2024年青少年心理健康与学业状况调查报告。",
+      "url": "https://psy.china.com.cn/2025-05/27/content_43126660.htm"
+    },
+    {
+      "number": 2,
+      "title": "李春玲 高云浩 学业和就业竞争压力下大学生社会心态特征。",
+      "url": "https://sociology.cssn.cn/shxsw/swx_kycg/swx_xslw/202410/W020241025423030106787.pdf"
+    },
+    {
+      "number": 3,
+      "title": "方圆等 2024年大学生心理健康状况调查报告 作者公开摘要。",
+      "url": "https://psy.china.com.cn/2025-06/20/content_43141390.htm"
+    },
+    {
+      "number": 4,
+      "title": "教育部 2025年全国教育事业发展统计公报。",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/sjzl_fztjgb/202607/t20260706_1442870.html"
+    },
+    {
+      "number": 5,
+      "title": "四川邮电职业技术学院 心理健康测评系统成交公告 N5100012026001455。",
+      "url": "https://www.ccgp.gov.cn/cggg/dfgg/zbgg/202607/t20260715_26941179.htm"
+    },
+    {
+      "number": 6,
+      "title": "中国劳动关系学院 智能心理测评与服务系统成交公告 ZYZB-2026-0788。",
+      "url": "https://www.ccgp.gov.cn/cggg/zygg/cjgg/202609/t20260909_27295534.htm"
+    },
+    {
+      "number": 7,
+      "title": "龙泉驿区教育局 2026年中小学生心理健康状况测评服务成交公告。",
+      "url": "https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202605/t20260514_26566118.htm"
+    },
+    {
+      "number": 8,
+      "title": "成都市教科院 2026年中小学心理健康资源建设及关护行动成交公告 N5101012026000770。",
+      "url": "https://www.ccgp.gov.cn/cggg/dfgg/cjgg/202607/t20260701_26848948.htm"
+    },
+    {
+      "number": 9,
+      "title": "教育部 全国学生心理健康工作咨询委员会第二次全体会议召开。",
+      "url": "https://www.moe.gov.cn/jyb_zzjg/huodong/202505/t20250529_1192362.html"
+    },
+    {
+      "number": 10,
+      "title": "教育部等 全面加强和改进新时代学生心理健康工作专项行动计划2023至2025。",
+      "url": "https://www.moe.gov.cn/srcsite/A17/moe_943/moe_946/202305/t20230511_1059219.html"
+    },
+    {
+      "number": 11,
+      "title": "教育部 全面推进健康学校建设指导意见。",
+      "url": "https://www.moe.gov.cn/srcsite/A17/moe_943/moe_946/202602/t20260227_1429365.html"
+    },
+    {
+      "number": 12,
+      "title": "教育部 2024年各地区高等教育普通本科学生数。",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431199.html"
+    },
+    {
+      "number": 13,
+      "title": "教育部 2024年各地区高等教育职业本专科学生数。",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431198.html"
+    },
+    {
+      "number": 14,
+      "title": "教育部 2024年各地区高等教育学校（机构）数。",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260317_1431201.html"
+    },
+    {
+      "number": 15,
+      "title": "教育部 2024年各地区普通高中教育学生数。",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431390.html"
+    },
+    {
+      "number": 16,
+      "title": "教育部 2024年各地区初中教育学生数。",
+      "url": "https://www.moe.gov.cn/jyb_sjzl/moe_560/2024/gedi/202603/t20260319_1431404.html"
+    },
+    {
+      "number": 17,
+      "title": "〖中国教育报〗湖北以三大评价改革系统优化育人生态——“评”出新活力，“育”出真精彩。",
+      "url": "https://jyt.hubei.gov.cn/bmdt/gxhptlm/mtjj/202606/t20260608_5953967.shtml"
+    },
+    {
+      "number": 18,
+      "title": "2024年度义务教育薄弱环节改善与能力提升中央补助资金绩效自评报告。",
+      "url": "https://edu.gd.gov.cn/attachment/0/578/578399/4700799.pdf"
+    },
+    {
+      "number": 19,
+      "title": "江苏省中小学标准化心理辅导室建设指南。",
+      "url": "https://www.taixing.gov.cn/ztzl/ztlb/wcnrczzt/zdzx/art/2024/art_e50010fa33a0446da51b00961c96d48b.html"
+    },
+    {
+      "number": 20,
+      "title": "嘉兴市南湖区深化教育服务增值化改革为随迁子女提供全方位教育保障。",
+      "url": "https://jyt.zj.gov.cn/art/2024/10/31/art_1543974_58942938.html"
+    },
+    {
+      "number": 21,
+      "title": "山东省中小学教育技术装备配备指南（初中）（试行）。",
+      "url": "https://edu.shandong.gov.cn/module/download/downfile.jsp?classid=0&filename=6e51854a33144ec790cf536516265b9a.pdf"
+    },
+    {
+      "number": 22,
+      "title": "中小学校心理辅导室建设规范（四川省地方标准）。",
+      "url": "https://std.samr.gov.cn/db/search/stdDBDetailed?id=53F0FB55EF253707E06397BE0A0ADB38"
+    },
+    {
+      "number": 23,
+      "title": "郑州师范学院牵头制定全国首个心理支持服务地方标准。",
+      "url": "https://jyt.henan.gov.cn/2024/11-05/3082082.html"
+    },
+    {
+      "number": 24,
+      "title": "关于全面加强和改进新时代中小学校学生心理健康工作行动计划（2023—2025年）。",
+      "url": "https://jw.beijing.gov.cn/xxgk/2024zcwj/2024qtwj/202404/t20240409_3614280.html"
+    },
+    {
+      "number": 25,
+      "title": "Zhou J, Liu Y, Ma J, et al. Prevalence of depressive symptoms among children and adolescents in China: a systematic review and meta-analysis. 2024;18:150.",
+      "url": "https://link.springer.com/article/10.1186/s13034-024-00841-w"
+    },
+    {
+      "number": 26,
+      "title": "Zhou等. Additional file 4, Table S2 地区亚组明细.",
+      "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1186%2Fs13034-024-00841-w/MediaObjects/13034_2024_841_MOESM4_ESM.pdf"
+    }
+  ],
+  "referenceSource": "docs/plan/心域智链申报计划书.md",
+  "referenceSourceSha256": "a48601001e6ac57c17458b7e4ed9cfbe737be86c2042e9a7a2a3d60e26eac471",
+  "referenceRebrowsePerformed": false,
+  "status": "complete for user review",
+  "scopeClarification": "用户最新明确本对话任务为修改策划书；PPT不作为本轮完成条件",
+  "sourceAttachmentUnchanged": true,
+  "base37PageDeliverableUnchanged": true,
+  "nativeRender": {
+    "renderer": "Microsoft Word",
+    "version": "16.0",
+    "pages": 40,
+    "sections": 3,
+    "readOnly": true,
+    "input": "C:\\University\\Code_total\\health_new_muzee2025\\tmp\\project-plan-revision-20261029\\render-v2-input.docx",
+    "pdf": "C:\\University\\Code_total\\health_new_muzee2025\\tmp\\project-plan-revision-20261029\\word-v2.pdf"
+  },
+  "nativePdfSha256": "c2304ae2c64ddc678962f393454d4eaf29532ea25f14ee54000d10c474ac8a7f",
+  "allSourceLinksInDocxAndPdf": 26,
+  "screenshotPages": [
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "newTableAndStagesPage": 34,
+  "sourcePages": [
+    36,
+    37
+  ],
+  "supportingEvidencePages": [
+    38,
+    39,
+    40
+  ],
+  "visualPages": [
+    {
+      "page": 1,
+      "sha256": "dee0f6e33ccfd90de4ab8ee6a86418c074fb181fbf2bdaf8f3e57c184e085016",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 1
+    },
+    {
+      "page": 2,
+      "sha256": "0495b56d97c8060e28514d5d8bdf414ccde953d0dc53a940c59c95d95274bf4b",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 2
+    },
+    {
+      "page": 3,
+      "sha256": "68641287d5aeb7c5d0e10496e52721cee2fc478a0581ae8b40a5877b52050bff",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 3
+    },
+    {
+      "page": 4,
+      "sha256": "7b67523a7cd3c035c7fd50d667890b494311efbc1cd559033815fd77057f6463",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 4
+    },
+    {
+      "page": 5,
+      "sha256": "03e291aabe57ad83bf16907f054b4456b61567d81b89620d3ebf1eab1e68e1c5",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 5
+    },
+    {
+      "page": 6,
+      "sha256": "47bdcde9a05dc2cf7bd4627d245c673a570b16e09ff6bf656d20d778af1bb7c2",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 6
+    },
+    {
+      "page": 7,
+      "sha256": "e5ce598032d508155fc05de535b354d7b3f3dd5e33c89532a96e2d9ee4a9c8c8",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 7
+    },
+    {
+      "page": 8,
+      "sha256": "1f7cf4a916d08dc0692fc28bac7ffc2eab7ed5a46b90d457b7d410cb54355d82",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 8
+    },
+    {
+      "page": 9,
+      "sha256": "cd1d37d31387b7dad7df22bc3f56c92f1d82904681e761ce0220927f43e9a54f",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 9
+    },
+    {
+      "page": 10,
+      "sha256": "930fd6dc9aa7c96816c420bf80d7dbb140b4e549edd12fcd5195f65d16cfdc4d",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 10
+    },
+    {
+      "page": 11,
+      "sha256": "0098ae536658237fe235246d11099d3d5e21277ab5f69e06d4296b2811309751",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 11
+    },
+    {
+      "page": 12,
+      "sha256": "d706bfa2bfbb6aa70a15b3fea8f831361f34b235b4a11e9d49bfdc6795be3d3a",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 13,
+      "sha256": "14b6d86977cdc43620b345989fa6ee645a71f718aaaa285598a2af7a46380a48",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 13
+    },
+    {
+      "page": 14,
+      "sha256": "5724cce03e897a1406ccd6b8fe7988439564cf3e05b0256c11b2962a9fc723a9",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 14
+    },
+    {
+      "page": 15,
+      "sha256": "caa0d538e9540b6a3a2920fed2e8bfe771c4772893c17bd2692d8ac76f0dd402",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 15
+    },
+    {
+      "page": 16,
+      "sha256": "38ef73931aea66d136e4ea22d7907a79f3376790ccdf8eeacefc69dd827fcdd7",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 16
+    },
+    {
+      "page": 17,
+      "sha256": "9f39c11ea6afd30d5714e4c1b14f1db45be8619f63656ab18d9e09c867038d9f",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 17
+    },
+    {
+      "page": 18,
+      "sha256": "42ab8438a2be145ff8c0a23715410caea2ca9986539e0e113957e75eea0cb58b",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 18
+    },
+    {
+      "page": 19,
+      "sha256": "8959d4658e2fba56de64bd698c558552700f41f0f8f6bd6765eab9f5f2a23b81",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 19
+    },
+    {
+      "page": 20,
+      "sha256": "c847defa1cd07be5bc54b75130bd1b6c172a403ab61d18fd265d02fc973d5ac4",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 21,
+      "sha256": "aaf20fed7fe428c40c828e3a44694c21f6c4c8e5de5521b57feeb57ffc44d707",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 21
+    },
+    {
+      "page": 22,
+      "sha256": "46ae713d320c54a0da85c647d94b00777bd96eb21ddee5068a5cc3489634e936",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 22
+    },
+    {
+      "page": 23,
+      "sha256": "0d20b260082d01b00417ab064a898e310f66b457bb3e07fad04c0ea35b6ce543",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 23
+    },
+    {
+      "page": 24,
+      "sha256": "79a7b3fab69a522c5e32107e2447ccc91bb49e4687ffecfade727b23a1e1abd6",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 25,
+      "sha256": "cb9b962dd06c4b6eda3265b1fcdc04a900d5878f68f137c7ff8d45d925351a45",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 25
+    },
+    {
+      "page": 26,
+      "sha256": "2312bc2362ddb738d1c2a18fdea6ff0c9e61c8d868fcc07e2c4caa7f49220825",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 26
+    },
+    {
+      "page": 27,
+      "sha256": "f016206c6ca8bfa67f82ebb4f5461618bdc79bfd929ed27c9aea63099c948d8c",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 27
+    },
+    {
+      "page": 28,
+      "sha256": "a88a45252c97958870684dd1ae4b0a821ddbddbd64f3de0e4f43e0e8643d3727",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 28
+    },
+    {
+      "page": 29,
+      "sha256": "408428f2f4c343e3b0563f45c5c5a599679b558b2aacceb4118bb012ca1bb6fd",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 29
+    },
+    {
+      "page": 30,
+      "sha256": "28a6ea100686e0bf6c3ef767ddcca532436d990f9874cf006823704ab2d5a493",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 30
+    },
+    {
+      "page": 31,
+      "sha256": "08cc888bdbba7f6c9c51b3876b3a67922772d20d101e819b105d394c6dfdbd2c",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 31
+    },
+    {
+      "page": 32,
+      "sha256": "ac1c08c585b0fa6104624301c1007c94a679661cdf73f1924a545edf774291a7",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 32
+    },
+    {
+      "page": 33,
+      "sha256": "c3da8b23d9396fa16f50a89d8ae6249f68068e14a7b14ab083becc27f69724a3",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 34,
+      "sha256": "6c994566872b1858b9eb0f93e0d90e326411a62132bac0bf4d2cd973356af3a6",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 35,
+      "sha256": "d90f52ab9dac7e973c53c71c49445467c98fad565d9a768e9b3c167863267eea",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 36,
+      "sha256": "369989b66828880201f7b87bdffb1ee951bdae99fda5d590d5ebdb4bef48d78e",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 37,
+      "sha256": "090b9d5d66c5892a6527c2e1545ed0988af31fa7e6431867dfe32a5c651bc4b9",
+      "currentVisualInspection": true,
+      "identicalPreviouslyInspectedPage": null
+    },
+    {
+      "page": 38,
+      "sha256": "eef9f43805a35da53d68e1a599f2f2d2d590b38a3096ff51848513e1fc99176f",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 35
+    },
+    {
+      "page": 39,
+      "sha256": "c15200edfad639c29e43e65bdfde92fe69b63c63481e6b694b38da957056f27e",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 36
+    },
+    {
+      "page": 40,
+      "sha256": "973eef5b45f619f05abe7465336da1c0ce1775153779f72b1e5d1a5a3b343fdc",
+      "currentVisualInspection": false,
+      "identicalPreviouslyInspectedPage": 37
+    }
+  ],
+  "currentPagesVisuallyInspected": [
+    12,
+    20,
+    24,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "pixelIdenticalReusedPages": 32,
+  "all40PagesCoveredByVisualEvidence": true,
+  "independentReview": {
+    "path": "docs\\test\\策划书内容完善独立复核.md",
+    "sha256": "a688f326a62e5485482accdb1960bc2b18b09a7babf76bb18ccebb69fb8e89bf",
+    "boundDocxSha256": "619839668667f936dbf82318b5d6cc781d6b2ee77504fc24f61b4aa592ab7cc3",
+    "scope": "structure, wording and source registration; no full-page visual review"
+  },
+  "canonicalRenderer": "failed: soffice.exe unavailable; used Microsoft Word 16 read-only private-copy export and PDFium",
+  "businessCodeModified": false,
+  "businessDatabaseUsed": false,
+  "realModelUsed": false,
+  "productionApproval": false
+}

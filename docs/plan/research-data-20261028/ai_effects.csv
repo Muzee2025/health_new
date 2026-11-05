@@ -1,0 +1,12 @@
+﻿source_id,outcome,analysis,trials_k_reported,hedges_g,ci95_lower,ci95_upper,i2,p_reported,ci_excludes_zero,source_location,limitation
+FENG2025,抑郁症状,原始合并,10,0.5,0.18,0.82,0.897,<.01,True,Results: Depression,正g有利干预；原文报告值，非本项目效果
+FENG2025,抑郁症状,排除1项异常研究,9,0.61,0.35,0.86,0.549,<.001,True,Results: Depression sensitivity,正g有利干预；原文报告值，非本项目效果
+FENG2025,焦虑症状,原始合并,10,0.42,-0.04,0.87,0.874,.08,False,Results: Generalized Anxiety,正g有利干预；原文报告值，非本项目效果
+FENG2025,焦虑症状,排除1项异常研究,9,0.17,-0.07,0.42,0.513,.17,False,Results: Generalized Anxiety sensitivity,正g有利干预；原文报告值，非本项目效果
+FENG2025,焦虑症状,trim-and-fill校正,,0.06,-0.21,0.32,,,False,Results: Generalized Anxiety publication bias,正g有利干预；原文报告值，非本项目效果
+FENG2025,压力,原始合并,4,0.002,-0.19,0.2,0.0,.98,False,Results: Stress,正g有利干预；原文报告值，非本项目效果
+FENG2025,积极情感,原始合并,7,0.01,-0.24,0.27,0.631,.92,False,Results: Positive Affect,正g有利干预；原文报告值，非本项目效果
+FENG2025,消极情感,原始合并,7,0.36,-0.04,0.76,0.843,.08,False,Results: Negative Affect,正g有利干预；原文报告值，非本项目效果
+FENG2025,消极情感,排除异常研究（原文冲突）,10,0.11,-0.06,0.28,0.113,<.001,False,Results: Negative Affect sensitivity,正g有利干预；原文报告值，非本项目效果；CI跨0却p<.001、k异常，标为不用于结论
+FENG2025,消极情感,trim-and-fill校正,,0.07,-0.13,0.27,,,False,Results: Negative Affect publication bias,正g有利干预；原文报告值，非本项目效果
+FENG2025,心理幸福感,原始合并,4,0.04,-0.21,0.29,0.323,.76,False,Results: Mental Well-being,正g有利干预；原文报告值，非本项目效果

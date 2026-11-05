@@ -1,0 +1,44 @@
+{
+  "owner": "A / Lead",
+  "version": "7.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "method": "Built-in image_gen.imagegen edit",
+  "source": "C:/Users/14012/.codex/generated_images/01a192d5-a2c8-7dd1-b6ab-ffd817e46f66/exec-3a38cc7e-bc8c-45d7-86b4-57855d534af9.png",
+  "reference": "User inward-arrow, staggered-column and zigzag sketches plus explicit flush-contact request",
+  "visualSource": "Existing project diagram and purple palette",
+  "license": "Built-in ImageGen original, project-specific diagram edit",
+  "promptFile": "docs/ppt/local-agents-20261101/image-edit-v7.md",
+  "actualDimensions": [
+    1672,
+    941
+  ],
+  "native4K": false,
+  "leadVisualReview": {
+    "noHardwareLine": true,
+    "noUpperRightLabel": true,
+    "sixInwardLavenderBlockArrows": true,
+    "verticallyStaggeredColumns": true,
+    "boldExpertAndModelNames": true,
+    "straightSegmentZigzagFlow": true,
+    "panelsDirectlyTouchCentralPolyline": true,
+    "centeredContentAndNoClippingObserved": true,
+    "modelNamesManuallyCompared": true,
+    "finalLabel": "输出结果"
+  },
+  "independentReview": "not performed",
+  "historicalArtifactsAndOriginalPptxUnchanged": true,
+  "deliveryByteMatch": true,
+  "artifacts": [
+    {
+      "path": "docs/ppt/local-agents-20261101/local-agent-collaboration-v7.png",
+      "bytes": 1623562,
+      "sha256": "dc452525ee9a7d38cb6830570c4712a2c19bf2293de7c8ea12da263b0ae7fdd9"
+    },
+    {
+      "path": "deliverables/心域智链_本地多智能体协作示意图_紧贴折线版_20261101.png",
+      "bytes": 1623562,
+      "sha256": "dc452525ee9a7d38cb6830570c4712a2c19bf2293de7c8ea12da263b0ae7fdd9"
+    }
+  ]
+}

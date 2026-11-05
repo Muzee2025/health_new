@@ -1,0 +1,250 @@
+{
+  "schema_version": "1.0",
+  "owner": "A / Lead",
+  "date": "2026-10-31",
+  "status": "local_engineering_verified_not_production_approved",
+  "head": "ad0dda2b7a82b3433e9d3968c29bbbbcd13ad660",
+  "checks": [
+    {
+      "name": "full_backend_frozen_core",
+      "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py -rs",
+      "status": "passed_with_conditional_skips",
+      "exit_code": 0,
+      "passed": 194,
+      "skipped": 3,
+      "warnings": 26,
+      "seconds": 254.54,
+      "log": "tmp/interface-ai-20261031/backend-frozen-final.log",
+      "scope": "Complete suite before the final image-only capability guard",
+      "log_sha256": "9d48523df009671a0ddeb5b5ef30ca43ee875c83a01eb1082e3c80dc4c0dfe51"
+    },
+    {
+      "name": "last_image_guard_and_security",
+      "command": ".venv/Scripts/python.exe scripts/run-backend-baseline.py backend/tests/test_report_evidence_integrity.py backend/tests/test_w2_security.py -rs",
+      "status": "passed",
+      "exit_code": 0,
+      "passed": 41,
+      "warnings": 15,
+      "seconds": 22.3,
+      "log": "tmp/interface-ai-20261031/upload-final.log",
+      "scope": "Current image guard plus affected report and security groups; not another complete suite",
+      "log_sha256": "1b401c24e44837660330caa97dc83e38fcd540da0ac8b962f8dcdd8070ad6494"
+    },
+    {
+      "name": "frontend",
+      "command": "npm test",
+      "status": "passed",
+      "exit_code": 0,
+      "passed": 29,
+      "test_files": 10,
+      "log": "tmp/interface-ai-20261031/frontend-reviewed.log",
+      "log_sha256": "72d87bf2e3c33ba13f4f4356de9f8e16447ebf5c9bbdf593c121669c3d008e90"
+    },
+    {
+      "name": "build",
+      "command": "Vite build({envDir:false,build:{outDir:<new tmp/dist-final>,emptyOutDir:false,manifest:true}})",
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 9.78,
+      "log": "tmp/interface-ai-20261031/build-reviewed.log",
+      "log_sha256": "af2d8b282cf24d91545f28cfacadfdae821ed27bc5451743d4d9fe8403a20118"
+    },
+    {
+      "name": "assets",
+      "command": "npm run assets:check",
+      "status": "passed_with_legacy_warnings",
+      "exit_code": 0,
+      "covered": 131,
+      "approved": 124,
+      "legacy_unverified": 7,
+      "log": "tmp/interface-ai-20261031/assets-final.log",
+      "log_sha256": "32e2a23269d6153da6bf1536bdbc6929e5e0323992b262055349f353ba0e0494"
+    },
+    {
+      "name": "source_rules",
+      "command": "npm run assets:source-check",
+      "status": "passed",
+      "exit_code": 0,
+      "scanned_files": 59,
+      "roles": 16,
+      "icons": 25,
+      "references": 21,
+      "log": "tmp/interface-ai-20261031/source-reviewed.log",
+      "log_sha256": "8b7a036ce53e33e1bf7c81ae16feea23d190d28ecddb25c029215372675d9dfc"
+    },
+    {
+      "name": "source_negative_tests",
+      "command": "npm run assets:source-test",
+      "status": "passed",
+      "exit_code": 0,
+      "passed": 7,
+      "log": "tmp/interface-ai-20261031/source-test.log",
+      "log_sha256": "03a0adf4d692c3aeb09fd6794d9c11862a4021ec9aab79cac5ed54bb4e0a8ab8"
+    },
+    {
+      "name": "real_edge_http",
+      "command": "node scripts/verify-interface-ai.mjs --build tmp/interface-ai-20261031/dist-reviewed --accounts <new synthetic QA accounts> --output <new tmp browser output>",
+      "status": "passed",
+      "exit_code": 0,
+      "passed": 48,
+      "page_scenarios": 38,
+      "interaction_scenarios": 10,
+      "viewports": [
+        1440,
+        390
+      ],
+      "page_errors": 0,
+      "blocked_external": 0,
+      "unexpected_5xx": 0,
+      "injected_503": 2,
+      "log": "tmp/interface-ai-20261031/browser-reviewed.log",
+      "log_sha256": "ad161ff3193ec9b090799b427617e7af65a4eafba2bf6e428e4f63b1c5aed095"
+    },
+    {
+      "name": "tracked_repo_hygiene",
+      "command": ".venv/Scripts/python.exe scripts/check-repo.py --json",
+      "status": "passed",
+      "exit_code": 0,
+      "tracked_files": 807,
+      "forbidden": 0,
+      "ignored_but_tracked": 0,
+      "unexpected": 0,
+      "missing": 0,
+      "oversized": 0
+    },
+    {
+      "name": "diff_whitespace",
+      "command": "git diff --check -- src backend/app backend/tests scripts/verify-interface-ai.mjs",
+      "status": "passed",
+      "exit_code": 0,
+      "note": "Git autocrlf informational warnings retained; no whitespace errors"
+    }
+  ],
+  "source_sha256": {
+    "backend/app/routers/advanced_chat.py": "588b820e553cb5480e4cfb273b2233e4e99e2de7b028d3ca7e9a73009c36cacb",
+    "backend/app/routers/assistant_v1.py": "bb6f0172a8b6d7171a9c2b17fabeab768999b5934a1a6416e499a80e844c2368",
+    "backend/app/routers/llm_gateway.py": "574a3e556655ceaa23425843cbd1e5d36fe47ddeb96f92b9b170a118aa88ccad",
+    "backend/app/routers/report_v1.py": "14998096bb7dfcd02cc309974cb5a3808112f7a8d308afd719d447817d18d8d3",
+    "backend/app/routers/student.py": "335fb85fce52494e53bb0a14b5df0d1eff5d25d3eb2b9ca68c8d04d7a5ad9fe7",
+    "backend/app/routers/teacher.py": "bf1836616eab0051136e541c54618bcdcbc5a50e66c890e02a7b73f318312784",
+    "backend/app/schemas.py": "5f16de5a5a3b7dfe7d553d0bf9201315af945f8051953515dea05e5aaf978337",
+    "backend/app/services/dialogue_analysis_service.py": "210df9db06a90eb2328b6fc43dac2c243d6ab9d79777a91003f26dd72d674fe6",
+    "backend/app/services/llm_fallback.py": "e81712de52334a5542b930e768a8857db61dbf05a1981207f0ba4bb19f3fc549",
+    "backend/app/services/multi_model_orchestrator.py": "e20303e7dca4b41dd539ff4f5b89ea489dafdbbcb5e89e1aa34e46dfa5834c83",
+    "backend/app/services/qwen_service.py": "1d6195cf6a517314293d568344d26b9e2b786929776b7023f250ad7ffa8cbbe1",
+    "backend/app/services/rag_service.py": "5c5d98c9bdea6e63d37386e75653578949ae2bf1d227b8e943917602f8b2da9b",
+    "backend/tests/test_assessment_integrity.py": "82f8b912029cf133313f9a09969ef06288842cf69d4cfb8af80e5af4e05cc3fb",
+    "backend/tests/test_assessment_interpretation.py": "52653baa4238532bdb89a39233b312e9d428920ba73cb874c9565c2319686b26",
+    "backend/tests/test_emotion_trend_adjustment.py": "8ddeca7df56ba47441c81f87fdcaaf1a037646c9cb9a146f7f3f4ee18b415046",
+    "backend/tests/test_report_evidence_integrity.py": "be4498faeaafb025cfbfb3ffe37e6cb1bfef8fa3e6708a531a1ae6a93ea98f37",
+    "scripts/verify-interface-ai.mjs": "96f38f73c12da815fef873fbaa36126c982c20c62e16d3d1b9c88a1355f9e8dc",
+    "src/components/AIInterpretCard.vue": "20101a6916ac2335a06a1d2ec7b958fa7fb21d51f0a0bbbaf7f58dbdd4e89ee3",
+    "src/components/RiskFactorFiveDimension.vue": "62c19ebbe27ce13049a4d23c28b8e432932fc3c2ab0d92a4ccde9028dcadef50",
+    "src/data/tests.js": "ab811c96af47cb88e76a842beac42984aa6ab23d0047fb59386cd11dbc2822f8",
+    "src/services/assessmentFlow.js": "d1b9a141e76cb2cda1ff3a9320624d5d14c65a66f095409f8b2c265be98d912b",
+    "src/services/assessmentFlow.test.js": "da4f357228a7862e62e751c10629126f614d563eadfa34879a8d4cdf1fccf20a",
+    "src/services/reportNumbers.js": "0de60f5ff2a24f5f47dbd3792eab4a8e6c5dfd9e3f27c7d97939bd2341ca16be",
+    "src/services/reportNumbers.test.js": "9eeb2c1951729b948ebf1c073eea81dc87cbcfd205963d0aef3740c847101aef",
+    "src/services/reportPolling.js": "b2efbc0f794554f0a4c052d82446061048e9d58f8dd6716228e845a458f80182",
+    "src/services/reportPolling.test.js": "7354038ebdbf9cf4a69b6f9635d9ddc5060932a7bb33d8c2e666c1232a1358b7",
+    "src/views/student/AdvancedAiChat.vue": "f0bbba7d35aece866c050bb2b0c530bee0baee0024e8e09ab07b7370e2ff7cdb",
+    "src/views/student/Dashboard.vue": "f8d7300a1fa34bdf7c46a2fb08e50a20962561e61c9ca6d5da7d2fceeb965536",
+    "src/views/student/Report.vue": "e09848a3303e23c96f420ce75ffb2b77a21c4a78cb192cd09be4b017dda1e74a",
+    "src/views/student/Test.vue": "865db21475320dbc322c349fe7e06f2644fe48e752d5dd08f929ce25195d4087",
+    "src/views/teacher/AdvancedDashboard.vue": "ef7634231c7be97f23b48cb8578a9dccb7c299dae98491cc45cc83b02f44d29f",
+    "src/views/teacher/Layout.vue": "a0638d23d1fcf1708e763fc6a5f22a648004070e961e061f6198a4a310ad5e08",
+    "src/views/teacher/StudentDetail.vue": "d4446141db9e4003b89de7efac965250128a085e22971eb214e3b9c73a8f06ff",
+    "src/views/teacher/StudentManagement.vue": "41a09c60c83c3b0581035ac9b60ec12ef7faf35b24182f4d0f683001bbd50bfb"
+  },
+  "independent_review": {
+    "path": "docs/test/界面与AI升级独立复核.md",
+    "sha256": "c1069a79b63bccc0cc1a93c7407cfaf7fa371f07c998efc03181f85f0e745eff",
+    "status": "passed_with_professional_and_production_gates_unreleased",
+    "bound_source_count": 31,
+    "test_attribution": "Independent reviewer ran isolated targeted tests and npm; complete suite and actual browser were run by Lead",
+    "version": "1.3"
+  },
+  "browser_summary": {
+    "path": "tmp/interface-ai-20261031/browser-reviewed/summary.json",
+    "sha256": "a56f8288142a96d6474a846a53ccd6d156c4bf6ae38146a3fea6c26d4991d9ba",
+    "synthetic_only": true
+  },
+  "screenshots_manifest": "docs/design/screenshots/interface-ai-20261031/manifest.json",
+  "new_qa_database": {
+    "tables": 27,
+    "users": 4,
+    "assignments": 2,
+    "articles": 1,
+    "quick_check": "ok",
+    "foreign_key_violations": 0,
+    "synthetic_only": true,
+    "source_database_copied": false
+  },
+  "scope_protection": {
+    "original_runtime_db_env_uploads_touched": false,
+    "real_accounts_or_assignments_changed": false,
+    "user_browser_touched": false,
+    "provider_called": false,
+    "dependencies_changed": false,
+    "existing_services_restarted": false,
+    "new_qa_sessions_stopped": true,
+    "git_staged_committed_pushed": false,
+    "unchanged_non_task_snapshot_files": 344,
+    "concurrent_non_task_material_changes": [
+      {
+        "path": "docs/ppt/six-chapters-20261029/README.md",
+        "before_sha256": "3a5060ec9736f756e9a600c369ead606170cf67c2ecc7ca7d5beed5aafecbb6b",
+        "after_sha256": "a64e0bdca4c6b4ace821295320b136ea68bcd9b63342aff96add451842ae1bbe",
+        "task_wrote_path": false
+      }
+    ]
+  },
+  "intermediate_results": [
+    {
+      "backend-full.log": "187 passed/3 skipped/1 failed; obsolete person-specific score amplification expectation replaced by preservation assertion"
+    },
+    {
+      "browser-v1": "Keyboard focus corrected; harness login/standalone article selectors fixed"
+    },
+    {
+      "browser-v2": "41/46; text-length/heading selector harness failures fixed"
+    },
+    {
+      "browser-final": "43/48; mismatched explanation was rejected, harness exact-copy assertion and missing interceptor cleanup caused cascading failures; corrected and rerun 48/48"
+    },
+    {
+      "process_launch": "Hidden Start-Process rejected by automatic review; not repeated, explicit controlled exec session used safely"
+    },
+    {
+      "playwright_cli": "offline ENOTCACHED; installed repository runtime used, no dependency install"
+    }
+  ],
+  "disabled_capabilities": [
+    "unvalidated multimodal fusion API returns 503 and capability false",
+    "image content analysis validates input then returns 503, never placeholder features"
+  ],
+  "limits": [
+    "Formal questionnaire rights/translation/population/interpretation/threshold review remains pending.",
+    "No real provider, professional effectiveness, school pilot, production Docker/TLS, load capacity, or cross-machine recovery verification.",
+    "Submission retry deduplication is process-local and scans only the most recent 200 same-tool records.",
+    "RAG failure suppression is process-local, not durable cross-process publication/withdrawal consistency.",
+    "Seven legacy visual assets retain unverified provenance.",
+    "The complete suite predates the final image guard; the final affected report/security group independently passed 41 tests."
+  ],
+  "document_validation": {
+    "markdowns": 4,
+    "links_checked": 13,
+    "missing": [],
+    "metadata": "passed"
+  },
+  "artifacts_sha256": {
+    "docs/test/界面与AI解析升级验收.md": "67a111ca78b2d2d267f873df711cc5268269c5e737747e92664148ecda19f099",
+    "docs/design/界面与AI解析升级.md": "129028fac3d7055b93289076e11031dfef5f8bf6ddae77ce81e84edfe560ec3b",
+    "docs/design/screenshots/interface-ai-20261031/manifest.json": "3a327aef71d5043253edebe2c76b82eedc7db3c2b7a5b0ddb6e873e213bfe42b"
+  },
+  "final_visual_review": {
+    "empty_report": "one useful empty state instead of repeated empty charts",
+    "source_change": "Report.vue rendering conditions only; backend core unchanged",
+    "frontend_and_browser_rerun": "29 frontend tests and complete 48 browser scenarios passed on dist-reviewed"
+  }
+}

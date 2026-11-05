@@ -1,0 +1,23 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "2.0",
+  "updated": "2026-10-28",
+  "status": "registered-for-ai-revision",
+  "items": [
+    {
+      "path": "records-ai-human-review.png",
+      "source": "C:\\Users\\14012\\.codex\\generated_images\\01a17922-d3f5-7190-9324-481ac5fe193a\\exec-be0fa161-d1a5-4edf-894f-a1db3798d124.png",
+      "sha256": "7b1474dcd56df4be0e2960e476ae7eb8b668dcab8ed10429f7e3a69e60c57a95",
+      "type": "transparent PNG concept illustration",
+      "rights": "Built-in ImageGen original; conceptual workflow, not a real event or native SVG"
+    },
+    {
+      "path": "data-demo.json",
+      "sha256": "e7c49c82dfd7fd9750bec8366f49ef74317a4692db8de7a2db4e2c3177253fec",
+      "type": "synthetic demonstration records and deterministic facts",
+      "rights": "Project-authored synthetic data; no personal records"
+    }
+  ],
+  "styleSource": "src/styles/tokens.css and existing project illustration",
+  "modelMode": "built-in image_gen; no business model/API called"
+}

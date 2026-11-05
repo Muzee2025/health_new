@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#604372"/></marker></defs>
+<path d="M 345 363.0 C 415.0 363.0, 415.0 363.0, 485 363.0" fill="none" stroke="#604372" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M 730 363.0 C 800.0 363.0, 800.0 363.0, 870 363.0" fill="none" stroke="#604372" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M 1115 363.0 C 1185.0 363.0, 1185.0 363.0, 1255 363.0" fill="none" stroke="#604372" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="100" y="317" width="245" height="92" rx="18" fill="#F7E7D8" stroke="#E8B185" stroke-width="2"/>
+<text x="222.5" y="375.6" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" fill="#29332F">流程了解</text>
+<text x="222.5" y="245.8" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="48" font-weight="700" fill="#604372">01</text>
+<text x="222.5" y="524.675" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">确认角色与任务</text>
+<text x="222.5" y="569.625" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">列出待核事项</text>
+<rect x="485" y="317" width="245" height="92" rx="18" fill="#F7E7D8" stroke="#E8B185" stroke-width="2"/>
+<text x="607.5" y="375.6" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" fill="#29332F">合成演示</text>
+<text x="607.5" y="245.8" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="48" font-weight="700" fill="#604372">02</text>
+<text x="607.5" y="524.675" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">演示并修订原型</text>
+<text x="607.5" y="569.625" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">整理问题清单</text>
+<rect x="870" y="317" width="245" height="92" rx="18" fill="#F7E7D8" stroke="#E8B185" stroke-width="2"/>
+<text x="992.5" y="375.6" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" fill="#29332F">培训维护</text>
+<text x="992.5" y="245.8" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="48" font-weight="700" fill="#604372">03</text>
+<text x="992.5" y="524.675" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">准备操作与维护材料</text>
+<text x="992.5" y="569.625" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">明确职责安排</text>
+<rect x="1255" y="317" width="245" height="92" rx="18" fill="#F7E7D8" stroke="#E8B185" stroke-width="2"/>
+<text x="1377.5" y="375.6" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="36" font-weight="700" fill="#29332F">任务验证</text>
+<text x="1377.5" y="245.8" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="48" font-weight="700" fill="#604372">04</text>
+<text x="1377.5" y="524.675" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">经校内批准后</text>
+<text x="1377.5" y="569.625" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="29" font-weight="400" fill="#29332F">观察用时、错误与反馈</text>
+<text x="100" y="774.0" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="30" font-weight="400" fill="#56625C">周期、人员与经费按实际情况核实填写</text>
+</svg>

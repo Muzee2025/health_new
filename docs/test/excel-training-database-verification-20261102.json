@@ -1,0 +1,101 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "updated": "2026-11-02",
+  "status": "local_reference_database_verified",
+  "source": {
+    "path": "deliverables/心域智链_数据库变量与项目数据_20261028.xlsx",
+    "sha256": "79da59887ad69b1b081ea4ec9f4866bddbb2341d4e47468e1cc57bee3392649a",
+    "unchanged": true
+  },
+  "package": {
+    "path": "deliverables/心域智链_通用训练资料包_20261102",
+    "manifest_sha256": "d08e0fa651cd820a180c814877a7a0576b6174b5f898532f4bcbdc1c00456228",
+    "files": {
+      "reference-records.jsonl": {
+        "sha256": "e54995e49273bac12cec568da70a370386328947aef0b51a045a04a3341721ac",
+        "bytes": 372462
+      },
+      "schema.sql": {
+        "sha256": "bd432ea987749e30f01e3e6e91334d57372f29ffef40ebf7f9dac15f4c80a906",
+        "bytes": 4578
+      },
+      "training-examples.jsonl": {
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      "training-reference.sqlite3": {
+        "sha256": "55f8826176edd2697ccb48f7e3d158149f5cb0fafdd248a396dbe4177e2e9ab3",
+        "bytes": 1990656
+      },
+      "使用说明.md": {
+        "sha256": "1b1413b1b67b1e04852d65049508704e3aad514a161c2be7a340093f0e064e60",
+        "bytes": 2821
+      }
+    },
+    "archive": "deliverables/心域智链_通用训练资料包_20261102.zip",
+    "archive_sha256": "51895d874b8bb3b71214a2925a033c397056f46aec445e6eaa8cc96811ce33fe",
+    "archive_verified": true
+  },
+  "counts": {
+    "literature_aggregates": 38,
+    "reference_records": 476,
+    "region_education": 31,
+    "schema_fields": 198,
+    "schema_tables": 27,
+    "source_cells": 5828,
+    "source_files": 1,
+    "source_sheets": 7,
+    "training_examples": 0
+  },
+  "reference_jsonl_records": 476,
+  "cached_formulas": 151,
+  "sqlite": {
+    "integrity_check": "ok",
+    "foreign_key_issues": 0,
+    "triggers": [
+      "immutable_source_provenance",
+      "no_reference_as_supervised",
+      "no_reference_as_supervised_update"
+    ]
+  },
+  "tests": {
+    "command": "python -m unittest scripts.tests.test_training_database -v",
+    "runtime": "bundled Python",
+    "exit_code": 0,
+    "passed": 14
+  },
+  "independent_review": {
+    "report": "docs/test/Excel通用训练库来源复核_20261102.md",
+    "status": "passed",
+    "report_sha256": "aa299bd198e62af5c98192275ddf6f18d12b73ca0549c67ee66947c00563eaf1",
+    "tests_passed": 14,
+    "archive_reviewed_by": "Lead"
+  },
+  "protected_original_databases": [
+    {
+      "path": "tmp/showcase-20261024-7f5512da/health.db",
+      "sha256": "0ce0a025b164b0d212c76b21c6d815e78b3389f00ac40f9b21b5b0e219a1f75c",
+      "unchanged": true
+    },
+    {
+      "path": "health.db",
+      "sha256": "bb786303a4dc3680b9199fc1e10c7845af3ed03c419be87a6a08bedda0f78cb5",
+      "unchanged": true
+    },
+    {
+      "path": "backend/health.db",
+      "sha256": "218cfdd5c7cf485bb7ccd494ae7728a406606ffe356fc234e20bee2cf3b3d049",
+      "unchanged": true
+    }
+  ],
+  "boundaries": {
+    "supervised_training_examples": 0,
+    "training_started": false,
+    "uploaded": false,
+    "business_database_switched": false,
+    "website_changed": false,
+    "unverified_historical_dialogues_exported": false,
+    "data_usage": "reference_only"
+  }
+}

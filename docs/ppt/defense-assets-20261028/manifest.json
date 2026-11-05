@@ -1,0 +1,40 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "1.0",
+  "updated": "2026-10-28",
+  "status": "registered-for-review-deck",
+  "items": [
+    {
+      "path": "docs/ppt/defense-assets-20261028/student-teacher-records.png",
+      "source": "C:\\Users\\14012\\.codex\\generated_images\\01a17922-d3f5-7190-9324-481ac5fe193a\\exec-853adc82-e0e7-4bb0-9bf6-86998a5a9939.png",
+      "sha256": "c68bbce9bfde1e22e2c1c8b16111453c783ddc7373c9ea6581ae60540d9781ce",
+      "dimensions": [
+        1466,
+        1073
+      ],
+      "mode": "RGBA",
+      "alphaRange": [
+        0,
+        255
+      ],
+      "sourceType": "built-in ImageGen",
+      "status": "review-deck-asset"
+    },
+    {
+      "path": "docs/ppt/material-library-design-20261028/application-library-revision.png",
+      "source": "C:\\Users\\14012\\.codex\\generated_images\\01a17922-d3f5-7190-9324-481ac5fe193a\\exec-04c93d59-5b27-4269-bec1-b16fe1ca4ebf.png",
+      "sha256": "a71cf22bac4b3f8b6f609f18c73a38bf0a6f6eb3f145128db929345540df59d0",
+      "dimensions": [
+        1486,
+        1058
+      ],
+      "mode": "RGB",
+      "alphaRange": null,
+      "sourceType": "built-in ImageGen",
+      "status": "ui-preview-only"
+    }
+  ],
+  "rights": "AI-generated original illustration/concept; not a photograph, implemented UI, or true vector file.",
+  "styleSource": "src/styles/tokens.css and project material-library design",
+  "modelMode": "built-in image_gen; no CLI/API fallback"
+}

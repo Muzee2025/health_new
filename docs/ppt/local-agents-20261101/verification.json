@@ -1,0 +1,20 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "svgParse": "pass",
+  "pngDimensions": [
+    3840,
+    2160
+  ],
+  "sixRolesPresent": true,
+  "externalAssetReferences": 0,
+  "manifestHashesMatch": true,
+  "deliveryCopiesMatch": true,
+  "originalPptxSha256Unchanged": "3651273bde057b992dd083ed101c8bbd7dfa223c8742446e140ba7dd52698a1b",
+  "localReadmeLinks": "pass",
+  "leadPngVisualReview": "pass: all six role cards, model names, tasks, outputs, connectors and final human review readable; no clipping observed",
+  "independentReview": "not performed; proposal preview only",
+  "modelDeploymentAndPerformance": "not executed"
+}

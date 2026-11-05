@@ -1,0 +1,28 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "iterations": [
+    {
+      "stage": "first-build",
+      "exit": 1,
+      "reason": "Chart wrapper identity check removed native chart; changed to element identity."
+    },
+    {
+      "stage": "first-schema-validation",
+      "exit": 1,
+      "reason": "Validator child process used GBK for UTF-8 XML; rerun with PYTHONUTF8=1."
+    },
+    {
+      "stage": "first-render-guard",
+      "exit": 1,
+      "reason": "Windows PowerShell non-BOM hardcoded Chinese path; removed non-ASCII script literals and derived task output from input directory."
+    },
+    {
+      "stage": "first-native-visual",
+      "status": "failed",
+      "reason": "Public drawing helpers interpret unprefixed hexadecimal as a semantic key; black fills hid text. Add # to helper color values and expand arrow shaft for centered text.",
+      "evidence": "tmp/ppt-page-preview-20261101/first-native-failed"
+    }
+  ]
+}

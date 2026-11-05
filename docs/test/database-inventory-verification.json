@@ -1,0 +1,32 @@
+{
+  "owner": "A Lead",
+  "version": "1.0",
+  "status": "passed",
+  "updated": "2026-10-28",
+  "workbook": "deliverables/心域智链_数据库变量与项目数据_20261028.xlsx",
+  "sha256": "79da59887ad69b1b081ea4ec9f4866bddbb2341d4e47468e1cc57bee3392649a",
+  "source_database_count": 6,
+  "source_database_bytes_unchanged": true,
+  "sheets": 7,
+  "filtered_tables": 7,
+  "dictionary_fields": 198,
+  "formula_count": 151,
+  "formula_errors": 0,
+  "formula_caches_present": true,
+  "regional_total": 38912568,
+  "regional_cr5": 0.3401317795320011,
+  "regional_cv": 0.6321321139881616,
+  "regional_identity_differences": 0,
+  "legacy_fk_issues": [
+    {
+      "source_id": "BACKEND_HEALTH",
+      "table": "psychological_reports",
+      "parent": "users",
+      "count": 1
+    }
+  ],
+  "current_service_database_binding": "not_verified",
+  "external_provider_calls": 0,
+  "privacy": "schema and aggregate counts only; no individual row values",
+  "native_excel_execution": "not_performed"
+}

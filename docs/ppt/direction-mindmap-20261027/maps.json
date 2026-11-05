@@ -1,0 +1,688 @@
+[
+  {
+    "id": "project-mindmap",
+    "label": "项目概览思维导图",
+    "use": "适合项目概览或产品总览，替换原页内容，不增加总页数",
+    "source": "申报书摘要、第二章、第四章至第六章",
+    "nodes": [
+      {
+        "id": "core",
+        "x": 620,
+        "y": 350,
+        "w": 360,
+        "h": 172,
+        "lines": [
+          "心域智链"
+        ],
+        "fill": "#EEE7F2",
+        "stroke": "#78558F",
+        "size": 52,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "student",
+        "x": 110,
+        "y": 150,
+        "w": 410,
+        "h": 65,
+        "lines": [
+          "学生使用"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 40,
+        "bold": true,
+        "color": "#604372",
+        "align": "left"
+      },
+      {
+        "id": "student-body",
+        "x": 110,
+        "y": 237,
+        "w": 410,
+        "h": 115,
+        "lines": [
+          "测评与个人记录",
+          "求助与预约"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 32,
+        "bold": false,
+        "color": "#29332F",
+        "align": "left"
+      },
+      {
+        "id": "teacher",
+        "x": 1080,
+        "y": 150,
+        "w": 410,
+        "h": 65,
+        "lines": [
+          "教师支持"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 40,
+        "bold": true,
+        "color": "#604372",
+        "align": "left"
+      },
+      {
+        "id": "teacher-body",
+        "x": 1080,
+        "y": 237,
+        "w": 410,
+        "h": 115,
+        "lines": [
+          "按明确分配查阅",
+          "人工答复与跟进"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 32,
+        "bold": false,
+        "color": "#29332F",
+        "align": "left"
+      },
+      {
+        "id": "ai",
+        "x": 110,
+        "y": 610,
+        "w": 410,
+        "h": 65,
+        "lines": [
+          "拟建AI辅助"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 40,
+        "bold": true,
+        "color": "#604372",
+        "align": "left"
+      },
+      {
+        "id": "ai-body",
+        "x": 110,
+        "y": 697,
+        "w": 410,
+        "h": 115,
+        "lines": [
+          "统计事实与资料检索",
+          "摘要草稿与教师复核"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 32,
+        "bold": false,
+        "color": "#29332F",
+        "align": "left"
+      },
+      {
+        "id": "delivery",
+        "x": 1080,
+        "y": 610,
+        "w": 410,
+        "h": 65,
+        "lines": [
+          "实施与保障"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 40,
+        "bold": true,
+        "color": "#604372",
+        "align": "left"
+      },
+      {
+        "id": "delivery-body",
+        "x": 1080,
+        "y": 697,
+        "w": 410,
+        "h": 115,
+        "lines": [
+          "责任与数据范围确认",
+          "隔离评测与维护材料"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 32,
+        "bold": false,
+        "color": "#29332F",
+        "align": "left"
+      }
+    ],
+    "edges": [
+      {
+        "a": "core",
+        "b": "student",
+        "color": "#604372",
+        "side_a": "left",
+        "side_b": "right",
+        "arrow": false
+      },
+      {
+        "a": "core",
+        "b": "teacher",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": false
+      },
+      {
+        "a": "core",
+        "b": "ai",
+        "color": "#604372",
+        "side_a": "left",
+        "side_b": "right",
+        "arrow": false
+      },
+      {
+        "a": "core",
+        "b": "delivery",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": false
+      }
+    ]
+  },
+  {
+    "id": "ai-flow",
+    "label": "AI分析流程图",
+    "use": "适合第4页，箭头表示先后，明确为拟建能力",
+    "source": "申报书1.4、5.1至5.3、表13及图13",
+    "nodes": [
+      {
+        "id": "s0",
+        "x": 80,
+        "y": 300,
+        "w": 240,
+        "h": 112,
+        "lines": [
+          "字段质量检查"
+        ],
+        "fill": "#E8F0EA",
+        "stroke": "#8BA696",
+        "size": 31,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "b0",
+        "x": 73,
+        "y": 456,
+        "w": 254,
+        "h": 90,
+        "lines": [
+          "版本与时间范围"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 27,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "s1",
+        "x": 385,
+        "y": 300,
+        "w": 240,
+        "h": 112,
+        "lines": [
+          "统计事实"
+        ],
+        "fill": "#E8F0EA",
+        "stroke": "#8BA696",
+        "size": 31,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "b1",
+        "x": 378,
+        "y": 456,
+        "w": 254,
+        "h": 90,
+        "lines": [
+          "计数与同口径变化"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 27,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "s2",
+        "x": 690,
+        "y": 300,
+        "w": 240,
+        "h": 112,
+        "lines": [
+          "审核资料检索"
+        ],
+        "fill": "#E8F0EA",
+        "stroke": "#8BA696",
+        "size": 31,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "b2",
+        "x": 683,
+        "y": 456,
+        "w": 254,
+        "h": 90,
+        "lines": [
+          "查找相关说明段落"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 27,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "s3",
+        "x": 995,
+        "y": 300,
+        "w": 240,
+        "h": 112,
+        "lines": [
+          "大模型起草"
+        ],
+        "fill": "#EEE7F2",
+        "stroke": "#78558F",
+        "size": 31,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "b3",
+        "x": 988,
+        "y": 456,
+        "w": 254,
+        "h": 90,
+        "lines": [
+          "依据事实生成草稿"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 27,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "s4",
+        "x": 1300,
+        "y": 300,
+        "w": 240,
+        "h": 112,
+        "lines": [
+          "教师复核"
+        ],
+        "fill": "#E8F0EA",
+        "stroke": "#8BA696",
+        "size": 31,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "b4",
+        "x": 1293,
+        "y": 456,
+        "w": 254,
+        "h": 90,
+        "lines": [
+          "修改、采用或弃用"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 27,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "plan",
+        "x": 80,
+        "y": 160,
+        "w": 1440,
+        "h": 60,
+        "lines": [
+          "拟建设流程"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 32,
+        "bold": false,
+        "color": "#56625C",
+        "align": "left"
+      },
+      {
+        "id": "fields",
+        "x": 80,
+        "y": 635,
+        "w": 1440,
+        "h": 70,
+        "lines": [
+          "草稿区分：已有记录、缺失信息、待核对问题"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 34,
+        "bold": false,
+        "color": "#29332F",
+        "align": "left"
+      },
+      {
+        "id": "fallback",
+        "x": 80,
+        "y": 737,
+        "w": 1440,
+        "h": 60,
+        "lines": [
+          "参考依据与时间范围随稿保留，失败时继续人工流程"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 29,
+        "bold": false,
+        "color": "#56625C",
+        "align": "left"
+      }
+    ],
+    "edges": [
+      {
+        "a": "s0",
+        "b": "s1",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      },
+      {
+        "a": "s1",
+        "b": "s2",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      },
+      {
+        "a": "s2",
+        "b": "s3",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      },
+      {
+        "a": "s3",
+        "b": "s4",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      }
+    ]
+  },
+  {
+    "id": "implementation-route",
+    "label": "实施路径图",
+    "use": "适合第6页，不虚构日期或已获批的试点",
+    "source": "申报书第四章与第六章表16",
+    "nodes": [
+      {
+        "id": "st0",
+        "x": 100,
+        "y": 317,
+        "w": 245,
+        "h": 92,
+        "lines": [
+          "流程了解"
+        ],
+        "fill": "#F7E7D8",
+        "stroke": "#E8B185",
+        "size": 36,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "num0",
+        "x": 100,
+        "y": 194,
+        "w": 245,
+        "h": 70,
+        "lines": [
+          "01"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 48,
+        "bold": true,
+        "color": "#604372",
+        "align": "center"
+      },
+      {
+        "id": "body0",
+        "x": 70,
+        "y": 475,
+        "w": 305,
+        "h": 124,
+        "lines": [
+          "确认角色与任务",
+          "列出待核事项"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 29,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "st1",
+        "x": 485,
+        "y": 317,
+        "w": 245,
+        "h": 92,
+        "lines": [
+          "合成演示"
+        ],
+        "fill": "#F7E7D8",
+        "stroke": "#E8B185",
+        "size": 36,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "num1",
+        "x": 485,
+        "y": 194,
+        "w": 245,
+        "h": 70,
+        "lines": [
+          "02"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 48,
+        "bold": true,
+        "color": "#604372",
+        "align": "center"
+      },
+      {
+        "id": "body1",
+        "x": 455,
+        "y": 475,
+        "w": 305,
+        "h": 124,
+        "lines": [
+          "演示并修订原型",
+          "整理问题清单"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 29,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "st2",
+        "x": 870,
+        "y": 317,
+        "w": 245,
+        "h": 92,
+        "lines": [
+          "培训维护"
+        ],
+        "fill": "#F7E7D8",
+        "stroke": "#E8B185",
+        "size": 36,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "num2",
+        "x": 870,
+        "y": 194,
+        "w": 245,
+        "h": 70,
+        "lines": [
+          "03"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 48,
+        "bold": true,
+        "color": "#604372",
+        "align": "center"
+      },
+      {
+        "id": "body2",
+        "x": 840,
+        "y": 475,
+        "w": 305,
+        "h": 124,
+        "lines": [
+          "准备操作与维护材料",
+          "明确职责安排"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 29,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "st3",
+        "x": 1255,
+        "y": 317,
+        "w": 245,
+        "h": 92,
+        "lines": [
+          "任务验证"
+        ],
+        "fill": "#F7E7D8",
+        "stroke": "#E8B185",
+        "size": 36,
+        "bold": true,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "num3",
+        "x": 1255,
+        "y": 194,
+        "w": 245,
+        "h": 70,
+        "lines": [
+          "04"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 48,
+        "bold": true,
+        "color": "#604372",
+        "align": "center"
+      },
+      {
+        "id": "body3",
+        "x": 1225,
+        "y": 475,
+        "w": 305,
+        "h": 124,
+        "lines": [
+          "经校内批准后",
+          "观察用时、错误与反馈"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 29,
+        "bold": false,
+        "color": "#29332F",
+        "align": "center"
+      },
+      {
+        "id": "pending",
+        "x": 100,
+        "y": 731,
+        "w": 1420,
+        "h": 65,
+        "lines": [
+          "周期、人员与经费按实际情况核实填写"
+        ],
+        "fill": "none",
+        "stroke": "none",
+        "size": 30,
+        "bold": false,
+        "color": "#56625C",
+        "align": "left"
+      }
+    ],
+    "edges": [
+      {
+        "a": "st0",
+        "b": "st1",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      },
+      {
+        "a": "st1",
+        "b": "st2",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      },
+      {
+        "a": "st2",
+        "b": "st3",
+        "color": "#604372",
+        "side_a": "right",
+        "side_b": "left",
+        "arrow": true
+      }
+    ]
+  }
+]

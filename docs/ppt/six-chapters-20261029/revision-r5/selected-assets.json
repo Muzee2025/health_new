@@ -1,0 +1,1118 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "5.0",
+  "status": "verified-actual-image-placement",
+  "updated": "2026-10-31",
+  "styleSource": "src/styles/tokens.css",
+  "assets": [
+    {
+      "id": "brand-bg",
+      "path": "src/assets/backgrounds/bg-login-1440.svg",
+      "pages": [
+        1
+      ],
+      "use": "原品牌舒展书页背景",
+      "sha256": "bb8a64f5486bfdf1794b4aa1791e7b0af84715d50915cc0953536148bfcd8bb7",
+      "bytes": 985,
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 原创贝塞尔矢量源",
+      "registry": "src/assets/manifest.json",
+      "notice": "src/assets/LICENSES.md",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "records-ai-review",
+      "path": "docs/ppt/defense-ai-assets-20261028/records-ai-human-review.png",
+      "sha256": "7b1474dcd56df4be0e2960e476ae7eb8b668dcab8ed10429f7e3a69e60c57a95",
+      "license": "Built-in ImageGen original",
+      "source": "Project registered concept illustration, not a real event",
+      "registry": "docs/ppt/defense-ai-assets-20261028/manifest.json",
+      "pages": [
+        1
+      ],
+      "use": "学生记录、AI草稿与教师复核概念插画",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "brand-mark",
+      "path": "src/assets/brand/brand-mark-color.svg",
+      "pages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "use": "重复品牌页脚标志",
+      "sha256": "bb65e0cb8670cef46a260679311bab3415241af2dba0e0f4d75fc296f328f9c4",
+      "bytes": 407,
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 原创贝塞尔矢量源",
+      "registry": "src/assets/manifest.json",
+      "notice": "src/assets/LICENSES.md",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "used": true,
+      "placements": 15
+    },
+    {
+      "id": "policy-book",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-book-open.svg",
+      "pages": [
+        2
+      ],
+      "use": "政策、资料阅读与学校场景",
+      "sha256": "b38cdb3a15dcf00cfa4811e318b021e25c6a87b47acbb11888e16d107a5642da",
+      "bytes": 396,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/book-open.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/policy-book.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "c49a6636f5b9846cc6b53306e0ad6582c54fff8f6c1a4f4e4451bd8e388e21e4",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "college-provinces",
+      "path": "docs/plan/ai-application/figures-sci/fig10-regional-college.png",
+      "use": "申报书图9，前12省本专科规模原图",
+      "source": "docs/plan/ai-application/figures-sci/fig10-regional-college.png",
+      "license": "LicenseRef-Project-Original",
+      "sha256": "7ffebe30517b50f10c6a0fd8e908e0237689cf421105a8af653df7571898661b",
+      "bytes": 86490,
+      "used": true,
+      "pages": [
+        2
+      ],
+      "placements": 1
+    },
+    {
+      "id": "government-policy",
+      "path": "docs/ppt/six-chapters-20261029/revision-r3/assets/government-policy.png",
+      "use": "教育部网站原网页区域截图，标题日期与政策原文",
+      "source": "https://www.moe.gov.cn/jyb_xwfb/gzdt_gzdt/s5987/202602/t20260227_1429383.html",
+      "license": "Government-public-page-evidence",
+      "sha256": "4290d5485ae673691c9e05f45ab97db6c06a4708400746a08fea21e5a9f2131b",
+      "bytes": 459175,
+      "used": true,
+      "pages": [
+        2
+      ],
+      "placements": 1
+    },
+    {
+      "id": "student-support",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-hand-heart.svg",
+      "pages": [
+        3
+      ],
+      "use": "学生与支持",
+      "sha256": "8797f9ca2bc8620c56c9dead90c047724176a611d52e613c6412aa16745bf93e",
+      "bytes": 928,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/hand-heart.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/student-support.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "60b14edef0fb736fe5d957deb4e0f44687962dac44079b59ecd981884a512c80",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "pressure-photo",
+      "path": "docs/ppt/six-chapters-20261029/revision-r3/assets/student-pressure.jpg",
+      "use": "压力情境配图，Andy Barbour，不代表真实学生或诊断",
+      "source": "https://www.pexels.com/photo/man-taking-an-exam-6683990/",
+      "license": "Pexels License",
+      "sha256": "f2879f48944f6d3573bb5902fad05ff50f0f9b8989a2d7feefcc15dbef130f03",
+      "bytes": 159594,
+      "used": true,
+      "pages": [
+        3
+      ],
+      "placements": 1
+    },
+    {
+      "id": "insomnia-photo",
+      "path": "docs/ppt/six-chapters-20261029/revision-r3/assets/sleepless-night.jpg",
+      "use": "夜间失眠情境配图，cottonbro studio，不代表真实学生或诊断",
+      "source": "https://www.pexels.com/photo/young-man-suffering-from-insomnia-at-night-6943440/",
+      "license": "Pexels License",
+      "sha256": "d154041d48ed9ebdd74421f608c19af854704928f45d646d11efe0623f8627d8",
+      "bytes": 163592,
+      "used": true,
+      "pages": [
+        3
+      ],
+      "placements": 1
+    },
+    {
+      "id": "laptop-photo",
+      "path": "docs/ppt/six-chapters-20261029/revision-r3/assets/laptop-support.jpg",
+      "use": "线上使用情境配图，Artem Podrez",
+      "source": "https://www.pexels.com/photo/photo-of-a-person-typing-on-a-laptop-6279113/",
+      "license": "Pexels License",
+      "sha256": "bf61929c59f5cadb6da9626a74115e6611a62a0500072cff7c004ee02451b460",
+      "bytes": 41865,
+      "used": true,
+      "pages": [
+        3
+      ],
+      "placements": 1
+    },
+    {
+      "id": "teacher-chat",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-chat-circle-dots.svg",
+      "pages": [
+        4
+      ],
+      "use": "教师沟通与提醒",
+      "sha256": "2af44e36757c90c999e070065ae61c495c66c8e88f43c5f07964dc3367cad60d",
+      "bytes": 473,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/chat-circle-dots.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/teacher-chat.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "e0180f7686a0fd232fc541e69bbbc68637191011d77fced60fd4340b7e149fc5",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "assessment-current-r4",
+      "path": "docs/ppt/six-chapters-20261029/revision-r4/assets/assessment-current-synthetic.png",
+      "use": "2026-10-31当前测评结果与AI操作入口，真实项目界面与隔离合成数据",
+      "source": "docs/design/screenshots/interface-ai-20261031/manifest.json",
+      "license": "LicenseRef-Project-Original",
+      "sha256": "9e29c9f1e9a0f988d76db26f20e7cf105a32649d095aed1b94a7966762f0bdb2",
+      "bytes": 95764,
+      "used": true,
+      "pages": [
+        4
+      ],
+      "placements": 1
+    },
+    {
+      "id": "student-ui",
+      "path": "docs/ppt/six-chapters-20261029/project-screenshots/student-questions-1440.png",
+      "sha256": "8fce687f317d7d1c0548a4d1fab6505949ce19abebb6837e02e5e1d4170904ac",
+      "license": "LicenseRef-Project-Original",
+      "source": "Project Vue frontend rendered by isolated Edge/Playwright with synthetic API; no real backend, student data or model calls",
+      "registry": "docs/ppt/six-chapters-20261029/project-screenshots/manifest.json",
+      "pages": [
+        4
+      ],
+      "use": "实际项目学生留言与答复页面，合成API",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "followup-flow",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-flow-arrow.svg",
+      "pages": [
+        5
+      ],
+      "use": "持续跟进与流程接续",
+      "sha256": "4442d669a533e017377effd5182a59de1580c47d647c85ca1a84f435967bc8fb",
+      "bytes": 421,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/flow-arrow.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/followup-flow.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "54b0cfd205f20f063657ba431e5a2e60a08c38427d7ebb7eb9fbef6af02fd07c",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "teacher-ui",
+      "path": "docs/ppt/six-chapters-20261029/project-screenshots/teacher-support-1440.png",
+      "sha256": "48d66b4a01d697d1607428139b6478fa0599148d2e7f44e20edac2ac41be6d02",
+      "license": "LicenseRef-Project-Original",
+      "source": "Project Vue frontend rendered by isolated Edge/Playwright with synthetic API; no real backend, student data or model calls",
+      "registry": "docs/ppt/six-chapters-20261029/project-screenshots/manifest.json",
+      "pages": [
+        5
+      ],
+      "use": "实际项目教师求助答复页面，合成API，未发送",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "followup-ui-new",
+      "path": "docs/ppt/six-chapters-20261029/revision-r3/assets/teacher-followups-section-1040.png",
+      "use": "2026-10-31新隔离捕获的教师内部跟进区，合成GET API，无真实数据或写操作",
+      "source": "tmp/ppt-review-r3-20261029/project-capture-refresh/teacher-followups-section-1040.png",
+      "license": "LicenseRef-Project-Original",
+      "sha256": "f572e8c75b0dfd9530fd60aab6e423c9e0c9381c917ec0e692bcff331fa5e593",
+      "bytes": 20883,
+      "used": true,
+      "pages": [
+        5
+      ],
+      "placements": 1
+    },
+    {
+      "id": "data-store",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-database.svg",
+      "pages": [
+        6
+      ],
+      "use": "数据输入与保存",
+      "sha256": "da7d3598430cbe3b334c308c03ca41e8c4c7bbbfa7891e914d7aa8e87d847423",
+      "bytes": 810,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/database.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/data-store.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "95ef74c9997383bfa95137f9175122636c685882e9f0cf71d942aab274e568d5",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "province-map",
+      "path": "docs/ppt/six-chapters-20261029/revision-r3/assets/province-map-v2.png",
+      "use": "31省高校所数立体统计地图，厚度统一，颜色编码所数",
+      "source": "https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json",
+      "license": "Source-DataV-geometry-and-MOE-statistics",
+      "sha256": "30fbe659a30964d4d3879783810e286591e38b797385948209f6b596119f9ffe",
+      "bytes": 651746,
+      "used": true,
+      "pages": [
+        6
+      ],
+      "placements": 1
+    },
+    {
+      "id": "records-icon",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-files.svg",
+      "pages": [
+        7
+      ],
+      "use": "记录与材料",
+      "sha256": "bb4cec5fc4ae78d9bfc38378db6d991a4f9b89e0e58db97a95a083b68a4c5a9e",
+      "bytes": 550,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/files.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/records-icon.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "912de76fc188e514303fc905f7ca79d524262e3ec01fd6cad640608262f4c71b",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "growth-compass",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-compass.svg",
+      "pages": [
+        8
+      ],
+      "use": "实施范围与方向",
+      "sha256": "00c7e42415f795fcea90bd9dc0b2c8266b4e9601d2937cb122cd03b7e9e9e198",
+      "bytes": 402,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/compass.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/growth-compass.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "83dd63ddefb5281b449e5f1cc54c4d909d5d961a9f838fe47cedf09bf75989ed",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "ai-icon",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-brain.svg",
+      "pages": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "use": "AI辅助草稿",
+      "sha256": "9fdd189bc61e6b5e437c91bd6819c7a0bd1e598d0a780ae097b4db2e0de13a43",
+      "bytes": 846,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/brain.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/ai-icon.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "000246871391f5cf474416e8a86220fc33d05dc517cb57467149dfdb6654ae7a",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 6
+    },
+    {
+      "id": "privacy-icon",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-shield-check.svg",
+      "pages": [
+        15
+      ],
+      "use": "权限与人工复核",
+      "sha256": "bb04d552c0baaaabd90f7eb60760cb0c7ddb7e9f47e4b76e9599ddd7dfd8eaa7",
+      "bytes": 536,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/shield-check.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/privacy-icon.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "45c2fca7cd10d07efd98bd08b93d07797942645535abff08067fb328ce85a760",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    },
+    {
+      "id": "structure-icon",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-tree-structure.svg",
+      "pages": [
+        16
+      ],
+      "use": "生成内容结构核对",
+      "sha256": "b44cc8e3cfb16309ee80aa43bb581427d57796a702ddace498ba41ff0709c461",
+      "bytes": 524,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/tree-structure.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "registered-for-six-chapter-rendering",
+      "presentationPath": "docs/ppt/six-chapters-20261029/icon-compatibility/structure-icon.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "84f764cb2e045021f0b15c0d2bd0018159ae0a401fc4e1d10738f745711297a4",
+      "renderOperation": "SVG rasterization to 256px transparent PNG for native PowerPoint compatibility; original SVG unchanged",
+      "used": true,
+      "placements": 1
+    }
+  ],
+  "placements": [
+    {
+      "slide": 1,
+      "pictureId": "11",
+      "assetId": "brand-bg",
+      "framePx": [
+        1440.0,
+        900.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 1,
+      "pictureId": "3",
+      "assetId": "records-ai-review",
+      "framePx": [
+        680.0,
+        340.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 2,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 2,
+      "pictureId": "3",
+      "assetId": "policy-book",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 2,
+      "pictureId": "8",
+      "assetId": "college-provinces",
+      "framePx": [
+        700.0,
+        435.3285039370079
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 0.999999915503527
+    },
+    {
+      "slide": 2,
+      "pictureId": "12",
+      "assetId": "government-policy",
+      "framePx": [
+        670.0,
+        320.8734908136483
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.47
+      },
+      "distortionFactor": 1.0000000098551467
+    },
+    {
+      "slide": 3,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 3,
+      "pictureId": "3",
+      "assetId": "student-support",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 3,
+      "pictureId": "8",
+      "assetId": "pressure-photo",
+      "framePx": [
+        440.0,
+        270.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.45545,
+        "r": 0.0,
+        "b": 0.13545
+      },
+      "distortionFactor": 1.0000222222222224
+    },
+    {
+      "slide": 3,
+      "pictureId": "11",
+      "assetId": "insomnia-photo",
+      "framePx": [
+        440.0,
+        270.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.29545,
+        "r": 0.0,
+        "b": 0.29545
+      },
+      "distortionFactor": 1.0000222222222224
+    },
+    {
+      "slide": 3,
+      "pictureId": "14",
+      "assetId": "laptop-photo",
+      "framePx": [
+        440.0,
+        270.0
+      ],
+      "crop": {
+        "l": 0.04138,
+        "t": 0.0,
+        "r": 0.04138,
+        "b": 0.0
+      },
+      "distortionFactor": 1.000009460172558
+    },
+    {
+      "slide": 4,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 4,
+      "pictureId": "3",
+      "assetId": "teacher-chat",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 4,
+      "pictureId": "7",
+      "assetId": "assessment-current-r4",
+      "framePx": [
+        531.1283989501312,
+        350.0
+      ],
+      "crop": {
+        "l": 0.31597,
+        "t": 0.17017,
+        "r": 0.14236,
+        "b": 0.48136
+      },
+      "distortionFactor": 0.9999807032091322
+    },
+    {
+      "slide": 4,
+      "pictureId": "8",
+      "assetId": "student-ui",
+      "framePx": [
+        555.0810498687664,
+        350.0
+      ],
+      "crop": {
+        "l": 0.17,
+        "t": 0.08,
+        "r": 0.015,
+        "b": 0.18
+      },
+      "distortionFactor": 0.99999994376981
+    },
+    {
+      "slide": 5,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 5,
+      "pictureId": "3",
+      "assetId": "followup-flow",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 5,
+      "pictureId": "7",
+      "assetId": "teacher-ui",
+      "framePx": [
+        680.4,
+        350.0
+      ],
+      "crop": {
+        "l": 0.17,
+        "t": 0.1,
+        "r": 0.02,
+        "b": 0.3
+      },
+      "distortionFactor": 1.0000000000000002
+    },
+    {
+      "slide": 5,
+      "pictureId": "8",
+      "assetId": "followup-ui-new",
+      "framePx": [
+        690.0,
+        332.4870341207349
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0000000376297062
+    },
+    {
+      "slide": 6,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 6,
+      "pictureId": "3",
+      "assetId": "data-store",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 6,
+      "pictureId": "7",
+      "assetId": "province-map",
+      "framePx": [
+        1440.0,
+        585.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 7,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 7,
+      "pictureId": "3",
+      "assetId": "records-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 8,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 8,
+      "pictureId": "3",
+      "assetId": "growth-compass",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 9,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 9,
+      "pictureId": "3",
+      "assetId": "ai-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 10,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 10,
+      "pictureId": "3",
+      "assetId": "ai-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 11,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 11,
+      "pictureId": "3",
+      "assetId": "ai-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 12,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 12,
+      "pictureId": "3",
+      "assetId": "ai-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 13,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 13,
+      "pictureId": "3",
+      "assetId": "ai-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 14,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 14,
+      "pictureId": "3",
+      "assetId": "ai-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 15,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 15,
+      "pictureId": "3",
+      "assetId": "privacy-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 16,
+      "pictureId": "2",
+      "assetId": "brand-mark",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    },
+    {
+      "slide": 16,
+      "pictureId": "3",
+      "assetId": "structure-icon",
+      "framePx": [
+        48.0,
+        48.0
+      ],
+      "crop": {
+        "l": 0.0,
+        "t": 0.0,
+        "r": 0.0,
+        "b": 0.0
+      },
+      "distortionFactor": 1.0
+    }
+  ],
+  "stats": {
+    "images": 42,
+    "uniqueAssets": 23,
+    "distortedImages": 0,
+    "allAspectRatiosLocked": true
+  }
+}

@@ -1,0 +1,5 @@
+﻿source_id,survey_wave,start_date,end_date,sample_n,outcome,instrument,cutoff,estimate,ci95_lower,ci95_upper,source_location,limitation
+CHEN2021,1,2020-02-20,2020-02-27,9554,抑郁症状,CES-D,>15,0.366,0.356,0.376,摘要/Results/Table 2,两次独立样本；排除重复参加者；不是个体纵向追踪
+CHEN2021,1,2020-02-20,2020-02-27,9554,焦虑症状,GAD-7,>4,0.19,0.182,0.198,摘要/Results/Table 2,两次独立样本；排除重复参加者；不是个体纵向追踪
+CHEN2021,2,2020-04-11,2020-04-19,3886,抑郁症状,CES-D,>15,0.57,0.554,0.586,摘要/Results/Table 2,两次独立样本；排除重复参加者；不是个体纵向追踪
+CHEN2021,2,2020-04-11,2020-04-19,3886,焦虑症状,GAD-7,>4,0.367,0.352,0.382,摘要/Results/Table 2,两次独立样本；排除重复参加者；不是个体纵向追踪

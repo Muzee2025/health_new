@@ -1,0 +1,274 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "1.0",
+  "updated": "2026-10-29",
+  "sourceFile": "心域智链123(2).pptx",
+  "sourceSha256": "6a34c6c90539799c3e92dbbd9f859ef264348ded9fccf03b6be0ae91ce1ed96b",
+  "sourceSlides": 13,
+  "mediaFiles": 47,
+  "nativeTextRuns": 196,
+  "picturePlacements": 133,
+  "blankPptxSha256": "1b77f3e02fea72d6b220d1967d530b9a9eef93efb7846a5b238519bb610031c5",
+  "files": [
+    {
+      "path": "extraction.json",
+      "bytes": 144378,
+      "sha256": "dc819b4d32ef37999561373a04385f141c593188add3eb2a76aac4418f144c0c"
+    },
+    {
+      "path": "images/image1.emf",
+      "bytes": 1508,
+      "sha256": "45122f426ca1e7ad936143b7a09eefba84aaa0e25743219490adb2b358586374"
+    },
+    {
+      "path": "images/image10.svg",
+      "bytes": 1183,
+      "sha256": "7d96b3e905f33df4e96f8c594733af04356f5e12a2a9122e93f00034e3373b5c"
+    },
+    {
+      "path": "images/image11.svg",
+      "bytes": 1717,
+      "sha256": "5a5037785e893de3fe500a5019e0a8b06a9767ce1034b0d28bf13d6e2d2a99ff"
+    },
+    {
+      "path": "images/image12.svg",
+      "bytes": 1769,
+      "sha256": "3cb1e5ad79d79f1dada5b06d1beb8e742a6af04e362929ef0b85b35ea7a63c3a"
+    },
+    {
+      "path": "images/image13.svg",
+      "bytes": 1709,
+      "sha256": "1df01c8c7b4b2542f62096fc6020eb142a833593565a055a2707b3fd0771b21e"
+    },
+    {
+      "path": "images/image14.svg",
+      "bytes": 842,
+      "sha256": "e332f7b72d3470358c465bd547986783231e88d127fbf93949b25f215622d103"
+    },
+    {
+      "path": "images/image15.svg",
+      "bytes": 989,
+      "sha256": "ab8009f48bba9a687a1c38233ee1dcd7491e0e5c0fed475abad23009a1669801"
+    },
+    {
+      "path": "images/image16.svg",
+      "bytes": 850,
+      "sha256": "6080eecccca206b17ae411f792b035f9759630c20b8a0d8226dbe64d58cb65d2"
+    },
+    {
+      "path": "images/image17.svg",
+      "bytes": 923,
+      "sha256": "fb00dc357fe233e6d61f5830a4fa0f7386b851ba5746d329952d55baf73f3e91"
+    },
+    {
+      "path": "images/image18.svg",
+      "bytes": 829,
+      "sha256": "fbf355f3d44d1d7294576bc31c597141a0282602beda11ceb070d832b14a01ce"
+    },
+    {
+      "path": "images/image19.svg",
+      "bytes": 1709,
+      "sha256": "0d96612179dc99899907e7fd374dcbe55ab72862530f1bfeaaf5042d7828b9b2"
+    },
+    {
+      "path": "images/image2.emf",
+      "bytes": 42424,
+      "sha256": "162ef335cdcf8e82042130830023bace112575ca2b5e2223274840bb3710808d"
+    },
+    {
+      "path": "images/image20.svg",
+      "bytes": 989,
+      "sha256": "52fc19520750532717b26b9b8061f58ce2e115c0b0bc8e9acb9d35e10ed82ad0"
+    },
+    {
+      "path": "images/image21.svg",
+      "bytes": 1178,
+      "sha256": "c0e61799667f1488219e9c080fd203470d89f896391af84a9249a25f4f6f14f9"
+    },
+    {
+      "path": "images/image22.png",
+      "bytes": 230324,
+      "sha256": "f748ba07bcbf09347af8a81fe303a3580b8a9347eec493283a6cacba2fe3affd"
+    },
+    {
+      "path": "images/image23.svg",
+      "bytes": 622,
+      "sha256": "1e3d7645e30f659571225f16a3dae4aad48aedf5a3bc19641e15e5186fb61159"
+    },
+    {
+      "path": "images/image24.svg",
+      "bytes": 1787,
+      "sha256": "32137b15cadc8ad5d0b270f34a2742bce826d67350b07698c7c6c881b4d999d6"
+    },
+    {
+      "path": "images/image25.svg",
+      "bytes": 896,
+      "sha256": "10833398358d94c571d9541052036b2baa80491c75c9856324c85ea9ef622522"
+    },
+    {
+      "path": "images/image26.svg",
+      "bytes": 752,
+      "sha256": "b9783df74b1482f38665d14215f095f099e1230b7407162efdcb9bdd440db8fd"
+    },
+    {
+      "path": "images/image27.svg",
+      "bytes": 989,
+      "sha256": "170616b7396a97c56b830cff5582bd37f172204c2d31c2ebcf01cf62255b076d"
+    },
+    {
+      "path": "images/image28.svg",
+      "bytes": 989,
+      "sha256": "1280e97fe1ca73399952faa05d3b5bb9ad1fb4fbe7a32e6a50726e733aabe4b2"
+    },
+    {
+      "path": "images/image29.svg",
+      "bytes": 857,
+      "sha256": "f68bdca7d8a1990eff2ec6f7536e888c8ca94fec7d2c8262cbc544c6f3d256a1"
+    },
+    {
+      "path": "images/image3.emf",
+      "bytes": 3908,
+      "sha256": "5971a7a334116a26d21b336c14c8a1a3fb8fc23fa03fa0a43acbc0a0a7ef2852"
+    },
+    {
+      "path": "images/image30.png",
+      "bytes": 176300,
+      "sha256": "6152d8fa46a70cc9118fc64db53f06461b5a8753a86630db33abb0629f94f89b"
+    },
+    {
+      "path": "images/image31.svg",
+      "bytes": 666,
+      "sha256": "f1d1865b005c9d79e850d74fe9eddf213a526305f51e113846d65bb9abcfe65d"
+    },
+    {
+      "path": "images/image32.svg",
+      "bytes": 839,
+      "sha256": "52546a4c982b98272d2e85e41f69fc003402d4261d7b5a5563b39e2ad2a789dd"
+    },
+    {
+      "path": "images/image33.svg",
+      "bytes": 896,
+      "sha256": "2be80dd1e2a6084ea507f93d5ad3b3375cdb247b39fede1f209b36bb225014da"
+    },
+    {
+      "path": "images/image34.svg",
+      "bytes": 593,
+      "sha256": "b5bac2cb4a72571d521c6ffd4bbd575865ff60378fa9fe40ceb3fb0831890439"
+    },
+    {
+      "path": "images/image35.svg",
+      "bytes": 982,
+      "sha256": "b35ddbe3d5d4d0b70bfee602b0126fa983988b807ad93e639487db2acb66ebf2"
+    },
+    {
+      "path": "images/image36.png",
+      "bytes": 151686,
+      "sha256": "d47447db14ab15d6c82943560d0ecb6c97866f81beaed658900fe5efac8a3218"
+    },
+    {
+      "path": "images/image37.png",
+      "bytes": 200766,
+      "sha256": "476ac94aabcf5087e98c486fc793b759cc28fea317fdb7196332f0580452d6c3"
+    },
+    {
+      "path": "images/image38.png",
+      "bytes": 148296,
+      "sha256": "82979e59caf9c09a192e9089b61881d5cd777b877d631e54673a2487e83e7e3b"
+    },
+    {
+      "path": "images/image39.svg",
+      "bytes": 829,
+      "sha256": "1a80352f5e1c222f7d681fd2add8f714c492c280004b5bd18c249923707c3eb4"
+    },
+    {
+      "path": "images/image4.emf",
+      "bytes": 3544,
+      "sha256": "6461723c7fcd4836f34141932a6ada912cd3fb16811dd297b88a7d63ca7e7395"
+    },
+    {
+      "path": "images/image40.svg",
+      "bytes": 841,
+      "sha256": "103be9b8fc3b6c4bee3adb458794c403ea3eca8be43658ee828db1e77a4e0df8"
+    },
+    {
+      "path": "images/image41.svg",
+      "bytes": 827,
+      "sha256": "90dacf4733494a2ae469ff0d09253c891e6554f6a758dac0bb6c00dc5338ec25"
+    },
+    {
+      "path": "images/image42.svg",
+      "bytes": 1134,
+      "sha256": "dbf6e898d6b7f03fe09c30aa14b3d5d345695cc696e0e543bb45795f05aa6b28"
+    },
+    {
+      "path": "images/image43.svg",
+      "bytes": 984,
+      "sha256": "18eab71f7e33f4ef62631046b3c6f6a3068142c3627b4f27be2e3a921e586078"
+    },
+    {
+      "path": "images/image44.svg",
+      "bytes": 1030,
+      "sha256": "4e496f8f277672d8a23ff530f3fb2e34df47cff6a3ae36c3046678011ad69d4e"
+    },
+    {
+      "path": "images/image45.svg",
+      "bytes": 593,
+      "sha256": "86604b8f8d6165d7973c778e76001872602bf206f72fb005f20dabe01c5d97da"
+    },
+    {
+      "path": "images/image46.svg",
+      "bytes": 786,
+      "sha256": "9ab6ac750bd55d7bae3093989ea2ddf366b2ac9c321faa7382f49385b276f975"
+    },
+    {
+      "path": "images/image47.svg",
+      "bytes": 490,
+      "sha256": "80f742e1f234fc5450d3084b404a03c0f02a8adfb01507fda64f65c17d33cde7"
+    },
+    {
+      "path": "images/image5.emf",
+      "bytes": 2116,
+      "sha256": "1375f043f6db665b2a39e93f93f68ab454065e0225580a9ac1e8e13e21ba7696"
+    },
+    {
+      "path": "images/image6.emf",
+      "bytes": 644,
+      "sha256": "8682c8a98076998b6d552755598ea0fa86bbae092c6b3636710425657b0aeffe"
+    },
+    {
+      "path": "images/image7.emf",
+      "bytes": 33576,
+      "sha256": "436c38c37cebfe126a97584a5522b3f8a0eceb4af5735e020936520442fb3306"
+    },
+    {
+      "path": "images/image8.jpeg",
+      "bytes": 62937,
+      "sha256": "b898572efcf22971055e68e8d113f4fb2945b1245856f63e993975463f202425"
+    },
+    {
+      "path": "images/image9.jpeg",
+      "bytes": 164762,
+      "sha256": "e09813d8140dff9df3e7de0a4cebaac1c728b1f515d3eed342d1f2ac579a2d85"
+    },
+    {
+      "path": "六章空白稿逐页文字.md",
+      "bytes": 6397,
+      "sha256": "12ff9e4d01e3f9aec13a7a9f5b3efb6f87f982e29ef88fcd37d36913f424c573"
+    },
+    {
+      "path": "原PPT文字提取.md",
+      "bytes": 10540,
+      "sha256": "1c642557977dd397b22e2f7f9676f17369457b1fd06bde68689e1a4d0b739522"
+    },
+    {
+      "path": "图片与旧稿页码对应.csv",
+      "bytes": 6319,
+      "sha256": "2b6ac8f7c11fe1af85bb09cdd47c7a1d5e9e5aeaeaf7d2c841a6bacd4f5d8b6d"
+    },
+    {
+      "path": "提取说明.md",
+      "bytes": 1264,
+      "sha256": "1c01a4f820dbdfa6384a7f8291d6854a0f5ec574fc811f556de2282803add83c"
+    }
+  ]
+}

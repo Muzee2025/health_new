@@ -1,0 +1,574 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "2.0",
+  "updated": "2026-10-28",
+  "status": "application-linked-content-pack",
+  "sourceApplication": "docs/plan/心域智链申报计划书.md",
+  "sourceApplicationSha256": "9871d8db1e6c85931990320f98bbf7a32e62a5d8feeb9ad4c3f72003e39cc69b",
+  "sourceDocxSha256": "285aa4fe96c65a2b71d75f5ad7b24b663c2850b72015161f8f487822112ce764",
+  "pages": [
+    {
+      "page": 1,
+      "title": "项目概览",
+      "source": "摘要、2.1、2.5",
+      "main": [
+        "diagrams/project-mindmap.svg"
+      ],
+      "support": [
+        "diagrams/project-mindmap.drawio"
+      ],
+      "placement": "关系图作为一项主要视觉，说明学生、教师和拟建AI的任务关系。",
+      "boundary": "不将关系图中的拟建AI写成已完成能力。"
+    },
+    {
+      "page": 2,
+      "title": "背景需求",
+      "source": "1.1、1.3，表1与图3",
+      "main": [
+        "figures/fig09-service.svg"
+      ],
+      "support": [
+        "figures/fig02-pressure.svg"
+      ],
+      "placement": "主图使用咨询知晓/使用原图，竞争感知图留作替换或问答备查，避免一页堆两图。",
+      "boundary": "80.0%与2.8%为2024年本科生调查不同题项；不画漏斗、不计算转化率。竞争感知不是患病率。"
+    },
+    {
+      "page": 3,
+      "title": "产品服务",
+      "source": "2.1—2.4，表4、图7",
+      "main": [
+        "figures/fig06-architecture.svg"
+      ],
+      "support": [
+        "demo/teacher-appointments-synthetic.webp",
+        "diagrams/project-mindmap.drawio"
+      ],
+      "placement": "架构或关系图配学生本人记录、求助预约、教师查阅明确分配事项、人工答复和跟进的文字。预约截图作为合成示例。",
+      "boundary": "不写陪伴咨询、个别辅导、个性化指导或资源推荐已提供；示意插画不作为功能验收证据。"
+    },
+    {
+      "page": 4,
+      "title": "AI实现",
+      "source": "1.4、5.1—5.3，表13/14、图13",
+      "main": [
+        "diagrams/ai-flow.svg"
+      ],
+      "support": [
+        "diagrams/ai-flow.drawio",
+        "figures/fig07-ai-workflow.svg"
+      ],
+      "placement": "主讲用五步简图，申报原图留作详细备查。摘要按已有记录、尚缺信息、待核对问题、参考依据四部分展示。",
+      "boundary": "标题标拟建；模型根据已确认事实和审核资料起草，教师修改、采用或弃用；失败回原始记录和人工流程。"
+    },
+    {
+      "page": 5,
+      "title": "湖北市场",
+      "source": "3.1、3.2、3.4，表7、图9/10",
+      "main": [
+        "figures/fig11-hubei-neighbours.svg"
+      ],
+      "support": [
+        "figures/fig10-regional-college.svg"
+      ],
+      "placement": "主讲仍优先呈现2024年湖北133所普通/职业高校、191.52万本专科在校生及测评后求助、教师答复、记录整理等切入任务；软件、部署、维护和专业服务采购范围分开明确。比较图用于替换或备查，避免堆31地表。",
+      "boundary": "教育规模为前期调研背景，不换算客户、实际服务量、心理风险需求或收入。"
+    },
+    {
+      "page": 6,
+      "title": "实施验证",
+      "source": "4.1—4.3，表12、表16",
+      "main": [
+        "diagrams/implementation-route.svg"
+      ],
+      "support": [
+        "diagrams/implementation-route.drawio"
+      ],
+      "placement": "四阶段主图：流程了解、合成演示、培训维护、校内获批后的任务验证。4.4的后续中学适配留作问答，主讲按精简大纲省略。",
+      "boundary": "不虚构周数、试点或效果；观察任务完成、耗时、错误和教师草稿修改。"
+    },
+    {
+      "page": 7,
+      "title": "组织预算",
+      "source": "6.1、6.2，表15",
+      "main": [
+        "roles-budget-source.txt"
+      ],
+      "support": [
+        "icons/phosphor-database.svg",
+        "icons/phosphor-book-open.svg",
+        "icons/phosphor-shield-check.svg"
+      ],
+      "placement": "以责任文字与六项预算科目为主，图标仅辅助标题。需要图形时用PPT原生形状或SmartArt按源稿建立，当前未创建原生PPT图。",
+      "boundary": "人员、导师、周期、单价与金额待填写，不做虚构金额图或预算比例饼图。"
+    },
+    {
+      "page": 8,
+      "title": "预期成果",
+      "source": "6.3、6.4，表16",
+      "main": [
+        "icons/phosphor-files.svg",
+        "icons/phosphor-chart-line-up.svg",
+        "icons/phosphor-book-open.svg",
+        "icons/phosphor-shield-check.svg"
+      ],
+      "support": [],
+      "placement": "四项交付：可复验原型、统计图表、摘要与评测记录、培训治理与运行恢复材料；用少量图标辅助，文字标预期。",
+      "boundary": "不把预期交付、合成演示或技术复验写成专业有效性验证、校方采用或生产放行。"
+    }
+  ],
+  "assets": [
+    {
+      "file": "figures/fig01-youth.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig01-youth.svg",
+      "sha256": "de05f3788c9c52750b3c49a4350f41813768e9a0b3d8833bd38a3edb773ec58c",
+      "kind": "application-original-figure",
+      "origin": "2024年青少年抑郁筛查分组与学习状态。（a）上学意愿；（b）自陈学习行为",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig01-youth.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig01-youth.png",
+      "sha256": "6da2101fc17451661a15cb7071a74db55e1e4aeaafa99f42efff29a7d101b3c3",
+      "kind": "application-original-figure",
+      "origin": "2024年青少年抑郁筛查分组与学习状态。（a）上学意愿；（b）自陈学习行为",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig02-pressure.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig02-pressure.svg",
+      "sha256": "a18bd8e8a04f901e4c1892b32e786d3839b5a1adb966517abfc6ac2d8a9ce425",
+      "kind": "application-original-figure",
+      "origin": "2023年大学生学业竞争感知",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig02-pressure.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig02-pressure.png",
+      "sha256": "978526c693406f26ae6718f070c324103fcc7dca805615c0c6d2dd9c977acb95",
+      "kind": "application-original-figure",
+      "origin": "2023年大学生学业竞争感知",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig09-service.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig09-service.svg",
+      "sha256": "21ceb4f2e7dbe1852a43859585fed8d5dac84f5f0c0144ce0a297c09548d93e6",
+      "kind": "application-original-figure",
+      "origin": "2024年大学生免费咨询知晓与使用",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig09-service.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig09-service.png",
+      "sha256": "fa196cb459a9ba50c8895636838ff25e237b4c09692070b9fb02e891d7ae8c07",
+      "kind": "application-original-figure",
+      "origin": "2024年大学生免费咨询知晓与使用",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig12-literature-stage.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig12-literature-stage.svg",
+      "sha256": "edb29216bf11fac2b9455be17281dd0c0d382c22c5f26d35ed41eb73c655048d",
+      "kind": "application-original-figure",
+      "origin": "不同学段抑郁症状筛查阳性的合并比例及95%置信区间",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig12-literature-stage.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig12-literature-stage.png",
+      "sha256": "d25faaad687486ef5a4f3a232ff65c9c2d60bc1a8fb8c393f19735800eaf4eb1",
+      "kind": "application-original-figure",
+      "origin": "不同学段抑郁症状筛查阳性的合并比例及95%置信区间",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig13-literature-regions.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig13-literature-regions.svg",
+      "sha256": "dc2bca76975713a9864a1ea3e058f649717d1fa6f9281883126cf4562d812d93",
+      "kind": "application-original-figure",
+      "origin": "纳入研究的31省份地区亚组合并比例与95%置信区间",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig13-literature-regions.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig13-literature-regions.png",
+      "sha256": "6d3028bd1125dd305ae160664f0cb516f2766acd1776ef31b5b8a33bbff7de32",
+      "kind": "application-original-figure",
+      "origin": "纳入研究的31省份地区亚组合并比例与95%置信区间",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig05-mindmap.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig05-mindmap.svg",
+      "sha256": "090d1c08148d2969cda2e5e9a9a9fb2fad656b22ec36391788d20de8e70414c3",
+      "kind": "application-original-figure",
+      "origin": "AI+高校心理测评与持续支持逻辑",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig05-mindmap.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig05-mindmap.png",
+      "sha256": "579397462f72e7872c6955abf93eeab6f6adfdc6284ac3e3ccc2b76546bb52ae",
+      "kind": "application-original-figure",
+      "origin": "AI+高校心理测评与持续支持逻辑",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig06-architecture.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig06-architecture.svg",
+      "sha256": "1a17d28c325b4afa48cef51bf011e65eabc5cfcd6377f4390e5ea2cf7537a47f",
+      "kind": "application-original-figure",
+      "origin": "系统与AI能力的分层关系",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig06-architecture.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig06-architecture.png",
+      "sha256": "49b306fb46ec8b5c2c99bb9cf18f80dfa1ac2eab63ab809ef4e63ae254268895",
+      "kind": "application-original-figure",
+      "origin": "系统与AI能力的分层关系",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig03-education.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig03-education.svg",
+      "sha256": "eb831d08c2be0d68a7552ca69c7737334faff4a2c070d68e1c1a90255de0520f",
+      "kind": "application-original-figure",
+      "origin": "2025年高校与中学在校生规模",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig03-education.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig03-education.png",
+      "sha256": "c2bd14d6648ac7c11d4f74a8efce0fbd30c1e5726cfe9b357df3b9d1da3561cd",
+      "kind": "application-original-figure",
+      "origin": "2025年高校与中学在校生规模",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig10-regional-college.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig10-regional-college.svg",
+      "sha256": "73b8be5e19808aee87e1e7def6e909366d7cb2b7c8aa259db58545b792c3831b",
+      "kind": "application-original-figure",
+      "origin": "2024年本专科在校生规模前12位省份",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig10-regional-college.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig10-regional-college.png",
+      "sha256": "7ffebe30517b50f10c6a0fd8e908e0237689cf421105a8af653df7571898661b",
+      "kind": "application-original-figure",
+      "origin": "2024年本专科在校生规模前12位省份",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig11-hubei-neighbours.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig11-hubei-neighbours.svg",
+      "sha256": "49835aa4c981c79ae9562761dff99802072fb733047ae1542b9c1a34c592ec55",
+      "kind": "application-original-figure",
+      "origin": "2024年湖北及周边六省市在校生规模。（a）本专科；（b）普通高中；（c）初中",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig11-hubei-neighbours.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig11-hubei-neighbours.png",
+      "sha256": "c64f2deef25a7d7ba14ebcb9ef09578100dbeb508f7a53377235ff9547ea7c47",
+      "kind": "application-original-figure",
+      "origin": "2024年湖北及周边六省市在校生规模。（a）本专科；（b）普通高中；（c）初中",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig14-education-lorenz.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig14-education-lorenz.svg",
+      "sha256": "8ade4ec3bba2d73a578743ee1ba586c544e1513d9836c5be4588567d71279d54",
+      "kind": "application-original-figure",
+      "origin": "2024年三个学段在校生规模的地区累计份额曲线",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig14-education-lorenz.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig14-education-lorenz.png",
+      "sha256": "7b449056af9aaf9a3fda84f2e118ed9f7fd077ebdffb666b30b1546ff9a2df7b",
+      "kind": "application-original-figure",
+      "origin": "2024年三个学段在校生规模的地区累计份额曲线",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig04-procurement.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig04-procurement.svg",
+      "sha256": "27484a717b8645a2026178bf8b503cdc9b1dbc3398d6b4f724a17faeb07825dd",
+      "kind": "application-original-figure",
+      "origin": "2026年四项心理服务采购案例。（a）高校软件及系统；（b）区域测评与综合服务",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig04-procurement.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig04-procurement.png",
+      "sha256": "e0851ba99b7cd2816478db5bfc94fbe1dac4271fb7db50ef0a03d0db253f1da8",
+      "kind": "application-original-figure",
+      "origin": "2026年四项心理服务采购案例。（a）高校软件及系统；（b）区域测评与综合服务",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig07-ai-workflow.svg",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig07-ai-workflow.svg",
+      "sha256": "540c9e1c07a79172dcfd6d7c9c174abf4ab5450d77578a05c53d90fc910e1e88",
+      "kind": "application-original-figure",
+      "origin": "AI分析与大模型的人机协作流程",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "figures/fig07-ai-workflow.png",
+      "sourceFile": "docs/plan/ai-application/figures-sci/fig07-ai-workflow.png",
+      "sha256": "ea8a335acd158b2291ff88a81fd4f5d819022e731e821743e029dea32165277d",
+      "kind": "application-original-figure",
+      "origin": "AI分析与大模型的人机协作流程",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/project-mindmap.svg",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/project-mindmap.svg",
+      "sha256": "abd84cd571e007c83f6beb8351c773bcce5827043dad2ff826344a680bd73d53",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/project-mindmap.png",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/project-mindmap.png",
+      "sha256": "500df67fa3099f6aac5e2afe13e2fc455780207f317a6189313f31f5ae01db5b",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/project-mindmap.drawio",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/project-mindmap.drawio",
+      "sha256": "57a6732e267c88a10ec8f5b8826fb6107cfc6644bfa78f7b6363dcad3479bd0a",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/ai-flow.svg",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/ai-flow.svg",
+      "sha256": "50e35e00fd9d9d95db7cb5a5d588a0eb07afd0f4a281539e93417731d177b5d6",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/ai-flow.png",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/ai-flow.png",
+      "sha256": "e44f07384cd769271adeb03486924e697588c6806e62e28538183cd8627e1e00",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/ai-flow.drawio",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/ai-flow.drawio",
+      "sha256": "67fb6cd377d5e00cfb20d7da2b3c927a8f56d3976fae976e03124ca25c2c35fe",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/implementation-route.svg",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/implementation-route.svg",
+      "sha256": "f8518f84672c74998742be278d00cce1f79b7c72978484cba49259bc1e6055f4",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/implementation-route.png",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/implementation-route.png",
+      "sha256": "7467acc6c23a3593c74d4ea258a82b555b0ea2d669cd780c39559ba937cc6657",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "diagrams/implementation-route.drawio",
+      "sourceFile": "docs/ppt/direction-mindmap-20261027/implementation-route.drawio",
+      "sha256": "b47949af01b8c176c6d38d074ab423fb7728bc9c5d782af3c110596abd9f42c9",
+      "kind": "project-diagram-source",
+      "origin": "项目原创；按S5申报书任务关系整理",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-hand-heart.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-hand-heart.svg",
+      "sha256": "8797f9ca2bc8620c56c9dead90c047724176a611d52e613c6412aa16745bf93e",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/hand-heart.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-chat-circle-dots.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-chat-circle-dots.svg",
+      "sha256": "2af44e36757c90c999e070065ae61c495c66c8e88f43c5f07964dc3367cad60d",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/chat-circle-dots.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-book-open.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-book-open.svg",
+      "sha256": "b38cdb3a15dcf00cfa4811e318b021e25c6a87b47acbb11888e16d107a5642da",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/book-open.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-files.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-files.svg",
+      "sha256": "bb4cec5fc4ae78d9bfc38378db6d991a4f9b89e0e58db97a95a083b68a4c5a9e",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/files.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-database.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-database.svg",
+      "sha256": "da7d3598430cbe3b334c308c03ca41e8c4c7bbbfa7891e914d7aa8e87d847423",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/database.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-brain.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-brain.svg",
+      "sha256": "9fdd189bc61e6b5e437c91bd6819c7a0bd1e598d0a780ae097b4db2e0de13a43",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/brain.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-shield-check.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-shield-check.svg",
+      "sha256": "bb04d552c0baaaabd90f7eb60760cb0c7ddb7e9f47e4b76e9599ddd7dfd8eaa7",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/shield-check.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "icons/phosphor-chart-line-up.svg",
+      "sourceFile": "docs/ppt/vector-assets-20261027/phosphor-chart-line-up.svg",
+      "sha256": "1bcf22abc6fe9cfb6195f0781d3056509aade1a35d4279ed46de7f282cca8937",
+      "kind": "supporting-icon",
+      "origin": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/chart-line-up.svg",
+      "licenseNotice": "LICENSE-PHOSPHOR-MIT.txt",
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    },
+    {
+      "file": "demo/teacher-appointments-synthetic.webp",
+      "sourceFile": "docs/design/screenshots/library-source/production/teacher-appointments-1440.webp",
+      "sha256": "3ec5dbd7fe0ac99e7a26cd682c9fa54eb6afbff9e55c0293a69a3b96849aafd9",
+      "kind": "synthetic-demo",
+      "origin": "W2-LIB-PRODUCTION合成API演示截图，仅展示预约页面",
+      "licenseNotice": null,
+      "status": "source-preserved-content-selected",
+      "styleApproval": "pending"
+    }
+  ],
+  "applicationFigureCount": 13,
+  "svgCount": 24,
+  "pngCount": 16,
+  "drawioCount": 3,
+  "syntheticDemoCount": 1,
+  "livePptModified": false,
+  "newUiPreview": {
+    "status": "blocked-by-image-service-network",
+    "attempts": 2,
+    "error": "image generation failed: network error: error sending request"
+  },
+  "generatedRasterAssetsInPack": false
+}

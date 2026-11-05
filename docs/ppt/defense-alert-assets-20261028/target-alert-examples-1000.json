@@ -1,0 +1,49 @@
+{
+  "synthetic": true,
+  "modelCalled": false,
+  "origin": "human-authored demonstration wording from rule evidence",
+  "examples": [
+    {
+      "id": "DEMO-W-0098",
+      "caseAlias": "S-0098",
+      "recipient": "T-DEMO-01",
+      "clues": [
+        {
+          "rule": "DEMO-REPEAT",
+          "fact": "两次留言均提到睡眠困扰",
+          "recordIds": [
+            "VR-0098-01",
+            "VR-0098-02"
+          ]
+        },
+        {
+          "rule": "DEMO-HELP",
+          "fact": "主动请求老师联系",
+          "recordIds": [
+            "VR-0098-03"
+          ]
+        }
+      ],
+      "status": "待授权教师复核",
+      "actualNotificationSent": false,
+      "humanDecision": "核对原文和语境后，决定是否重点关注与跟进"
+    },
+    {
+      "id": "DEMO-W-0142",
+      "caseAlias": "S-0142",
+      "recipient": "T-DEMO-02",
+      "clues": [
+        {
+          "rule": "DEMO-HELP",
+          "fact": "主动请求老师联系",
+          "recordIds": [
+            "VR-0142-03"
+          ]
+        }
+      ],
+      "status": "待授权教师复核",
+      "actualNotificationSent": false,
+      "humanDecision": "核对原文和语境后，决定是否重点关注与跟进"
+    }
+  ]
+}

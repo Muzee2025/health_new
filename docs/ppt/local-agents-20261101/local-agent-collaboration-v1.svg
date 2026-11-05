@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+<title id="title">本地多智能体协作：三套模型支撑六类专家任务</title>
+<desc id="desc">立项候选方案。Windows服务器有两张RTX4070，按每卡12GB规划。Qwen3-8B量化语言模型分时支撑语义、情绪线索、认知线索与风险复核角色。Qwen3-Embedding-0.6B和Qwen3-Reranker-0.6B支撑纵向记录与资料检索。受控证据通过协调器汇总，交授权教师复核后形成摘要、引用、资料缺口和支持草稿。未部署或测得效果。</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#604372" stroke-width="1.6"/></marker>
+<marker id="back-arrow" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M9 1L1 5L9 9" fill="none" stroke="#604372" stroke-width="1.6"/></marker>
+</defs>
+<g font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif">
+<rect x="0" y="0" width="1920" height="1080" rx="0" fill="#FFFFFF" stroke="none" stroke-width="1.5"/>
+<text x="80" y="73" font-size="50" fill="#604372" font-weight="700" text-anchor="start">本地多智能体协作</text>
+<text x="80" y="119" font-size="28" fill="#56625C" font-weight="400" text-anchor="start">三套模型支撑六类专家任务，每项输出都有依据可核对</text>
+<rect x="1570" y="34" width="270" height="52" rx="26" fill="#F7F3F8" stroke="none" stroke-width="1.5"/>
+<text x="1705" y="69" font-size="25" fill="#604372" font-weight="600" text-anchor="middle">立项方案 · 待验证</text>
+<text x="80" y="197" font-size="28" fill="#29332F" font-weight="600" text-anchor="start">授权文本 / 本人记录</text>
+<path d="M410,188 L650,188" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)"/>
+<rect x="675" y="152" width="570" height="74" rx="18" fill="#F7F3F8" stroke="none" stroke-width="1.5"/>
+<text x="960" y="183" font-size="29" fill="#604372" font-weight="700" text-anchor="middle">协调器</text>
+<text x="960" y="211" font-size="23" fill="#56625C" font-weight="400" text-anchor="middle">权限校验 · 最小输入 · 按需调度</text>
+<text x="1325" y="178" font-size="26" fill="#29332F" font-weight="600" text-anchor="start">Windows · 2 × RTX 4070</text>
+<text x="1325" y="214" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">每卡12GB，按两块独立显卡规划</text>
+<path d="M960,226 L960,844" stroke="#604372" stroke-width="2.4" fill="none"/>
+<rect x="80" y="254" width="800" height="170" rx="18" fill="#FFFFFF" stroke="#E3E8E1" stroke-width="1.5"/>
+<text x="108" y="292" font-size="31" fill="#604372" font-weight="700" text-anchor="start">01  语义理解专家</text>
+<text x="108" y="327" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">Qwen3-8B · 4bit量化</text>
+<text x="108" y="366" font-size="26" fill="#29332F" font-weight="400" text-anchor="start">任务：提取事件、时间、否定和原文片段</text>
+<text x="108" y="403" font-size="27" fill="#29332F" font-weight="600" text-anchor="start">输出：结构化事实＋原文引用</text>
+<path d="M884,340 L950,340" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)" marker-start="url(#back-arrow)"/>
+<rect x="1040" y="254" width="800" height="170" rx="18" fill="#FFFFFF" stroke="#E3E8E1" stroke-width="1.5"/>
+<text x="1068" y="292" font-size="31" fill="#604372" font-weight="700" text-anchor="start">02  情绪线索专家</text>
+<text x="1068" y="327" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">Qwen3-8B · 独立角色提示</text>
+<text x="1068" y="366" font-size="26" fill="#29332F" font-weight="400" text-anchor="start">任务：整理压力、睡眠等自述表达</text>
+<text x="1068" y="403" font-size="27" fill="#29332F" font-weight="600" text-anchor="start">输出：有依据的线索＋未知项</text>
+<path d="M970,340 L1035,340" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)" marker-start="url(#back-arrow)"/>
+<rect x="80" y="454" width="800" height="170" rx="18" fill="#FFFFFF" stroke="#E3E8E1" stroke-width="1.5"/>
+<text x="108" y="492" font-size="31" fill="#604372" font-weight="700" text-anchor="start">03  认知线索专家</text>
+<text x="108" y="527" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">Qwen3-8B · 独立角色提示</text>
+<text x="108" y="566" font-size="26" fill="#29332F" font-weight="400" text-anchor="start">任务：识别绝对化等候选表达模式</text>
+<text x="108" y="603" font-size="27" fill="#29332F" font-weight="600" text-anchor="start">输出：待核验假设＋对应原文</text>
+<path d="M884,540 L950,540" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)" marker-start="url(#back-arrow)"/>
+<rect x="1040" y="454" width="800" height="170" rx="18" fill="#FFFFFF" stroke="#E3E8E1" stroke-width="1.5"/>
+<text x="1068" y="492" font-size="31" fill="#604372" font-weight="700" text-anchor="start">04  纵向记录专家</text>
+<text x="1068" y="527" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">Qwen3-Embedding-0.6B＋时间规则</text>
+<text x="1068" y="566" font-size="26" fill="#29332F" font-weight="400" text-anchor="start">任务：召回本人授权记录并按时间归并</text>
+<text x="1068" y="603" font-size="27" fill="#29332F" font-weight="600" text-anchor="start">输出：阶段记录时间线 / 资料不足</text>
+<path d="M970,540 L1035,540" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)" marker-start="url(#back-arrow)"/>
+<rect x="80" y="654" width="800" height="170" rx="18" fill="#FFFFFF" stroke="#E3E8E1" stroke-width="1.5"/>
+<text x="108" y="692" font-size="31" fill="#604372" font-weight="700" text-anchor="start">05  风险复核专家</text>
+<text x="108" y="727" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">Qwen3-8B＋待审规则</text>
+<text x="108" y="766" font-size="26" fill="#29332F" font-weight="400" text-anchor="start">任务：核对矛盾、缺失与紧急线索</text>
+<text x="108" y="803" font-size="27" fill="#29332F" font-weight="600" text-anchor="start">输出：待人工核查事项，不自动定级</text>
+<path d="M884,740 L950,740" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)" marker-start="url(#back-arrow)"/>
+<rect x="1040" y="654" width="800" height="170" rx="18" fill="#FFFFFF" stroke="#E3E8E1" stroke-width="1.5"/>
+<text x="1068" y="692" font-size="31" fill="#604372" font-weight="700" text-anchor="start">06  资源检索专家</text>
+<text x="1068" y="727" font-size="23" fill="#56625C" font-weight="400" text-anchor="start">Qwen3-Embedding-0.6B＋Qwen3-Reranker-0.6B</text>
+<text x="1068" y="766" font-size="26" fill="#29332F" font-weight="400" text-anchor="start">任务：召回并重排已审核的支持资料</text>
+<text x="1068" y="803" font-size="27" fill="#29332F" font-weight="600" text-anchor="start">输出：相关资料片段＋来源</text>
+<path d="M970,740 L1035,740" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)" marker-start="url(#back-arrow)"/>
+<rect x="921" y="450" width="78" height="170" rx="20" fill="#F7F3F8" stroke="none" stroke-width="1.5"/>
+<text x="960" y="486" font-size="27" fill="#604372" font-weight="600" text-anchor="middle">受</text>
+<text x="960" y="520" font-size="27" fill="#604372" font-weight="600" text-anchor="middle">控</text>
+<text x="960" y="554" font-size="27" fill="#604372" font-weight="600" text-anchor="middle">证</text>
+<text x="960" y="588" font-size="27" fill="#604372" font-weight="600" text-anchor="middle">据</text>
+<path d="M960,825 L960,850" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)"/>
+<rect x="80" y="855" width="1760" height="62" rx="16" fill="#F7F3F8" stroke="none" stroke-width="1.5"/>
+<text x="960" y="896" font-size="29" fill="#604372" font-weight="600" text-anchor="middle">协调器汇总：核对引用 · 保留分歧 · 标记资料缺口</text>
+<path d="M960,918 L960,941" stroke="#604372" stroke-width="2.4" fill="none" marker-end="url(#arrow)"/>
+<rect x="80" y="948" width="1760" height="83" rx="18" fill="#E8F0EA" stroke="none" stroke-width="1.5"/>
+<text x="960" y="981" font-size="28" fill="#3C4841" font-weight="700" text-anchor="middle">授权教师复核后输出</text>
+<text x="960" y="1016" font-size="29" fill="#3C4841" font-weight="600" text-anchor="middle">事实摘要    原文证据    资料缺口    支持草稿</text>
+<text x="80" y="1064" font-size="22" fill="#56625C" font-weight="400" text-anchor="start">“专家”指任务角色；共享语言模型分时调用。紧急线索优先交人工。部署、性能及专业有效性待实测。</text>
+</g></svg>

@@ -1,0 +1,141 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "4.0",
+  "updated": "2026-10-28",
+  "nationalEducation": {
+    "year": 2025,
+    "higherEducationInstitutions": 3167,
+    "ordinaryVocationalUndergraduateJuniorStudentsWan": "3953.96",
+    "scopeNote": "学校数含成人高校；学生数仅普通、职业本专科，不据此求校均值。",
+    "url": "https://www.moe.gov.cn/jyb_sjzl/sjzl_fztjgb/202607/t20260706_1442870.html"
+  },
+  "policy": {
+    "title": "教育部关于全面推进健康学校建设的指导意见",
+    "document": "教体艺〔2026〕3号",
+    "date": "2026-02-26",
+    "url": "https://www.moe.gov.cn/srcsite/A17/moe_943/moe_946/202602/t20260227_1429365.html",
+    "paraphrase": "要求规范开展心理健康监测、科学运用监测结果；政策要求不表示各校已达成。"
+  },
+  "monitoring": {
+    "reportedDate": "2025-05-29",
+    "firstNationalMonitoringStudents": 1500000,
+    "url": "https://www.moe.gov.cn/jyb_zzjg/huodong/202505/t20250529_1192362.html",
+    "scope": "首次全国监测覆盖规模；通报年不等于采集年，不是心理问题人数"
+  },
+  "actionPlan": {
+    "period": "2023–2025",
+    "url": "https://www.moe.gov.cn/srcsite/A17/moe_943/moe_946/202305/t20230511_1059219.html",
+    "scope": "历史专项行动计划的要求，不当作当前全部学校已达成"
+  },
+  "literature": {
+    "doi": "10.1186/s13034-024-00841-w",
+    "url": "https://capmh.biomedcentral.com/counter/pdf/10.1186/s13034-024-00841-w.pdf",
+    "ageYears": "6-24",
+    "studies": 439,
+    "participants": 1497524,
+    "overall": {
+      "estimate_percent": 26.17,
+      "ci95_lower_percent": 25.0,
+      "ci95_upper_percent": 27.41,
+      "i2_percent": 100,
+      "heterogeneity_p": "<0.001",
+      "estimate_type": "Random-effects pooled proportion of depressive-symptom screen positives across included studies; not a clinical diagnosis prevalence estimate"
+    },
+    "stages": [
+      {
+        "stage": "Primary school",
+        "studies_k": 30,
+        "sample_n": 137116,
+        "estimate_percent": 16.97,
+        "ci95_lower_percent": 14.0,
+        "ci95_upper_percent": 20.56,
+        "i2_percent": 99
+      },
+      {
+        "stage": "Middle school",
+        "studies_k": 94,
+        "sample_n": 342082,
+        "estimate_percent": 24.15,
+        "ci95_lower_percent": 21.61,
+        "ci95_upper_percent": 27.0,
+        "i2_percent": 100
+      },
+      {
+        "stage": "High school",
+        "studies_k": 86,
+        "sample_n": 1069851,
+        "estimate_percent": 28.23,
+        "ci95_lower_percent": 25.58,
+        "ci95_upper_percent": 31.15,
+        "i2_percent": 100
+      },
+      {
+        "stage": "Undergraduate school",
+        "studies_k": 188,
+        "sample_n": 374996,
+        "estimate_percent": 27.72,
+        "ci95_lower_percent": 25.79,
+        "ci95_upper_percent": 29.79,
+        "i2_percent": 100
+      }
+    ],
+    "scope": "症状筛查阳性研究汇总；量表/界值异质，不当作当前全国临床患病率，不乘人口外推总人数，也不相加亚组样本"
+  },
+  "hubeiEducation": {
+    "year": 2024,
+    "institutions": 133,
+    "students": 1915173,
+    "localSource": "docs/plan/ai-application/revision-20261027/regional-education-2024.json",
+    "scopeNote": "普通、职业高校及本专科在校生；背景而非客户、签约/服务人数。"
+  },
+  "scaleAssumptions": {
+    "status": "planning_scenarios_not_measured_capacity",
+    "studentsPerInstitution": 5000,
+    "recordsPerStudentPerSemester": 2,
+    "summaryFractionOfRecords": "0.20",
+    "scopeNote": "20%是人为设定的业务调用比例，不是风险检出率或实测需求；人数是场景覆盖假设。"
+  },
+  "scaleScenarios": [
+    {
+      "schools": 1,
+      "students": 5000,
+      "recordsPerSemester": 10000,
+      "summariesPerSemester": 2000
+    },
+    {
+      "schools": 5,
+      "students": 25000,
+      "recordsPerSemester": 50000,
+      "summariesPerSemester": 10000
+    },
+    {
+      "schools": 10,
+      "students": 50000,
+      "recordsPerSemester": 100000,
+      "summariesPerSemester": 20000
+    }
+  ],
+  "sensitiveDataWorkflow": {
+    "status": "proposed-to-complete-and-evaluate-not-deployed-proof",
+    "privacy": [
+      "授权与用途核验",
+      "去标识、最小字段",
+      "经批准模型与审核资料",
+      "输出泄露/越界检查",
+      "教师确认"
+    ],
+    "riskClues": [
+      "规则初筛与AI辅助提示",
+      "授权责任人核对原文语境",
+      "按校方流程跟进/必要升级"
+    ],
+    "limitations": [
+      "不是诊断或校准概率",
+      "未验证漏报误报",
+      "未证明全链路脱敏",
+      "不声称24小时值守或自动危机处置"
+    ],
+    "governanceSource": "docs/ops/校内运营与隐私流程.md",
+    "codeAuditSource": "docs/plan/ai-application/ai-integration-20261027/code-scope.md"
+  }
+}

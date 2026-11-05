@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="text/ecmascript" zoomAndPan="magnify" contentStyleType="text/css" style="stroke-opacity: 1.0;" version="1.0" width="48" fill="none" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" height="48" opacity="1.0">
+<path fill="#F97316" fill-opacity="1.0" stroke-width="2.0" d="M23.9998 3L45.8741 18.8926L38 45H10L2.12549 18.8926L23.9998 3Z" stroke-linejoin="round" stroke="#F97316"/>
+<path d="M38 45L31 37" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" stroke="white"/>
+<path d="M10 45L17 37" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" stroke="white"/>
+<path d="M2 19L12 22" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" stroke="white"/>
+<path d="M46 19L36 22" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" stroke="white"/>
+<path d="M24 3V13" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" stroke="white"/>
+<path fill="white" fill-opacity="1.0" stroke-width="2.0" d="M24 13L30.0073 17.5706L36 22L31 37H17L12 22L17.9927 17.5706L24 13Z" stroke-linejoin="round" stroke="white"/>
+<path d="M7.59406 14.9194L2.12549 18.8926L4.09412 25.4194" stroke-width="2.0" stroke-linejoin="round" stroke="#F97316"/>
+<path d="M8.03125 38.4731L9.99988 45H16.9999" stroke-width="2.0" stroke-linejoin="round" stroke="#F97316"/>
+<path d="M31 45H38L39.9685 38.4731" stroke-width="2.0" stroke-linejoin="round" stroke="#F97316"/>
+<path d="M40.4053 14.9194L45.8738 18.8926L43.9053 25.4194" stroke-width="2.0" stroke-linejoin="round" stroke="#F97316"/>
+<path d="M29.4684 6.97315L23.9998 3L18.5312 6.97315" stroke-width="2.0" stroke-linejoin="round" stroke="#F97316"/>
+</svg>

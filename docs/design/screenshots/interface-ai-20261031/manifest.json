@@ -1,0 +1,29 @@
+{
+  "owner": "A / Lead",
+  "date": "2026-10-31",
+  "purpose": "QA evidence only, not runtime visual assets",
+  "synthetic_only": true,
+  "source": "Real Edge rendering of dist-reviewed with new synthetic QA SQLite",
+  "files": [
+    {
+      "file": "assessment-desktop.png",
+      "sha256": "9e29c9f1e9a0f988d76db26f20e7cf105a32649d095aed1b94a7966762f0bdb2",
+      "bytes": 95764
+    },
+    {
+      "file": "assessment-mobile.png",
+      "sha256": "59080e53e54e4e12a78a843c5cb011172f0c9f2a7c0430608f0f92d44e4e41ee",
+      "bytes": 70297
+    },
+    {
+      "file": "report-mobile.png",
+      "sha256": "13f862e6be752937b83418f02a4d00f69c5cbad30c35b06e32fcaf2ba3bccacf",
+      "bytes": 85844
+    },
+    {
+      "file": "teacher-support-desktop.png",
+      "sha256": "cfeeb1f180d5921b2c52ad7ca574d86f03a0a4b12a881bac677e8ea423f1934f",
+      "bytes": 73347
+    }
+  ]
+}

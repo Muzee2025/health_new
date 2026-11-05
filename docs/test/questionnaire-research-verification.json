@@ -1,0 +1,112 @@
+{
+  "owner": "A",
+  "version": "1.1",
+  "updated": "2026-10-29",
+  "status": "research-material-checks-passed",
+  "scope": "Public questionnaire research, source metadata, preparation templates and static code observations",
+  "source_entries": 54,
+  "unique_external_urls": 51,
+  "local_project_context_entries": 3,
+  "instrument_families": 12,
+  "faq_items": 12,
+  "launch_tasks": 15,
+  "registration_template_fields": 27,
+  "checks": {
+    "json_and_csv": "passed",
+    "local_markdown_links_and_metadata": "passed",
+    "package_script_syntax": "passed",
+    "zip_crc_and_manifest_payloads": "passed",
+    "illustrative_ppv_arithmetic": "85/(85+90)=0.4857142857142857; hypothetical, not project data",
+    "git_diff_check": "exit 0",
+    "runtime_or_clinical_tests": "not run; research-only task"
+  },
+  "commands": [
+    {
+      "command": "python scripts/package-questionnaire-research.py",
+      "exit_code": 0
+    },
+    {
+      "command": "Inline Python: JSON parse, CSV shape, local links/metadata, ast.parse",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "privacy": {
+    "read_database": false,
+    "read_env": false,
+    "read_real_responses": false,
+    "called_model_provider": false,
+    "changed_business_code": false,
+    "changed_services": false,
+    "full_questionnaire_text_in_package": false
+  },
+  "archive": {
+    "path": "deliverables/心域智链_心理问卷选型与上线准备资料_20261029.zip",
+    "sha256": "075a3e13b6c71025e76d74fdd97a84d8ecb693dd2811dce97cf4d227a88240de",
+    "files": 12
+  },
+  "source_files": [
+    {
+      "path": "docs/plan/questionnaire-research-20261029/code-observations.md",
+      "sha256": "adbeb9c82de7c40093df90d060b9e6656f38d7593f62825ef914e8bf1078b678"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/governance/governance.md",
+      "sha256": "2c5d6be0f2dbc44797c8426ba3bf4ac6c83358f927413ea0a8cd3d2415ecbd27"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/governance/sources.json",
+      "sha256": "bef2e808df47f2123953fe175a3638cdf5c1d814995cb0229fee7a13cf006736"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/instruments/instruments.md",
+      "sha256": "64c3f6ab9564643b48af7e4c0e588f31a17a82cba5c55d97d265f283b184a741"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/instruments/sources.json",
+      "sha256": "8b1339c1f6b3f1e9f80b31476807d7f5cb0d3624debe7749ea720e0402477656"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/launch-checklist.csv",
+      "sha256": "cbd6128d22ab8d190271942a1b5be1f7b91861348c20c01fa943722724996b00"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/manifest.json",
+      "sha256": "3bdf30f459ebc05512de483c5dad36f6349f658aa8a46e480981062445c7bb5f"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/questionnaire-register-template.csv",
+      "sha256": "1936b2b50a70f10b332ad78b6379b1fce8cd47d72e31c4114c4b5e857506a349"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/README.md",
+      "sha256": "80bdb5d825019fea6bf643c4528006edebafe22cad2714cc146b53091c951267"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/source-catalog.csv",
+      "sha256": "b1a40c31438d4d10a29ccb83d91bd8ea3e459f60ffa8032c8ca2f9ccece16daa"
+    },
+    {
+      "path": "docs/plan/questionnaire-research-20261029/问卷使用问题与答疑.md",
+      "sha256": "7b03484a4762c8972bd58e3e2e56d27a28c1294075f3d1b02592552d06ec5eff"
+    }
+  ],
+  "limitations": [
+    "Not a systematic review; unresolved rights and population evidence are recorded by instrument.",
+    "The 51 URLs are registered external source entry points, not 51 full methodological/license audits.",
+    "No formal questionnaire selection, school/professional approval or deployment clearance is granted."
+  ],
+  "independent_review": {
+    "status": "passed-material-accuracy-and-payload-scope-only",
+    "path": "docs/test/心理问卷资料独立复核.md",
+    "sha256": "f8c9a6c7074f063436b3d564d4a7188fc4a1d29b9e1ef9fefafbd85658d6c95a",
+    "archive_sha256": "075a3e13b6c71025e76d74fdd97a84d8ecb693dd2811dce97cf4d227a88240de"
+  },
+  "packaging_script": {
+    "path": "scripts/package-questionnaire-research.py",
+    "sha256": "914b65bf528e9cd5d9531e8541f1c6f0010f3d3ef4b65b0bfdcdd20ac66b150a"
+  }
+}

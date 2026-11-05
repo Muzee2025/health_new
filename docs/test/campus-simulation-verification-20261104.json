@@ -1,0 +1,229 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "updated": "2026-11-04",
+  "status": "verified",
+  "manifest": {
+    "table_counts": {
+      "sim_students": 20000,
+      "sim_student_terms": 40000,
+      "sim_departments": 8,
+      "sim_programs": 41,
+      "sim_classes": 503,
+      "sim_events": 235407,
+      "reference_records": 476,
+      "training_examples": 96
+    },
+    "term_enrollment_and_active_counts": [
+      [
+        1,
+        20000,
+        12348
+      ],
+      [
+        2,
+        20000,
+        12814
+      ]
+    ],
+    "event_counts": [
+      [
+        1,
+        "appointment",
+        1161
+      ],
+      [
+        1,
+        "article_view",
+        26699
+      ],
+      [
+        1,
+        "chat_session",
+        18300
+      ],
+      [
+        1,
+        "demo_assessment",
+        15506
+      ],
+      [
+        1,
+        "mood_checkin",
+        33311
+      ],
+      [
+        1,
+        "platform_visit",
+        12348
+      ],
+      [
+        1,
+        "teacher_message",
+        3816
+      ],
+      [
+        1,
+        "treehole_post",
+        4134
+      ],
+      [
+        2,
+        "appointment",
+        1177
+      ],
+      [
+        2,
+        "article_view",
+        28296
+      ],
+      [
+        2,
+        "chat_session",
+        19055
+      ],
+      [
+        2,
+        "demo_assessment",
+        16018
+      ],
+      [
+        2,
+        "mood_checkin",
+        34518
+      ],
+      [
+        2,
+        "platform_visit",
+        12814
+      ],
+      [
+        2,
+        "teacher_message",
+        4032
+      ],
+      [
+        2,
+        "treehole_post",
+        4222
+      ]
+    ],
+    "checks": {
+      "id_mismatch": 0,
+      "cohort_or_calendar_mismatch": 0,
+      "event_outside_window": 0,
+      "group_without_both_terms": 0,
+      "inconsistent_class_roster": 0
+    },
+    "integrity": "ok",
+    "foreign_key_errors": 0,
+    "seed": 20261104,
+    "source_sha256": "3f8931f627eebeb4c0514e580fa3b62516d73eed9d619e3eadaaaf781d388d20",
+    "cohorts": {
+      "2022": 4700,
+      "2023": 4850,
+      "2024": 5050,
+      "2025": 5400
+    },
+    "sources": {
+      "calendar": "https://jw.whxy.edu.cn/info/1031/10464.htm",
+      "departments": "https://www.whxy.edu.cn/ybsz.htm",
+      "cohort_programs": "https://cw.whxy.edu.cn/__local/4/58/CD/37215CC85CDF2D2F5756BF5E200_34E7C2C0_1A5B4B.pdf",
+      "tracks": "https://xxgk.whxy.edu.cn/info/1010/3529.htm"
+    },
+    "synthetic": true,
+    "files": {
+      "campus-simulation.sqlite3": {
+        "sha256": "4682ec4c2d6742073882541de2c30d409f6aeb2d3669b1952ad5c23cecc68b57",
+        "bytes": 44785664
+      },
+      "monthly-activity.csv": {
+        "sha256": "a00b6cb085a8a1ffcdd47f77af038e86433d6f5e20e40360876c9954a3522088",
+        "bytes": 2774
+      },
+      "platform-events.csv": {
+        "sha256": "5efed1bdc4e0c611631d399c326fa9701a000c1c56e7f488914c3019e5f58e6f",
+        "bytes": 17291777
+      },
+      "student-semesters.csv": {
+        "sha256": "6cf3910d8a7a98b09745eee0598e9a690eaf0279235c47acdde897aee517b924",
+        "bytes": 4966976
+      },
+      "数据说明.md": {
+        "sha256": "a550466d92f36d4fa39564373a40ea5826d8efde2f2950409907cee60cae1685",
+        "bytes": 4095
+      }
+    }
+  },
+  "manifest_sha256": "ab320f091359bfd3c1b0c6af015ab12d4e64360ca1fc2fc26639bf838bc417d8",
+  "csv_rows_verified": {
+    "student-semesters.csv": 40000,
+    "platform-events.csv": 235407,
+    "monthly-activity.csv": 80
+  },
+  "source_tables_compared": {
+    "literature_aggregates": 38,
+    "reference_records": 476,
+    "region_education": 31,
+    "schema_fields": 198,
+    "schema_tables": 27,
+    "source_cells": 5828,
+    "source_files": 4,
+    "source_sheets": 7,
+    "synthetic_batches": 1,
+    "synthetic_example_metadata": 96,
+    "training_examples": 96
+  },
+  "events_by_term": [
+    [
+      1,
+      115275
+    ],
+    [
+      2,
+      120132
+    ]
+  ],
+  "original_db_hashes_matched": [
+    {
+      "path": "tmp/showcase-20261024-7f5512da/health.db",
+      "sha256": "0ce0a025b164b0d212c76b21c6d815e78b3389f00ac40f9b21b5b0e219a1f75c",
+      "unchanged": true
+    },
+    {
+      "path": "health.db",
+      "sha256": "bb786303a4dc3680b9199fc1e10c7845af3ed03c419be87a6a08bedda0f78cb5",
+      "unchanged": true
+    },
+    {
+      "path": "backend/health.db",
+      "sha256": "218cfdd5c7cf485bb7ccd494ae7728a406606ffe356fc234e20bee2cf3b3d049",
+      "unchanged": true
+    }
+  ],
+  "archive": {
+    "path": "deliverables/心域智链_高校两学期模拟库_20261104.zip",
+    "sha256": "6bd81afd4ae4e74cab4d0331f90dbc48b000b0922136608956a0d2f14812939b",
+    "bytes": 11927926,
+    "all_member_hashes_verified": true
+  },
+  "regression": {
+    "command": "python -m unittest scripts.tests.test_training_database scripts.tests.test_synthetic_dialogues",
+    "exit_code": 0,
+    "passed": 30
+  },
+  "independent_review": {
+    "full_database_report": "pending",
+    "status": "partial",
+    "scope": [
+      "calendar",
+      "identifier_format",
+      "fields_and_manifest",
+      "program_subset"
+    ]
+  },
+  "rebuild": {
+    "matching_hashes": 4,
+    "exit_code": 0
+  }
+}

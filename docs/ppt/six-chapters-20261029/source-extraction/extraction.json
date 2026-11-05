@@ -1,0 +1,2627 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "1.0",
+  "updated": "2026-10-29",
+  "source": "心域智链123(2).pptx",
+  "sourceSha256": "6a34c6c90539799c3e92dbbd9f859ef264348ded9fccf03b6be0ae91ce1ed96b",
+  "slideSizeEmu": {
+    "cx": "12192000",
+    "cy": "6858000"
+  },
+  "slideCount": 13,
+  "media": [
+    {
+      "part": "ppt/media/image1.emf",
+      "file": "images/image1.emf",
+      "sha256": "45122f426ca1e7ad936143b7a09eefba84aaa0e25743219490adb2b358586374",
+      "bytes": 1508,
+      "width": 435,
+      "height": 504,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image10.svg",
+      "file": "images/image10.svg",
+      "sha256": "7d96b3e905f33df4e96f8c594733af04356f5e12a2a9122e93f00034e3373b5c",
+      "bytes": 1183
+    },
+    {
+      "part": "ppt/media/image11.svg",
+      "file": "images/image11.svg",
+      "sha256": "5a5037785e893de3fe500a5019e0a8b06a9767ce1034b0d28bf13d6e2d2a99ff",
+      "bytes": 1717
+    },
+    {
+      "part": "ppt/media/image12.svg",
+      "file": "images/image12.svg",
+      "sha256": "3cb1e5ad79d79f1dada5b06d1beb8e742a6af04e362929ef0b85b35ea7a63c3a",
+      "bytes": 1769
+    },
+    {
+      "part": "ppt/media/image13.svg",
+      "file": "images/image13.svg",
+      "sha256": "1df01c8c7b4b2542f62096fc6020eb142a833593565a055a2707b3fd0771b21e",
+      "bytes": 1709
+    },
+    {
+      "part": "ppt/media/image14.svg",
+      "file": "images/image14.svg",
+      "sha256": "e332f7b72d3470358c465bd547986783231e88d127fbf93949b25f215622d103",
+      "bytes": 842
+    },
+    {
+      "part": "ppt/media/image15.svg",
+      "file": "images/image15.svg",
+      "sha256": "ab8009f48bba9a687a1c38233ee1dcd7491e0e5c0fed475abad23009a1669801",
+      "bytes": 989
+    },
+    {
+      "part": "ppt/media/image16.svg",
+      "file": "images/image16.svg",
+      "sha256": "6080eecccca206b17ae411f792b035f9759630c20b8a0d8226dbe64d58cb65d2",
+      "bytes": 850
+    },
+    {
+      "part": "ppt/media/image17.svg",
+      "file": "images/image17.svg",
+      "sha256": "fb00dc357fe233e6d61f5830a4fa0f7386b851ba5746d329952d55baf73f3e91",
+      "bytes": 923
+    },
+    {
+      "part": "ppt/media/image18.svg",
+      "file": "images/image18.svg",
+      "sha256": "fbf355f3d44d1d7294576bc31c597141a0282602beda11ceb070d832b14a01ce",
+      "bytes": 829
+    },
+    {
+      "part": "ppt/media/image19.svg",
+      "file": "images/image19.svg",
+      "sha256": "0d96612179dc99899907e7fd374dcbe55ab72862530f1bfeaaf5042d7828b9b2",
+      "bytes": 1709
+    },
+    {
+      "part": "ppt/media/image2.emf",
+      "file": "images/image2.emf",
+      "sha256": "162ef335cdcf8e82042130830023bace112575ca2b5e2223274840bb3710808d",
+      "bytes": 42424,
+      "width": 947,
+      "height": 526,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image20.svg",
+      "file": "images/image20.svg",
+      "sha256": "52fc19520750532717b26b9b8061f58ce2e115c0b0bc8e9acb9d35e10ed82ad0",
+      "bytes": 989
+    },
+    {
+      "part": "ppt/media/image21.svg",
+      "file": "images/image21.svg",
+      "sha256": "c0e61799667f1488219e9c080fd203470d89f896391af84a9249a25f4f6f14f9",
+      "bytes": 1178
+    },
+    {
+      "part": "ppt/media/image22.png",
+      "file": "images/image22.png",
+      "sha256": "f748ba07bcbf09347af8a81fe303a3580b8a9347eec493283a6cacba2fe3affd",
+      "bytes": 230324,
+      "width": 2118,
+      "height": 1143,
+      "mode": "RGBA"
+    },
+    {
+      "part": "ppt/media/image23.svg",
+      "file": "images/image23.svg",
+      "sha256": "1e3d7645e30f659571225f16a3dae4aad48aedf5a3bc19641e15e5186fb61159",
+      "bytes": 622
+    },
+    {
+      "part": "ppt/media/image24.svg",
+      "file": "images/image24.svg",
+      "sha256": "32137b15cadc8ad5d0b270f34a2742bce826d67350b07698c7c6c881b4d999d6",
+      "bytes": 1787
+    },
+    {
+      "part": "ppt/media/image25.svg",
+      "file": "images/image25.svg",
+      "sha256": "10833398358d94c571d9541052036b2baa80491c75c9856324c85ea9ef622522",
+      "bytes": 896
+    },
+    {
+      "part": "ppt/media/image26.svg",
+      "file": "images/image26.svg",
+      "sha256": "b9783df74b1482f38665d14215f095f099e1230b7407162efdcb9bdd440db8fd",
+      "bytes": 752
+    },
+    {
+      "part": "ppt/media/image27.svg",
+      "file": "images/image27.svg",
+      "sha256": "170616b7396a97c56b830cff5582bd37f172204c2d31c2ebcf01cf62255b076d",
+      "bytes": 989
+    },
+    {
+      "part": "ppt/media/image28.svg",
+      "file": "images/image28.svg",
+      "sha256": "1280e97fe1ca73399952faa05d3b5bb9ad1fb4fbe7a32e6a50726e733aabe4b2",
+      "bytes": 989
+    },
+    {
+      "part": "ppt/media/image29.svg",
+      "file": "images/image29.svg",
+      "sha256": "f68bdca7d8a1990eff2ec6f7536e888c8ca94fec7d2c8262cbc544c6f3d256a1",
+      "bytes": 857
+    },
+    {
+      "part": "ppt/media/image3.emf",
+      "file": "images/image3.emf",
+      "sha256": "5971a7a334116a26d21b336c14c8a1a3fb8fc23fa03fa0a43acbc0a0a7ef2852",
+      "bytes": 3908,
+      "width": 435,
+      "height": 435,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image30.png",
+      "file": "images/image30.png",
+      "sha256": "6152d8fa46a70cc9118fc64db53f06461b5a8753a86630db33abb0629f94f89b",
+      "bytes": 176300,
+      "width": 1020,
+      "height": 824,
+      "mode": "RGBA"
+    },
+    {
+      "part": "ppt/media/image31.svg",
+      "file": "images/image31.svg",
+      "sha256": "f1d1865b005c9d79e850d74fe9eddf213a526305f51e113846d65bb9abcfe65d",
+      "bytes": 666
+    },
+    {
+      "part": "ppt/media/image32.svg",
+      "file": "images/image32.svg",
+      "sha256": "52546a4c982b98272d2e85e41f69fc003402d4261d7b5a5563b39e2ad2a789dd",
+      "bytes": 839
+    },
+    {
+      "part": "ppt/media/image33.svg",
+      "file": "images/image33.svg",
+      "sha256": "2be80dd1e2a6084ea507f93d5ad3b3375cdb247b39fede1f209b36bb225014da",
+      "bytes": 896
+    },
+    {
+      "part": "ppt/media/image34.svg",
+      "file": "images/image34.svg",
+      "sha256": "b5bac2cb4a72571d521c6ffd4bbd575865ff60378fa9fe40ceb3fb0831890439",
+      "bytes": 593
+    },
+    {
+      "part": "ppt/media/image35.svg",
+      "file": "images/image35.svg",
+      "sha256": "b35ddbe3d5d4d0b70bfee602b0126fa983988b807ad93e639487db2acb66ebf2",
+      "bytes": 982
+    },
+    {
+      "part": "ppt/media/image36.png",
+      "file": "images/image36.png",
+      "sha256": "d47447db14ab15d6c82943560d0ecb6c97866f81beaed658900fe5efac8a3218",
+      "bytes": 151686,
+      "width": 1442,
+      "height": 809,
+      "mode": "RGBA"
+    },
+    {
+      "part": "ppt/media/image37.png",
+      "file": "images/image37.png",
+      "sha256": "476ac94aabcf5087e98c486fc793b759cc28fea317fdb7196332f0580452d6c3",
+      "bytes": 200766,
+      "width": 1268,
+      "height": 960,
+      "mode": "RGBA"
+    },
+    {
+      "part": "ppt/media/image38.png",
+      "file": "images/image38.png",
+      "sha256": "82979e59caf9c09a192e9089b61881d5cd777b877d631e54673a2487e83e7e3b",
+      "bytes": 148296,
+      "width": 1256,
+      "height": 1083,
+      "mode": "RGBA"
+    },
+    {
+      "part": "ppt/media/image39.svg",
+      "file": "images/image39.svg",
+      "sha256": "1a80352f5e1c222f7d681fd2add8f714c492c280004b5bd18c249923707c3eb4",
+      "bytes": 829
+    },
+    {
+      "part": "ppt/media/image4.emf",
+      "file": "images/image4.emf",
+      "sha256": "6461723c7fcd4836f34141932a6ada912cd3fb16811dd297b88a7d63ca7e7395",
+      "bytes": 3544,
+      "width": 408,
+      "height": 448,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image40.svg",
+      "file": "images/image40.svg",
+      "sha256": "103be9b8fc3b6c4bee3adb458794c403ea3eca8be43658ee828db1e77a4e0df8",
+      "bytes": 841
+    },
+    {
+      "part": "ppt/media/image41.svg",
+      "file": "images/image41.svg",
+      "sha256": "90dacf4733494a2ae469ff0d09253c891e6554f6a758dac0bb6c00dc5338ec25",
+      "bytes": 827
+    },
+    {
+      "part": "ppt/media/image42.svg",
+      "file": "images/image42.svg",
+      "sha256": "dbf6e898d6b7f03fe09c30aa14b3d5d345695cc696e0e543bb45795f05aa6b28",
+      "bytes": 1134
+    },
+    {
+      "part": "ppt/media/image43.svg",
+      "file": "images/image43.svg",
+      "sha256": "18eab71f7e33f4ef62631046b3c6f6a3068142c3627b4f27be2e3a921e586078",
+      "bytes": 984
+    },
+    {
+      "part": "ppt/media/image44.svg",
+      "file": "images/image44.svg",
+      "sha256": "4e496f8f277672d8a23ff530f3fb2e34df47cff6a3ae36c3046678011ad69d4e",
+      "bytes": 1030
+    },
+    {
+      "part": "ppt/media/image45.svg",
+      "file": "images/image45.svg",
+      "sha256": "86604b8f8d6165d7973c778e76001872602bf206f72fb005f20dabe01c5d97da",
+      "bytes": 593
+    },
+    {
+      "part": "ppt/media/image46.svg",
+      "file": "images/image46.svg",
+      "sha256": "9ab6ac750bd55d7bae3093989ea2ddf366b2ac9c321faa7382f49385b276f975",
+      "bytes": 786
+    },
+    {
+      "part": "ppt/media/image47.svg",
+      "file": "images/image47.svg",
+      "sha256": "80f742e1f234fc5450d3084b404a03c0f02a8adfb01507fda64f65c17d33cde7",
+      "bytes": 490
+    },
+    {
+      "part": "ppt/media/image5.emf",
+      "file": "images/image5.emf",
+      "sha256": "1375f043f6db665b2a39e93f93f68ab454065e0225580a9ac1e8e13e21ba7696",
+      "bytes": 2116,
+      "width": 611,
+      "height": 536,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image6.emf",
+      "file": "images/image6.emf",
+      "sha256": "8682c8a98076998b6d552755598ea0fa86bbae092c6b3636710425657b0aeffe",
+      "bytes": 644,
+      "width": 282,
+      "height": 693,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image7.emf",
+      "file": "images/image7.emf",
+      "sha256": "436c38c37cebfe126a97584a5522b3f8a0eceb4af5735e020936520442fb3306",
+      "bytes": 33576,
+      "width": 692,
+      "height": 197,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image8.jpeg",
+      "file": "images/image8.jpeg",
+      "sha256": "b898572efcf22971055e68e8d113f4fb2945b1245856f63e993975463f202425",
+      "bytes": 62937,
+      "width": 600,
+      "height": 504,
+      "mode": "RGB"
+    },
+    {
+      "part": "ppt/media/image9.jpeg",
+      "file": "images/image9.jpeg",
+      "sha256": "e09813d8140dff9df3e7de0a4cebaac1c728b1f515d3eed342d1f2ac579a2d85",
+      "bytes": 164762,
+      "width": 1000,
+      "height": 667,
+      "mode": "RGB"
+    }
+  ],
+  "slides": [
+    {
+      "slide": 1,
+      "part": "ppt/slides/slide1.xml",
+      "shapes": [
+        {
+          "id": "11",
+          "name": "文本框 10",
+          "paragraphs": [
+            "心域智链",
+            "   ——基于多智能体协同与LLM的高校心理健康守护平台 "
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"637032\" y=\"1776714\"/><a:ext cx=\"10763047\" cy=\"2169825\"/></a:xfrm>"
+        },
+        {
+          "id": "14",
+          "name": "文本框 13",
+          "paragraphs": [
+            "队长：周秋宇",
+            "队员：韩沐泽 甘思琪 徐婉婷 陈智勇"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1873885\" y=\"4942205\"/><a:ext cx=\"5116195\" cy=\"645160\"/></a:xfrm>"
+        },
+        {
+          "id": "15",
+          "name": "文本框 14",
+          "paragraphs": [
+            "专业：会计ACA\n "
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"7534275\" y=\"4942205\"/><a:ext cx=\"3080385\" cy=\"646331\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "心域智链",
+        "   ——基于多智能体协同与LLM的高校心理健康守护平台 ",
+        "队长：周秋宇",
+        "队员：韩沐泽 甘思琪 徐婉婷 陈智勇",
+        "专业：会计ACA\n "
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126073\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1252390\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 2,
+      "part": "ppt/slides/slide2.xml",
+      "shapes": [
+        {
+          "id": "31",
+          "name": "AutoShape 3",
+          "paragraphs": [
+            "小林的困境："
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"331748\" y=\"384121\"/><a:ext cx=\"4749758\" cy=\"571500\"/></a:xfrm>"
+        },
+        {
+          "id": "32",
+          "name": "AutoShape 4",
+          "paragraphs": [
+            "想象一下，凌晨2点，小林，一个普通的大学生，内心充满焦虑和无助。他想找人倾诉，却发现……"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"761999\" y=\"1403813\"/><a:ext cx=\"10668000\" cy=\"635000\"/></a:xfrm>"
+        },
+        {
+          "id": "35",
+          "name": "AutoShape 7",
+          "paragraphs": [
+            "困境一：悬殊的师生比，求助无门",
+            "据教育部数据，高校心理咨询师生比普遍在1:400以上。当鼓起勇气预约时，往往需要等待数周甚至一个月，错过了最佳疏导时机"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"852291\" y=\"3716681\"/><a:ext cx=\"2921000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "38",
+          "name": "AutoShape 10",
+          "paragraphs": [
+            "困境二：服务时间的空白，深夜的孤独",
+            "咨询中心通常遵循“朝九晚五”工作制。但心理危机的萌发与加剧，往往发生在夜深人静、情绪泛滥的时刻，那时服务窗口早已关闭。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4535291\" y=\"3716681\"/><a:ext cx=\"2921000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "42",
+          "name": "AutoShape 14",
+          "paragraphs": [
+            "困境三：单一AI的局限，对话的无力",
+            "引入的通用AI聊天机器人，缺乏专业的心理识别能力，无法提供针对性的专业疏导，甚至可能产生答非所问的回复，加剧了孤独感"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8218291\" y=\"3716681\"/><a:ext cx=\"2921000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "44",
+          "name": "AutoShape 16",
+          "paragraphs": [
+            "要真正解决小林的困境，我们必须换一种思路：不做全能医生，而是组建一个 AI 专家会诊团。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"761999\" y=\"5962389\"/><a:ext cx=\"10668000\" cy=\"571500\"/></a:xfrm>"
+        },
+        {
+          "id": "46",
+          "name": "文本框 45",
+          "paragraphs": [
+            "“小林”们的困境,我们怎么解决？"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"582286\" y=\"5401935\"/><a:ext cx=\"3953005\" cy=\"369332\"/></a:xfrm>"
+        },
+        {
+          "id": "48",
+          "name": "文本框 47",
+          "paragraphs": [
+            "痛点引入："
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"266699\" y=\"1249924\"/><a:ext cx=\"1171183\" cy=\"307777\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "小林的困境：",
+        "想象一下，凌晨2点，小林，一个普通的大学生，内心充满焦虑和无助。他想找人倾诉，却发现……",
+        "困境一：悬殊的师生比，求助无门",
+        "据教育部数据，高校心理咨询师生比普遍在1:400以上。当鼓起勇气预约时，往往需要等待数周甚至一个月，错过了最佳疏导时机",
+        "困境二：服务时间的空白，深夜的孤独",
+        "咨询中心通常遵循“朝九晚五”工作制。但心理危机的萌发与加剧，往往发生在夜深人静、情绪泛滥的时刻，那时服务窗口早已关闭。",
+        "困境三：单一AI的局限，对话的无力",
+        "引入的通用AI聊天机器人，缺乏专业的心理识别能力，无法提供针对性的专业疏导，甚至可能产生答非所问的回复，加剧了孤独感",
+        "要真正解决小林的困境，我们必须换一种思路：不做全能医生，而是组建一个 AI 专家会诊团。",
+        "“小林”们的困境,我们怎么解决？",
+        "痛点引入："
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"18789\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3464959\" y=\"-1123983\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4694617\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3355229\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6153194\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "34",
+          "name": "Picture 6",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image8.jpeg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"852291\" y=\"2319681\"/><a:ext cx=\"2921000\" cy=\"1270000\"/></a:xfrm>",
+          "crop": {
+            "t": "24120",
+            "b": "24120"
+          }
+        },
+        {
+          "id": "37",
+          "name": "Picture 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image9.jpeg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4535291\" y=\"2319681\"/><a:ext cx=\"2921000\" cy=\"1270000\"/></a:xfrm>",
+          "crop": {
+            "t": "17407",
+            "b": "17407"
+          }
+        },
+        {
+          "id": "41",
+          "name": "Picture 13",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image10.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"9234291\" y=\"2573681\"/><a:ext cx=\"762000\" cy=\"762000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "47",
+          "name": "图片 46",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-657358\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 3,
+      "part": "ppt/slides/slide3.xml",
+      "shapes": [
+        {
+          "id": "12",
+          "name": "AutoShape 3",
+          "paragraphs": [
+            "为什么没有使用单一大模型包揽一切？"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"234517\" y=\"220237\"/><a:ext cx=\"11722966\" cy=\"975723\"/></a:xfrm>"
+        },
+        {
+          "id": "15",
+          "name": "AutoShape 6",
+          "paragraphs": [
+            "痛点分析：单一大模型是“通才”"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"989783\" y=\"1875423\"/><a:ext cx=\"4635500\" cy=\"520635\"/></a:xfrm>"
+        },
+        {
+          "id": "19",
+          "name": "AutoShape 10",
+          "paragraphs": [
+            "我们的定位：多智能体协同分析流水线"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6938892\" y=\"1775509\"/><a:ext cx=\"4953000\" cy=\"730250\"/></a:xfrm>"
+        },
+        {
+          "id": "20",
+          "name": "AutoShape 11",
+          "paragraphs": [
+            "国内首个面向校园心理健康的解决方案",
+            "心理分析不应是“全能医生”的单打独斗，而应是模拟现实中的“专科会诊团队”。我们通过将不同的AI智能体进行专业分工，实现从数据处理风险识别、方案生成到复核的全流程协作。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6664015\" y=\"2533210\"/><a:ext cx=\"5269908\" cy=\"2316875\"/></a:xfrm>"
+        },
+        {
+          "id": "22",
+          "name": "AutoShape 13",
+          "paragraphs": [
+            "把心理分析从一个人的判断，变成一群专家的共识"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"762000\" y=\"5205364\"/><a:ext cx=\"10668000\" cy=\"1143000\"/></a:xfrm>"
+        },
+        {
+          "id": "21",
+          "name": "AutoShape 8",
+          "paragraphs": [
+            "专业能力不足"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"770246\" y=\"2831038\"/><a:ext cx=\"1206500\" cy=\"444500\"/></a:xfrm>"
+        },
+        {
+          "id": "23",
+          "name": "AutoShape 9",
+          "paragraphs": [
+            "心理学是一门极其复杂的学科，通用大模型在特定领域的深度与专业度，远不及专科模型。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"325746\" y=\"3504138\"/><a:ext cx=\"1587500\" cy=\"952500\"/></a:xfrm>"
+        },
+        {
+          "id": "26",
+          "name": "AutoShape 12",
+          "paragraphs": [
+            "风险识别能力差"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2780492\" y=\"2837325\"/><a:ext cx=\"1453024\" cy=\"444500\"/></a:xfrm>"
+        },
+        {
+          "id": "27",
+          "name": "AutoShape 13",
+          "paragraphs": [
+            "面对高危、隐晦的表述时，通用模型容易忽略潜在的危机信号，导致严重的漏报与误报。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2446646\" y=\"3504138\"/><a:ext cx=\"1587500\" cy=\"952500\"/></a:xfrm>"
+        },
+        {
+          "id": "30",
+          "name": "AutoShape 16",
+          "paragraphs": [
+            "缺乏动态分析"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4983304\" y=\"2824688\"/><a:ext cx=\"1206500\" cy=\"444500\"/></a:xfrm>"
+        },
+        {
+          "id": "31",
+          "name": "AutoShape 17",
+          "paragraphs": [
+            "基于单次对话的“静态快照式”分析，难以形成对用户心理状态的连续性、交叉验证认知。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4580246\" y=\"3504138\"/><a:ext cx=\"1587500\" cy=\"952500\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "为什么没有使用单一大模型包揽一切？",
+        "痛点分析：单一大模型是“通才”",
+        "我们的定位：多智能体协同分析流水线",
+        "国内首个面向校园心理健康的解决方案",
+        "心理分析不应是“全能医生”的单打独斗，而应是模拟现实中的“专科会诊团队”。我们通过将不同的AI智能体进行专业分工，实现从数据处理风险识别、方案生成到复核的全流程协作。",
+        "把心理分析从一个人的判断，变成一群专家的共识",
+        "专业能力不足",
+        "心理学是一门极其复杂的学科，通用大模型在特定领域的深度与专业度，远不及专科模型。",
+        "风险识别能力差",
+        "面对高危、隐晦的表述时，通用模型容易忽略潜在的危机信号，导致严重的漏报与误报。",
+        "缺乏动态分析",
+        "基于单次对话的“静态快照式”分析，难以形成对用户心理状态的连续性、交叉验证认知。"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3395069\" y=\"-1130499\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "14",
+          "name": "Picture 5",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image11.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"654306\" y=\"1995259\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "18",
+          "name": "Picture 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image12.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6494391\" y=\"2032989\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "2",
+          "name": "图片 1",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "3",
+          "name": "图片 2",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "17",
+          "name": "Picture 7",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image13.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"325746\" y=\"2869138\"/><a:ext cx=\"355600\" cy=\"355600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "25",
+          "name": "Picture 11",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image14.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2340202\" y=\"2882235\"/><a:ext cx=\"355600\" cy=\"355600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "29",
+          "name": "Picture 15",
+          "description": null,
+          "relationship": "rId13",
+          "media": "ppt/media/image15.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4528677\" y=\"2875488\"/><a:ext cx=\"355600\" cy=\"355600\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 4,
+      "part": "ppt/slides/slide4.xml",
+      "shapes": [
+        {
+          "id": "16",
+          "name": "AutoShape 3",
+          "paragraphs": [
+            "技术地基：多智能体协同分析流水线"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"214550\" y=\"84582\"/><a:ext cx=\"9349900\" cy=\"1086612\"/></a:xfrm>"
+        },
+        {
+          "id": "19",
+          "name": "AutoShape 6",
+          "paragraphs": [
+            "语义理解智能体",
+            "深度对话理解，基于RAG技术捕捉深层含义，准确理解用户诉求"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2482045\" y=\"1634073\"/><a:ext cx=\"2159000\" cy=\"1143000\"/></a:xfrm>"
+        },
+        {
+          "id": "22",
+          "name": "AutoShape 9",
+          "paragraphs": [
+            "情绪识别智能体",
+            "多模态情绪分析，精准识别情绪类型与强度，洞察情感状态。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"7239000\" y=\"1634073\"/><a:ext cx=\"2159000\" cy=\"1143000\"/></a:xfrm>"
+        },
+        {
+          "id": "25",
+          "name": "AutoShape 12",
+          "paragraphs": [
+            "风险评估智能体",
+            "危机信号识别，精准识别超过200种高危语义模式，防患于未然。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2482045\" y=\"3651250\"/><a:ext cx=\"2159000\" cy=\"1143000\"/></a:xfrm>"
+        },
+        {
+          "id": "30",
+          "name": "AutoShape 17",
+          "paragraphs": [
+            "核心优势 ",
+            "✅术业专攻：每个智能体都是特定领域的专家，各司其职\n✅交叉验证：多维度数据与逻辑分析，结果相互印证\n✅结果可靠：流水线式自动化协同，确保专业、客观与高效"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6540500\" y=\"3410621\"/><a:ext cx=\"4572000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "33",
+          "name": "AutoShape 20",
+          "paragraphs": [
+            "认知行为分析智能体",
+            "思维模式洞察，识别潜在的认知偏差与行为逻辑。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1651000\" y=\"5397500\"/><a:ext cx=\"2159000\" cy=\"1016000\"/></a:xfrm>"
+        },
+        {
+          "id": "36",
+          "name": "AutoShape 23",
+          "paragraphs": [
+            "纵向趋势分析智能体",
+            "历史数据对比分析，发现长期情绪与状态的波动趋势。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"5334000\" y=\"5397500\"/><a:ext cx=\"2159000\" cy=\"1016000\"/></a:xfrm>"
+        },
+        {
+          "id": "39",
+          "name": "AutoShape 26",
+          "paragraphs": [
+            "资源匹配与安抚策略",
+            "基于综合分析，生成个性化的干预方案与资源推荐。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"9017000\" y=\"5397500\"/><a:ext cx=\"2159000\" cy=\"1016000\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "技术地基：多智能体协同分析流水线",
+        "语义理解智能体",
+        "深度对话理解，基于RAG技术捕捉深层含义，准确理解用户诉求",
+        "情绪识别智能体",
+        "多模态情绪分析，精准识别情绪类型与强度，洞察情感状态。",
+        "风险评估智能体",
+        "危机信号识别，精准识别超过200种高危语义模式，防患于未然。",
+        "核心优势 ",
+        "✅术业专攻：每个智能体都是特定领域的专家，各司其职\n✅交叉验证：多维度数据与逻辑分析，结果相互印证\n✅结果可靠：流水线式自动化协同，确保专业、客观与高效",
+        "认知行为分析智能体",
+        "思维模式洞察，识别潜在的认知偏差与行为逻辑。",
+        "纵向趋势分析智能体",
+        "历史数据对比分析，发现长期情绪与状态的波动趋势。",
+        "资源匹配与安抚策略",
+        "基于综合分析，生成个性化的干预方案与资源推荐。"
+      ],
+      "pictures": [
+        {
+          "id": "18",
+          "name": "Picture 5",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image16.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1732237\" y=\"1951573\"/><a:ext cx=\"508000\" cy=\"508000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "21",
+          "name": "Picture 8",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image17.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6591758\" y=\"1934532\"/><a:ext cx=\"508000\" cy=\"508000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "24",
+          "name": "Picture 11",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image18.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1768603\" y=\"3902717\"/><a:ext cx=\"508000\" cy=\"508000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "32",
+          "name": "Picture 19",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image19.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"952500\" y=\"5524500\"/><a:ext cx=\"508000\" cy=\"508000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "35",
+          "name": "Picture 22",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image20.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4635500\" y=\"5524500\"/><a:ext cx=\"508000\" cy=\"508000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "38",
+          "name": "Picture 25",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image21.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8318500\" y=\"5524500\"/><a:ext cx=\"508000\" cy=\"508000\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1252390\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "40",
+          "name": "图片 39",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-657358\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "41",
+          "name": "图片 40",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3355229\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "42",
+          "name": "图片 41",
+          "description": null,
+          "relationship": "rId13",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3464959\" y=\"-1123983\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "44",
+          "name": "图片 43",
+          "description": null,
+          "relationship": "rId14",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"18789\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 5,
+      "part": "ppt/slides/slide5.xml",
+      "shapes": [
+        {
+          "id": "3",
+          "name": "AutoShape 3",
+          "paragraphs": [
+            "心域智链"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2637593\" y=\"1671344\"/><a:ext cx=\"5912072\" cy=\"1485870\"/></a:xfrm>"
+        },
+        {
+          "id": "11",
+          "name": "AutoShape 4",
+          "paragraphs": [
+            "我们把这套多智能体联合会诊模型，落地成了今天带来的作品"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1940118\" y=\"3519149\"/><a:ext cx=\"7998949\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "13",
+          "name": "AutoShape 6",
+          "paragraphs": [
+            "它不仅仅是一个聊天机器人，更是一个真实可用的高校心理健康守护平台"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"922223\" y=\"4223397\"/><a:ext cx=\"10160000\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "14",
+          "name": "AutoShape 7",
+          "paragraphs": [
+            "下面，让我们回到小林的故事，看看“心域智链”是如何用四大创新点，一步步带他走出阴霾。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"0\" y=\"5073112\"/><a:ext cx=\"12192000\" cy=\"889000\"/></a:xfrm>"
+        },
+        {
+          "id": "15",
+          "name": "文本框 14",
+          "paragraphs": [
+            "我们带来了："
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"413359\" y=\"542679\"/><a:ext cx=\"5980659\" cy=\"830997\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "心域智链",
+        "我们把这套多智能体联合会诊模型，落地成了今天带来的作品",
+        "它不仅仅是一个聊天机器人，更是一个真实可用的高校心理健康守护平台",
+        "下面，让我们回到小林的故事，看看“心域智链”是如何用四大创新点，一步步带他走出阴霾。",
+        "我们带来了："
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1144862\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3464268\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "12",
+          "name": "图片 11",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image22.png",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8052426\" y=\"113284\"/><a:ext cx=\"4033234\" cy=\"2176575\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 6,
+      "part": "ppt/slides/slide6.xml",
+      "shapes": [
+        {
+          "id": "2",
+          "name": "AutoShape 2",
+          "paragraphs": [
+            "创新点一：极速风险刻画快速洞察学生"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"791729\" y=\"484828\"/><a:ext cx=\"10668000\" cy=\"571500\"/></a:xfrm>"
+        },
+        {
+          "id": "12",
+          "name": "AutoShape 5",
+          "paragraphs": [
+            "模拟：学生求助输入"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1490229\" y=\"1881828\"/><a:ext cx=\"2286000\" cy=\"381000\"/></a:xfrm>"
+        },
+        {
+          "id": "13",
+          "name": "AutoShape 6",
+          "paragraphs": [
+            "“期末压力大，\n最近总是睡不着...”"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1045729\" y=\"2643828\"/><a:ext cx=\"2794000\" cy=\"1016000\"/></a:xfrm>"
+        },
+        {
+          "id": "14",
+          "name": "AutoShape 7",
+          "paragraphs": [
+            "输入完成 · 按下发送键"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1045729\" y=\"4040828\"/><a:ext cx=\"2794000\" cy=\"381000\"/></a:xfrm>"
+        },
+        {
+          "id": "17",
+          "name": "AutoShape 10",
+          "paragraphs": [
+            "五维情绪雷达图 (实时生成)"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"5236729\" y=\"1881828\"/><a:ext cx=\"2286000\" cy=\"381000\"/></a:xfrm>"
+        },
+        {
+          "id": "18",
+          "name": "AutoShape 11",
+          "paragraphs": [
+            "🚨 焦虑 (High) · 压力 (High) 🚨\n😐 抑郁 | 孤独  ",
+            "\n系统通过算法加权，直观呈现心理风险分布"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4411229\" y=\"2520407\"/><a:ext cx=\"3048000\" cy=\"1850621\"/></a:xfrm>"
+        },
+        {
+          "id": "21",
+          "name": "AutoShape 14",
+          "paragraphs": [
+            "01 情绪识别 · 毫秒级响应",
+            "基于Emohaa模型，精准捕捉“压力”“焦虑”等情绪标签。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8919729\" y=\"1754828\"/><a:ext cx=\"2413000\" cy=\"635000\"/></a:xfrm>"
+        },
+        {
+          "id": "24",
+          "name": "AutoShape 17",
+          "paragraphs": [
+            "02 维度归类 · 逻辑映射",
+            "将分散标签，自动匹配至五维风险模型中对应的维度。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8919729\" y=\"2834328\"/><a:ext cx=\"2413000\" cy=\"635000\"/></a:xfrm>"
+        },
+        {
+          "id": "27",
+          "name": "AutoShape 20",
+          "paragraphs": [
+            "03 实时渲染 · 直观可视",
+            "对归类后的维度进行加权计算，并立即生成可视化图表。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8919729\" y=\"3913828\"/><a:ext cx=\"2413000\" cy=\"635000\"/></a:xfrm>"
+        },
+        {
+          "id": "29",
+          "name": "AutoShape 22",
+          "paragraphs": [
+            "快速读懂你的情绪，让隐形的心理状态第一次被“看见”。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"791729\" y=\"5374328\"/><a:ext cx=\"10668000\" cy=\"635000\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "创新点一：极速风险刻画快速洞察学生",
+        "模拟：学生求助输入",
+        "“期末压力大，\n最近总是睡不着...”",
+        "输入完成 · 按下发送键",
+        "五维情绪雷达图 (实时生成)",
+        "🚨 焦虑 (High) · 压力 (High) 🚨\n😐 抑郁 | 孤独  ",
+        "\n系统通过算法加权，直观呈现心理风险分布",
+        "01 情绪识别 · 毫秒级响应",
+        "基于Emohaa模型，精准捕捉“压力”“焦虑”等情绪标签。",
+        "02 维度归类 · 逻辑映射",
+        "将分散标签，自动匹配至五维风险模型中对应的维度。",
+        "03 实时渲染 · 直观可视",
+        "对归类后的维度进行加权计算，并立即生成可视化图表。",
+        "快速读懂你的情绪，让隐形的心理状态第一次被“看见”。"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126073\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "11",
+          "name": "Picture 4",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image23.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1045729\" y=\"1881828\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "16",
+          "name": "Picture 9",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image24.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4728729\" y=\"1881828\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "20",
+          "name": "Picture 13",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image25.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8348229\" y=\"1856428\"/><a:ext cx=\"431800\" cy=\"431800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "23",
+          "name": "Picture 16",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image26.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8348229\" y=\"2935928\"/><a:ext cx=\"431800\" cy=\"431800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "26",
+          "name": "Picture 19",
+          "description": null,
+          "relationship": "rId13",
+          "media": "ppt/media/image27.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8348229\" y=\"4015428\"/><a:ext cx=\"431800\" cy=\"431800\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 7,
+      "part": "ppt/slides/slide7.xml",
+      "shapes": [
+        {
+          "id": "23",
+          "name": "AutoShape 2",
+          "paragraphs": [
+            "创新点二：跨时间线的心理分析（深度思考）"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4138143\" y=\"476028\"/><a:ext cx=\"8266830\" cy=\"571500\"/></a:xfrm>"
+        },
+        {
+          "id": "27",
+          "name": "AutoShape 9",
+          "paragraphs": [
+            "RAG 增强检索",
+            "超越简单的历史记录，通过RAG技术对用户过往对话进行深度语义检索与分析，精准提取关键信息。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1287050\" y=\"662133\"/><a:ext cx=\"2413000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "31",
+          "name": "AutoShape 13",
+          "paragraphs": [
+            "纵向趋势洞察",
+            "AI识别情绪长期变化趋势，敏锐捕捉关键转折点，帮助用户发现被忽略的心理模式。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1287050\" y=\"2718140\"/><a:ext cx=\"2413000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "35",
+          "name": "AutoShape 17",
+          "paragraphs": [
+            "流式交互 (SSE)",
+            "实时展示AI思考过程，断网亦可通过本地缓存续聊，确保回溯与分析体验流畅无断点。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1287050\" y=\"4826340\"/><a:ext cx=\"2413000\" cy=\"1397000\"/></a:xfrm>"
+        },
+        {
+          "id": "36",
+          "name": "AutoShape 19",
+          "paragraphs": [
+            "让AI不只听见一句话，而是读懂一个人半年的心路。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4701088\" y=\"5928978\"/><a:ext cx=\"7050762\" cy=\"728606\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "创新点二：跨时间线的心理分析（深度思考）",
+        "RAG 增强检索",
+        "超越简单的历史记录，通过RAG技术对用户过往对话进行深度语义检索与分析，精准提取关键信息。",
+        "纵向趋势洞察",
+        "AI识别情绪长期变化趋势，敏锐捕捉关键转折点，帮助用户发现被忽略的心理模式。",
+        "流式交互 (SSE)",
+        "实时展示AI思考过程，断网亦可通过本地缓存续聊，确保回溯与分析体验流畅无断点。",
+        "让AI不只听见一句话，而是读懂一个人半年的心路。"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1107284\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "26",
+          "name": "Picture 8",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image25.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"715550\" y=\"662133\"/><a:ext cx=\"406400\" cy=\"406400\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "30",
+          "name": "Picture 12",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image28.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"715550\" y=\"2718140\"/><a:ext cx=\"406400\" cy=\"406400\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "34",
+          "name": "Picture 16",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image29.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"715550\" y=\"4826340\"/><a:ext cx=\"406400\" cy=\"406400\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "37",
+          "name": "图片 36",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image30.png",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"5154459\" y=\"1415441\"/><a:ext cx=\"5321475\" cy=\"4258504\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 8,
+      "part": "ppt/slides/slide8.xml",
+      "shapes": [
+        {
+          "id": "2",
+          "name": "AutoShape 2",
+          "paragraphs": [
+            "创新点三：毫秒级危机预警与联动闭环"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"674318\" y=\"553438\"/><a:ext cx=\"10668000\" cy=\"571500\"/></a:xfrm>"
+        },
+        {
+          "id": "12",
+          "name": "AutoShape 5",
+          "paragraphs": [
+            "学生端 · 实时交互触发"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1524000\" y=\"1905000\"/><a:ext cx=\"3810000\" cy=\"381000\"/></a:xfrm>"
+        },
+        {
+          "id": "14",
+          "name": "AutoShape 7",
+          "paragraphs": [
+            "“最近压力太大了，感觉一切都没有意义，活着真的没意思……”"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1206500\" y=\"2730500\"/><a:ext cx=\"4318000\" cy=\"635000\"/></a:xfrm>"
+        },
+        {
+          "id": "17",
+          "name": "AutoShape 10",
+          "paragraphs": [
+            "教师端 Dashboard · 高危预警(耗时 < 500ms)"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6985000\" y=\"1905000\"/><a:ext cx=\"4064000\" cy=\"381000\"/></a:xfrm>"
+        },
+        {
+          "id": "19",
+          "name": "AutoShape 12",
+          "paragraphs": [
+            "匿名ID：#2024-X-8192 | 风险等级：高风险（需立即介入）",
+            "触发关键词：“活着没意思” | 建议：优先联系心理辅导室"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6667500\" y=\"2667000\"/><a:ext cx=\"4318000\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "22",
+          "name": "AutoShape 15",
+          "paragraphs": [
+            "01. 高危语义触发",
+            "NLP模型毫秒级扫描文本，精准识别消极、自杀等高危语义特征，即刻触发预警流程。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1397000\" y=\"4381500\"/><a:ext cx=\"2540000\" cy=\"1016000\"/></a:xfrm>"
+        },
+        {
+          "id": "25",
+          "name": "AutoShape 18",
+          "paragraphs": [
+            "02. 自动拦截与安抚",
+            "系统自动阻断潜在的风险传播，无缝切换为安全、温暖的心理疏导话术，争取缓冲时间。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"5041900\" y=\"4381500\"/><a:ext cx=\"2540000\" cy=\"1016000\"/></a:xfrm>"
+        },
+        {
+          "id": "28",
+          "name": "AutoShape 21",
+          "paragraphs": [
+            "03. 极速消息推送",
+            "通过高性能消息队列(MQ)，实现预警信息的毫秒级、精准触达对应辅导员，避免信息延迟。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8686800\" y=\"4381500\"/><a:ext cx=\"2540000\" cy=\"1016000\"/></a:xfrm>"
+        },
+        {
+          "id": "30",
+          "name": "AutoShape 23",
+          "paragraphs": [
+            "从AI察觉到教师出动，不到半秒 —— 打通干预最后一公里。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"0\" y=\"6070600\"/><a:ext cx=\"12192000\" cy=\"558800\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "创新点三：毫秒级危机预警与联动闭环",
+        "学生端 · 实时交互触发",
+        "“最近压力太大了，感觉一切都没有意义，活着真的没意思……”",
+        "教师端 Dashboard · 高危预警(耗时 < 500ms)",
+        "匿名ID：#2024-X-8192 | 风险等级：高风险（需立即介入）",
+        "触发关键词：“活着没意思” | 建议：优先联系心理辅导室",
+        "01. 高危语义触发",
+        "NLP模型毫秒级扫描文本，精准识别消极、自杀等高危语义特征，即刻触发预警流程。",
+        "02. 自动拦截与安抚",
+        "系统自动阻断潜在的风险传播，无缝切换为安全、温暖的心理疏导话术，争取缓冲时间。",
+        "03. 极速消息推送",
+        "通过高性能消息队列(MQ)，实现预警信息的毫秒级、精准触达对应辅导员，避免信息延迟。",
+        "从AI察觉到教师出动，不到半秒 —— 打通干预最后一公里。"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126073\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "11",
+          "name": "Picture 4",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image31.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1016000\" y=\"1905000\"/><a:ext cx=\"355600\" cy=\"355600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "16",
+          "name": "Picture 9",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image32.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6477000\" y=\"1905000\"/><a:ext cx=\"355600\" cy=\"355600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "21",
+          "name": "Picture 14",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image33.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"952500\" y=\"4445000\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "24",
+          "name": "Picture 17",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image34.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4597400\" y=\"4445000\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "27",
+          "name": "Picture 20",
+          "description": null,
+          "relationship": "rId13",
+          "media": "ppt/media/image35.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8242300\" y=\"4445000\"/><a:ext cx=\"304800\" cy=\"304800\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 9,
+      "part": "ppt/slides/slide9.xml",
+      "shapes": [
+        {
+          "id": "2",
+          "name": "文本框 1",
+          "paragraphs": [
+            "创新点四：多智能体联合会诊图"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"339811\" y=\"377852\"/><a:ext cx=\"9267568\" cy=\"830997\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "创新点四：多智能体联合会诊图"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126074\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "11",
+          "name": "图片 10",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image36.png",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"873125\" y=\"1227003\"/><a:ext cx=\"10445749\" cy=\"5318098\"/></a:xfrm>",
+          "crop": {
+            "l": "1057",
+            "t": "792"
+          }
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 10,
+      "part": "ppt/slides/slide10.xml",
+      "shapes": [
+        {
+          "id": "2",
+          "name": "文本框 1",
+          "paragraphs": [
+            "创新点四：多智能体联合会诊图"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"339811\" y=\"377852\"/><a:ext cx=\"9267568\" cy=\"830997\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "创新点四：多智能体联合会诊图"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126074\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "13",
+          "name": "图片 12",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image37.png",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6013263\" y=\"1658872\"/><a:ext cx=\"5468281\" cy=\"4140024\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "3",
+          "name": "图片 2",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image38.png",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1061532\" y=\"1658871\"/><a:ext cx=\"4797336\" cy=\"4136556\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 11,
+      "part": "ppt/slides/slide11.xml",
+      "shapes": [
+        {
+          "id": "2",
+          "name": "AutoShape 2",
+          "paragraphs": [
+            "从AI会诊到人工干预的完整闭环"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"762000\" y=\"635000\"/><a:ext cx=\"10668000\" cy=\"508000\"/></a:xfrm>"
+        },
+        {
+          "id": "11",
+          "name": "AutoShape 4",
+          "paragraphs": [
+            "学生端 · 隐私保护与自助服务"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1016000\" y=\"1905000\"/><a:ext cx=\"4699000\" cy=\"444500\"/></a:xfrm>"
+        },
+        {
+          "id": "13",
+          "name": "AutoShape 6",
+          "paragraphs": [
+            "AI 7x24小时对话陪伴",
+            "全天候匿名在线陪伴，即时响应学生倾诉，提供初步情绪疏导与支持。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1778000\" y=\"2603500\"/><a:ext cx=\"3937000\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "15",
+          "name": "AutoShape 8",
+          "paragraphs": [
+            "匿名树洞 · 零持久化隐私保护",
+            "采用严格的“零持久化”存储设计，所有对话记录实时销毁，彻底杜绝隐私泄露风险。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1778000\" y=\"3619500\"/><a:ext cx=\"3937000\" cy=\"825500\"/></a:xfrm>"
+        },
+        {
+          "id": "17",
+          "name": "AutoShape 10",
+          "paragraphs": [
+            "专业多维心理测评工具",
+            "提供权威、标准化的心理测评量表，支持学生自助完成心理健康状态的科学评估。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1778000\" y=\"4762500\"/><a:ext cx=\"3937000\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "19",
+          "name": "AutoShape 12",
+          "paragraphs": [
+            "教师端 · 智能分析与干预支持"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6477000\" y=\"1905000\"/><a:ext cx=\"4699000\" cy=\"444500\"/></a:xfrm>"
+        },
+        {
+          "id": "21",
+          "name": "AutoShape 14",
+          "paragraphs": [
+            "多源数据融合画像",
+            "自动整合学生在系统内的对话、测评、行为等全维度数据，构建立体化学生档案。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"7239000\" y=\"2603500\"/><a:ext cx=\"3937000\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "23",
+          "name": "AutoShape 16",
+          "paragraphs": [
+            "K-Means 算法高危分层",
+            "利用机器学习算法对全体学生进行智能聚类分析，自动识别并分级标记高风险学生群体。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"7239000\" y=\"3619500\"/><a:ext cx=\"3937000\" cy=\"825500\"/></a:xfrm>"
+        },
+        {
+          "id": "25",
+          "name": "AutoShape 18",
+          "paragraphs": [
+            "AI 辅助干预策略生成",
+            "结合过往成功干预案例与数据洞察，为辅导员提供科学、可落地的个性化干预方案参考。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"7239000\" y=\"4762500\"/><a:ext cx=\"3937000\" cy=\"762000\"/></a:xfrm>"
+        },
+        {
+          "id": "27",
+          "name": "AutoShape 20",
+          "paragraphs": [
+            "“树洞、预约、科普、大屏等功能均已闭环，不再赘述。”"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"0\" y=\"6121400\"/><a:ext cx=\"12192000\" cy=\"381000\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "从AI会诊到人工干预的完整闭环",
+        "学生端 · 隐私保护与自助服务",
+        "AI 7x24小时对话陪伴",
+        "全天候匿名在线陪伴，即时响应学生倾诉，提供初步情绪疏导与支持。",
+        "匿名树洞 · 零持久化隐私保护",
+        "采用严格的“零持久化”存储设计，所有对话记录实时销毁，彻底杜绝隐私泄露风险。",
+        "专业多维心理测评工具",
+        "提供权威、标准化的心理测评量表，支持学生自助完成心理健康状态的科学评估。",
+        "教师端 · 智能分析与干预支持",
+        "多源数据融合画像",
+        "自动整合学生在系统内的对话、测评、行为等全维度数据，构建立体化学生档案。",
+        "K-Means 算法高危分层",
+        "利用机器学习算法对全体学生进行智能聚类分析，自动识别并分级标记高风险学生群体。",
+        "AI 辅助干预策略生成",
+        "结合过往成功干预案例与数据洞察，为辅导员提供科学、可落地的个性化干预方案参考。",
+        "“树洞、预约、科普、大屏等功能均已闭环，不再赘述。”"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126073\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "12",
+          "name": "Picture 5",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image23.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1079500\" y=\"2667000\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "14",
+          "name": "Picture 7",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image39.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1079500\" y=\"3683000\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "16",
+          "name": "Picture 9",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image40.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1079500\" y=\"4826000\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "20",
+          "name": "Picture 13",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image41.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6540500\" y=\"2667000\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "22",
+          "name": "Picture 15",
+          "description": null,
+          "relationship": "rId13",
+          "media": "ppt/media/image42.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6540500\" y=\"3683000\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "24",
+          "name": "Picture 17",
+          "description": null,
+          "relationship": "rId14",
+          "media": "ppt/media/image43.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"6540500\" y=\"4826000\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 12,
+      "part": "ppt/slides/slide12.xml",
+      "shapes": [
+        {
+          "id": "2",
+          "name": "AutoShape 2",
+          "paragraphs": [
+            "融入未来校园生活"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"762000\" y=\"306127\"/><a:ext cx=\"10668000\" cy=\"635000\"/></a:xfrm>"
+        },
+        {
+          "id": "13",
+          "name": "AutoShape 6",
+          "paragraphs": [
+            "RBAC 权限控制",
+            "严格的角色权限管理，细粒度划分访问范围，确保后台数据与操作绝对安全。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1650999\" y=\"1576127\"/><a:ext cx=\"2304055\" cy=\"1396182\"/></a:xfrm>"
+        },
+        {
+          "id": "17",
+          "name": "AutoShape 10",
+          "paragraphs": [
+            "数据最小化脱敏",
+            "仅采集服务必需的最小集信息，敏感字段实时脱敏处理，规避隐私泄露风险。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"5248771\" y=\"1534459\"/><a:ext cx=\"2354855\" cy=\"1366714\"/></a:xfrm>"
+        },
+        {
+          "id": "21",
+          "name": "AutoShape 14",
+          "paragraphs": [
+            "匿名模式零持久化",
+            "核心隐私保护架构，对话内容全流程内存流转，不落地、不存储，从根源保护。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8910990\" y=\"1558458\"/><a:ext cx=\"2413000\" cy=\"1396182\"/></a:xfrm>"
+        },
+        {
+          "id": "24",
+          "name": "AutoShape 17",
+          "paragraphs": [
+            "教务系统 / 学工系统"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1669055\" y=\"3796184\"/><a:ext cx=\"2285999\" cy=\"482600\"/></a:xfrm>"
+        },
+        {
+          "id": "27",
+          "name": "AutoShape 20",
+          "paragraphs": [
+            "心域智链系统"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4894855\" y=\"3796184\"/><a:ext cx=\"2540000\" cy=\"482600\"/></a:xfrm>"
+        },
+        {
+          "id": "30",
+          "name": "AutoShape 23",
+          "paragraphs": [
+            "预警信息推送 / ",
+            "基础数据接收"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8400055\" y=\"3796184\"/><a:ext cx=\"2540000\" cy=\"482600\"/></a:xfrm>"
+        },
+        {
+          "id": "32",
+          "name": "AutoShape 25",
+          "paragraphs": [
+            "愿景：将“心域智链”从一个独立的软件，升维成为校园心理安全基础设施，深度融入智慧校园生态体系。"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"869950\" y=\"5208326\"/><a:ext cx=\"10560050\" cy=\"867417\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "融入未来校园生活",
+        "RBAC 权限控制",
+        "严格的角色权限管理，细粒度划分访问范围，确保后台数据与操作绝对安全。",
+        "数据最小化脱敏",
+        "仅采集服务必需的最小集信息，敏感字段实时脱敏处理，规避隐私泄露风险。",
+        "匿名模式零持久化",
+        "核心隐私保护架构，对话内容全流程内存流转，不落地、不存储，从根源保护。",
+        "教务系统 / 学工系统",
+        "心域智链系统",
+        "预警信息推送 / ",
+        "基础数据接收",
+        "愿景：将“心域智链”从一个独立的软件，升维成为校园心理安全基础设施，深度融入智慧校园生态体系。"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126073\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"0\" y=\"3303327\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1200907\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "12",
+          "name": "Picture 5",
+          "description": null,
+          "relationship": "rId9",
+          "media": "ppt/media/image44.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"1046281\" y=\"1959570\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "16",
+          "name": "Picture 9",
+          "description": null,
+          "relationship": "rId10",
+          "media": "ppt/media/image45.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4678955\" y=\"1959570\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "20",
+          "name": "Picture 13",
+          "description": null,
+          "relationship": "rId11",
+          "media": "ppt/media/image46.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8322171\" y=\"1996893\"/><a:ext cx=\"457200\" cy=\"457200\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "25",
+          "name": "Picture 18",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image47.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"4209055\" y=\"3758084\"/><a:ext cx=\"431800\" cy=\"431800\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "28",
+          "name": "Picture 21",
+          "description": null,
+          "relationship": "rId12",
+          "media": "ppt/media/image47.svg",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"7688855\" y=\"3758084\"/><a:ext cx=\"431800\" cy=\"431800\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    },
+    {
+      "slide": 13,
+      "part": "ppt/slides/slide13.xml",
+      "shapes": [
+        {
+          "id": "11",
+          "name": "文本框 10",
+          "paragraphs": [
+            "感谢聆听",
+            "   "
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"637033\" y=\"1801757\"/><a:ext cx=\"10763047\" cy=\"2169825\"/></a:xfrm>"
+        },
+        {
+          "id": "14",
+          "name": "文本框 13",
+          "paragraphs": [
+            "汇报人：周秋宇"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2897046\" y=\"5080119\"/><a:ext cx=\"2350108\" cy=\"369332\"/></a:xfrm>"
+        },
+        {
+          "id": "12",
+          "name": "文本框 11",
+          "paragraphs": [
+            "作品的详细请看我们制作的视频"
+          ],
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8432141\" y=\"6170566\"/><a:ext cx=\"3657927\" cy=\"369332\"/></a:xfrm>"
+        }
+      ],
+      "text": [
+        "感谢聆听",
+        "   ",
+        "汇报人：周秋宇",
+        "作品的详细请看我们制作的视频"
+      ],
+      "pictures": [
+        {
+          "id": "5",
+          "name": "图片 4",
+          "description": null,
+          "relationship": "rId2",
+          "media": "ppt/media/image1.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"8986718\" y=\"0\"/><a:ext cx=\"3489734\" cy=\"3549755\"/></a:xfrm>",
+          "crop": {
+            "l": "316",
+            "t": "13172",
+            "r": "-316",
+            "b": "-1092"
+          }
+        },
+        {
+          "id": "4",
+          "name": "图片 3",
+          "description": null,
+          "relationship": "rId3",
+          "media": "ppt/media/image2.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"3449660\" y=\"-1126073\"/><a:ext cx=\"8742340\" cy=\"4854511\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "6",
+          "name": "图片 5",
+          "description": null,
+          "relationship": "rId4",
+          "media": "ppt/media/image3.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-755072\" y=\"-676147\"/><a:ext cx=\"3566542\" cy=\"3562566\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "7",
+          "name": "图片 6",
+          "description": null,
+          "relationship": "rId5",
+          "media": "ppt/media/image4.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"10211301\" y=\"4675828\"/><a:ext cx=\"2551135\" cy=\"2797512\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "9",
+          "name": "图片 8",
+          "description": null,
+          "relationship": "rId6",
+          "media": "ppt/media/image5.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1\" y=\"3336440\"/><a:ext cx=\"3955056\" cy=\"3532577\"/></a:xfrm>",
+          "crop": {
+            "l": "25962",
+            "b": "24550"
+          }
+        },
+        {
+          "id": "8",
+          "name": "图片 7",
+          "description": null,
+          "relationship": "rId7",
+          "media": "ppt/media/image6.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"-1252390\" y=\"220237\"/><a:ext cx=\"2176864\" cy=\"5332364\"/></a:xfrm>",
+          "crop": null
+        },
+        {
+          "id": "10",
+          "name": "图片 9",
+          "description": null,
+          "relationship": "rId8",
+          "media": "ppt/media/image7.emf",
+          "positionXml": "<a:xfrm xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\"><a:off x=\"2706627\" y=\"6134405\"/><a:ext cx=\"7770263\" cy=\"2217600\"/></a:xfrm>",
+          "crop": null
+        }
+      ],
+      "charts": [],
+      "tables": [],
+      "speakerNotes": []
+    }
+  ]
+}

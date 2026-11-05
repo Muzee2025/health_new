@@ -1,0 +1,510 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "status": "private_preview_deployed",
+  "updated": "2026-11-02",
+  "publication": {
+    "deployment": {
+      "id": "appgdep_6ae8168c7c288191a6caf8f6257a81f6",
+      "project_id": "appgprj_6ae813d1ddac81919691e674b253ccf9",
+      "title": "心域智链 · 系统界面预览",
+      "version_id": "appgprj_6ae813d1ddac81919691e674b253ccf9~appgver_8c862a18f040819182f64160fc404267",
+      "type": "publish",
+      "status": "succeeded",
+      "url": "https://xinyu-system-preview-20261102.sableburr1.chatgpt.site",
+      "has_mcp": false,
+      "screenshot_asset_pointer": null,
+      "provider_deployment_id": "site---6ae813d1ddac81919691e674b253ccf9",
+      "failure_message": null,
+      "env_set_revision": 0,
+      "updated_at": "2026-11-02T04:50:39.655090+00:00"
+    },
+    "source": {
+      "project_id": "appgprj_6ae813d1ddac81919691e674b253ccf9",
+      "checkout_path": "C:/University/Code_total/health_new_muzee2025/tmp/sites/xinyu-preview-20261102",
+      "commit_sha": "287e99993b329ccb162ae84402cf0969d0685097",
+      "archive": "C:/University/Code_total/health_new_muzee2025/tmp/sites/xinyu-preview-20261102-v2.tar.gz"
+    }
+  },
+  "verification": {
+    "frontend_source_files_unchanged": 203,
+    "chart_files_unchanged": 4,
+    "page_matrix_before_final_search_csp_fixes": {
+      "rows": [
+        {
+          "route": "/student/dashboard",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 265,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/test",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 335,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/appointments",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 251,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/articles",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 590,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/advanced-chat",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 214,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/report",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 315,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/treehole",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 372,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/questions",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 294,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/article/900100",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 296,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/advanced-dashboard",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 350,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/support",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 383,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/students",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 222,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/student/900001",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 258,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/appointments",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 141,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/content",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 691,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/interventions",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 119,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/login",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 84,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/register",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 125,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/does-not-exist",
+          "width": 1440,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 33,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/dashboard",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 227,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/test",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 287,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/appointments",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 213,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/articles",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 3,
+          "appText": 542,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/advanced-chat",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 176,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/report",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 266,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/treehole",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 334,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/student/questions",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 245,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/article/900100",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 296,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/advanced-dashboard",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 297,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/support",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 330,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/students",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 181,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/student/900001",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 218,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/appointments",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 100,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/content",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 650,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/teacher/interventions",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 78,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/login",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 38,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/register",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 79,
+          "syntheticLabel": true,
+          "passed": true
+        },
+        {
+          "route": "/does-not-exist",
+          "width": 390,
+          "overflow": false,
+          "brokenImages": [],
+          "pendingLazyImages": 0,
+          "appText": 33,
+          "syntheticLabel": true,
+          "passed": true
+        }
+      ],
+      "errors": [],
+      "networkApis": [],
+      "failedAssets": [],
+      "passed": true
+    },
+    "targeted_checks_after_final_fixes": {
+      "writeRejectedVisibly": true,
+      "fetchStatus": {
+        "apiGet": 503,
+        "apiPost": 503,
+        "staticPost": 503,
+        "externalGet": 503
+      },
+      "searchAndClear": true,
+      "lazyImageLoaded": true,
+      "articleOpened": true,
+      "apiNetworkRequests": [],
+      "passed": true
+    },
+    "csp_appointment_page_events_after_final_fix": [],
+    "independent_fetch_stub_cases_passed": 11,
+    "final_build_exit_code": 0,
+    "source_syntax_exit_code": 0,
+    "site_repository_clean": true,
+    "codex_browser_handoff": "queued",
+    "deployed_page_browser_visit": false
+  },
+  "artifacts": [
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/.openai/hosting.json",
+      "sha256": "b5f8e58d94b91a0bc49392b291c1484ad534ce63fc650c901f334569fb43b323"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/index.html",
+      "sha256": "e8de35943f6eed3e4321dcaf07b799e49179e5b47906ff2ef249d54bb2923ffe"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/preview-api.js",
+      "sha256": "9162ffc54b37b1333b2d95e465f6cb0c4bd118dfc63a833eff6454c7546e5ab4"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/preview-entry.js",
+      "sha256": "9921d938a9abe9ab0f8dacc8fe1dede6b0d36fb64518f4201be515e786134862"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/preview.css",
+      "sha256": "d8b19b56966cad158d27d05602dbcb3572cfc053c636bc858eacf6e3c655c8e8"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/vite.config.js",
+      "sha256": "c3d905aa395a06871ce5967b0df2d4e4fa3e754cdca1119e99195c968514e547"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/source-snapshot.json",
+      "sha256": "03c8b03984be1ef02d66dd0dc17b1a404d79eb25fd67f4a417345d754934880a"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/dist/index.html",
+      "sha256": "d187ae833416accd7d080c36a844495dce9a1e4f05b284d05acc3e43c7c883c2"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-qa/browser-result.json",
+      "sha256": "95e4c7367ef6218f9801a660a88695d0c978635b8720582133fbdeafd4e466d9"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-qa/interaction-result.json",
+      "sha256": "44889095ee76b0fb9da81293cc35ad7033a8129b4e0fc14a728ba4a8fd2384c8"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-qa/pages-final.log",
+      "sha256": "c16b728d86f4f35fa4494181eeb6ef64e96873a71cdd85d2ffcc69cbfbdf032f"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-qa/interactions-final.log",
+      "sha256": "c8f4f8cc12886a856fb8319f99eb7cb609a6e4ac7e4983d254d3f15eb18f6b26"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-qa/csp-final.log",
+      "sha256": "9ef0747cb1d8a2fa4fb77c32ab6b81de96abb7abd4f74f379d65201ee697b807"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-v2.tar.gz",
+      "sha256": "e7f0646ce0d4f1500227f077337383aa3cb7267f57fdc1cdc5f6bd38eeb5ec86"
+    },
+    {
+      "path": "docs/test/网站预览独立复核.md",
+      "sha256": "a3d1b2d3b1bcaff1c8682acd4c0bd06122b563f6041020b7b45a97c035967705"
+    }
+  ],
+  "limitations": [
+    "Synthetic data only; actual FastAPI authentication, writes and AI are disconnected.",
+    "Independent reviewer ran syntax/hash/fetch-stub checks and reviewed Lead browser logs; did not run browser or deployment.",
+    "A mistaken root Vite build regenerated ignored dist and may have discovered local dotenv; no env values were output, root dist was not uploaded, prior dist bytes are not preserved.",
+    "Only new Site repository was committed and pushed. Main project changes are unstaged and uncommitted."
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "status": "verified synthetic UI captures",
+  "updated": "2026-10-29",
+  "backendUsed": false,
+  "realModelUsed": false,
+  "registeredVisualSource": "src/assets/manifest.json",
+  "registeredVisualManifestSha256": "8ff67b2a775844a8e70897ae27d7a08e6e0ce99c8ade9857da1961a2a9a24a4b",
+  "captureScript": "scripts/capture-attachment-ui.mjs",
+  "captureScriptSha256": "4c8d091e3e6c377520fd58b6ef4afa97043e233affc91b985e75ae1472acad36",
+  "assets": [
+    {
+      "figure": 14,
+      "file": "student-dashboard.png",
+      "role": "student",
+      "route": "/student/dashboard",
+      "sha256": "166a2f68eecb24740ade44d966de75284b2bacdd955d89d9778780aa7411de16",
+      "pixels": [
+        1640,
+        1700
+      ],
+      "clip": {
+        "x": 220,
+        "y": 0,
+        "width": 820,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/latest_scores",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/red_energy",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/treehole_words",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/appointment_stats",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/student/dashboard/emotion_trend",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 15,
+      "file": "student-test.png",
+      "role": "student",
+      "route": "/student/test",
+      "sha256": "28f69ca4a0d93d1ef1e9b858bd28ea5f2dc9d536896937bb8fa54a84051229f9",
+      "pixels": [
+        1640,
+        1700
+      ],
+      "clip": {
+        "x": 220,
+        "y": 0,
+        "width": 820,
+        "height": 850
+      },
+      "apiRequests": [],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 16,
+      "file": "student-chat.png",
+      "role": "student",
+      "route": "/student/advanced-chat",
+      "sha256": "d9a094e21b1925ed877fb3d7ef40fac1fb7e7f4982c6e6d04a597b5fd74acaa5",
+      "pixels": [
+        2384,
+        1700
+      ],
+      "clip": {
+        "x": 248,
+        "y": 0,
+        "width": 1192,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-ai/sessions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/advanced-ai/sessions/synthetic-session-01/messages",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 17,
+      "file": "student-report.png",
+      "role": "student",
+      "route": "/student/report",
+      "sha256": "b59a967ec97ce6352f1f831bd5159a9cbf51d6907d0b37bfe776591c92502d0f",
+      "pixels": [
+        2384,
+        1700
+      ],
+      "clip": {
+        "x": 248,
+        "y": 0,
+        "width": 1192,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/v1/model/current",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/v1/report/analysis/latest",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 18,
+      "file": "teacher-dashboard.png",
+      "role": "teacher",
+      "route": "/teacher/advanced-dashboard",
+      "sha256": "a350ae3f56c312f4d2a27babca328cd5ad36ccfc611dcdaf6c256e2dad4c4372",
+      "pixels": [
+        1640,
+        1700
+      ],
+      "clip": {
+        "x": 220,
+        "y": 0,
+        "width": 820,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/dashboard/metrics",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/crisis/pending",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/warnings",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 19,
+      "file": "teacher-support.png",
+      "role": "teacher",
+      "route": "/teacher/support",
+      "sha256": "4e0a3e96081a3fcb0d4a69385ef2fe37a805761e7ba6b4681c4342ba249f4dc2",
+      "pixels": [
+        1640,
+        1700
+      ],
+      "clip": {
+        "x": 220,
+        "y": 0,
+        "width": 820,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/questions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/follow-ups",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/advanced-teacher/warnings",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 20,
+      "file": "teacher-student.png",
+      "role": "teacher",
+      "route": "/teacher/student/900001",
+      "sha256": "727dfe3e24050b2c3d4f9330dcbbe618771963218147278ba89747e0258d8d6c",
+      "pixels": [
+        2064,
+        1700
+      ],
+      "clip": {
+        "x": 248,
+        "y": 0,
+        "width": 1032,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/student/900001",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    },
+    {
+      "figure": 21,
+      "file": "teacher-content.png",
+      "role": "teacher",
+      "route": "/teacher/content",
+      "sha256": "e92c4b17d0bd0d3d8b35a9534ceb7a591f85703330cacfba5f2e7cd652ef515c",
+      "pixels": [
+        2384,
+        1700
+      ],
+      "clip": {
+        "x": 248,
+        "y": 0,
+        "width": 1192,
+        "height": 850
+      },
+      "apiRequests": [
+        {
+          "method": "GET",
+          "path": "/api/teacher/articles/page",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/teachers_profiles",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/api/teacher/students",
+          "status": 200
+        }
+      ],
+      "synthetic": true,
+      "source": "Current project frontend production build",
+      "rights": "项目原创界面截图；图标与品牌沿用src/assets/manifest.json既有许可",
+      "review": "technical capture verified; synthetic data only"
+    }
+  ]
+}

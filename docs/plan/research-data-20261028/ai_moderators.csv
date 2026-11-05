@@ -1,0 +1,13 @@
+﻿source_id,moderator,category,trials_k,hedges_g,ci95_lower,ci95_upper,source_location,limitation
+FENG2025,Interaction mode,Text-based,7,0.52,0.17,0.86,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Interaction mode,Multimodal,2,0.82,0.54,1.09,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Sample type,Clinical sample,1,0.91,-0.11,1.94,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Sample type,Nonclinical sample,2,0.04,-0.38,0.46,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Sample type,Subclinical sample,6,0.74,0.5,0.98,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Control g roup,Active control,5,0.62,0.21,1.04,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Control g roup,Information only,3,0.52,0.23,0.81,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Control g roup,Waitlist or assessment only,1,0.91,-0.11,1.94,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Delivery platform,Instant messenger platform,5,0.59,0.15,1.03,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Delivery platform,Stand-alone application,4,0.62,0.29,0.96,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Intervention length,0-4 weeks,7,0.55,0.23,0.86,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异
+FENG2025,Intervention length,> 4 weeks,2,0.83,0.42,1.24,Table 2,跨研究亚组比较，不能认定亚组特征导致疗效差异

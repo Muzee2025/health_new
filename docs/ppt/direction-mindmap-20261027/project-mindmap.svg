@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 Z" fill="#604372"/></marker></defs>
+<path d="M 620 436.0 C 570.0 436.0, 570.0 182.5, 520 182.5" fill="none" stroke="#604372" stroke-width="3"/>
+<path d="M 980 436.0 C 1030.0 436.0, 1030.0 182.5, 1080 182.5" fill="none" stroke="#604372" stroke-width="3"/>
+<path d="M 620 436.0 C 570.0 436.0, 570.0 642.5, 520 642.5" fill="none" stroke="#604372" stroke-width="3"/>
+<path d="M 980 436.0 C 1030.0 436.0, 1030.0 642.5, 1080 642.5" fill="none" stroke="#604372" stroke-width="3"/>
+<rect x="620" y="350" width="360" height="172" rx="18" fill="#EEE7F2" stroke="#78558F" stroke-width="2"/>
+<text x="800.0" y="454.2" text-anchor="middle" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="52" font-weight="700" fill="#29332F">心域智链</text>
+<text x="110" y="196.5" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="40" font-weight="700" fill="#604372">学生使用</text>
+<text x="110" y="280.9" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">测评与个人记录</text>
+<text x="110" y="330.5" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">求助与预约</text>
+<text x="1080" y="196.5" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="40" font-weight="700" fill="#604372">教师支持</text>
+<text x="1080" y="280.9" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">按明确分配查阅</text>
+<text x="1080" y="330.5" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">人工答复与跟进</text>
+<text x="110" y="656.5" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="40" font-weight="700" fill="#604372">拟建AI辅助</text>
+<text x="110" y="740.9000000000001" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">统计事实与资料检索</text>
+<text x="110" y="790.5000000000001" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">摘要草稿与教师复核</text>
+<text x="1080" y="656.5" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="40" font-weight="700" fill="#604372">实施与保障</text>
+<text x="1080" y="740.9000000000001" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">责任与数据范围确认</text>
+<text x="1080" y="790.5000000000001" text-anchor="start" font-family="Microsoft YaHei, Noto Sans CJK SC, sans-serif" font-size="32" font-weight="400" fill="#29332F">隔离评测与维护材料</text>
+</svg>

@@ -1,0 +1,54 @@
+{
+  "owner": "A / Lead",
+  "version": "2.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "purpose": "用户要求统一字体/字号/字重，六格文字居中，底部仅写输出结果；保留v1和原PPT",
+  "method": "Original deterministic SVG; rendered by sharp. No generative image provider.",
+  "license": "LicenseRef-Project-Original",
+  "visualSource": "src/styles/tokens.css",
+  "reference": "User supplied six-box sketch, this chat, 2026-11-01",
+  "hardware": {
+    "os": "Windows",
+    "gpu": "RTX 4070",
+    "count": 2,
+    "vramPerGpuGiBPlanningAssumption": 12
+  },
+  "modelCandidates": [
+    {
+      "id": "Qwen/Qwen3-8B-GGUF",
+      "quantizationCandidate": "Q4_K_M",
+      "url": "https://huggingface.co/Qwen/Qwen3-8B-GGUF",
+      "status": "proposed-not-tested"
+    },
+    {
+      "id": "Qwen/Qwen3-Embedding-0.6B",
+      "url": "https://huggingface.co/Qwen/Qwen3-Embedding-0.6B",
+      "status": "proposed-not-tested"
+    },
+    {
+      "id": "Qwen/Qwen3-Reranker-0.6B",
+      "url": "https://huggingface.co/Qwen/Qwen3-Reranker-0.6B",
+      "status": "proposed-not-tested"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/ppt/local-agents-20261101/local-agent-collaboration-v2.svg",
+      "bytes": 9230,
+      "sha256": "63e5491e393bec9d22d8a217d201d9283caf8c679c4472419cccde475d49ea31"
+    },
+    {
+      "path": "docs/ppt/local-agents-20261101/local-agent-collaboration-v2.png",
+      "bytes": 428020,
+      "sha256": "ff393cc71462bae88b67074c2b22ee709603e23bac82ed8cb1d96375fafa5392"
+    }
+  ],
+  "typography": {
+    "fontFamily": "Microsoft YaHei, sans-serif",
+    "fontSizePx": 28,
+    "fontWeight": 400,
+    "textAnchor": "middle"
+  },
+  "finalOutputText": "输出结果"
+}

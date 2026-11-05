@@ -1,0 +1,16 @@
+﻿source_id,study,sample_type,reported_n,female_fraction,mean_age,agent_name,platform,mode,therapy,duration,control,outcomes,source_location,limitation
+FENG2025,Bird et al. (2018),nonclinical,171,0.816,22.08,MYLO,Instant messenger platform,Text-based,MOL,12 min,Active control,DASS-21,"Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Drouin et al. (2022),nonclinical,415,0.7120000000000001,19.82,Replika,standalone app,Multimodal,NR,20 min,Active control,PANAS,"Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Ehrlich et al. (2024).1,nonclinical,177,0.52,20.8,Mind Tutor,standalone app,Text-based,Integrative approach,6 weeks,Waitlist,"SWEMWBS, SWLS, PANAS-SF, GSES","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Ehrlich et al. (2024).2,nonclinical,250,0.56,20.23,Mind Tutor,standalone app,Text-based,Integrative approach,6 weeks,Waitlist,"SWEMWBS, SWLS, PANAS-SF, GSES","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Fitzpatrick et al. (2017),subclinical,70,0.67,22.2,Woebot,standalone app,Text-based,CBT,2 weeks,Information only,"PHQ-9, GAD-7, PANAS","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Gaffney et al. (2014),nonclinical,42,0.7859999999999999,21.4,MYLO,Web-based,Text-based,MOL,20 min,Active control,DASS-21,"Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Fulmer et al. (2018),subclinical,75,0.69,22.9,Tess,Instant messenger platform,Text-based,Integrative,2-4 weeks,Information only,"GAD-7, PHQ-9","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,He et al. (2022),subclinical,125,0.8,18.78,XiaoE,Instant messenger platform,Multimodal,CBT,1 weeks,Active control,PHQ-9,"Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Jang et al. (2021),subclinical,46,0.57,24.79,Todaki,standalone app,Text-based,CBT,4 weeks,Information only,"QIDS-SR, SAS, PSS","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Klos et al. (2021),nonclinical,73,0.87,,Tess,Instant messenger platform,Text-based,Integrative,8 weeks,Information only,"PHQ-9, GAD-7","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Liu et al. (2022),subclinical,83,0.55,23.08,XiaoNan,Instant messenger platform,Multimodal,CBT,16 weeks,Active control,"PHQ-9, GAD-7, PANAS","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Liu et al. (2024),nonclinical,48,0.418,21.14,ChatGPT-3.5-Turbo API,standalone app,Text-based,PPI,2 weeks,Active control,"PHQ-9, GAD-7, PANAS, SWLS, PWB","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Romanovskyi et al. (2021),subclinical,82,0.488,20.85,Elomia,standalone app,Text-based,Integrative approach,4 weeks,Active control,"PHQ-9, GAD-7, PANAS","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Terblanche et al. (2022),nonclinical,169,0.56,22.0,Vici,Instant messenger platform,Text-based,GROW coaching model,6 months,Waitlist,"WEMWBS, BRS, PSS-10","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加
+FENG2025,Nicol et al. (2022),clinical,75,0.882,14.8,Woebot,standalone app,Text-based,CBT,12 weeks,Waitlist,"PHQ-9, GAD-7, MHSES","Multimedia Appendix 2, Table S2",按原表15行保留；未把与Woebot单篇重叠样本再次相加

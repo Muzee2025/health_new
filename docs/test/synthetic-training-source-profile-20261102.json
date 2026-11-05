@@ -1,0 +1,203 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-02",
+  "status": "source_profile_complete_target_source_pending",
+  "authorization": "User permits confirmed virtual database records as training candidates.",
+  "controlling_source": "SHOWCASE historical synthetic source, hash unchanged from inventoried source",
+  "source_profile": {
+    "profile_date": "2026-11-02",
+    "record_values_exported": false,
+    "sources": [
+      {
+        "id": "SHOWCASE",
+        "path": "tmp/showcase-20261024-7f5512da/health.db",
+        "sha256": "0ce0a025b164b0d212c76b21c6d815e78b3389f00ac40f9b21b5b0e219a1f75c",
+        "matches_prior_inventory": true,
+        "wal_exists": false,
+        "counts": {
+          "users": 4,
+          "ai_chat_sessions": 3,
+          "ai_chat_messages": 42,
+          "test_results": 21,
+          "treehole_posts": 3,
+          "questions": 3
+        },
+        "columns": {
+          "ai_chat_sessions": [
+            "id",
+            "user_id",
+            "mode",
+            "title",
+            "created_at",
+            "updated_at"
+          ],
+          "ai_chat_messages": [
+            "id",
+            "session_id",
+            "role",
+            "content",
+            "emotion_tags",
+            "is_crisis",
+            "heatmap",
+            "created_at"
+          ]
+        },
+        "fk_issues": 0,
+        "message_roles": {
+          "ai": 21,
+          "user": 21
+        },
+        "blank_message_count": 0,
+        "source_file_unchanged": true
+      },
+      {
+        "id": "ROOT_HEALTH",
+        "path": "health.db",
+        "sha256": "bb786303a4dc3680b9199fc1e10c7845af3ed03c419be87a6a08bedda0f78cb5",
+        "matches_prior_inventory": true,
+        "wal_exists": false,
+        "counts": {
+          "users": 8,
+          "ai_chat_sessions": 0,
+          "ai_chat_messages": 0,
+          "test_results": 3,
+          "treehole_posts": 30,
+          "questions": 0
+        },
+        "columns": {
+          "ai_chat_sessions": [
+            "id",
+            "user_id",
+            "mode",
+            "title",
+            "created_at",
+            "updated_at"
+          ],
+          "ai_chat_messages": [
+            "id",
+            "session_id",
+            "role",
+            "content",
+            "emotion_tags",
+            "is_crisis",
+            "heatmap",
+            "created_at"
+          ]
+        },
+        "fk_issues": 0,
+        "message_roles": {},
+        "blank_message_count": 0,
+        "source_file_unchanged": true
+      },
+      {
+        "id": "BACKEND_HEALTH",
+        "path": "backend/health.db",
+        "sha256": "218cfdd5c7cf485bb7ccd494ae7728a406606ffe356fc234e20bee2cf3b3d049",
+        "matches_prior_inventory": true,
+        "wal_exists": false,
+        "counts": {
+          "users": 8,
+          "ai_chat_sessions": 21,
+          "ai_chat_messages": 239,
+          "test_results": 24,
+          "treehole_posts": 8,
+          "questions": 0
+        },
+        "columns": {
+          "ai_chat_sessions": [
+            "id",
+            "user_id",
+            "mode",
+            "title",
+            "created_at",
+            "updated_at"
+          ],
+          "ai_chat_messages": [
+            "id",
+            "session_id",
+            "role",
+            "content",
+            "emotion_tags",
+            "is_crisis",
+            "heatmap",
+            "created_at"
+          ]
+        },
+        "fk_issues": 1,
+        "message_roles": {
+          "ai": 130,
+          "user": 109
+        },
+        "blank_message_count": 0,
+        "source_file_unchanged": true
+      }
+    ]
+  },
+  "dialogue_profile": {
+    "user": {
+      "rows": 21,
+      "distinct_exact": 1,
+      "char_min": 17,
+      "char_max": 17,
+      "char_median": 17,
+      "explicit_demo_marker": 21
+    },
+    "ai": {
+      "rows": 21,
+      "distinct_exact": 1,
+      "char_min": 30,
+      "char_max": 30,
+      "char_median": 30,
+      "explicit_demo_marker": 21
+    },
+    "flagged_crisis_messages": 0,
+    "messages_per_session": [
+      14,
+      14,
+      14
+    ],
+    "labels_present": {
+      "emotion_tags": 21
+    }
+  },
+  "quality_finding": {
+    "unique_placeholder_prompt_response_combinations": 1,
+    "valid_training_dataset_claimed": false
+  },
+  "exported_samples": 0,
+  "training_started": false,
+  "provider_calls": 0,
+  "raw_record_values_in_report": false,
+  "independent_review": {
+    "path": "docs/test/虚拟训练数据初查独立复核_20261102.md",
+    "exists": true,
+    "sha256": "9606065d8ae3441484f7baa88797dbd7974588a356d8ac45a23bab973180c98b"
+  },
+  "artifacts": [
+    {
+      "path": "tmp/training-data-20261102/source-profile.json",
+      "sha256": "c4391e3a9ee75d12ca764415772dbac97a4af043711b7a25b20921a433e54de7"
+    },
+    {
+      "path": "tmp/training-data-20261102/dialogue-profile.json",
+      "sha256": "7914cb2f733bf6d49c7854522132efd520a8adda934f3ea0d2699656a228908e"
+    },
+    {
+      "path": "tmp/training-data-20261102/profile-sources.py",
+      "sha256": "5ffe47b4f353bfb109414da6d15dda4ab56c0c63d65cd66df1f90b56f602684b"
+    },
+    {
+      "path": "tmp/training-data-20261102/profile-dialogue.py",
+      "sha256": "d3961c813a16b2cbf32c5cb49a1944115d6b71469ed36645500b15ece8ba287e"
+    },
+    {
+      "path": "tmp/training-data-20261102/check-protection.py",
+      "sha256": "60dcc249cb24b4323a4a45e63e51c313aecfd635b4e10b0419ad4ed88258a248"
+    }
+  ],
+  "pending_information": [
+    "Exact database meant by the user",
+    "Training task or model target"
+  ]
+}

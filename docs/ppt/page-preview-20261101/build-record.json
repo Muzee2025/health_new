@@ -1,0 +1,265 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "brief": "当前18页每页一张优化预览；不是15份历史PPT分别优化。六章顺序保持，原PPT不覆盖。",
+  "source": "deliverables/心域智链_六章答辩PPT_多智能体协作机制优化版_20261031.pptx",
+  "sourceSha256": "3651273bde057b992dd083ed101c8bbd7dfa223c8742446e140ba7dd52698a1b",
+  "candidate": "deliverables/逐页优化预览_20261101/心域智链_18页逐页优化参考稿_20261101.pptx",
+  "candidateSha256": "9e91d13ee457bbf9d77f64edc2a3fe4127e45798ea54b52fbb83aff48ca53702",
+  "slideCount": 18,
+  "canvasInches": [
+    16.6666666667,
+    9.375
+  ],
+  "nativeFont": "Microsoft YaHei",
+  "nativeTextPt": 24,
+  "theme": {
+    "path": "docs/ppt/page-preview-20261101/resolved-theme.json",
+    "sha256": "65a49c83c5f4b105b57b04d80d7aaf106d68d627ed4781239e4fe43cbcc521e7",
+    "version": "1.0",
+    "packageVersion": "1.0.0b11",
+    "packagePath": "C:\\Users\\14012\\.codex\\runtimes\\ppt-skills\\Lib\\site-packages\\pptx_designer\\__init__.py",
+    "seed": 17
+  },
+  "originalChartDataPreserved": [
+    [
+      5509.34,
+      3039.5,
+      3953.96
+    ]
+  ],
+  "pages": [
+    {
+      "page": 1,
+      "chapter": "项目概览",
+      "title": "心域智链",
+      "change": "扩大项目插画，集中定位和团队信息，取消外框",
+      "nativeShapes": 9,
+      "notesPreserved": true
+    },
+    {
+      "page": 2,
+      "chapter": "1 实用性与创新力",
+      "title": "高校规模与政策背景",
+      "change": "保留原始数据图，政策改成按年排列，原网页图放备注备查",
+      "nativeShapes": 15,
+      "notesPreserved": true
+    },
+    {
+      "page": 3,
+      "chapter": "1 实用性与创新力",
+      "title": "学生心理支持中的三个困境",
+      "change": "保留三张情境照片，统一裁剪区域和居中说明",
+      "nativeShapes": 16,
+      "notesPreserved": true
+    },
+    {
+      "page": 4,
+      "chapter": "2 产品与服务",
+      "title": "学生端：测评记录与求助操作",
+      "change": "截图等比例放大，操作步骤压缩为两条清晰路径",
+      "nativeShapes": 14,
+      "notesPreserved": true
+    },
+    {
+      "page": 5,
+      "chapter": "2 产品与服务",
+      "title": "教师端：核对答复与持续跟进",
+      "change": "两个工作界面独立展示，权限和处理步骤对应排列",
+      "nativeShapes": 14,
+      "notesPreserved": true
+    },
+    {
+      "page": 6,
+      "chapter": "3 市场分析",
+      "title": "全国高校规模与服务衔接需求",
+      "change": "保留完整统计地图，调查两项指标分开陈述",
+      "nativeShapes": 9,
+      "notesPreserved": true
+    },
+    {
+      "page": 7,
+      "chapter": "3 市场分析",
+      "title": "湖北切入与合作路径",
+      "change": "分开湖北规模、调研任务、采购参照，保留原金额和范围",
+      "nativeShapes": 35,
+      "notesPreserved": true
+    },
+    {
+      "page": 8,
+      "chapter": "4 推广与实施",
+      "title": "高校先行，按学段适配",
+      "change": "保留原生数据图，三个适配阶段改为清晰流程",
+      "nativeShapes": 16,
+      "notesPreserved": true
+    },
+    {
+      "page": 9,
+      "chapter": "5 技术创新",
+      "title": "当前原型与拟建AI如何衔接",
+      "change": "测评链与主动求助链分区，保留当前记录绑定和人工边界",
+      "nativeShapes": 32,
+      "notesPreserved": true
+    },
+    {
+      "page": 10,
+      "chapter": "5 技术创新",
+      "title": "本地多智能体协作（拟建）",
+      "change": "六类任务写清角色、支撑模型及工作，居中并加粗角色/模型",
+      "nativeShapes": 33,
+      "notesPreserved": true
+    },
+    {
+      "page": 11,
+      "chapter": "5 技术创新",
+      "title": "同一条求助的协作过程（示意）",
+      "change": "虚构案例独立成句，六行输出按原文证据整理",
+      "nativeShapes": 31,
+      "notesPreserved": true
+    },
+    {
+      "page": 12,
+      "chapter": "5 技术创新",
+      "title": "分歧、缺失与人工复核（拟建）",
+      "change": "普通核查与紧急支路分开，不用投票补事实",
+      "nativeShapes": 33,
+      "notesPreserved": true
+    },
+    {
+      "page": 13,
+      "chapter": "5 技术创新",
+      "title": "本地候选模型与职责",
+      "change": "将旧云端模型表换成本聊天核对的三种开源候选及分工",
+      "nativeShapes": 22,
+      "notesPreserved": true
+    },
+    {
+      "page": 14,
+      "chapter": "5 技术创新",
+      "title": "情绪线索与五维展示（拟建）",
+      "change": "保留原文映射，未知项和明确表达以文字区分",
+      "nativeShapes": 30,
+      "notesPreserved": true
+    },
+    {
+      "page": 15,
+      "chapter": "5 技术创新",
+      "title": "纵向记录与RAG检索（拟建）",
+      "change": "授权记录、筛选、召回、重排、摘要及人工复核用原生流程展示",
+      "nativeShapes": 46,
+      "notesPreserved": true
+    },
+    {
+      "page": 16,
+      "chapter": "5 技术创新",
+      "title": "规则提示与危机复核联动",
+      "change": "四步处理路径放大，异常处理与规则局限压缩说明",
+      "nativeShapes": 29,
+      "notesPreserved": true
+    },
+    {
+      "page": 17,
+      "chapter": "5 技术创新",
+      "title": "敏感数据处理与教师提醒（拟建）",
+      "change": "四项算法设计分区，合成记录核算与提醒人数分别呈现",
+      "nativeShapes": 33,
+      "notesPreserved": true
+    },
+    {
+      "page": 18,
+      "chapter": "6 预期成果与发展规划",
+      "title": "阶段成果与后续实施",
+      "change": "当前成果、部署分层和试点顺序分别展示，不写已上线",
+      "nativeShapes": 31,
+      "notesPreserved": true
+    }
+  ],
+  "assets": [
+    {
+      "sourcePage": 1,
+      "sourceShapeIndex": 2,
+      "originalPartSha256": "7b1474dcd56df4be0e2960e476ae7eb8b668dcab8ed10429f7e3a69e60c57a95",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/7b1474dcd56df4be0e29.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/7b1474dcd56df4be0e29.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 2,
+      "sourceShapeIndex": 7,
+      "originalPartSha256": "7ffebe30517b50f10c6a0fd8e908e0237689cf421105a8af653df7571898661b",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/7ffebe30517b50f10c6a.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/7ffebe30517b50f10c6a.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 3,
+      "sourceShapeIndex": 7,
+      "originalPartSha256": "f2879f48944f6d3573bb5902fad05ff50f0f9b8989a2d7feefcc15dbef130f03",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/f2879f48944f6d3573bb.jpg",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/f2879f48944f6d3573bb.jpg",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 3,
+      "sourceShapeIndex": 10,
+      "originalPartSha256": "d154041d48ed9ebdd74421f608c19af854704928f45d646d11efe0623f8627d8",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/d154041d48ed9ebdd744.jpg",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/d154041d48ed9ebdd744.jpg",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 3,
+      "sourceShapeIndex": 13,
+      "originalPartSha256": "bf61929c59f5cadb6da9626a74115e6611a62a0500072cff7c004ee02451b460",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/bf61929c59f5cadb6da9.jpg",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/bf61929c59f5cadb6da9.jpg",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 4,
+      "sourceShapeIndex": 6,
+      "originalPartSha256": "9e29c9f1e9a0f988d76db26f20e7cf105a32649d095aed1b94a7966762f0bdb2",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/9e29c9f1e9a0f988d76d.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/9e29c9f1e9a0f988d76d.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 4,
+      "sourceShapeIndex": 7,
+      "originalPartSha256": "8fce687f317d7d1c0548a4d1fab6505949ce19abebb6837e02e5e1d4170904ac",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/8fce687f317d7d1c0548.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/8fce687f317d7d1c0548.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 5,
+      "sourceShapeIndex": 6,
+      "originalPartSha256": "48d66b4a01d697d1607428139b6478fa0599148d2e7f44e20edac2ac41be6d02",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/48d66b4a01d697d16074.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/48d66b4a01d697d16074.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 5,
+      "sourceShapeIndex": 7,
+      "originalPartSha256": "f572e8c75b0dfd9530fd60aab6e423c9e0c9381c917ec0e692bcff331fa5e593",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/f572e8c75b0dfd9530fd.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/f572e8c75b0dfd9530fd.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    },
+    {
+      "sourcePage": 6,
+      "sourceShapeIndex": 6,
+      "originalPartSha256": "30fbe659a30964d4d3879783810e286591e38b797385948209f6b596119f9ffe",
+      "extracted": "tmp/ppt-page-preview-20261101/assets/30fbe659a30964d4d387.png",
+      "rendered": "tmp/ppt-page-preview-20261101/assets/30fbe659a30964d4d387.png",
+      "sourceRegistry": "docs/ppt/six-chapters-20261029/revision-r6/selected-assets.json"
+    }
+  ],
+  "realModelCalls": 0,
+  "businessChanges": false,
+  "independentReview": "pending",
+  "renderAndVisualReview": "pending"
+}

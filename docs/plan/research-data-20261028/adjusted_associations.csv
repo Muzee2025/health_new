@@ -1,0 +1,74 @@
+﻿source_id,table,population,outcome,factor,comparison,reference,adjusted_or,ci95_lower,ci95_upper,p_reported,causal_status,source_cell
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Gender,Girl,Boy,1.55,1.49,1.62,<0.001,横断面关联；OR不是风险比,"1.55 (1.49–1.62, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Age,Mean (SD),连续变量每1单位,0.99,0.98,1.0,=0.148,横断面关联；OR不是风险比,"0.99 (0.98-1.00, p = 0.148)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Residence,Urban,Country,1.11,1.06,1.17,<0.001,横断面关联；OR不是风险比,"1.11 (1.06–1.17, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Single-child,Yes,No,1.06,1.01,1.12,=0.025,横断面关联；OR不是风险比,"1.06 (1.01–1.12, p = 0.025)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Left-behind child,Yes,No,1.02,0.97,1.07,=0.457,横断面关联；OR不是风险比,"1.02 (0.97–1.07, p = 0.457)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Family type,Non-nuclear,Nuclear,1.31,1.25,1.38,<0.001,横断面关联；OR不是风险比,"1.31 (1.25–1.38, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,IGD,Yes,No,5.0,4.42,5.66,<0.001,横断面关联；OR不是风险比,"5.00 (4.42–5.66, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Sleep Disturbance,Yes,No,6.99,6.69,7.3,<0.001,横断面关联；OR不是风险比,"6.99 (6.69–7.30, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Physical victimization,Yes,No,1.51,1.44,1.59,<0.001,横断面关联；OR不是风险比,"1.51 (1.44–1.59, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Verbal victimization,Yes,No,1.7,1.6,1.8,<0.001,横断面关联；OR不是风险比,"1.70 (1.60–1.80, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Social manipulation,Yes,No,1.97,1.87,2.08,<0.001,横断面关联；OR不是风险比,"1.97 (1.87–2.08, p < 0.001)"
+CHEN2023,Table 2,全部中学生,心理困扰：PHQ-9≥10或GAD-7≥10,Property attacks,Yes,No,1.25,1.18,1.33,<0.001,横断面关联；OR不是风险比,"1.25 (1.18–1.33, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Gender,Girl,Boy,1.56,1.48,1.65,<0.001,横断面关联；OR不是风险比,"1.56 (1.48–1.65, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Age,Mean (SD),连续变量每1单位,1.06,1.03,1.09,<0.001,横断面关联；OR不是风险比,"1.06 (1.03–1.09, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Single-child,Yes,No,1.1,1.03,1.17,=0.005,横断面关联；OR不是风险比,"1.10 (1.03–1.17, p = 0.005)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Left-behind child,Yes,No,1.02,0.97,1.08,=0.411,横断面关联；OR不是风险比,"1.02 (0.97–1.08, p = 0.411)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Family type,Non-nuclear,Nuclear,1.32,1.24,1.4,<0.001,横断面关联；OR不是风险比,"1.32 (1.24–1.40, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,IGD,Yes,No,4.92,4.27,5.68,<0.001,横断面关联；OR不是风险比,"4.92 (4.27–5.68, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Sleep Disturbance,Yes,No,7.29,6.91,7.69,<0.001,横断面关联；OR不是风险比,"7.29 (6.91–7.69, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Verbal victimization,Yes,No,1.61,1.51,1.71,<0.001,横断面关联；OR不是风险比,"1.61 (1.51–1.71, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Physical victimization,Yes,No,1.74,1.61,1.88,<0.001,横断面关联；OR不是风险比,"1.74 (1.61–1.88, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Social manipulation,Yes,No,2.04,1.91,2.18,<0.001,横断面关联；OR不是风险比,"2.04 (1.91–2.18, p < 0.001)"
+CHEN2023,Table 3,初中,心理困扰：PHQ-9≥10或GAD-7≥10,Property attacks,Yes,No,1.22,1.13,1.31,<0.001,横断面关联；OR不是风险比,"1.22 (1.13–1.31, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Gender,Girl,Boy,1.58,1.47,1.71,<0.001,横断面关联；OR不是风险比,"1.58 (1.47–1.71, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Age,Mean (SD),连续变量每1单位,0.97,0.93,1.01,=0.096,横断面关联；OR不是风险比,"0.97 (0.93–1.01, p = 0.096)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Residence,Urban,Country,1.24,1.15,1.34,<0.001,横断面关联；OR不是风险比,"1.24 (1.15–1.34, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Family type,Non-nuclear,Nuclear,1.26,1.15,1.39,<0.001,横断面关联；OR不是风险比,"1.26 (1.15–1.39, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,IGD,Yes,No,4.94,3.85,6.39,<0.001,横断面关联；OR不是风险比,"4.94 (3.85–6.39, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Sleep Disturbance,Yes,No,6.58,6.1,7.1,<0.001,横断面关联；OR不是风险比,"6.58 (6.10–7.10, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Physical victimization,Yes,No,1.25,1.14,1.37,<0.001,横断面关联；OR不是风险比,"1.25 (1.14–1.37, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Verbal victimization,Yes,No,1.64,1.49,1.81,<0.001,横断面关联；OR不是风险比,"1.64 (1.49–1.81, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Social manipulation,Yes,No,1.84,1.69,2.0,<0.001,横断面关联；OR不是风险比,"1.84 (1.69-2.00, p < 0.001)"
+CHEN2023,Table 4,高中,心理困扰：PHQ-9≥10或GAD-7≥10,Property attacks,Yes,No,1.29,1.18,1.42,<0.001,横断面关联；OR不是风险比,"1.29 (1.18–1.42, p < 0.001)"
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Second survey completion,Second survey completion,第一次调查,1.47,1.34,1.61,<0.001,横断面关联；调整后波次OR不是发病率比,Second survey completion | <0.001 | 1.47 | 1.34 | 1.61 | <0.001 | 1.64 | 1.48 | 1.81
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Second survey completion,Second survey completion,第一次调查,1.64,1.48,1.81,<0.001,横断面关联；调整后波次OR不是发病率比,Second survey completion | <0.001 | 1.47 | 1.34 | 1.61 | <0.001 | 1.64 | 1.48 | 1.81
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Female,Female,男性,1.21,1.12,1.31,<0.001,横断面关联；调整后波次OR不是发病率比,Female | <0.001 | 1.21 | 1.12 | 1.31 | <0.001 | 1.23 | 1.13 | 1.34
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Female,Female,男性,1.23,1.13,1.34,<0.001,横断面关联；调整后波次OR不是发病率比,Female | <0.001 | 1.21 | 1.12 | 1.31 | <0.001 | 1.23 | 1.13 | 1.34
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Senior secondary school,Senior secondary school,初中,1.41,1.29,1.54,<0.001,横断面关联；调整后波次OR不是发病率比,Senior secondary school | <0.001 | 1.41 | 1.29 | 1.54 | <0.001 | 1.27 | 1.15 | 1.41
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Senior secondary school,Senior secondary school,初中,1.27,1.15,1.41,<0.001,横断面关联；调整后波次OR不是发病率比,Senior secondary school | <0.001 | 1.41 | 1.29 | 1.54 | <0.001 | 1.27 | 1.15 | 1.41
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,School type,Municipal key schools,Provincial key schools,0.95,0.8,1.13,0.551,横断面关联；调整后波次OR不是发病率比,Municipal key schools | 0.551 | 0.95 | 0.80 | 1.13 | 0.064 | 0.84 | 0.69 | 1.01
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,School type,Municipal key schools,Provincial key schools,0.84,0.69,1.01,0.064,横断面关联；调整后波次OR不是发病率比,Municipal key schools | 0.551 | 0.95 | 0.80 | 1.13 | 0.064 | 0.84 | 0.69 | 1.01
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,School type,Ordinary schools,Provincial key schools,1.08,0.92,1.26,0.336,横断面关联；调整后波次OR不是发病率比,Ordinary schools | 0.336 | 1.08 | 0.92 | 1.26 | 0.003 | 0.78 | 0.66 | 0.92
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,School type,Ordinary schools,Provincial key schools,0.78,0.66,0.92,0.003,横断面关联；调整后波次OR不是发病率比,Ordinary schools | 0.336 | 1.08 | 0.92 | 1.26 | 0.003 | 0.78 | 0.66 | 0.92
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,School type,Vocational schools,Provincial key schools,1.25,1.04,1.51,0.015,横断面关联；调整后波次OR不是发病率比,Vocational schools | 0.015 | 1.25 | 1.04 | 1.51 | 0.327 | 0.90 | 0.74 | 1.11
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,School type,Vocational schools,Provincial key schools,0.9,0.74,1.11,0.327,横断面关联；调整后波次OR不是发病率比,Vocational schools | 0.015 | 1.25 | 1.04 | 1.51 | 0.327 | 0.90 | 0.74 | 1.11
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Major class,Major class,原文未明示参照方向/编码,0.92,0.84,1.0,0.050,横断面关联；调整后波次OR不是发病率比,Major class | 0.050 | 0.92 | 0.84 | 1.00 | 0.265 | 1.06 | 0.96 | 1.17
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Major class,Major class,原文未明示参照方向/编码,1.06,0.96,1.17,0.265,横断面关联；调整后波次OR不是发病率比,Major class | 0.050 | 0.92 | 0.84 | 1.00 | 0.265 | 1.06 | 0.96 | 1.17
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Sleep duration/day,6–8 h,<6 h,0.45,0.37,0.53,<0.001,横断面关联；调整后波次OR不是发病率比,6–8 h | <0.001 | 0.45 | 0.37 | 0.53 | <0.001 | 0.47 | 0.40 | 0.55
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Sleep duration/day,6–8 h,<6 h,0.47,0.4,0.55,<0.001,横断面关联；调整后波次OR不是发病率比,6–8 h | <0.001 | 0.45 | 0.37 | 0.53 | <0.001 | 0.47 | 0.40 | 0.55
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Sleep duration/day,>8 h,<6 h,0.32,0.27,0.38,<0.001,横断面关联；调整后波次OR不是发病率比,>8 h | <0.001 | 0.32 | 0.27 | 0.38 | <0.001 | 0.34 | 0.28 | 0.40
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Sleep duration/day,>8 h,<6 h,0.34,0.28,0.4,<0.001,横断面关联；调整后波次OR不是发病率比,>8 h | <0.001 | 0.32 | 0.27 | 0.38 | <0.001 | 0.34 | 0.28 | 0.40
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Study duration/day,4–8 h,<4 h,0.87,0.78,0.98,0.023,横断面关联；调整后波次OR不是发病率比,4–8 h | 0.023 | 0.87 | 0.78 | 0.98 | 0.098 | 0.89 | 0.78 | 1.02
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Study duration/day,4–8 h,<4 h,0.89,0.78,1.02,0.098,横断面关联；调整后波次OR不是发病率比,4–8 h | 0.023 | 0.87 | 0.78 | 0.98 | 0.098 | 0.89 | 0.78 | 1.02
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Study duration/day,>8 h,<4 h,1.02,0.9,1.16,0.758,横断面关联；调整后波次OR不是发病率比,>8 h | 0.758 | 1.02 | 0.90 | 1.16 | 0.096 | 1.13 | 0.98 | 1.31
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Study duration/day,>8 h,<4 h,1.13,0.98,1.31,0.096,横断面关联；调整后波次OR不是发病率比,>8 h | 0.758 | 1.02 | 0.90 | 1.16 | 0.096 | 1.13 | 0.98 | 1.31
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Exercise duration/day,30–60 min,<30 min,0.64,0.6,0.7,<0.001,横断面关联；调整后波次OR不是发病率比,30–60 min | <0.001 | 0.64 | 0.60 | 0.70 | <0.001 | 0.73 | 0.67 | 0.80
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Exercise duration/day,30–60 min,<30 min,0.73,0.67,0.8,<0.001,横断面关联；调整后波次OR不是发病率比,30–60 min | <0.001 | 0.64 | 0.60 | 0.70 | <0.001 | 0.73 | 0.67 | 0.80
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Exercise duration/day,>60 min,<30 min,0.67,0.59,0.77,<0.001,横断面关联；调整后波次OR不是发病率比,>60 min | <0.001 | 0.67 | 0.59 | 0.77 | 0.025 | 0.84 | 0.73 | 0.98
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Exercise duration/day,>60 min,<30 min,0.84,0.73,0.98,0.025,横断面关联；调整后波次OR不是发病率比,>60 min | <0.001 | 0.67 | 0.59 | 0.77 | 0.025 | 0.84 | 0.73 | 0.98
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Change of study efficiency,About the same,Lower than before,0.65,0.6,0.71,<0.001,横断面关联；调整后波次OR不是发病率比,About the same | <0.001 | 0.65 | 0.60 | 0.71 | <0.001 | 0.72 | 0.65 | 0.79
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Change of study efficiency,About the same,Lower than before,0.72,0.65,0.79,<0.001,横断面关联；调整后波次OR不是发病率比,About the same | <0.001 | 0.65 | 0.60 | 0.71 | <0.001 | 0.72 | 0.65 | 0.79
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Change of study efficiency,Higher than before,Lower than before,0.64,0.56,0.74,<0.001,横断面关联；调整后波次OR不是发病率比,Higher than before | <0.001 | 0.64 | 0.56 | 0.74 | 0.014 | 0.81 | 0.69 | 0.96
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Change of study efficiency,Higher than before,Lower than before,0.81,0.69,0.96,0.014,横断面关联；调整后波次OR不是发病率比,Higher than before | <0.001 | 0.64 | 0.56 | 0.74 | 0.014 | 0.81 | 0.69 | 0.96
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,No. of COVID-19 cases at provincial level,100–999,10–99,0.62,0.32,1.21,0.159,横断面关联；调整后波次OR不是发病率比,100–999 | 0.159 | 0.62 | 0.32 | 1.21 | 0.008 | 0.41 | 0.22 | 0.80
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,No. of COVID-19 cases at provincial level,100–999,10–99,0.41,0.22,0.8,0.008,横断面关联；调整后波次OR不是发病率比,100–999 | 0.159 | 0.62 | 0.32 | 1.21 | 0.008 | 0.41 | 0.22 | 0.80
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,No. of COVID-19 cases at provincial level,1000–9999,10–99,0.47,0.24,0.92,0.028,横断面关联；调整后波次OR不是发病率比,1000–9999 | 0.028 | 0.47 | 0.24 | 0.92 | 0.001 | 0.31 | 0.16 | 0.60
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,No. of COVID-19 cases at provincial level,1000–9999,10–99,0.31,0.16,0.6,0.001,横断面关联；调整后波次OR不是发病率比,1000–9999 | 0.028 | 0.47 | 0.24 | 0.92 | 0.001 | 0.31 | 0.16 | 0.60
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,No. of COVID-19 cases at provincial level,">10,000",10–99,0.59,0.3,1.18,0.135,横断面关联；调整后波次OR不是发病率比,">10,000 | 0.135 | 0.59 | 0.30 | 1.18 | 0.013 | 0.42 | 0.21 | 0.83"
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,No. of COVID-19 cases at provincial level,">10,000",10–99,0.42,0.21,0.83,0.013,横断面关联；调整后波次OR不是发病率比,">10,000 | 0.135 | 0.59 | 0.30 | 1.18 | 0.013 | 0.42 | 0.21 | 0.83"
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Participating in distance learning,Participating in distance learning,不参加远程学习,0.68,0.56,0.81,<0.001,横断面关联；调整后波次OR不是发病率比,Participating in distance learning | <0.001 | 0.68 | 0.56 | 0.81 | 0.637 | 0.95 | 0.77 | 1.18
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Participating in distance learning,Participating in distance learning,不参加远程学习,0.95,0.77,1.18,0.637,横断面关联；调整后波次OR不是发病率比,Participating in distance learning | <0.001 | 0.68 | 0.56 | 0.81 | 0.637 | 0.95 | 0.77 | 1.18
+CHEN2021,Table 3,两次独立调查合并,CES-D>15,Concerned about entering a higher grade,Concerned about entering a higher grade,不担忧升学,1.75,1.62,1.89,<0.001,横断面关联；调整后波次OR不是发病率比,Concerned about entering a higher grade | <0.001 | 1.75 | 1.62 | 1.89 | <0.001 | 1.74 | 1.59 | 1.91
+CHEN2021,Table 3,两次独立调查合并,GAD-7>4,Concerned about entering a higher grade,Concerned about entering a higher grade,不担忧升学,1.74,1.59,1.91,<0.001,横断面关联；调整后波次OR不是发病率比,Concerned about entering a higher grade | <0.001 | 1.75 | 1.62 | 1.89 | <0.001 | 1.74 | 1.59 | 1.91

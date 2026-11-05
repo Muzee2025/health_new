@@ -1,10 +1,40 @@
 # 文档索引
 
-> owner: A ｜ version: 2.4 ｜ status: 评审 ｜ updated: 2026-10-27
+> owner: A ｜ version: 3.8 ｜ status: 高校两学期模拟库已登记 ｜ updated: 2026-11-04
+
+新增[高校两学期模拟库验收](test/高校两学期模拟库验收_20261104.md)和[机器记录](test/campus-simulation-verification-20261104.json)。同一批20,000名合成学生覆盖2025–2026两个学期，40,000条人学期和235,407条平台事件。[数据说明](../deliverables/心域智链_高校两学期模拟库_20261104/数据说明.md)记录学号编码、校历和CSV口径。
+
+新增[合成问答入库验收](test/合成问答入库验收_20261102.md)、[独立复核](test/合成问答入库独立复核_20261102.md)与[机器记录](test/synthetic-dialogue-verification-20261102.json)：用户明确授权新创虚拟问答，首批96对/12主题/72场景写入新独立SQLite，全部合成候选、未经专业审核；保留旧476条资料，30项检查通过。原稿[登记](../backend/training_data/synthetic-qa-20261102/README.md)、[数据说明](../deliverables/心域智链_合成问答训练集_20261102/数据说明.md)及[逐条预览](../deliverables/心域智链_合成问答训练集_20261102/问答预览.md)。未训练、上传或切换网站数据。下方Excel样本0是此前仅整理已有文件的历史状态。
+
+新增[Excel通用训练资料库验收](test/Excel通用训练库验收_20261102.md)、[独立复核](test/Excel通用训练库来源复核_20261102.md)与[机器记录](test/excel-training-database-verification-20261102.json)：用户已明确Excel来源及通用用途，在新目录建9表SQLite，导入476条资料记录，保留原来源。工作簿没有逐条训练样本，监督表/JSONL为空，未训练或上传。交付[使用说明](../deliverables/心域智链_通用训练资料包_20261102/使用说明.md)；旧待澄清记录保留为历史。
+
+新增[虚拟训练源初查](test/虚拟训练数据初查_20261102.md)、[机器记录](test/synthetic-training-source-profile-20261102.json)与[独立复核](test/虚拟训练数据初查独立复核_20261102.md)：合成展示库42条消息仅1组重复占位问答，历史239条消息来源待核。用户已允许虚拟记录作为训练集候选，但具体源/用途待明确，未导出正文或训练。
+
+当前[界面/分析优化验收](test/Sites界面优化验收_20261102.md)、[独立复核](test/Sites界面优化独立复核_20261102.md)、[机器记录](test/sites-refinement-verification-20261102.json)、[首页设计](design/首页分析与布局优化_20261102.md)与[报告五维设计](design/报告与五维状态优化_20261102.md)：修五维空态/对齐/等待与身份打印，新增同工具趋势摘要，前端41项、38页面与12布局检查通过，同一私有Site已更新；真实业务生产门禁保持。
+
+新增[现有网站Sites私有预览](test/网站Sites预览验收.md)、[独立复核](test/网站预览独立复核.md)与[机器记录](test/sites-preview-verification.json)：复用原Vue界面，合成数据、双角色切换，19页两视口及最终定向交互验证；Sites最终私有发布成功。真实后端/登录/保存/AI未连接，原业务生产门禁不变。根目录误构建dist及环境发现边界见验收记录（2026-11-02）。
 
 本索引覆盖源码仓库中的 Markdown 文档，并为 W0 基线和 W1 素材库提供入口。`.workbuddy/` 与 `backend/diagnostics_output/` 仅在本地保留，不纳入源码文档索引；这些目录可能含环境信息。历史文档已归档，内容中的状态、数字和实现说法未经本轮复核。路径均相对本文件所在目录。
 
 ## 项目入口
+
+2026-11-01配图审阅续作：用户确认保留前面第2、3版模型协作示意图，见[保留登记](ppt/local-agents-20261101/retained-selection.json)；下一张新增[纵向记录与RAG检索候选](ppt/local-agents-20261101/rag-records-v1.md)，三模型分工和人工复核以PNG呈现，样式待审。已选图与原PPT字节保持。
+
+2026-11-01新增[立项答辩本地多智能体配图候选](ppt/local-agents-20261101/README.md)：模型规划依据用户确认的Windows双4070/每卡12GB，但按后续反馈已删除图内硬件说明和右上角文字。当前v7为专家/模型名加粗、浅紫色朝内六框错位并紧贴中央粗折线的PNG，末尾只写“输出结果”；实际1672×941，无对应v7 SVG。Lead目视及文件核对通过，样式待用户审阅。历史图和原PPT保留，未部署或调用真实模型，不构成工程或专业门禁放行。
+
+最新实施：[界面与AI解析升级验收](test/界面与AI解析升级验收.md)、[设计与四张合成截图](design/界面与AI解析升级.md)、[后端阶段交接](test/后端AI解析修复交接.md)、[独立复核](test/界面与AI升级独立复核.md)、[机器记录](test/interface-ai-verification.json)。服务器计分/当前ID解析、结构化说明与来源、草稿/轮询/空值、危机持久化及教师状态已修复。完整后端194通过/3条件跳过，最后图片保护另有41专项通过；前端29、隔离构建及两视口48项真实HTTP浏览器验证通过。未核验的多模态融合/图片解析停用，真实模型与专业/生产仍未获证；原运行数据、配置与服务未切换（2026-10-31）。
+
+2026-10-31新增[项目补全与改进方案](plan/项目补全与改进方案_20261031.md)与[19项任务清单](plan/improvement-backlog-20261031.csv)：一项基线/方案任务、18项待实施工作包，优先服务端计分、版本追溯、当前答卷AI绑定、草稿隐私及真实联调，再推进知识依据、目标容器/恢复与受控试点。见[本轮验证](test/project-improvement-plan-verification.json)、[独立复核](test/项目补全方案独立复核.md)。本轮后端140通过/3条件跳过、前端22项及隔离构建/素材通过；没有重验浏览器、真实HTTP、Docker或真实模型，不放行整体上线。
+
+本轮新增[心理问卷选型与上线准备](plan/questionnaire-research-20261029/README.md)，含[12组工具与许可](plan/questionnaire-research-20261029/instruments/instruments.md)、[隐私/政策/人工承接](plan/questionnaire-research-20261029/governance/governance.md)、[使用答疑](plan/questionnaire-research-20261029/问卷使用问题与答疑.md)、[现有代码差距](plan/questionnaire-research-20261029/code-observations.md)、[来源CSV](plan/questionnaire-research-20261029/source-catalog.csv)、[上线清单](plan/questionnaire-research-20261029/launch-checklist.csv)和[问卷登记模板](plan/questionnaire-research-20261029/questionnaire-register-template.csv)。[本地资料包](../deliverables/心域智链_心理问卷选型与上线准备资料_20261029.zip)只含公开来源摘要/元数据，不含原题本或答卷。材料检查见[验收](test/心理问卷资料验收.md)、[独立复核](test/心理问卷资料独立复核.md)及[机器记录](test/questionnaire-research-verification.json)；材料准确性无阻断，不表示选型、专业、学校或生产准入通过。
+
+最新策划书：[40页内容完善修订稿](../deliverables/心域智链项目策划书_内容完善修订稿_20261029.docx)、[验收](test/策划书内容完善验收.md)、[独立复核](test/策划书内容完善独立复核.md)、[机器证据](test/project-plan-revision-verification.json)。保留介绍与第五章8图，补足项目进展、成果检查和阶段安排、26条既有参考；学校端规划与已有系统分清。用户原附件及37页前版保留（2026-10-29）。
+
+前版附件补充：[37页Word](../deliverables/心域智链项目计划书_系统内容与截图补充_20261029.docx)、[验收](test/附件系统内容补充验收.md)、[独立复核](test/附件系统内容补充独立复核.md)、[机器证据](test/attachment-system-verification.json)、[八张系统截图登记](plan/application-ui-20261029/README.md)。项目介绍、当前功能、进展和第五章8图已补充；图中数据为合成演示，原附件保持（2026-10-29）。
+
+文献数据新交付：[12表Excel](../deliverables/心域智链_文献数据下载与分析_20261028.xlsx)、[公开原文与聚合CSV资料包](../deliverables/心域智链_公开文献数据包_20261028.zip)、[数据来源与口径](plan/research-data-20261028/README.md)、[验收](test/文献数据下载与分析验收.md)、[独立复核](test/文献数据独立复核.md)、[机器证据](test/literature-data-verification.json)。6篇正式来源/26份去重下载；原始926访谈记录仅本地处理，交付包不含个人行（2026-10-28）。
+
+最新数据整理：[数据库变量与项目数据Excel](../deliverables/心域智链_数据库变量与项目数据_20261028.xlsx)、[整理验收](test/数据库变量整理验收.md)、[独立复核](test/数据库变量整理独立复核.md)、[机器记录](test/database-inventory-verification.json)。27表198字段为完整预览参考，历史库存在差异，运行服务绑定未核实（2026-10-28）。
 
 | 文档 | 状态 | 说明 |
 | --- | --- | --- |
@@ -86,6 +116,8 @@
 | [AI评测与试点方案](test/AI评测与试点方案.md) | 待专业/校内确认 | 12合成案例、失败分母、评分记录、提供商与试点前置；无真实效果结论 |
 
 ## 运维、运营与申报交付
+
+本轮AI融合前置盘点：[代码结合点与复现边界](plan/ai-application/ai-integration-20261027/code-scope.md)、[文献审计与AI融合建议](plan/ai-application/ai-integration-20261027/literature-audit.md)。两份为静态代码与限定文献审查记录，先用于向用户解释AI定位；尚未并入S5交付正文，原Word/HTML及其复核绑定保持不变。
 
 | 文档/工件 | 状态 | 说明 |
 | --- | --- | --- |
@@ -170,3 +202,29 @@
 | [图表浏览器检查](../scripts/check-chart-gallery.mjs) | `node scripts/check-chart-gallery.mjs`，验证8图、URL、表格、实际SVG下载与手机布局；模块和输出参数见图表验收记录。 |
 | [科研静态绘图](../scripts/render-scientific-figures.py) | 本机 `py -3.14 scripts/render-scientific-figures.py --range 14 --sample A`；需要已有Matplotlib/numpy/Pillow，5图SVG/PDF/300dpi PNG与灰度输出，SciencePlots可选。 |
 | [合成界面基线](../scripts/capture-ui-baseline.mjs) | `node scripts/capture-ui-baseline.mjs`，隔离后端/外部请求；参数见截图说明。 |
+
+
+## PPT-R3：12项批注修订（2026-10-31）
+
+[六章答辩PPT批注修订](ppt/six-chapters-20261029/revision-r3/README.md)：11页新副本及2页约4分钟Word配套稿，含逐条批注映射、31省统计图/政府截图来源、算法拟案和最终校验。原六章首版、统一字号空白版、用户旧稿及申报书保留。
+
+
+## PPT-R4：图片比例与项目原理可视化（2026-10-31）
+
+> owner: AI-OUTLINE ｜ version: 4.0 ｜ status: 完成，供用户审阅 ｜ updated: 2026-10-31
+
+[修订与验证记录](ppt/six-chapters-20261029/revision-r4/README.md)、[23项素材/32处放置登记](ppt/six-chapters-20261029/revision-r4/selected-assets.json)。保留11页，第9页7节点原生原理图；整稿32张图无比例变形。交付11页PPT及2页约4分钟Word讲稿；逐页原生渲染及独立复核无阻断，旧文件与业务运行环境保留。
+
+
+## PPT-R5：多智能体与专家模型扩展（2026-10-31）
+
+> owner: AI-OUTLINE ｜ version: 5.0 ｜ status: 材料完成，供用户审阅 ｜ updated: 2026-10-31
+
+[本轮记录](ppt/six-chapters-20261029/revision-r5/README.md)、[素材登记](ppt/six-chapters-20261029/revision-r5/selected-assets.json)。16页新副本已完成，新增第10—14页对应原123第6—10页主题：多智能体架构、六模型分工、情绪线索画像、纵向RAG和规则危机复核。42张图片均锁比例、0张变形；5表64格与原生图表保持可编辑，旧图表/源工作簿同字节。原生PowerPoint16页及独立Luna逐页复核无阻断；第15页仅保留旧保守安全区警告，原生无碰撞。
+
+
+## PPT-R6：多智能体协作机制优化（2026-10-31）
+
+> owner: AI-OUTLINE ｜ version: 6.0 ｜ status: 材料完成，供用户审阅 ｜ updated: 2026-10-31
+
+[本轮记录](ppt/six-chapters-20261029/revision-r6/README.md)、[素材登记](ppt/six-chapters-20261029/revision-r6/selected-assets.json)。18页副本完成。第10—12页明确语义共同依据、情绪/认知/纵向并行、风险复核与资源草稿、虚构案例输入输出，以及冲突回查/失败降级/紧急独立优先人工路径。46图锁比例且0变形，6表92格、1原生图表；前版表格和图表源工作簿保持。原生18页与独立Luna逐页复核无阻断。

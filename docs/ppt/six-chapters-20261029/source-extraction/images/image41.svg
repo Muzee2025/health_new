@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="text/ecmascript" zoomAndPan="magnify" contentStyleType="text/css" style="stroke-opacity: 1.0;" version="1.0" width="48" fill="none" preserveAspectRatio="xMidYMid meet" viewBox="0 0 48 48" height="48" opacity="1.0">
+<circle stroke-linecap="round" fill-opacity="1.0" fill="#2563EB" stroke-linejoin="round" r="8" cx="24" cy="12" stroke="#2563EB" stroke-width="2.0"/>
+<path d="M42 44C42 34.0589 33.9411 26 24 26C14.0589 26 6 34.0589 6 44" stroke-width="2.0" stroke-linejoin="round" stroke-linecap="round" stroke="#2563EB"/>
+<path stroke-linecap="round" fill-opacity="1.0" fill="#2563EB" stroke-linejoin="round" d="M24 44L28 39L24 26L20 39L24 44Z" stroke="#2563EB" stroke-width="2.0"/>
+</svg>

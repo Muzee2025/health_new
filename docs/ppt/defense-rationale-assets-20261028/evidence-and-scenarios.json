@@ -1,0 +1,86 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "3.0",
+  "updated": "2026-10-28",
+  "nationalEducation": {
+    "year": 2025,
+    "higherEducationInstitutions": 3167,
+    "ordinaryVocationalUndergraduateJuniorStudentsWan": "3953.96",
+    "scopeNote": "学校数含成人高校；学生数仅普通、职业本专科，不据此求校均值。",
+    "url": "https://www.moe.gov.cn/jyb_sjzl/sjzl_fztjgb/202607/t20260706_1442870.html"
+  },
+  "undergraduateMetaAnalysis": {
+    "citation": "Zhou et al. 2024, Table 1",
+    "doi": "10.1186/s13034-024-00841-w",
+    "url": "https://capmh.biomedcentral.com/counter/pdf/10.1186/s13034-024-00841-w.pdf",
+    "studies": 188,
+    "reportedSampleSize": 374996,
+    "proportion": 0.2772,
+    "ciLower": 0.2579,
+    "ciUpper": 0.2979,
+    "iSquaredPercent": 100,
+    "scopeNote": "本科研究亚组抑郁症状检出率；不是当前全国临床患病率，不能乘教育规模推算患者/用户。"
+  },
+  "counselingSurvey": {
+    "year": 2024,
+    "published": "2025-04",
+    "authors": "方圆、李朋远、陈祉妍",
+    "validUndergraduateQuestionnaires": 60782,
+    "knowsFreeCampusCounselingPercent": 80.0,
+    "everUsedPercent": 2.8,
+    "abstractUrl": "https://cpms.ssap.com.cn/skwx_cmr/initDatabaseDetail?contentId=8225479&contentType=literature&siteId=23",
+    "authorSummaryUrl": "https://psy.china.com.cn/2025-06/20/content_43141390.htm",
+    "authorSummaryAccessibleMirror": "https://big5.china.com.cn/gate/big5/psy.china.com.cn/2025-06/20/content_43141390.htm",
+    "scopeNote": "两个独立问题，不是转化漏斗；不推断未使用者均需咨询或本平台能提高使用率。"
+  },
+  "policy": {
+    "title": "教育部关于全面推进健康学校建设的指导意见",
+    "document": "教体艺〔2026〕3号",
+    "date": "2026-02-26",
+    "url": "https://www.moe.gov.cn/srcsite/A17/moe_943/moe_946/202602/t20260227_1429365.html",
+    "paraphrase": "要求规范开展心理健康监测、科学运用监测结果；政策要求不表示各校已达成。"
+  },
+  "hubeiEducation": {
+    "year": 2024,
+    "institutions": 133,
+    "students": 1915173,
+    "localSource": "docs/plan/ai-application/revision-20261027/regional-education-2024.json",
+    "scopeNote": "普通、职业高校及本专科在校生；背景而非客户、签约/服务人数。"
+  },
+  "procurementExample": {
+    "institution": "中国劳动关系学院",
+    "date": "2026-09-09",
+    "amountWan": "45",
+    "projectNumber": "ZYZB-2026-0788",
+    "scope": "访谈测评、AI陪伴、培训、平台、干预练习及部署等复合标的",
+    "url": "https://www.ccgp.gov.cn/cggg/zygg/cjgg/202609/t20260909_27295534.htm",
+    "scopeNote": "公开采购说明有采购实践，不证明本项目订单、效果或可照搬单价。"
+  },
+  "scaleAssumptions": {
+    "status": "planning_scenarios_not_measured_capacity",
+    "studentsPerInstitution": 5000,
+    "recordsPerStudentPerSemester": 2,
+    "summaryFractionOfRecords": "0.20",
+    "scopeNote": "20%是人为设定的业务调用比例，不是风险检出率或实测需求；人数是场景覆盖假设。"
+  },
+  "scaleScenarios": [
+    {
+      "schools": 1,
+      "students": 5000,
+      "recordsPerSemester": 10000,
+      "summariesPerSemester": 2000
+    },
+    {
+      "schools": 5,
+      "students": 25000,
+      "recordsPerSemester": 50000,
+      "summariesPerSemester": 10000
+    },
+    {
+      "schools": 10,
+      "students": 50000,
+      "recordsPerSemester": 100000,
+      "summariesPerSemester": 20000
+    }
+  ]
+}

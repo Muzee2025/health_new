@@ -1,0 +1,100 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "2.0",
+  "updated": "2026-10-28",
+  "synthetic": true,
+  "casePurpose": "Only demonstrate record cleaning, reproducible numerical facts and the proposed source-grounded summarization workflow. Not clinical data or real model evaluation.",
+  "raw": [
+    {
+      "id": "R01",
+      "date": "2026-10-01",
+      "instrument": "演示A",
+      "version": "v1",
+      "score": 12
+    },
+    {
+      "id": "R02",
+      "date": "2026-10-08",
+      "instrument": "演示A",
+      "version": "v1",
+      "score": 16
+    },
+    {
+      "id": "R02",
+      "date": "2026-10-08",
+      "instrument": "演示A",
+      "version": "v1",
+      "score": 16
+    },
+    {
+      "id": "R03",
+      "date": "2026-10-15",
+      "instrument": "演示A",
+      "version": "v1",
+      "score": 14
+    },
+    {
+      "id": "R04",
+      "date": "2026-10-22",
+      "instrument": "演示A",
+      "version": "v1",
+      "score": null
+    },
+    {
+      "id": "R05",
+      "date": "2026-10-22",
+      "instrument": "演示A",
+      "version": "v2",
+      "score": 9
+    }
+  ],
+  "facts": {
+    "rawRows": 6,
+    "uniqueRows": 5,
+    "duplicateRows": 1,
+    "comparableNonmissing": 3,
+    "validRecordIds": [
+      "R01",
+      "R02",
+      "R03"
+    ],
+    "scores": [
+      12,
+      16,
+      14
+    ],
+    "meanScore": 14.0,
+    "latestDifference": -2,
+    "missingIds": [
+      "R04"
+    ],
+    "incomparableIds": [
+      "R05"
+    ],
+    "seriesDates": [
+      "10-01",
+      "10-08",
+      "10-15",
+      "10-22"
+    ],
+    "seriesValues": [
+      12,
+      16,
+      14,
+      null
+    ]
+  },
+  "knowledge": {
+    "id": "K01",
+    "articleId": "guide-test-records",
+    "title": "测评记录可以说明什么",
+    "version": "1.0.0",
+    "excerpt": "量表版本、适用人群和解释方式应由专业人员确认",
+    "reviewStatus": "engineering_reviewed",
+    "license": "项目原创",
+    "source": "backend/scripts/content-catalog.json",
+    "sourceSha256": "81cd624690df9b2abaa4c87d14c73ea4ff6cf85f553af1c4ce0701125bb0bcf9"
+  },
+  "modelCalled": false,
+  "draftOrigin": "human-authored target example"
+}

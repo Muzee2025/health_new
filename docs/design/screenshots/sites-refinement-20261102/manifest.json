@@ -1,0 +1,48 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "status": "inspected_synthetic_browser_evidence",
+  "updated": "2026-11-02",
+  "images": [
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/after-dashboard-1440.png",
+      "sha256": "1543aee3ae597727cdca38446b73a05a1c033d3682e8b86d13181f84904a7d43",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/after-questions-1440.png",
+      "sha256": "92972da34f28bcb70eb9f5b4e82691834e0126dc84394cc7f7973ec689dbd3e9",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/after-report-1440.png",
+      "sha256": "e74403484c96d137f3c9ee11dc53c5ecd6b83675a68256aff896715c5f873545",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/before-dashboard-1440.png",
+      "sha256": "dd1f7016c327e6ae5fdbce7503d3e5516588d746148b1b2dd2983cb7a60feb40",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-chat-390.png",
+      "sha256": "ccefe589c7258bb6dc93193ac5b4fb3c94f051dc3155a37fccde15f4bce3d0b1",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-dashboard-390.png",
+      "sha256": "b03e3a0f4243cc108f57f31ab4408e9795a920c9cf5a28db69377333830f7535",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-questions-390.png",
+      "sha256": "577be8dc878d6b7f81e4795c926dace77424fefdafe9c6d8bc978323c168ef08",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-report-390.png",
+      "sha256": "7c36c0caa5ca950c437b58488e4b500591aec588b8e64152221deec54b0ca782",
+      "synthetic_only": true
+    }
+  ]
+}

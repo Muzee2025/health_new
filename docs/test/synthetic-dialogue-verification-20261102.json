@@ -1,0 +1,161 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "updated": "2026-11-02",
+  "status": "synthetic_candidates_generated_and_imported",
+  "authorization": "User explicitly requested AI-generated individual fictional Q&A and database insertion.",
+  "package": {
+    "path": "deliverables/心域智链_合成问答训练集_20261102",
+    "manifest_sha256": "2974b3a055828e5702ae166b46bec8fb493a92ee7b29a2b69f5dd6de8abb75b3",
+    "database_sha256": "3f8931f627eebeb4c0514e580fa3b62516d73eed9d619e3eadaaaf781d388d20",
+    "archive": "deliverables/心域智链_合成问答训练集_20261102.zip",
+    "archive_sha256": "8726d9012149c8a05a5331dd7ab2255719c8b404331a449f3213501491bd8bad",
+    "archive_bytes": 346772,
+    "archive_files": 10,
+    "archive_member_hashes_verified": true
+  },
+  "counts": {
+    "literature_aggregates": 38,
+    "reference_records": 476,
+    "region_education": 31,
+    "schema_fields": 198,
+    "schema_tables": 27,
+    "source_cells": 5828,
+    "source_files": 4,
+    "source_sheets": 7,
+    "synthetic_batches": 1,
+    "synthetic_example_metadata": 96,
+    "training_examples": 96
+  },
+  "candidate_examples": 96,
+  "scenario_groups": 72,
+  "single_turn_scenarios": 48,
+  "two_turn_scenarios": 24,
+  "source_counts": [
+    [
+      "ai_synthetic_candidate",
+      32
+    ],
+    [
+      "ai_synthetic_candidate",
+      32
+    ],
+    [
+      "ai_synthetic_candidate",
+      32
+    ],
+    [
+      "metadata_and_public_aggregates",
+      0
+    ]
+  ],
+  "candidate_status_counts": [
+    [
+      "candidate",
+      "unassigned",
+      96
+    ]
+  ],
+  "quality": {
+    "candidate_examples": 96,
+    "scenario_groups": 72,
+    "topic_counts": {
+      "study_pressure": 8,
+      "time_management": 8,
+      "career_uncertainty": 8,
+      "perfectionism": 8,
+      "relationships": 8,
+      "loneliness": 8,
+      "family_boundaries": 8,
+      "emotion_support": 8,
+      "routine_and_helpseeking": 8,
+      "assessment_literacy": 8,
+      "platform_privacy": 8,
+      "safety_support": 8
+    },
+    "unique_normalized_questions": 96,
+    "unique_normalized_answers": 96,
+    "near_duplicate_method": "character SequenceMatcher >= 0.86 on normalized question OR answer; heuristic only",
+    "near_duplicate_candidates": [],
+    "clinical_quality_assessed": false,
+    "professional_reviewed": false,
+    "accepted_for_training": 0,
+    "split": "unassigned"
+  },
+  "author_sources": [
+    {
+      "filename": "part-a.jsonl",
+      "sha256": "c9f3edfb5fa5f47dd093dcc0243a33b7252bac4f87479f6f6efb253df6f10e4b",
+      "candidate_examples": 32,
+      "author_agent": "dashboard_polish",
+      "author_model_id": "unknown",
+      "editor_agent": "root",
+      "revision_note": "removed unnecessary campus-location question"
+    },
+    {
+      "filename": "part-b.jsonl",
+      "sha256": "8549f1c1ac1caa31b28a532a95a57469cb39bca3d1a885efa358c61eadd59342",
+      "candidate_examples": 32,
+      "author_agent": "report_polish",
+      "author_model_id": "unknown",
+      "editor_agent": "root",
+      "revision_note": "removed 24 unnecessary age prefixes; refreshed matching history"
+    },
+    {
+      "filename": "part-c.jsonl",
+      "sha256": "f96775980f2a3ffbeec55ad2776746d341295bffa430656f2e2d5e838a8f75bf",
+      "candidate_examples": 32,
+      "author_agent": "root",
+      "author_model_id": "unknown",
+      "editor_agent": "root",
+      "revision_note": "original authored content"
+    }
+  ],
+  "checks": {
+    "command": "python -m unittest scripts.tests.test_training_database scripts.tests.test_synthetic_dialogues -v",
+    "runtime": "bundled Python",
+    "exit_code": 0,
+    "passed": 30,
+    "new_tests": 16,
+    "sqlite_integrity": "ok",
+    "foreign_key_issues": 0
+  },
+  "independent_ai_review": {
+    "report": "docs/test/合成问答入库独立复核_20261102.md",
+    "report_sha256": "4714a23960f5299ded78cf5e1ab9d0ca99aa3c9e32f0db440059b4607aa4b2b2",
+    "scope": "96 candidate texts and data/software checks; not professional clinical review",
+    "status": "passed"
+  },
+  "preserved": {
+    "prior_reference_package_and_archive": true,
+    "original_workbook": true,
+    "original_databases": [
+      {
+        "path": "tmp/showcase-20261024-7f5512da/health.db",
+        "sha256": "0ce0a025b164b0d212c76b21c6d815e78b3389f00ac40f9b21b5b0e219a1f75c",
+        "unchanged": true
+      },
+      {
+        "path": "health.db",
+        "sha256": "bb786303a4dc3680b9199fc1e10c7845af3ed03c419be87a6a08bedda0f78cb5",
+        "unchanged": true
+      },
+      {
+        "path": "backend/health.db",
+        "sha256": "218cfdd5c7cf485bb7ccd494ae7728a406606ffe356fc234e20bee2cf3b3d049",
+        "unchanged": true
+      }
+    ]
+  },
+  "boundaries": {
+    "generation_origin": "original_ai_fiction",
+    "real_person_data_used": false,
+    "professional_reviewed": false,
+    "accepted_examples": 0,
+    "training_started": false,
+    "uploaded": false,
+    "website_changed": false,
+    "business_database_switched": false,
+    "main_repository_committed_or_pushed": false
+  }
+}

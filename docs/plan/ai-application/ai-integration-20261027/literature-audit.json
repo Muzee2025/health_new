@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "owner": "Lead / AI-LIT-AUDIT",
+    "version": "1.0.0",
+    "status": "frozen-audit",
+    "updated": "2026-10-27",
+    "scope": "Read-only audit of proposal references 1-27 and frozen SCI literature files; add up to three AI methods/evaluation sources.",
+    "limitations": [
+      "No full systematic review, duplicate screening, or appraisal of the 439 primary studies.",
+      "No independent recomputation of meta-analysis or the 31-region dataset.",
+      "References 1-24 and 27 received source-type/link and claim-scope triage only; full-text methods, numeric claims, corrections, and current legal status were not individually verified.",
+      "No JCR quartiles or SCI indexing status were checked or inferred.",
+      "Zhou correction/retraction check was a publisher-page and exact-title/DOI web search; not an exhaustive registry or Crossmark audit.",
+      "SciSpace invocation returned a connection error; direct publisher/proceedings pages were used for substantive checks."
+    ]
+  },
+  "core_review": {
+    "reference_25": {
+      "status": "publisher-original-checked",
+      "citation": "Zhou J, Liu Y, Ma J, et al. Prevalence of depressive symptoms among children and adolescents in China: a systematic review and meta-analysis. Child Adolesc Psychiatry Ment Health. 2024;18:150.",
+      "doi": "10.1186/s13034-024-00841-w",
+      "publisher_url": "https://link.springer.com/article/10.1186/s13034-024-00841-w",
+      "design": "Systematic review and random-effects meta-analysis; eligible ages 6-24; searches in PubMed, EMBASE, CNKI, WANFANG through 2024-10-15; publication years 1988-2024; no unified fieldwork period reported.",
+      "evidence_type": "Peer-reviewed journal review/meta-analysis; not primary intervention evidence.",
+      "checked_results": {
+        "overall": "439 studies; 1,497,524 participants; pooled depressive-symptom screening positive proportion 26.17% (95% CI 25.00-27.41); I2=100%; p<0.001.",
+        "education_subgroup_test": "chi-square=26.24; p<0.01.",
+        "cutoffs": "Eight instruments used; authors did not subgroup the same instrument by different cutoffs.",
+        "publication_bias": "Funnel asymmetry and Egger z=-9.17, p<0.01 reported.",
+        "quality_reporting": "Authors report quality scores 3-8, median 6; 8/439 described nonresponders clearly; 141/439 lacked confidence intervals or subgroup details."
+      },
+      "limits_for_claims": [
+        "Screen-positive depressive symptoms are not a clinical diagnosis or local prevalence estimate.",
+        "I2=100%, varying instruments/cutoffs and publication bias materially limit transferability.",
+        "Stage subgroup k and n are not mutually exclusive; stage differences are descriptive and do not establish causes.",
+        "The high-school minus primary-school point estimate difference of 11.26 percentage points is descriptive only, not a pairwise test."
+      ],
+      "correction_retraction_check": "No correction/retraction notice surfaced in publisher-page and exact-title/DOI web checks performed 2026-10-27; not an exhaustive registry/Crossmark search."
+    },
+    "reference_26": {
+      "status": "publisher-supplement-source-checked; dataset-not-recomputed",
+      "source": "Additional file 4, Supplementary Table S2",
+      "url": "https://media.springernature.com/original/springer-static/esm/art%3A10.1186%2Fs13034-024-00841-w/MediaObjects/13034_2024_841_MOESM4_ESM.pdf",
+      "observations": [
+        "The supplement lists 33 rows including Hong Kong, Taiwan, and Tianjin; proposal charts 31 mainland rows.",
+        "The paper states its map excludes Macau and 29 articles with unspecified or multi-province sites.",
+        "Tianjin estimate derives from a multisite study; it is not a Tianjin-only study.",
+        "Abstract wording assigns Qinghai/Tibet study counts in an order that conflicts with Supplementary Table S2; frozen data follows the detailed table and notes the discrepancy.",
+        "Regional subgroup estimates are not representative province-level population rates."
+      ]
+    }
+  },
+  "existing_references": [
+    {"id": 1, "category": "survey/media report", "status": "locator-and-type-triage; underlying-methods-not-checked", "use_limit": "Do not claim representative prevalence or diagnosis; verify original report, sampling and denominator."},
+    {"id": 2, "category": "research-paper PDF hosted by Chinese Academy of Social Sciences domain", "status": "locator-and-type-triage; PDF-full-text-and-journal-metadata-not-checked", "use_limit": "Complete authors, original journal/year/volume/pages and sampling/measure metadata before submission; report perception items as perceptions."},
+    {"id": 3, "category": "survey report/public abstract", "status": "locator-and-type-triage; questionnaire-and-denominators-not-checked", "use_limit": "Do not derive a conversion rate from separate awareness/use items."},
+    {"id": 4, "category": "official national education statistics bulletin", "status": "official-source-type-identified; figures-not-recomputed", "use_limit": "Keep year, scope and student-category definitions."},
+    {"id": 5, "category": "government procurement award notice", "status": "source-type-identified; contract-performance-not-checked", "use_limit": "Award notice is not evidence of effectiveness, delivery or market-wide price."},
+    {"id": 6, "category": "government procurement award notice", "status": "source-type-identified; contract-performance-not-checked", "use_limit": "Award notice is not evidence of effectiveness, delivery or market-wide price."},
+    {"id": 7, "category": "government procurement award notice", "status": "source-type-identified; contract-performance-not-checked", "use_limit": "Preserve project/package scope; award notice is not evidence of effectiveness."},
+    {"id": 8, "category": "government procurement award notice", "status": "source-type-identified; contract-performance-not-checked", "use_limit": "Award notice is not evidence of effectiveness, delivery or market-wide price."},
+    {"id": 9, "category": "official ministry meeting/monitoring report", "status": "source-type-identified; underlying-monitoring-methods-not-checked", "use_limit": "Monitoring coverage figure is not a peer-reviewed sample or efficacy result."},
+    {"id": 10, "category": "official interdepartmental policy plan", "status": "source-type-identified; implementation-effects-not-checked", "use_limit": "Supports policy task/context only."},
+    {"id": 11, "category": "official ministry guidance", "status": "source-type-identified; implementation-effects-not-checked", "use_limit": "Supports policy context only."},
+    {"id": 12, "category": "official regional education statistics", "status": "official-source-type-identified; rows-not-recomputed", "use_limit": "Keep source year, units and category definitions."},
+    {"id": 13, "category": "official regional education statistics", "status": "official-source-type-identified; rows-not-recomputed", "use_limit": "Keep source year, units and category definitions."},
+    {"id": 14, "category": "official regional higher-education institution statistics", "status": "official-source-type-identified; rows-not-recomputed", "use_limit": "Preserve ordinary/vocational/adult institution category distinctions."},
+    {"id": 15, "category": "official regional senior-high statistics", "status": "official-source-type-identified; rows-not-recomputed", "use_limit": "Keep source year, units and category definitions."},
+    {"id": 16, "category": "official regional junior-high statistics", "status": "official-source-type-identified; rows-not-recomputed", "use_limit": "Keep source year, units and category definitions."},
+    {"id": 17, "category": "provincial education site carrying media report", "status": "host-and-source-type-triage; underlying-survey-not-checked", "use_limit": "Retain reported timeframe/denominator limitations; do not generalize statewide."},
+    {"id": 18, "category": "provincial department self-evaluation report", "status": "official-source-type-identified; independent-effect-evaluation-not-checked", "use_limit": "Identify as self-report, not independent impact evidence."},
+    {"id": 19, "category": "psychological counseling-room construction guideline hosted on local-government site", "status": "host-and-type-triage; issuing-document-number-and-current-validity-not-checked", "use_limit": "Distinguish issuing authority from host; do not imply research evidence."},
+    {"id": 20, "category": "provincial education department local case report", "status": "official-report-type-identified; outcome-evaluation-not-checked", "use_limit": "A local activity example is not regional coverage or efficacy."},
+    {"id": 21, "category": "provincial education guideline PDF", "status": "type-triage; formal-version-and-current-validity-not-checked", "use_limit": "Identify document status and applicable group."},
+    {"id": 22, "category": "official national standards database record", "status": "database-type-identified; standard-number-and-current-status-not-rechecked", "use_limit": "Add standard number, current status and scope; not an efficacy study."},
+    {"id": 23, "category": "provincial education department news", "status": "official-news-type-identified; underlying-standard-not-checked", "use_limit": "Scope 'first' to wording of source; not an outcomes study."},
+    {"id": 24, "category": "municipal education policy action plan", "status": "official-policy-type-identified; implementation-effects-not-checked", "use_limit": "Supports policy context only."},
+    {"id": 25, "category": "peer-reviewed systematic review/meta-analysis", "status": "publisher-original-checked; correction-check-not-exhaustive", "use_limit": "See core_review.reference_25."},
+    {"id": 26, "category": "publisher supplementary data table", "status": "publisher-supplement-checked; regional-values-not-recomputed", "use_limit": "See core_review.reference_26."},
+    {"id": 27, "category": "publisher author artwork instructions", "status": "reference-type-identified; not-research-evidence", "use_limit": "Editorial technical guidance only; not universal journal acceptance criteria."}
+  ],
+  "new_ai_sources": [
+    {
+      "id": 28,
+      "citation": "Lewis P, Perez E, Piktus A, et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. Advances in Neural Information Processing Systems 33. 2020.",
+      "publication_type": "Formal NeurIPS proceedings paper",
+      "url": "https://proceedings.neurips.cc/paper/2020/hash/6b493230205f780e1bc26945df7481e5-Abstract.html",
+      "doi": null,
+      "checked_claim": "Describes combining parametric language-model memory with nonparametric retrieved passages; evaluations are general knowledge-intensive NLP tasks, not mental-health service studies."
+    },
+    {
+      "id": 29,
+      "citation": "Singhal K, Azizi S, Tu T, et al. Large language models encode clinical knowledge. Nature. 2023;620:172-180.",
+      "publication_type": "Peer-reviewed journal article",
+      "doi": "10.1038/s41586-023-06291-2",
+      "url": "https://doi.org/10.1038/s41586-023-06291-2",
+      "correction": {"doi": "10.1038/s41586-023-06455-0", "url": "https://www.nature.com/articles/s41586-023-06455-0", "scope": "Publisher correction states references 1-14 were disordered in initial version due to a conversion error; HTML/PDF references corrected."},
+      "checked_claim": "Combines MultiMedQA benchmark and clinician human evaluation of long-form answers; study authors report remaining gaps from clinician-level performance. Pilot framework axes include factuality, comprehension, reasoning, possible harm and bias. Not a mental-health-specific product trial."
+    },
+    {
+      "id": 30,
+      "citation": "Guo Z, Lai A, Thygesen JH, et al. Large Language Models for Mental Health Applications: Systematic Review. JMIR Ment Health. 2024;11:e57400.",
+      "publication_type": "Peer-reviewed systematic review",
+      "doi": "10.2196/57400",
+      "url": "https://mental.jmir.org/2024/1/e57400",
+      "checked_claim": "PRISMA review searched through 2024-04-30 and evaluated 40 articles across detection, conversational-agent and other mental-health tasks; reports risks including inconsistent outputs, hallucinations, limited ethical benchmarks and need for professional oversight. Review findings are heterogeneous and not direct evidence for this platform."
+    }
+  ],
+  "ai_integration": {
+    "workflow": [
+      "Deterministic code calculates confirmed fields, missingness and comparable same-version scores.",
+      "RAG retrieves only approved institutional information and returns document/version/paragraph provenance.",
+      "LLM drafts a four-part summary: recorded facts, cited information, missing information, and questions for human confirmation.",
+      "Assigned professional checks source records, edits or discards draft and remains responsible for communication/action."
+    ],
+    "prohibited_claims_without_new_validation": [
+      "AI accurately diagnoses depression or determines crisis level.",
+      "AI reduces workload, improves mental health, or improves referral outcomes.",
+      "Current prototype has validated model performance."
+    ],
+    "reproducibility_difficulty": {
+      "deterministic_statistics": "low, after the instrument, data dictionary and score conventions have been confirmed",
+      "controlled_RAG": "moderate; requires a frozen corpus/index/retrieval configuration and human relevance labels",
+      "LLM_summary_evaluation": "moderate-high; requires fixed synthetic cases, exact model/version, prompts, sampling settings, rubric and blinded dual review; hosted model drift can impede exact repeatability",
+      "clinical_or_service_outcomes": "high; requires school and ethics approval, expert staff, real-world protocol, sampling, monitoring and safety stop rules"
+    },
+    "recommended_proposal_paragraph": "Project AI is limited to reviewed-information retrieval and draft organization. Deterministic code first processes records against an approved field dictionary and instrument version, marking missing or incomparable items. Retrieval returns source passages from approved institutional materials with version and location. A language model drafts a four-part summary of recorded facts, source material, missing information and questions for staff to confirm. Staff compare the draft with original records, edit or discard it, and remain responsible for communication and decisions. The first evaluation will use fixed synthetic cases to assess factual support, omissions, citations, boundary violations, staff edits and failure fallback. Further evaluation is contingent on school approval, role assignment, data governance and professional review."
+  }
+}

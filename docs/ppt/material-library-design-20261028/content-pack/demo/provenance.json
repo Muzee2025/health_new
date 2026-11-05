@@ -1,0 +1,9 @@
+{
+  "sourceFile": "docs/design/screenshots/library-source/production/qa.json",
+  "sourceSha256": "91ddfccdbe3aa213f13a0f2237d2a4732aed6cb6f206588762e8f8bf9b4d2416",
+  "task": "W2-LIB-PRODUCTION",
+  "status": "synthetic-business-regression",
+  "source": "W2业务页面；所有 API 均由本脚本在浏览器路由层合成响应。真实后端、真实账号、真实学生数据均未使用。",
+  "generatedAt": "2026-10-22T05:27:30.403Z",
+  "scope": "合成预约页面，不证明AI摘要、求助跟进或真实校内使用"
+}

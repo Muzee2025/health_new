@@ -1,0 +1,172 @@
+{
+  "owner": "A Lead",
+  "updated": "2026-10-28",
+  "method": "targeted discovery; not systematic or exhaustive",
+  "queries": [
+    {
+      "engine": "SciSpace",
+      "question": "Which open-access studies provide downloadable supplementary datasets on depression and anxiety prevalence, time trends, and associated factors among Chinese secondary school and university students?",
+      "results": [
+        {
+          "title": "Additional file 2 of Epidemiology of depressive disorders among youth during Gaokao to college in China: results from Hunan Normal University mental health survey",
+          "scispace_id": "n1q4h43fgqxt",
+          "doi": "10.6084/m9.figshare.26600857.v1",
+          "index_year": "2024"
+        },
+        {
+          "title": "Additional file 2 of Epidemiology of depressive disorders among youth during Gaokao to college in China: results from Hunan Normal University mental health survey",
+          "scispace_id": "zrkxl0dzhfa7",
+          "doi": "10.6084/m9.figshare.26600857",
+          "index_year": "2024"
+        },
+        {
+          "title": "Chinese University Students' Lifestyle and Physical-Mental Health Dataset (2024)",
+          "scispace_id": "me22lvry6wuv",
+          "doi": "10.57760/sciencedb.34161",
+          "index_year": "2025"
+        },
+        {
+          "title": "Anxiety and Depression Among International Students During the COVID-19 Pandemic: A Systematic Review and Meta-Analysis of Prevalence and Associated Factors",
+          "scispace_id": "ahkjvbc0ay3w",
+          "doi": "10.57760/sciencedb.012kn",
+          "index_year": "2026"
+        },
+        {
+          "title": "Prevalence and associated factors of depressive and anxiety symptoms among Chinese secondary school students",
+          "scispace_id": "3cmwrw8n1j",
+          "doi": "10.1186/s12888-023-05068-1",
+          "index_year": "2023"
+        },
+        {
+          "title": "Prevalence and Associated Factors of Complains on Depression, Anxiety, and Stress in University Students: An Extensive Population-Based Survey in China",
+          "scispace_id": "2bj09s72",
+          "doi": "10.3389/fpsyg.2022.842378",
+          "index_year": "2022"
+        },
+        {
+          "title": "Assessment of depression and anxiety among chinese university students: a systematic review",
+          "scispace_id": "61c9ri4cnjgp",
+          "doi": "10.5281/zenodo.19397126",
+          "index_year": "2026"
+        },
+        {
+          "title": "Depression, anxiety and associated factors among Chinese adolescents during the COVID-19 outbreak: a comparison of two cross-sectional studies.",
+          "scispace_id": "2frwsxr3mo",
+          "doi": "10.1038/S41398-021-01271-4",
+          "index_year": "2021"
+        },
+        {
+          "title": "Prevalence and determinants of depression, anxiety, and stress among secondary school students",
+          "scispace_id": "5aghk2dwnuia",
+          "doi": "10.1371/journal.pone.0328785",
+          "index_year": "2025"
+        },
+        {
+          "title": "Status and epidemiological characteristics of depression and anxiety among Chinese university students in 2023",
+          "scispace_id": "tc7e1udbhqpo",
+          "doi": "10.1186/s12889-025-22443-7",
+          "index_year": "2025"
+        }
+      ]
+    },
+    {
+      "engine": "SciSpace",
+      "question": "Which randomized controlled trials or systematic reviews provide downloadable numerical data on mental health chatbot interventions for adolescents or university students, including depression and anxiety outcomes?",
+      "results": [
+        {
+          "title": "Enhancing mental health support for students through AI-powered chatbot: a systematic literature review",
+          "scispace_id": "o1c3ojr34bsn",
+          "doi": "10.29210/1202526198",
+          "index_year": "2025"
+        },
+        {
+          "title": "Predicting Symptom Change in Mental Health Chatbot Interventions: A Meta-Analysis",
+          "scispace_id": "8c6onqjtqm0u",
+          "doi": "10.1080/10410236.2026.2734165",
+          "index_year": "2026"
+        },
+        {
+          "title": "Effectiveness of AI and rule-based conversational agents for depression, anxiety and stress: A meta-analysis",
+          "scispace_id": "owkjyct9w8g4",
+          "doi": "10.1038/s41746-026-02820-1",
+          "index_year": "2026"
+        },
+        {
+          "title": "The therapeutic effectiveness of artificial intelligence-based chatbots in alleviation of depressive and anxiety symptoms in short-course treatments: A systematic review and meta-analysis.",
+          "scispace_id": "152oe9kjqp",
+          "doi": "10.1016/j.jad.2024.04.057",
+          "index_year": "2024"
+        },
+        {
+          "title": "Systematic review and meta analysis of chatbots in the management of depressive and anxiety symptoms",
+          "scispace_id": "655ppfhupjj9",
+          "doi": "10.1038/s41746-026-02566-w",
+          "index_year": "2026"
+        },
+        {
+          "title": "Effectiveness of Digital Health Interventions on Stress, Anxiety, and Depression in University Students: A Systematic Review and Meta-Analysis",
+          "scispace_id": "etamy9pip7l0",
+          "doi": "10.3791/69949",
+          "index_year": "2026"
+        },
+        {
+          "title": "Efficacy of artificial intelligence-driven conversational agents (chatbots) for mental health promotion among university students: a systematic review and meta-analysis",
+          "scispace_id": "tkccyth5flv6",
+          "doi": "10.3389/fpsyt.2026.1824378",
+          "index_year": "2026"
+        },
+        {
+          "title": "Effectiveness of artificial intelligence chatbots on mental health &amp; well-being in college students: a rapid systematic review",
+          "scispace_id": "lketk927cz1c",
+          "doi": "10.3389/fpsyt.2025.1621768",
+          "index_year": "2025"
+        },
+        {
+          "title": "The Impact of Chatbots on Adolescent Mental Health Development: A Comprehensive Literature Review",
+          "scispace_id": "i1gdfpkmekg0",
+          "doi": "10.2147/jmdh.s579872",
+          "index_year": "2026"
+        },
+        {
+          "title": "Artificial Intelligence-Powered Cognitive Behavioral Therapy Chatbots, a Systematic Review",
+          "scispace_id": "3qxcurbrtpcz",
+          "doi": "10.18502/ijps.v20i1.17395",
+          "index_year": "2024"
+        }
+      ]
+    }
+  ],
+  "dataset_column": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Added 'dataset' column with data for 4/4 papers."
+      }
+    ],
+    "structuredContent": {
+      "columnKey": "dataset",
+      "columnData": {
+        "data": {
+          "tc7e1udbhqpo": {
+            "data": "1. There is no specific named dataset mentioned in the provided abstract; the study only describes using a sample of 49,717 university students from 106 Chinese universities with responses collected via self-report questionnaires.",
+            "context_map": {}
+          },
+          "n1q4h43fgqxt": {
+            "data": "1. Table S1 (Province distribution of the participants)  \n2. Table S2 (Correlations matrix of screening Instruments)  \n3. Table S3 (The 9-month cumulative incidence and prevalence of depressive disorders with sampling weight and poststratification weight)  \n4. Table S4 (The prevalence of depressive symptoms and suicide ideation)  \n5. Figure S1 (Flowchart of procedures of suicidal ideation survey)",
+            "context_map": {}
+          },
+          "3cmwrw8n1j": {
+            "data": "1. Patient Health Questionnaire (9-item)  \n2. Generalized Anxiety Disorder Questionnaire (7-item)  \n3. Multidimensional Peer-Victimization Scale  \n4. Pittsburgh Sleep Quality Index  \n5. Nine-Item Internet Gaming Disorder Scale-Short Form",
+            "context_map": {}
+          },
+          "2frwsxr3mo": {
+            "data": "1. **Pre-designed data collection form** (used to collect socio-demographic data and information about clinical characteristics)",
+            "context_map": {}
+          }
+        },
+        "not_found": []
+      }
+    },
+    "isError": false
+  }
+}

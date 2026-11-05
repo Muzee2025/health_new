@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "task_id": "AI-CODE-SCOPE",
+  "owner": "A / AI-CODE-SCOPE",
+  "version": "1.0",
+  "status": "code_inventory_frozen",
+  "updated": "2026-10-27",
+  "scope": {
+    "read_only": true,
+    "read_env": false,
+    "read_database_logs_or_real_data": false,
+    "imported_application": false,
+    "called_provider": false,
+    "git_operations": false,
+    "limitations": "Static code and project-document inspection only. Provider configuration and runtime state are unknown."
+  },
+  "claims": {
+    "available_in_code": [
+      "Student chat and report entry points",
+      "Qwen, Zhipu Emohaa and DeepSeek provider adapters; exact active deployment configuration unknown",
+      "Optional knowledge retrieval with SQL knowledge records authoritative and vector index opt-in",
+      "Heuristic/statistical report aggregation and local structured fallback",
+      "Teacher warning review history and assigned-student support workflows",
+      "Multi-model orchestration, streaming, retries, timeouts, circuit behavior and fallback paths",
+      "Offline synthetic-case comparison tool requiring independent ratings"
+    ],
+    "not_established": [
+      "Provider/model is currently configured or active in any target runtime",
+      "Clinical effectiveness, diagnostic accuracy, calibrated risk probabilities or trained NLP model results",
+      "Complete image/audio input understanding or validated multimodal fusion",
+      "Every AI output has mandatory teacher approval",
+      "Real model evaluation, professional review or school pilot has been completed"
+    ]
+  },
+  "capabilities": [
+    {
+      "id": "student_chat",
+      "status": "provider_adapters_and_chat_routes_in_code",
+      "evidence": [
+        {"path": "backend/app/routers/advanced_chat.py", "lines": [902, 1138], "note": "Chat and streaming routes; invokes emotion pipeline and Zhipu service."},
+        {"path": "backend/app/services/zhipu_emohaa_service.py", "lines": [15, 97], "note": "HTTP/SKD provider adapter for emohaa."},
+        {"path": "backend/app/services/qwen_service.py", "lines": [8, 57], "note": "Qwen chat adapter; placeholder literal visible in source, do not infer runtime secret/configuration."}
+      ],
+      "runtime_configuration_verified": false,
+      "recommended_claim": "Model-adapter and student-chat code exists; active provider/model must be verified in the deployment configuration."
+    },
+    {
+      "id": "knowledge_retrieval",
+      "status": "optional_rag_code_and_student_analysis_wiring",
+      "evidence": [
+        {"path": "backend/app/services/rag_service.py", "lines": [1, 125], "note": "RAG defaults off; embedding initialization requires explicit opt-in; SQL records remain authoritative."},
+        {"path": "backend/app/routers/teacher.py", "lines": [1028, 1059], "note": "Knowledge item CRUD attempts optional index add/delete."},
+        {"path": "backend/app/routers/student.py", "lines": [550, 579], "note": "Student assessment explanation constructs retrieval context and calls DeepSeek."}
+      ],
+      "runtime_configuration_verified": false,
+      "quality_verified": false,
+      "recommended_claim": "Optional retrieval-augmented analysis path exists; indexed corpus, retrieval quality, licensing and live configuration have not been verified."
+    },
+    {
+      "id": "rules_statistics_and_risk",
+      "status": "heuristic_scoring_and_keyword_flags_in_code",
+      "evidence": [
+        {"path": "backend/app/services/nlp_engine.py", "lines": [7, 119], "note": "Docstring explicitly describes model-like logic as dictionary/heuristic simulation; fixed outputs are not trained model results."},
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": [81, 155], "note": "Heuristic score, trend, radar and derived heatmap aggregation."},
+        {"path": "backend/app/services/llm_fallback.py", "lines": [23, 63], "note": "Keyword-based fixed bucket scores and canned interventions."},
+        {"path": "backend/app/routers/advanced_chat.py", "lines": [83, 90], "note": "Keyword crisis detection."}
+      ],
+      "calibration_verified": false,
+      "clinical_validity_established": false,
+      "recommended_claim": "Rule-based indicators and aggregate displays support attention and discussion; scores are not calibrated probabilities, diagnosis, or incidence estimates."
+    },
+    {
+      "id": "report_explanation",
+      "status": "statistics_plus_optional_llm_and_local_fallback",
+      "evidence": [
+        {"path": "backend/app/services/dialogue_analysis_service.py", "lines": [158, 205], "note": "Calls non-local configured LLM URL when present; otherwise returns structured local rule fallback and default chart explanations."},
+        {"path": "backend/app/routers/report_v1.py", "lines": [92, 130], "note": "Builds/reuses report and exposes score/risk data and explanations."},
+        {"path": "backend/app/routers/advanced_chat.py", "lines": [1469, 1528], "note": "Chat-derived report route uses Qwen report adapter."},
+        {"path": "src/views/student/Report.vue", "lines": [1075, 1165], "note": "Student UI submits and streams collaborative analysis."}
+      ],
+      "runtime_provider_verified": false,
+      "factual_fidelity_verified": false,
+      "recommended_claim": "Report aggregation and explanation paths exist, with both external-model and local fallback paths; runtime selection and output quality remain to be verified."
+    },
+    {
+      "id": "teacher_human_review",
+      "status": "warning_review_and_followup_workflow_in_code",
+      "evidence": [
+        {"path": "backend/app/routers/teacher.py", "lines": [197, 270], "note": "Review actions/reasons and review history are persisted for assigned students."},
+        {"path": "src/views/teacher/AdvancedDashboard.vue", "lines": [112, 247], "note": "Teacher UI collects review action/reason and displays history/errors."},
+        {"path": "src/views/teacher/SupportWorkspace.vue", "lines": [19, 120], "note": "Question response, warning history and follow-up workflow."}
+      ],
+      "mandatory_approval_for_all_ai_outputs": false,
+      "staffing_and_sla_verified": false,
+      "recommended_claim": "Teacher warning review and follow-up recording are implemented; actual staffing, professional responsibility, response deadlines and mandatory approval scope require school confirmation."
+    },
+    {
+      "id": "orchestration_and_multimodal",
+      "status": "orchestration_adapters_and_hints_in_code",
+      "evidence": [
+        {"path": "backend/app/services/multi_model_orchestrator.py", "lines": [30, 43], "note": "Declares model chain and environment-controlled primary/fallback parameters."},
+        {"path": "backend/app/services/multi_model_orchestrator.py", "lines": [281, 359], "note": "Sequential stage execution, event streaming, result/error recording."},
+        {"path": "backend/app/services/multi_model_orchestrator.py", "lines": [492, 623], "note": "Calls Qwen-compatible chat endpoint, primary fallback and response parsing."},
+        {"path": "backend/app/services/multi_model_orchestrator.py", "lines": [677, 719], "note": "WANX adapter is text-to-image API, not visual understanding of uploaded student media."},
+        {"path": "backend/app/services/multi_model_orchestrator.py", "lines": [721, 755], "note": "Rerank adapter."},
+        {"path": "backend/app/routers/report_v1.py", "lines": [318, 331], "note": "Passes visualHints/audioHints fields; fields alone do not constitute media input parsing."}
+      ],
+      "complete_multimodal_understanding_verified": false,
+      "confidence_calibration_verified": false,
+      "recommended_claim": "A multi-model orchestration framework and several provider adapters exist; complete multimodal analysis and model confidence calibration are not established."
+    },
+    {
+      "id": "evaluation",
+      "status": "offline_evaluation_pipeline_and_synthetic_cases_ready",
+      "evidence": [
+        {"path": "scripts/evaluate-support-ai.py", "lines": [47, 124], "note": "Requires every variant to cover the same complete case set, separate ratings, includes failed attempts and states clinical effectiveness is false."},
+        {"path": "docs/test/AI评测与试点方案.md", "lines": [5, 22], "note": "12 synthetic cases; no provider calls, real student data, effect or accuracy claim."},
+        {"path": "docs/test/AI评测与试点方案.md", "lines": [47, 66], "note": "School pilot dependencies and genuine inputs remain pending."}
+      ],
+      "real_model_outputs_evaluated": false,
+      "professional_case_review_complete": false,
+      "school_pilot_completed": false
+    }
+  ],
+  "reproducibility": {
+    "layers": [
+      {"id": "engineering_run", "difficulty": "low_to_medium", "scope": "Re-run screens, APIs, deterministic rules and business workflow using pinned code/dependencies, isolated configuration and synthetic data."},
+      {"id": "statistical_recalculation", "difficulty": "low_to_medium", "scope": "Recalculate deterministic aggregates with the same source rows, date window, timezone and algorithm."},
+      {"id": "generated_output_approximation", "difficulty": "medium", "scope": "Re-run a provider model with fixed model/version, region, prompt/hash, parameters and knowledge snapshot; semantic or quality-level approximation, not guaranteed verbatim identity."},
+      {"id": "professional_or_clinical_validity", "difficulty": "high_and_not_inferable_from_code", "scope": "Requires professional protocol, review, approved pilot and ongoing governance; no code or repeatability result establishes clinical benefit."}
+    ],
+    "variables_to_pin": [
+      "Git commit and dependency lock",
+      "Provider, exact model ID/version, region and API version",
+      "System/user prompt template and hashes",
+      "Temperature, sampling parameters and token limit",
+      "Knowledge corpus version, embedding version, chunking and retrieval/rerank parameters",
+      "Fixed de-identified synthetic cases and time window",
+      "Every attempted request as denominator, including failures/timeouts, request ID, latency and actual token usage",
+      "Independent human rubric, reviewer role and rating records"
+    ],
+    "cost_or_schedule_estimate": null
+  },
+  "application_text": "现有代码包含学生对话和报告入口、外部模型适配、可选知识检索、规则统计以及教师预警审核与跟进记录，可作为后续试点的工程基础；代码盘点不代表目标环境已启用模型或通过专业评测。现有风险标签和分值属于线索或规则输出，不是诊断概率。项目拟先固定知识资料与单一模型开展受控摘要验证，保留所有成功、失败和超时请求，由专业人员按预先制定的量规独立复核后，再决定是否扩展。",
+  "recommended_application_additions": [
+    "Separate existing implementation from proposed work and runtime configuration.",
+    "Describe AI as an assistant for summarization, explanation and navigation, with staff responsible for communication and action.",
+    "State that fixed-rule scores, keyword signals and model confidence values are not calibrated diagnostic probabilities.",
+    "For an initial trial, pin model, prompt, parameters, knowledge version and synthetic case set; count failures/timeouts in the evaluation denominator and use independent human ratings.",
+    "Leave provider, professional reviewers, school owner, staffing/SLA, sample/recruitment, privacy retention, success threshold, budget and schedule as unconfirmed inputs until supplied."
+  ]
+}

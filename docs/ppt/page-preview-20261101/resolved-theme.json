@@ -1,0 +1,91 @@
+{
+  "name": "healthchain-page-preview-project-tokens-v1",
+  "colors": {
+    "primary": "#604372",
+    "on-primary": "#FFFFFF",
+    "secondary": "#64748B",
+    "accent": "#604372",
+    "background": "#FFFFFF",
+    "foreground": "#29332F",
+    "muted": "#EEE7F2",
+    "muted-foreground": "#56625C",
+    "border": "#E3E8E1",
+    "destructive": "#EF4444"
+  },
+  "typography": {
+    "heading": "Microsoft YaHei",
+    "body": "Microsoft YaHei"
+  },
+  "dark_mode": false,
+  "decoration": {
+    "name": "Minimal Dots",
+    "left_accent": false,
+    "title_underline": false,
+    "card_top_bar": false,
+    "bullet_style": "circle",
+    "description": "Subtle dot bullets, no lines"
+  },
+  "layout_variant": {
+    "name": "Centered",
+    "content_margin_left": 2.0,
+    "content_margin_right": 2.0,
+    "title_alignment": "center",
+    "card_style": "rounded",
+    "description": "Centered editorial layout"
+  },
+  "text_effect_preset": null,
+  "image_effect": null,
+  "semantic_roles": {
+    "background": "#FFFFFF",
+    "surface": "#EEE7F2",
+    "ink": "#29332F",
+    "muted": "#56625C",
+    "accent": "#604372",
+    "accent-secondary": "#64748B",
+    "success": "#0096C7",
+    "warning": "#64748B",
+    "danger": "#EF4444",
+    "border": "#E3E8E1",
+    "data-series-1": "#604372",
+    "data-series-2": "#8BA696"
+  },
+  "source": {
+    "requested": {
+      "style": "minimal",
+      "palette": null,
+      "fonts": null,
+      "decoration": null,
+      "layout": null,
+      "mood": null,
+      "seed": 17,
+      "query": null,
+      "text_effect_preset": null,
+      "image_effect": null
+    },
+    "resolved": {
+      "style": "minimal",
+      "palette": "ocean-blue",
+      "fonts": "minimal-mix",
+      "decoration": "minimal-dots",
+      "layout": "centered",
+      "mood": [
+        "minimal"
+      ]
+    },
+    "seed": 17,
+    "resolver": "local",
+    "package_version": "1.0.0b11",
+    "fallbacks": [],
+    "warnings": [],
+    "project_override": "src/styles/tokens.css; user selected centered lavender diagrams; no preset blue retained"
+  },
+  "atoms": {
+    "palette": "ocean-blue",
+    "fonts": "minimal-mix",
+    "decoration": "minimal-dots",
+    "layout": "centered",
+    "moods": [
+      "minimal"
+    ]
+  }
+}

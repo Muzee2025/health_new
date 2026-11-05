@@ -1,0 +1,134 @@
+﻿旧稿页码,对象ID,对象名,图片文件,裁剪
+1,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+1,4,图片 3,images/image2.emf,
+1,6,图片 5,images/image3.emf,
+1,7,图片 6,images/image4.emf,
+1,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+1,8,图片 7,images/image6.emf,
+1,10,图片 9,images/image7.emf,
+2,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+2,4,图片 3,images/image2.emf,
+2,7,图片 6,images/image4.emf,
+2,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+2,10,图片 9,images/image7.emf,
+2,34,Picture 6,images/image8.jpeg,"{""t"": ""24120"", ""b"": ""24120""}"
+2,37,Picture 9,images/image9.jpeg,"{""t"": ""17407"", ""b"": ""17407""}"
+2,41,Picture 13,images/image10.svg,
+2,47,图片 46,images/image3.emf,
+3,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+3,4,图片 3,images/image2.emf,
+3,6,图片 5,images/image3.emf,
+3,7,图片 6,images/image4.emf,
+3,10,图片 9,images/image7.emf,
+3,14,Picture 5,images/image11.svg,
+3,18,Picture 9,images/image12.svg,
+3,2,图片 1,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+3,3,图片 2,images/image6.emf,
+3,17,Picture 7,images/image13.svg,
+3,25,Picture 11,images/image14.svg,
+3,29,Picture 15,images/image15.svg,
+4,18,Picture 5,images/image16.svg,
+4,21,Picture 8,images/image17.svg,
+4,24,Picture 11,images/image18.svg,
+4,32,Picture 19,images/image19.svg,
+4,35,Picture 22,images/image20.svg,
+4,38,Picture 25,images/image21.svg,
+4,7,图片 6,images/image4.emf,
+4,8,图片 7,images/image6.emf,
+4,10,图片 9,images/image7.emf,
+4,40,图片 39,images/image3.emf,
+4,41,图片 40,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+4,42,图片 41,images/image2.emf,
+4,44,图片 43,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+5,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+5,4,图片 3,images/image2.emf,
+5,6,图片 5,images/image3.emf,
+5,7,图片 6,images/image4.emf,
+5,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+5,8,图片 7,images/image6.emf,
+5,10,图片 9,images/image7.emf,
+5,12,图片 11,images/image22.png,
+6,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+6,4,图片 3,images/image2.emf,
+6,6,图片 5,images/image3.emf,
+6,7,图片 6,images/image4.emf,
+6,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+6,8,图片 7,images/image6.emf,
+6,10,图片 9,images/image7.emf,
+6,11,Picture 4,images/image23.svg,
+6,16,Picture 9,images/image24.svg,
+6,20,Picture 13,images/image25.svg,
+6,23,Picture 16,images/image26.svg,
+6,26,Picture 19,images/image27.svg,
+7,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+7,4,图片 3,images/image2.emf,
+7,6,图片 5,images/image3.emf,
+7,7,图片 6,images/image4.emf,
+7,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+7,8,图片 7,images/image6.emf,
+7,10,图片 9,images/image7.emf,
+7,26,Picture 8,images/image25.svg,
+7,30,Picture 12,images/image28.svg,
+7,34,Picture 16,images/image29.svg,
+7,37,图片 36,images/image30.png,
+8,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+8,4,图片 3,images/image2.emf,
+8,6,图片 5,images/image3.emf,
+8,7,图片 6,images/image4.emf,
+8,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+8,8,图片 7,images/image6.emf,
+8,10,图片 9,images/image7.emf,
+8,11,Picture 4,images/image31.svg,
+8,16,Picture 9,images/image32.svg,
+8,21,Picture 14,images/image33.svg,
+8,24,Picture 17,images/image34.svg,
+8,27,Picture 20,images/image35.svg,
+9,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+9,4,图片 3,images/image2.emf,
+9,6,图片 5,images/image3.emf,
+9,7,图片 6,images/image4.emf,
+9,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+9,8,图片 7,images/image6.emf,
+9,10,图片 9,images/image7.emf,
+9,11,图片 10,images/image36.png,"{""l"": ""1057"", ""t"": ""792""}"
+10,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+10,4,图片 3,images/image2.emf,
+10,6,图片 5,images/image3.emf,
+10,7,图片 6,images/image4.emf,
+10,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+10,8,图片 7,images/image6.emf,
+10,10,图片 9,images/image7.emf,
+10,13,图片 12,images/image37.png,
+10,3,图片 2,images/image38.png,
+11,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+11,4,图片 3,images/image2.emf,
+11,6,图片 5,images/image3.emf,
+11,7,图片 6,images/image4.emf,
+11,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+11,8,图片 7,images/image6.emf,
+11,10,图片 9,images/image7.emf,
+11,12,Picture 5,images/image23.svg,
+11,14,Picture 7,images/image39.svg,
+11,16,Picture 9,images/image40.svg,
+11,20,Picture 13,images/image41.svg,
+11,22,Picture 15,images/image42.svg,
+11,24,Picture 17,images/image43.svg,
+12,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+12,4,图片 3,images/image2.emf,
+12,6,图片 5,images/image3.emf,
+12,7,图片 6,images/image4.emf,
+12,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+12,8,图片 7,images/image6.emf,
+12,10,图片 9,images/image7.emf,
+12,12,Picture 5,images/image44.svg,
+12,16,Picture 9,images/image45.svg,
+12,20,Picture 13,images/image46.svg,
+12,25,Picture 18,images/image47.svg,
+12,28,Picture 21,images/image47.svg,
+13,5,图片 4,images/image1.emf,"{""l"": ""316"", ""t"": ""13172"", ""r"": ""-316"", ""b"": ""-1092""}"
+13,4,图片 3,images/image2.emf,
+13,6,图片 5,images/image3.emf,
+13,7,图片 6,images/image4.emf,
+13,9,图片 8,images/image5.emf,"{""l"": ""25962"", ""b"": ""24550""}"
+13,8,图片 7,images/image6.emf,
+13,10,图片 9,images/image7.emf,

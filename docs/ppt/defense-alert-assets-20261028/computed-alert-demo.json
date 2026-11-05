@@ -1,0 +1,90 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "5.0",
+  "updated": "2026-10-28",
+  "synthetic": true,
+  "counts": {
+    "rawRecords": 8,
+    "rawStudents": 5,
+    "duplicates": 1,
+    "uniqueRecords": 7,
+    "pendingRecords": 1,
+    "validRecords": 6,
+    "validStudents": 4,
+    "remindedStudents": 2
+  },
+  "duplicates": [
+    "R02"
+  ],
+  "pending": [
+    {
+      "id": "R07",
+      "caseAlias": "S-E",
+      "reason": "时间字段缺失",
+      "action": "转资料核对，不作无风险判断"
+    }
+  ],
+  "cases": [
+    {
+      "caseAlias": "S-A",
+      "validRecords": 2,
+      "status": "待复核提醒"
+    },
+    {
+      "caseAlias": "S-B",
+      "validRecords": 2,
+      "status": "未触发本次规则"
+    },
+    {
+      "caseAlias": "S-C",
+      "validRecords": 1,
+      "status": "待复核提醒"
+    },
+    {
+      "caseAlias": "S-D",
+      "validRecords": 1,
+      "status": "未触发本次规则"
+    }
+  ],
+  "reminders": [
+    {
+      "id": "DEMO-W1",
+      "caseAlias": "S-A",
+      "recipient": "T-DEMO-A",
+      "status": "待授权教师复核",
+      "clues": [
+        {
+          "rule": "DEMO-REPEAT",
+          "fact": "两次留言均提到睡眠困扰",
+          "recordIds": [
+            "R01",
+            "R02"
+          ]
+        }
+      ],
+      "actualNotificationSent": false,
+      "humanDecision": "教师核对原文和语境后，决定是否列入重点跟进"
+    },
+    {
+      "id": "DEMO-W2",
+      "caseAlias": "S-C",
+      "recipient": "T-DEMO-C",
+      "status": "待授权教师复核",
+      "clues": [
+        {
+          "rule": "DEMO-HELP",
+          "fact": "主动请求老师联系",
+          "recordIds": [
+            "R05"
+          ]
+        }
+      ],
+      "actualNotificationSent": false,
+      "humanDecision": "教师核对原文和语境后，决定是否列入重点跟进"
+    }
+  ],
+  "actualComputation": "offline deterministic demonstration rules",
+  "modelCalled": false,
+  "aiSummaryStatus": "proposed to organize evidence, no actual model output",
+  "sourceSha256": "e3d055519c03c2b49a3b323f376d9702903ee7678c612e8b4f34ba669793d749"
+}

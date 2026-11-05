@@ -1,0 +1,24 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "1.0",
+  "updated": "2026-10-28",
+  "synthetic": true,
+  "source": "为PPT流程说明人工设计，非学校数据、学生数据或训练数据",
+  "records": [
+    {"id":"R01","student_id":"DEMO-A","name":"虚构学生甲","student_no":"DEMO-A001","contact":"DEMO-CONTACT-A","time":"2026-10-01T09:00:00","text":"最近一周总睡不好，上课很难集中。"},
+    {"id":"R02","student_id":"DEMO-A","name":"虚构学生甲","student_no":"DEMO-A001","contact":"DEMO-CONTACT-A","time":"2026-10-08T09:00:00","text":"这周仍然睡不好，学习很难集中。"},
+    {"id":"R02","student_id":"DEMO-A","name":"虚构学生甲","student_no":"DEMO-A001","contact":"DEMO-CONTACT-A","time":"2026-10-08T09:00:00","text":"这周仍然睡不好，学习很难集中。"},
+    {"id":"R03","student_id":"DEMO-B","name":"虚构学生乙","student_no":"DEMO-B001","contact":"DEMO-CONTACT-B","time":"2026-10-02T09:00:00","text":"最近参加了社团活动，学习安排还算顺利。"},
+    {"id":"R04","student_id":"DEMO-B","name":"虚构学生乙","student_no":"DEMO-B001","contact":"DEMO-CONTACT-B","time":"2026-10-09T09:00:00","text":"这周和室友一起运动，按计划完成课程。"},
+    {"id":"R05","student_id":"DEMO-C","name":"虚构学生丙","student_no":"DEMO-C001","contact":"DEMO-CONTACT-C","time":"2026-10-09T14:00:00","text":"最近压力比较大，希望老师联系我。"},
+    {"id":"R06","student_id":"DEMO-D","name":"虚构学生丁","student_no":"DEMO-D001","contact":"DEMO-CONTACT-D","time":"2026-10-09T15:00:00","text":"作业多，想了解时间管理的方法。"},
+    {"id":"R07","student_id":"DEMO-E","name":"虚构学生戊","student_no":"DEMO-E001","contact":"DEMO-CONTACT-E","time":null,"text":"最近有些烦，想看看学校的支持资料。"}
+  ],
+  "caseAliases": {"DEMO-A":"S-A","DEMO-B":"S-B","DEMO-C":"S-C","DEMO-D":"S-D","DEMO-E":"S-E"},
+  "explicitSyntheticTeacherAssignments": {"S-A":"T-DEMO-A","S-B":"T-DEMO-B","S-C":"T-DEMO-C","S-D":"T-DEMO-D","S-E":"T-DEMO-E"},
+  "demonstrationRules": [
+    {"id":"DEMO-REPEAT","description":"14天内至少两条有效记录均出现‘睡不好’，标记为需要人工了解的重复表达；非临床阈值"},
+    {"id":"DEMO-HELP","description":"有效记录中出现明确请求‘希望老师联系我’，建立求助待办；不据此诊断心理问题"}
+  ],
+  "limitations": ["全部为虚构样例","规则仅说明流程，不是训练模型或经验证的风险检测器","未触发不等于无风险","资料不全转人工核对，不默认为正常","不构造患病率、准确率或误报漏报结果","提醒只生成演示待办，不执行实际通知"]
+}

@@ -1,0 +1,204 @@
+{
+  "schema_version": "1.0",
+  "owner": "A / Lead",
+  "date": "2026-10-31",
+  "status": "plan_and_current_baseline_complete_implementation_planned",
+  "baseline_commit": "ad0dda2b7a82b3433e9d3968c29bbbbcd13ad660",
+  "branch": "codex/application-delivery",
+  "request_scope": "Design a repository-evidence-backed completion and improvement plan; baseline verification only; no business implementation",
+  "preexisting_changed_or_untracked_files": 342,
+  "checks": [
+    {
+      "name": "backend_full",
+      "command": ".\\.venv\\Scripts\\python.exe scripts/run-backend-baseline.py",
+      "exit_code": 0,
+      "status": "passed_with_conditional_skips",
+      "passed": 140,
+      "skipped": 3,
+      "warnings": 25,
+      "duration_seconds": 103.16,
+      "evidence": "tmp/completion-plan-20261031/backend-baseline.log",
+      "evidence_sha256": "3c21c8235d9cfb0cbdedf8531fd2ff3d730ad69e49dc565037d206ab4ef1ba7c"
+    },
+    {
+      "name": "skip_reason_audit",
+      "command": ".\\.venv\\Scripts\\python.exe scripts/run-backend-baseline.py <3 symlink test node IDs> -rs",
+      "exit_code": 0,
+      "status": "conditional_skips_confirmed",
+      "skipped": 3,
+      "warnings": 14,
+      "duration_seconds": 2.99,
+      "evidence": "tmp/completion-plan-20261031/skip-reasons.log",
+      "reason": "Windows test account cannot create symlinks",
+      "targets": [
+        "backend/tests/test_backup_restore_database.py::test_destination_must_be_new_and_symlink_source_is_refused",
+        "backend/tests/test_content_catalog.py::test_real_symlink_output_is_refused_when_available",
+        "backend/tests/test_support_workflow.py::test_migration_cli_backs_up_before_upgrade_and_refuses_symlink_target"
+      ],
+      "evidence_sha256": "0b3db6710b74bd140dba7775cb168aa2d08c7a5aaaaf4cfe0657c9bb869da76a"
+    },
+    {
+      "name": "frontend_tests",
+      "command": "npm test",
+      "exit_code": 0,
+      "status": "passed",
+      "passed": 22,
+      "test_files": 7,
+      "evidence": "tmp/completion-plan-20261031/frontend-test.log",
+      "evidence_sha256": "4f735bddae623eb03534996797b1a77d64556a870715f9622d55d419c595aee0"
+    },
+    {
+      "name": "isolated_production_build",
+      "command": "$env:PERF_BUILD_OUTPUT = 'tmp/completion-plan-20261031/frontend-build'; npm run perf:build",
+      "exit_code": 0,
+      "status": "passed",
+      "modules": 2452,
+      "duration_seconds": 20.26,
+      "evidence": "tmp/completion-plan-20261031/frontend-build.log",
+      "evidence_sha256": "38c4cecfce09fa18d32f4672257fad973615a21a1b35f84691f9e85f23c2315a"
+    },
+    {
+      "name": "asset_check",
+      "command": "npm run assets:check",
+      "exit_code": 0,
+      "status": "passed_with_legacy_warnings",
+      "covered": 131,
+      "approved": 124,
+      "legacy_unverified": 7,
+      "evidence": "tmp/completion-plan-20261031/assets-check.log",
+      "evidence_sha256": "32e2a23269d6153da6bf1536bdbc6929e5e0323992b262055349f353ba0e0494"
+    },
+    {
+      "name": "repo_hygiene",
+      "command": ".\\.venv\\Scripts\\python.exe scripts/check-repo.py --json",
+      "exit_code": 0,
+      "status": "passed",
+      "tracked_count": 807,
+      "forbidden": 0,
+      "ignored_but_tracked": 0,
+      "unexpected": 0,
+      "missing": 0,
+      "oversized": 0
+    },
+    {
+      "name": "backlog_validation",
+      "command": "Python csv/path/dependency assertions",
+      "exit_code": 0,
+      "status": "passed",
+      "work_packages": 19,
+      "planned_engineering_packages": 18,
+      "dependency_cycle": false
+    },
+    {
+      "name": "final_plan_structure_and_preservation",
+      "command": "Python local-link/CSV DAG/team-body and non-task SHA256 checks",
+      "exit_code": 0,
+      "status": "passed_with_two_non_task_material_changes_recorded",
+      "no_dependency_cycle": true,
+      "old_team_body_text_preserved": true
+    },
+    {
+      "name": "tracked_diff_whitespace",
+      "command": "git diff --check -- <four modified index/team paths>",
+      "exit_code": 0,
+      "status": "passed"
+    },
+    {
+      "name": "scope_diff",
+      "command": "git diff --name-only -- src public backend/app backend/scripts package.json package-lock.json deploy scripts .github",
+      "exit_code": 0,
+      "status": "passed",
+      "tracked_business_or_runtime_changes": []
+    }
+  ],
+  "artifacts": {
+    "docs/plan/项目补全与改进方案_20261031.md": "3488c6fa517dcb60de1f5b74472ee1e4178343e938340621e432845550e2a12b",
+    "docs/plan/improvement-backlog-20261031.csv": "31316e4b769b25077f078f692c3de693886908e89269826c5a373e2e801bd746",
+    "docs/test/项目补全方案独立复核.md": "c0fbed629e09096429e1b1b3c941432346e02ee5bc376edd691830f17924556d"
+  },
+  "source_sha256": {
+    "src/data/tests.js": "ab811c96af47cb88e76a842beac42984aa6ab23d0047fb59386cd11dbc2822f8",
+    "src/views/student/Test.vue": "8ecd26df57bc4ff1b340990a4688c7ea774033313f0b91b3a0e720a36ad5289e",
+    "src/views/student/Layout.vue": "05f462f521e591db15d25e050c2877363b36ea412a1ddc5cc4424ab4eb002378",
+    "src/router/index.js": "5d7ab9adf2d5f5c660ba7b6dd844b2746c75fa5be9c3f8ce3f6aee23f546c08f",
+    "backend/app/routers/student.py": "32094f87d332055aabfd43087d63e40502869242248e4268f3d0f848e17d5fe3",
+    "backend/app/routers/teacher.py": "aa148be1bc2301f4314e07b4d1caf70262958b75b20f57706fd94cfbb5320699",
+    "backend/app/models.py": "8c0c892ff645b1154ec94702cd5af1d0288e8babe2eec6ff0c13b533dbe59949",
+    "backend/app/schemas.py": "24b4fa78daf6d3a5757612a5c3fab5a08c9a83df484d8ab807b50cf4ce91bca6",
+    "backend/app/student_access.py": "5d40ababec15a776cb5a9c505ddb2b673cc05bf71b6c2d47d2268844abaf3628",
+    "backend/app/support_workflow.py": "91bbbadbcde223360fe22419072712c74213682cb32095a3f23de0b6a1a43927",
+    "backend/app/services/rag_service.py": "cb418b7dcc20f7a868f2047b14ad6249f271db117d6fc4c70d753236d842e75e",
+    "scripts/run-backend-baseline.py": "410bae9eac1c8f5ebc118bfab90d9c6a259248c88cf1581ee7aed3cf5dcead31"
+  },
+  "independent_review": {
+    "status": "passed_no_blockers",
+    "path": "docs/test/项目补全方案独立复核.md",
+    "sha256": "c0fbed629e09096429e1b1b3c941432346e02ee5bc376edd691830f17924556d",
+    "reviewer": "gpt-6-luna / IMP-REVIEW-01",
+    "scope": "static code gaps; plan facts and scope; CSV owners and dependency DAG; review of Lead logs",
+    "performed_tests": false,
+    "bound_artifacts": {
+      "docs/plan/项目补全与改进方案_20261031.md": "3488c6fa517dcb60de1f5b74472ee1e4178343e938340621e432845550e2a12b",
+      "docs/plan/improvement-backlog-20261031.csv": "31316e4b769b25077f078f692c3de693886908e89269826c5a373e2e801bd746"
+    }
+  },
+  "not_run": [
+    "browser_real_http_integration",
+    "Vite_proxy_EACCES_reproduction",
+    "target_Docker_compose_build_and_runtime",
+    "formal_DNS_TLS",
+    "capacity_and_cross_machine_recovery",
+    "real_model_calls",
+    "professional_questionnaire_or_clinical_review",
+    "school_pilot"
+  ],
+  "historical_blockers": {
+    "WinError10013": "not_reproduced_in_current_backend_run; not_claimed_fixed",
+    "Vite_EACCES": "not_retested",
+    "target_image_registry": "not_retested"
+  },
+  "scope_protection": {
+    "business_source_changed": false,
+    "dependencies_changed": false,
+    "runtime_env_or_database_read": false,
+    "existing_services_or_accounts_changed": false,
+    "real_provider_called": false,
+    "git_staged_or_committed_or_pushed": false,
+    "preexisting_file_verification": {
+      "unchanged_other_paths": 336,
+      "authorized_team_index_paths": 4,
+      "old_team_body_text_preserved": true,
+      "non_task_changes_detected": [
+        {
+          "path": "deliverables/心域智链_六章答辩演讲稿_批注配套版_20261031.docx",
+          "before_sha256": "c7b197c1aea8f3e21789b007d289641a00a1ae3b2cc73b8d077a5cfde1f420bf",
+          "current_sha256": "dc9a08d8c6480b8f697ac76cf95e05fafd0b1655cc0d68569b458cac022a2486",
+          "task_wrote_path": false
+        },
+        {
+          "path": "docs/ppt/six-chapters-20261029/revision-r3/selected-assets.json",
+          "before_sha256": "82d956aef4d6c20554756c56de8c3f3bba5aadedbf59bfef85e1c7df11c2b0c9",
+          "current_sha256": "93883f782c3bcffc58022e5b6624fa706107ffbf0a479b58593f4d1e87851362",
+          "task_wrote_path": false
+        }
+      ],
+      "action": "preserved current state; no overwrite/revert outside task scope"
+    },
+    "team_changes": "additive sections plus version/status/date headers only"
+  },
+  "limitations": [
+    "Unit and build results do not establish real HTTP integration or production readiness.",
+    "Seven legacy assets remain unverified.",
+    "Questionnaire rules, responsible people, retention, provider and deployment facts remain external inputs.",
+    "Eighteen implementation work packages remain planned."
+  ],
+  "inspection_notes": [
+    "Early exploratory reads of backend/pytest.ini, system-gap-map.md, access_control.py and support_teacher.py did not find those paths; subsequent inspection used conftest.py, code-observations.md, student_access.py and teacher.py. No missing-path result is counted as a passing check."
+  ],
+  "link_validation": {
+    "status": "passed",
+    "checked": 40,
+    "missing": [],
+    "scope": "two new Markdown documents and new insertions of four existing index/team documents"
+  }
+}

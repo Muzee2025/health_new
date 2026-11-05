@@ -1,0 +1,661 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "status": "private_site_refinement_deployed",
+  "updated": "2026-11-02",
+  "publication": {
+    "deployment": {
+      "id": "appgdep_6ae81ce53ec88191ac1790e97275cc4a",
+      "project_id": "appgprj_6ae813d1ddac81919691e674b253ccf9",
+      "title": "心域智链 · 系统界面预览",
+      "version_id": "appgprj_6ae813d1ddac81919691e674b253ccf9~appgver_0a8e66bb80948191bcc02b55a9d8662b",
+      "type": "publish",
+      "status": "succeeded",
+      "url": "https://xinyu-system-preview-20261102.sableburr1.chatgpt.site",
+      "has_mcp": false,
+      "screenshot_asset_pointer": null,
+      "provider_deployment_id": "site---6ae813d1ddac81919691e674b253ccf9",
+      "failure_message": null,
+      "env_set_revision": 0,
+      "updated_at": "2026-11-02T05:17:47.914008+00:00"
+    },
+    "source": {
+      "project_id": "appgprj_6ae813d1ddac81919691e674b253ccf9",
+      "checkout_path": "C:/University/Code_total/health_new_muzee2025/tmp/sites/xinyu-preview-20261102",
+      "commit_sha": "97c26d8a80c5faa62477b17b69878b4d0e319e56",
+      "archive": "C:/University/Code_total/health_new_muzee2025/tmp/sites/xinyu-preview-20261102-refined.tar.gz"
+    }
+  },
+  "frontend_tests": {
+    "files": 12,
+    "passed": 41,
+    "exit_code": 0
+  },
+  "independent_tests": {
+    "files": 2,
+    "passed": 12,
+    "exit_code": 0,
+    "report": "docs/test/Sites界面优化独立复核_20261102.md",
+    "browser_run_by_reviewer": false
+  },
+  "build": {
+    "working_directory": "tmp/sites/xinyu-preview-20261102",
+    "envDir": false,
+    "exit_code": 0,
+    "seconds": 9.4965443,
+    "root_dist_rebuilt_this_round": false
+  },
+  "source": {
+    "matching_snapshot_files": 207,
+    "matching_chart_files": 4,
+    "baseline_site_commit": "287e99993b329ccb162ae84402cf0969d0685097"
+  },
+  "pages": {
+    "rows": [
+      {
+        "route": "/student/dashboard",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 421,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/test",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 335,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/appointments",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 251,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/articles",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 590,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/advanced-chat",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 242,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/report",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 223,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/treehole",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 372,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/questions",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 294,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/article/900100",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 296,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/advanced-dashboard",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 350,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/support",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 383,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/students",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 222,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/student/900001",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 258,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/appointments",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 141,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/content",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 691,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/interventions",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 119,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/login",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 84,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/register",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 125,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/does-not-exist",
+        "width": 1440,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 33,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/dashboard",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 383,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/test",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 287,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/appointments",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 213,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/articles",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 542,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/advanced-chat",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 204,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/report",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 174,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/treehole",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 334,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/student/questions",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 245,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/article/900100",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 296,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/advanced-dashboard",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 297,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/support",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 330,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/students",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 181,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/student/900001",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 218,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/appointments",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 100,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/content",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 650,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/teacher/interventions",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 78,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/login",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 38,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/register",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 79,
+        "syntheticLabel": true,
+        "passed": true
+      },
+      {
+        "route": "/does-not-exist",
+        "width": 390,
+        "overflow": false,
+        "brokenImages": [],
+        "pendingLazyImages": 0,
+        "appText": 33,
+        "syntheticLabel": true,
+        "passed": true
+      }
+    ],
+    "errors": [],
+    "networkApis": [],
+    "failedAssets": [],
+    "passed": true
+  },
+  "runtime": {
+    "layout": [
+      {
+        "width": 1024,
+        "name": "dashboard",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 1024,
+        "name": "report",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 1024,
+        "name": "questions",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 1024,
+        "name": "chat",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 768,
+        "name": "dashboard",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 768,
+        "name": "report",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 768,
+        "name": "questions",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 768,
+        "name": "chat",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 390,
+        "name": "dashboard",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 390,
+        "name": "report",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 390,
+        "name": "questions",
+        "overflow": false,
+        "actionsAligned": true
+      },
+      {
+        "width": 390,
+        "name": "chat",
+        "overflow": false,
+        "actionsAligned": true
+      }
+    ],
+    "partialCardFailureIsolated": true,
+    "fiveDimensionRetry": true,
+    "metadataDoesNotBlockReport": true,
+    "populatedPrintImages": 1,
+    "oldPrintCleared": true,
+    "errors": [],
+    "apiRequests": [],
+    "passed": true
+  },
+  "radar": {
+    "readyRadar": true,
+    "identityClearsOldRadar": true,
+    "passed": true
+  },
+  "performance": {
+    "before": {
+      "shellMs": 3396,
+      "scriptRequests": 37,
+      "scriptDecodedBytes": 1098817,
+      "resources": 46,
+      "throttle": {
+        "latencyMs": 150,
+        "downloadBytesPerSecond": 200000,
+        "cacheDisabled": true
+      },
+      "stage": "before"
+    },
+    "after": {
+      "shellMs": 2547,
+      "scriptRequests": 35,
+      "scriptDecodedBytes": 1100688,
+      "resources": 42,
+      "throttle": {
+        "latencyMs": 150,
+        "downloadBytesPerSecond": 200000,
+        "cacheDisabled": true
+      },
+      "stage": "after"
+    },
+    "shell_ms_difference": 849,
+    "limit": "Single local fixed-throttle sample; not live latency, LCP/FCP, total payload reduction or an SLA."
+  },
+  "artifacts": [
+    {
+      "path": "docs/test/Sites界面优化独立复核_20261102.md",
+      "sha256": "fc96a61da7db6ac8889e44bd3b4c4a5684a5071ca148fdd97115a751b824f143"
+    },
+    {
+      "path": "docs/test/Sites界面优化验收_20261102.md",
+      "sha256": "4619e7cd11d73a17acfeca787756c61f4697a39e274a00f7c704cd03f7a6d872"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/source-snapshot.json",
+      "sha256": "beb44a73f5603c4389429a7029979c867f0550a85f72d225338fc455afa4fbca"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102/dist/index.html",
+      "sha256": "c9a9f27f71698954c4ae1fd4ce42501a3b7325d0651383f4ba3b2711f2c55062"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refined.tar.gz",
+      "sha256": "ca23b69fc7187303c3a57f454789b933cc9dc01bd7cbe97452f82f5e83b4a531"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/baseline-source-v2.zip",
+      "sha256": "a448b8d4bba361a16761181aff39cc418b7cdc857d2191287ecdda673291231e"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/pages-final.log",
+      "sha256": "a698f01e66bfc60cbb266e7f9d4de8c3bd8ca075dab9b695aa4429de0e7c0223"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/runtime-final.log",
+      "sha256": "11e0d027dc95a63a9589c0e48dcce417f3566479eb9dfa8d1a4e96aee1190c82"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/radar-final.log",
+      "sha256": "68ad4aa2735fa384bbddca8fd0b31870e00fbdc9878a3ef64de1296df8714461"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/before.log",
+      "sha256": "541c5accbd7fef65a40ddc06308a0a0c7f408ce94f0b1beed38147ad288233b6"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/after.log",
+      "sha256": "23b317b1c9573aa8ba1fd35d4ffeea94b43beae1fda57c7a93e020d013eb535f"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/runtime-transition-first.log",
+      "sha256": "d9dd1a4c71e882098c841c3dd969b1018c16b4fae253028636d539d6059c2f21"
+    },
+    {
+      "path": "tmp/sites/xinyu-preview-20261102-refine-qa/radar-fixture-first.log",
+      "sha256": "88733ba0eb2060441721ffce2bca1e3ac182009151284704e21cf1b42a57b842"
+    }
+  ],
+  "images": [
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/after-dashboard-1440.png",
+      "sha256": "1543aee3ae597727cdca38446b73a05a1c033d3682e8b86d13181f84904a7d43",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/after-questions-1440.png",
+      "sha256": "92972da34f28bcb70eb9f5b4e82691834e0126dc84394cc7f7973ec689dbd3e9",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/after-report-1440.png",
+      "sha256": "e74403484c96d137f3c9ee11dc53c5ecd6b83675a68256aff896715c5f873545",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/before-dashboard-1440.png",
+      "sha256": "dd1f7016c327e6ae5fdbce7503d3e5516588d746148b1b2dd2983cb7a60feb40",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-chat-390.png",
+      "sha256": "ccefe589c7258bb6dc93193ac5b4fb3c94f051dc3155a37fccde15f4bce3d0b1",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-dashboard-390.png",
+      "sha256": "b03e3a0f4243cc108f57f31ab4408e9795a920c9cf5a28db69377333830f7535",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-questions-390.png",
+      "sha256": "577be8dc878d6b7f81e4795c926dace77424fefdafe9c6d8bc978323c168ef08",
+      "synthetic_only": true
+    },
+    {
+      "path": "docs/design/screenshots/sites-refinement-20261102/final-report-390.png",
+      "sha256": "7c36c0caa5ca950c437b58488e4b500591aec588b8e64152221deec54b0ca782",
+      "synthetic_only": true
+    }
+  ],
+  "boundaries": [
+    "Only Site source repository was committed/pushed; main project is uncommitted.",
+    "No original DB/config/uploads/backend service or real provider was changed or invoked.",
+    "All browser API responses, fault injections and identities are synthetic; no real full-stack result is claimed.",
+    "Sites native successful response verifies publication; deployed page was not separately visited.",
+    "Existing user tabs were preserved; the task-owned 4197 server and isolated CLI browser are stopped during teardown."
+  ]
+}

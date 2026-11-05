@@ -1,0 +1,46 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "1.0",
+  "updated": "2026-10-27",
+  "mode": "built-in-imagegen",
+  "images": [
+    {
+      "displayedOption": 1,
+      "file": "design-01.png",
+      "sha256": "2223b702dd2a483d9a176761402e046deab9449896db2b15783718f84d5c24d7",
+      "actualPixels": [
+        1487,
+        1058
+      ],
+      "format": "PNG",
+      "role": "ui-concept-only"
+    },
+    {
+      "displayedOption": 2,
+      "file": "design-02.png",
+      "sha256": "6d60c3ea631723da6d6fb3bdddf0db276ec17e942cc8684d03eeb2aae36126c5",
+      "actualPixels": [
+        1487,
+        1058
+      ],
+      "format": "PNG",
+      "role": "ui-concept-only"
+    },
+    {
+      "displayedOption": 3,
+      "file": "design-03.png",
+      "sha256": "30289cac591a6f97b20ab7c9587019f93d7dbbf23fc54475264767902821001d",
+      "actualPixels": [
+        1487,
+        1058
+      ],
+      "format": "PNG",
+      "role": "ui-concept-only"
+    }
+  ],
+  "styleSelection": "pending",
+  "implemented": false,
+  "sourcePrompts": "prompts.json",
+  "prototypeBuilt": false,
+  "livePptModified": false
+}

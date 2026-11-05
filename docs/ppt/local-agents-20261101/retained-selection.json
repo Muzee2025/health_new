@@ -1,0 +1,24 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "status": "user-selected-to-retain",
+  "selectionStatement": "用户明确保留刚才展示的第2、3版示意图；不删除其他版本，不等同整套PPT批准",
+  "selected": [
+    {
+      "version": 2,
+      "path": "deliverables/心域智链_本地多智能体协作示意图_居中版_20261101.png",
+      "sha256": "ff393cc71462bae88b67074c2b22ee709603e23bac82ed8cb1d96375fafa5392"
+    },
+    {
+      "version": 3,
+      "path": "deliverables/心域智链_本地多智能体协作示意图_箭头框版_20261101.png",
+      "sha256": "ba0c360c8d4dcfc0eab32170897231e15690f4835e66bce949df90e2431fc4a4",
+      "actualDimensions": [
+        1672,
+        941
+      ],
+      "method": "Built-in image_gen.imagegen edit"
+    }
+  ]
+}

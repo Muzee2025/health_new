@@ -1,0 +1,267 @@
+{
+  "owner": "AI-OUTLINE",
+  "version": "6.1",
+  "updated": "2026-10-28",
+  "status": "compatibility-renders-prepared",
+  "assets": [
+    {
+      "id": "brand-bg",
+      "path": "src/assets/backgrounds/bg-login-1440.svg",
+      "pages": [
+        1
+      ],
+      "use": "原品牌舒展书页背景",
+      "sha256": "bb8a64f5486bfdf1794b4aa1791e7b0af84715d50915cc0953536148bfcd8bb7",
+      "bytes": 985,
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 原创贝塞尔矢量源",
+      "registry": "src/assets/manifest.json",
+      "notice": "src/assets/LICENSES.md",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "brand-mark",
+      "path": "src/assets/brand/brand-mark-color.svg",
+      "pages": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "use": "重复品牌页脚标志",
+      "sha256": "bb65e0cb8670cef46a260679311bab3415241af2dba0e0f4d75fc296f328f9c4",
+      "bytes": 407,
+      "license": "LicenseRef-Project-Original",
+      "source": "项目自制：scripts/build-design-assets.mjs 原创贝塞尔矢量源",
+      "registry": "src/assets/manifest.json",
+      "notice": "src/assets/LICENSES.md",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "policy-book",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-book-open.svg",
+      "pages": [
+        2
+      ],
+      "use": "专项行动与政策资料",
+      "sha256": "b38cdb3a15dcf00cfa4811e318b021e25c6a87b47acbb11888e16d107a5642da",
+      "bytes": 396,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/book-open.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "policy-chart",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-chart-line-up.svg",
+      "pages": [
+        2
+      ],
+      "use": "全国监测建设进展",
+      "sha256": "1bcf22abc6fe9cfb6195f0781d3056509aade1a35d4279ed46de7f282cca8937",
+      "bytes": 350,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/chart-line-up.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "policy-path",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-path.svg",
+      "pages": [
+        2
+      ],
+      "use": "健康学校建设方向",
+      "sha256": "76f5e16efb2333fb42f40d5685c2d3b0bb037597fa8253ee1974dfece3514f44",
+      "bytes": 296,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/path.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "student-figure",
+      "path": "docs/ppt/vector-assets-20261027/ira-woman-talking.svg",
+      "pages": [
+        3
+      ],
+      "use": "学生沟通概念人物",
+      "sha256": "e747b856a506b3a991d5c5a60dfb58f74510cfc2375af373e5bf25436075d7ff",
+      "bytes": 5604,
+      "license": "MIT",
+      "source": "https://github.com/ira-design/ira-illustrations/blob/SVG/SVG.zip",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-IRA-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review",
+      "presentationPath": "docs/ppt/rendered-materials-20261028/compatibility/student-figure.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "f8c6c77cbd207888ce7b3d610757ab7587e199202543ccb6c74c9f1cc4861bb3",
+      "renderOperation": "SVG rasterization for renderer compatibility, 1200px height, transparent background; original SVG unchanged"
+    },
+    {
+      "id": "cycle-icon",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-arrows-clockwise.svg",
+      "pages": [
+        4
+      ],
+      "use": "师生支持业务闭环",
+      "sha256": "2e80fbc9c5c37553934c9ebbd6324bf7fabe9a4b4d7c2445d99edfce55cc22df",
+      "bytes": 503,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/arrows-clockwise.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "teacher-figure",
+      "path": "docs/ppt/vector-assets-20261027/ira-man-documents.svg",
+      "pages": [
+        5
+      ],
+      "use": "教师核对材料概念人物",
+      "sha256": "b28f50b11397d7b873fe2bdd1a51040b48855f05dea46bbb28c78bfbdb497bea",
+      "bytes": 7515,
+      "license": "MIT",
+      "source": "https://github.com/ira-design/ira-illustrations/blob/SVG/SVG.zip",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-IRA-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review",
+      "presentationPath": "docs/ppt/rendered-materials-20261028/compatibility/teacher-figure.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "7d87bc660d0b670544949e71801a4a4f5989263fd219eb4168bab40616ef57fa",
+      "renderOperation": "SVG rasterization for renderer compatibility, 1200px height, transparent background; original SVG unchanged"
+    },
+    {
+      "id": "ai-icon",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-brain.svg",
+      "pages": [
+        5
+      ],
+      "use": "大模型拟建草稿节点",
+      "sha256": "9fdd189bc61e6b5e437c91bd6819c7a0bd1e598d0a780ae097b4db2e0de13a43",
+      "bytes": 846,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/brain.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "merge-icon",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-arrows-merge.svg",
+      "pages": [
+        6
+      ],
+      "use": "数据清洗与线索合并",
+      "sha256": "539b016c43d95d693548f3a50d41b31e5602209df9881d688092ee85cc6624ab",
+      "bytes": 338,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/arrows-merge.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "privacy-icon",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-shield-check.svg",
+      "pages": [
+        7
+      ],
+      "use": "敏感信息保护",
+      "sha256": "bb04d552c0baaaabd90f7eb60760cb0c7ddb7e9f47e4b76e9599ddd7dfd8eaa7",
+      "bytes": 536,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/shield-check.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "records-icon",
+      "path": "docs/ppt/vector-assets-20261027/phosphor-files.svg",
+      "pages": [
+        7
+      ],
+      "use": "身份与资料的最小必要处理",
+      "sha256": "bb4cec5fc4ae78d9bfc38378db6d991a4f9b89e0e58db97a95a083b68a4c5a9e",
+      "bytes": 550,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/files.svg",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "structure-icon",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-tree-structure.svg",
+      "pages": [
+        7
+      ],
+      "use": "生成内容结构核对",
+      "sha256": "b44cc8e3cfb16309ee80aa43bb581427d57796a702ddace498ba41ff0709c461",
+      "bytes": 524,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/tree-structure.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "routing-icon",
+      "path": "docs/ppt/direction-mindmap-20261027/phosphor-arrows-split.svg",
+      "pages": [
+        7
+      ],
+      "use": "风险线索人工分流",
+      "sha256": "6ad27cca24989a0b9aa4491aea2da46678f028162144849964f491f57934ac9a",
+      "bytes": 432,
+      "license": "MIT",
+      "source": "https://raw.githubusercontent.com/phosphor-icons/core/2b75f3ad12b420c9504ef05df8d2564a28f8500e/assets/regular/arrows-split.svg",
+      "registry": "docs/ppt/direction-mindmap-20261027/manifest.json",
+      "notice": "docs/ppt/direction-mindmap-20261027/LICENSE-PHOSPHOR-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review"
+    },
+    {
+      "id": "implementation-figure",
+      "path": "docs/ppt/vector-assets-20261027/ira-man-presenting.svg",
+      "pages": [
+        8
+      ],
+      "use": "验证、培训和逐校实施概念人物",
+      "sha256": "54a3c4ca9585cbc3363d53335079f1d033cd381f21a9eed837b8b6534e6623ad",
+      "bytes": 5717,
+      "license": "MIT",
+      "source": "https://github.com/ira-design/ira-illustrations/blob/SVG/SVG.zip",
+      "registry": "docs/ppt/vector-assets-20261027/manifest.json",
+      "notice": "docs/ppt/vector-assets-20261027/LICENSE-IRA-MIT.txt",
+      "modified": false,
+      "status": "user-authorized-rendering-review",
+      "presentationPath": "docs/ppt/rendered-materials-20261028/compatibility/implementation-figure.png",
+      "presentationContentType": "image/png",
+      "presentationSha256": "bb733135d681eebbdd02a431f9baf769618ae76a7456c77c2119f1ed7812f5f4",
+      "renderOperation": "SVG rasterization for renderer compatibility, 1200px height, transparent background; original SVG unchanged"
+    }
+  ],
+  "scope": "Existing registered assets, original bytes; body facts and native evidence preserved."
+}

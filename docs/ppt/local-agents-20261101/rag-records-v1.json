@@ -1,0 +1,38 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "status": "candidate-user-review",
+  "method": "Built-in image_gen.imagegen",
+  "contentReference": "tmp/ppt-agent-interaction-20261031/native-final/slide-15.png",
+  "styleReference": "docs/ppt/local-agents-20261101/local-agent-collaboration-v3.png",
+  "source": "src/styles/tokens.css and existing project diagram style",
+  "license": "Built-in ImageGen original, project-specific diagram",
+  "promptFile": "docs/ppt/local-agents-20261101/rag-records-v1.md",
+  "actualDimensions": [
+    1672,
+    941
+  ],
+  "leadVisualReview": {
+    "threeModelNamesCorrect": true,
+    "proposedWorkflowClear": true,
+    "noClippingObserved": true,
+    "finalLabel": "输出结果"
+  },
+  "independentReview": "not performed",
+  "selectedVersions2And3Unchanged": true,
+  "originalPptxUnchanged": true,
+  "deliveryByteMatch": true,
+  "artifacts": [
+    {
+      "path": "docs/ppt/local-agents-20261101/rag-records-v1.png",
+      "bytes": 1309974,
+      "sha256": "e7a6bf9715d17aae8f03c5183723ef6ccb58d9f8aafc25bc2b4d573e39b40a86"
+    },
+    {
+      "path": "deliverables/心域智链_纵向记录与RAG检索_示意图候选_20261101.png",
+      "bytes": 1309974,
+      "sha256": "e7a6bf9715d17aae8f03c5183723ef6ccb58d9f8aafc25bc2b4d573e39b40a86"
+    }
+  ]
+}
