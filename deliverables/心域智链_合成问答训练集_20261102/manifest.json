@@ -1,0 +1,96 @@
+{
+  "batch_id": "synthetic-qa-20261102-v1",
+  "created_for": "2026-11-02",
+  "source_type": "ai_synthetic_candidate",
+  "candidate_examples": 96,
+  "scenario_groups": 72,
+  "reference_records_preserved": 476,
+  "accepted_examples": 0,
+  "professional_reviewed": false,
+  "training_started": false,
+  "source_database_sha256": "55f8826176edd2697ccb48f7e3d158149f5cb0fafdd248a396dbe4177e2e9ab3",
+  "author_sources": [
+    {
+      "filename": "part-a.jsonl",
+      "sha256": "c9f3edfb5fa5f47dd093dcc0243a33b7252bac4f87479f6f6efb253df6f10e4b",
+      "candidate_examples": 32,
+      "author_agent": "dashboard_polish",
+      "author_model_id": "unknown",
+      "editor_agent": "root",
+      "revision_note": "removed unnecessary campus-location question"
+    },
+    {
+      "filename": "part-b.jsonl",
+      "sha256": "8549f1c1ac1caa31b28a532a95a57469cb39bca3d1a885efa358c61eadd59342",
+      "candidate_examples": 32,
+      "author_agent": "report_polish",
+      "author_model_id": "unknown",
+      "editor_agent": "root",
+      "revision_note": "removed 24 unnecessary age prefixes; refreshed matching history"
+    },
+    {
+      "filename": "part-c.jsonl",
+      "sha256": "f96775980f2a3ffbeec55ad2776746d341295bffa430656f2e2d5e838a8f75bf",
+      "candidate_examples": 32,
+      "author_agent": "root",
+      "author_model_id": "unknown",
+      "editor_agent": "root",
+      "revision_note": "original authored content"
+    }
+  ],
+  "guidance": [
+    {
+      "publisher": "NIMH",
+      "title": "I'm So Stressed Out!",
+      "url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet"
+    },
+    {
+      "publisher": "NIMH",
+      "title": "5 Action Steps to Help Someone Having Thoughts of Suicide",
+      "url": "https://www.nimh.nih.gov/health/publications/5-action-steps-to-help-someone-having-thoughts-of-suicide"
+    },
+    {
+      "publisher": "WHO",
+      "title": "Doing What Matters in Times of Stress",
+      "url": "https://www.who.int/publications/i/item/9789240003927"
+    }
+  ],
+  "files": {
+    "quality-report.json": {
+      "sha256": "8eba5ef59285ced079f8cde6906dc23f6e1c5fadf253bfa2b711dc03a01763bf",
+      "bytes": 772
+    },
+    "schema.sql": {
+      "sha256": "ad368325dd58e7067df46356a6ebf70f422852e6e36983d7a4cef74881be84e5",
+      "bytes": 5579
+    },
+    "source-dialogues/part-a.jsonl": {
+      "sha256": "c9f3edfb5fa5f47dd093dcc0243a33b7252bac4f87479f6f6efb253df6f10e4b",
+      "bytes": 17656
+    },
+    "source-dialogues/part-b.jsonl": {
+      "sha256": "8549f1c1ac1caa31b28a532a95a57469cb39bca3d1a885efa358c61eadd59342",
+      "bytes": 19586
+    },
+    "source-dialogues/part-c.jsonl": {
+      "sha256": "f96775980f2a3ffbeec55ad2776746d341295bffa430656f2e2d5e838a8f75bf",
+      "bytes": 18184
+    },
+    "synthetic-training.sqlite3": {
+      "sha256": "3f8931f627eebeb4c0514e580fa3b62516d73eed9d619e3eadaaaf781d388d20",
+      "bytes": 2129920
+    },
+    "training-examples.jsonl": {
+      "sha256": "3f0286b1ac9181659d4ca5eb0d9b25464b10719f1520bb2bbf87ce7b76e02b7b",
+      "bytes": 119783
+    },
+    "数据说明.md": {
+      "sha256": "4c3bd36dd4b14641704b4684835d6f11cfe7a0a62117722bea30cd25a199411b",
+      "bytes": 3205
+    },
+    "问答预览.md": {
+      "sha256": "2c943220bb653dc6ef411ad8e449b5b49dbcb19fdf686d0c3d20b2d43045a7d0",
+      "bytes": 40618
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "candidate_examples": 96,
+  "scenario_groups": 72,
+  "topic_counts": {
+    "study_pressure": 8,
+    "time_management": 8,
+    "career_uncertainty": 8,
+    "perfectionism": 8,
+    "relationships": 8,
+    "loneliness": 8,
+    "family_boundaries": 8,
+    "emotion_support": 8,
+    "routine_and_helpseeking": 8,
+    "assessment_literacy": 8,
+    "platform_privacy": 8,
+    "safety_support": 8
+  },
+  "unique_normalized_questions": 96,
+  "unique_normalized_answers": 96,
+  "near_duplicate_method": "character SequenceMatcher >= 0.86 on normalized question OR answer; heuristic only",
+  "near_duplicate_candidates": [],
+  "clinical_quality_assessed": false,
+  "professional_reviewed": false,
+  "accepted_for_training": 0,
+  "split": "unassigned"
+}

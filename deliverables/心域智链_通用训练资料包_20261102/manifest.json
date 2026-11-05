@@ -1,0 +1,49 @@
+{
+  "format_version": "1.0",
+  "source_file": "心域智链_数据库变量与项目数据_20261028.xlsx",
+  "source_sha256": "79da59887ad69b1b081ea4ec9f4866bddbb2341d4e47468e1cc57bee3392649a",
+  "snapshot_date": "2026-10-28",
+  "built_for": "2026-11-02",
+  "database": "training-reference.sqlite3",
+  "reference_records": 476,
+  "source_sheets": 7,
+  "source_cells": 5828,
+  "cached_formulas": 151,
+  "table_rows": {
+    "DatabaseSummary": 6,
+    "FieldDictionary": 198,
+    "TableInventory": 119,
+    "SchemaDifferences": 45,
+    "JsonVariables": 39,
+    "RegionalEducation": 31,
+    "LiteratureScreening": 38
+  },
+  "application_schema_tables": 27,
+  "application_schema_fields": 198,
+  "supervised_training_examples": 0,
+  "training_started": false,
+  "data_usage": "reference_only",
+  "formula_policy": "cached values preserved; not recalculated",
+  "files": {
+    "reference-records.jsonl": {
+      "sha256": "e54995e49273bac12cec568da70a370386328947aef0b51a045a04a3341721ac",
+      "bytes": 372462
+    },
+    "schema.sql": {
+      "sha256": "bd432ea987749e30f01e3e6e91334d57372f29ffef40ebf7f9dac15f4c80a906",
+      "bytes": 4578
+    },
+    "training-examples.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "training-reference.sqlite3": {
+      "sha256": "55f8826176edd2697ccb48f7e3d158149f5cb0fafdd248a396dbe4177e2e9ab3",
+      "bytes": 1990656
+    },
+    "使用说明.md": {
+      "sha256": "1b1413b1b67b1e04852d65049508704e3aad514a161c2be7a340093f0e064e60",
+      "bytes": 2821
+    }
+  }
+}

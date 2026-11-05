@@ -1,0 +1,117 @@
+{
+  "owner": "A / Lead",
+  "version": "1.0",
+  "updated": "2026-11-01",
+  "project": "心域智链",
+  "status": "blank-for-user-selection",
+  "pages": [
+    {
+      "page": 1,
+      "title": "心域智链",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 2,
+      "title": "高校规模与政策背景",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 3,
+      "title": "学生心理支持中的三个困境",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 4,
+      "title": "学生端：测评记录与求助操作",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 5,
+      "title": "教师端：核对答复与持续跟进",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 6,
+      "title": "全国高校规模与服务衔接需求",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 7,
+      "title": "湖北切入与合作路径",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 8,
+      "title": "高校先行，按学段适配",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 9,
+      "title": "当前原型与拟建AI如何衔接",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 10,
+      "title": "本地多智能体协作（拟建）",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 11,
+      "title": "同一条求助的协作过程（示意）",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 12,
+      "title": "分歧、缺失与人工复核（拟建）",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 13,
+      "title": "本地候选模型与职责",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 14,
+      "title": "情绪线索与五维展示（拟建）",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 15,
+      "title": "纵向记录与RAG检索（拟建）",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 16,
+      "title": "规则提示与危机复核联动",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 17,
+      "title": "敏感数据处理与教师提醒（拟建）",
+      "choice": "pending",
+      "note": ""
+    },
+    {
+      "page": 18,
+      "title": "阶段成果与后续实施",
+      "choice": "pending",
+      "note": ""
+    }
+  ]
+}
