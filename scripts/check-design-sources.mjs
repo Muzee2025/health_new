@@ -91,7 +91,12 @@ export function inspectDesignSources(root = defaultRoot) {
     if (/(?:\.|\?\.)setOption\s*\(/.test(source)) issue('RAW_CHART_OPTION', name, 'Business ECharts options must pass through the shared library adapter.');
     if (/new\s+Chart\s*\(/.test(source) && !source.includes('createLibraryChartJsConfig')) issue('RAW_CHARTJS_CONFIG', name, 'Business Chart.js configuration must use the library adapter.');
     if (/<el-?empty\b/i.test(source) && name !== 'src/design/LibraryEmpty.vue') issue('DEFAULT_EMPTY_ART', name, 'Use LibraryEmpty so empty-state artwork comes from the approved manifest.');
-    for (const match of source.matchAll(/<el-?icon\b[^>]*>([\s\S]*?)<\/el-?icon>/gi)) {
+    // Both the opening and closing tags may span lines after formatting
+    // (Prettier can move the trailing '>' to the next line). A bare `>` or
+    // `[^>]*>` would then match the wrong delimiter and swallow the next
+    // sibling element into the icon body, producing false
+    // UNREGISTERED_ICON_COMPONENT reports.
+    for (const match of source.matchAll(/<el-?icon\b[\s\S]*?>\s*([\s\S]*?)\s*<\/el-?icon\s*>/gi)) {
       if (/<(?!LibraryIcon\b|\/)[A-Za-z][\w-]*\b/.test(match[1])) issue('UNREGISTERED_ICON_COMPONENT', name, 'Explicit control icons must resolve through LibraryIcon, not removed global component registrations.');
     }
     if (/\p{Extended_Pictographic}/u.test(source)) issue('DECORATIVE_EMOJI', name, 'Use a registered library icon for static graphical content.');
