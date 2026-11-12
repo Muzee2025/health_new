@@ -23,7 +23,16 @@ const walk = (dir) => {
     return entry.isDirectory() ? walk(full) : [full];
   });
 };
-const hashFile = (p) => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+// Text assets are hashed after CRLF->LF normalisation so the recorded digest does
+// not depend on the checkout's line endings (Windows autocrlf writes CRLF, Linux
+// writes LF). Binary assets are hashed byte-for-byte.
+const TEXT_ASSET = /\.(?:svg|txt|md|json|css|js|mjs)$/i;
+const hashBytes = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
+const hashFile = (p) => {
+  const bytes = fs.readFileSync(p);
+  if (!TEXT_ASSET.test(p)) return hashBytes(bytes);
+  return hashBytes(Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n'), 'utf8'));
+};
 const rel = (p) => path.relative(root, p).replaceAll('\\', '/');
 const isAssetMetadata = (p) => ['manifest.json', 'LICENSES.md'].includes(path.relative(assetsRoot, p).replaceAll('\\', '/')) || path.basename(p) === '.gitattributes';
 const categoryFor = (p, item) => {

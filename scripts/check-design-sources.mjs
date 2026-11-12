@@ -41,7 +41,13 @@ export function inspectDesignSources(root = defaultRoot) {
       issue('ASSET_SOURCE_INVALID', 'src/design/library-catalog.json', `${role} has an invalid path, source or license.`);
       return null;
     }
-    if (crypto.createHash('sha256').update(fs.readFileSync(absolute)).digest('hex') !== asset.sha256) {
+    // Same normalisation as check-assets.mjs: text assets are digested after
+    // CRLF->LF so a Windows checkout and a Linux checkout agree.
+    const TEXT_ASSET = /\.(?:svg|txt|md|json|css|js|mjs)$/i;
+    const digest = TEXT_ASSET.test(absolute)
+      ? crypto.createHash('sha256').update(Buffer.from(fs.readFileSync(absolute).toString('utf8').replace(/\r\n/g, '\n'), 'utf8')).digest('hex')
+      : crypto.createHash('sha256').update(fs.readFileSync(absolute)).digest('hex');
+    if (digest !== asset.sha256) {
       issue('ASSET_HASH_CHANGED', relative(absolute), 'Referenced asset bytes differ from the approved manifest.');
     }
     referenced.add(id);

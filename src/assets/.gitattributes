@@ -1,0 +1,4 @@
+# SVG bytes are hashed after CRLF->LF normalisation by scripts/check-assets.mjs.
+# Keep checkout bytes stable across Windows and Linux so vector sources, which
+# carry their upstream licence notice, are not rewritten by autocrlf.
+*.svg -text

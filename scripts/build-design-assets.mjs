@@ -17,6 +17,14 @@ try {
 }
 if (!sharp) throw new Error('sharp is required. Set SHARP_MODULE_PATH to an existing sharp module, or NODE_PATH to its node_modules directory. No install is performed.');
 const date = '2026-10-21';
+// Digests must not depend on the checkout's line endings: Windows autocrlf writes
+// CRLF while a Linux CI checkout writes LF. Text inputs are digested after
+// CRLF->LF normalisation, binary inputs byte-for-byte. This must stay identical to
+// hashFile() in scripts/check-assets.mjs, which verifies what is written here.
+const TEXT_ASSET = /\.(?:svg|txt|md|json|css|js|mjs)$/i;
+const digestFor = (relative, bytes) => crypto.createHash('sha256')
+  .update(TEXT_ASSET.test(relative) ? Buffer.from(bytes.toString('utf8').replace(/\r\n/g, '\n'), 'utf8') : bytes)
+  .digest('hex');
 const css = await fs.readFile(path.join(root, 'src/styles/tokens.css'), 'utf8');
 const tokens = Object.fromEntries([...css.matchAll(/--([\w-]+)\s*:\s*([^;]+);/g)].map(m => [m[1], m[2].trim()]));
 function t(key, seen = []) {
@@ -34,7 +42,7 @@ async function save(relative, contents, size, usage, status = 'approved') {
   try { previous = await fs.readFile(target); } catch (error) { if (error.code !== 'ENOENT') throw error; }
   if (!previous?.equals(output)) await fs.writeFile(target, output);
   const data = await fs.readFile(target);
-  entries.push({ id: path.basename(relative).replace(/\./g, '-'), path: relative.replaceAll('\\', '/'), type: path.extname(relative).slice(1), size, usage, license: status === 'approved' ? 'LicenseRef-Project-Original' : 'unverified', source: status === 'approved' ? '项目自制：scripts/build-design-assets.mjs 原创贝塞尔矢量源' : '仓库既有文件；原始来源与授权待核实', owner: status === 'approved' ? relative.startsWith('avatars/') ? '心域智链项目组（B / E03 原作；R1 品牌色适配）' : relative.startsWith('icons/icon-domain') ? '心域智链项目组（B / E03 原作）' : '心域智链项目组（B / R1 制作）' : '原作者待核实', status, sha256: crypto.createHash('sha256').update(data).digest('hex') });
+  entries.push({ id: path.basename(relative).replace(/\./g, '-'), path: relative.replaceAll('\\', '/'), type: path.extname(relative).slice(1), size, usage, license: status === 'approved' ? 'LicenseRef-Project-Original' : 'unverified', source: status === 'approved' ? '项目自制：scripts/build-design-assets.mjs 原创贝塞尔矢量源' : '仓库既有文件；原始来源与授权待核实', owner: status === 'approved' ? relative.startsWith('avatars/') ? '心域智链项目组（B / E03 原作；R1 品牌色适配）' : relative.startsWith('icons/icon-domain') ? '心域智链项目组（B / E03 原作）' : '心域智链项目组（B / R1 制作）' : '原作者待核实', status, sha256: digestFor(relative, data) });
 }
 // The paired folios are unequal in width. A continuous open path remains between them.
 // No heart, head, medical cross, network nodes, or infinite loop is used.
@@ -148,7 +156,7 @@ const phosphorLicense = await fs.readFile(path.join(root, 'docs/design/ppt-kit/u
 for (const [key, output, author, license, sourceSha256] of externalAssets) {
   const input = `docs/design/ppt-kit/upstream/${key}.svg.txt`;
   const raw = await fs.readFile(path.join(root, input));
-  if (crypto.createHash('sha256').update(raw).digest('hex') !== sourceSha256) throw new Error(`Upstream hash mismatch: ${input}`);
+  if (digestFor(input, raw) !== sourceSha256) throw new Error(`Upstream hash mismatch: ${input}`);
   const doodle = key.startsWith('open-doodles-');
   let adapted = raw.toString('utf8');
   if (doodle) adapted = adapted.replace(/-?\d+\.\d{3,}/g, n => String(Math.round(Number(n) * 100) / 100)).replace(/<!--[\s\S]*?-->/g, '').replace(/>\s+</g, '><').replaceAll('#FF5678', c.apricot).replaceAll('#000000', c.ink).replace(/<\?xml[^>]*\?>\s*/, '');
@@ -166,7 +174,7 @@ for (const [key, output, author, license, sourceSha256] of externalAssets) {
 for (const relative of ['avatars/psych-teacher-cartoon.svg', 'avatars/psych-teacher-cartoon-48.png', 'avatars/psych-teacher-cartoon-96.png', 'avatars/psych-teacher-cartoon-192.png', ...[1, 2, 3].map(n => `avatars/teachers/psych-teacher-${n}.png`)]) {
   const data = await fs.readFile(path.join(assetRoot, relative));
   const meta = await sharp(data).metadata();
-  entries.push({ id: `legacy-${path.basename(relative).replace(/\./g, '-')}`, path: relative, type: path.extname(relative).slice(1), size: [meta.width, meta.height], usage: '既有引用保留，禁止新增使用；不纳入approved素材包', license: 'unverified', source: '仓库既有文件；原始来源与授权待核实', owner: '原作者待核实', status: 'legacy-unverified', sha256: crypto.createHash('sha256').update(data).digest('hex') });
+  entries.push({ id: `legacy-${path.basename(relative).replace(/\./g, '-')}`, path: relative, type: path.extname(relative).slice(1), size: [meta.width, meta.height], usage: '既有引用保留，禁止新增使用；不纳入approved素材包', license: 'unverified', source: '仓库既有文件；原始来源与授权待核实', owner: '原作者待核实', status: 'legacy-unverified', sha256: digestFor(relative, data) });
 }
 await fs.writeFile(path.join(assetRoot, 'manifest.json'), JSON.stringify({ version: '2.0.0', updated: date, assets: entries }, null, 2) + '\n');
 const licenses = `# 心域智链素材来源与许可\n\n> owner: B / R1 ｜ version: 2.0 ｜ status: 定稿 ｜ updated: ${date}\n\nLicenseRef-Project-Original 素材由本项目通过原创贝塞尔矢量代码制作，无第三方字体文件；作者为心域智链项目组：品牌与状态场景由 B / R1 制作；原W1几何头像与领域图标由 B / E03 原作，R1 按品牌色适配头像。日期 ${date}。该许可表示项目自制，允许项目内部复用；正式对外授权前由负责人确认权属，本文不冒充第三方法律授权证明。字标使用系统字体文字，不分发字体。旧七个头像来源与许可待核实，禁止新增使用，不包含在 approved 素材包；保留仅为兼容已有业务。\n\n下表逐项列出全部id与路径；所有导出与对应source SVG同属一个系列。第三方条目单独标注作者、上游来源与真实许可，不被视作项目原创。\n\n| 素材id | 文件（相对src/assets） | 来源 / 许可 | 可商用 |\n| --- | --- | --- | --- |\n` + entries.map(e => `| ${e.id} | ${e.path} | ${e.status !== 'approved' ? '来源待核实 / unverified' : e.license === 'LicenseRef-Project-Original' ? '项目自制 / LicenseRef-Project-Original' : `${e.owner} / ${e.license}；[原始来源](${e.source})`} | ${e.status !== 'approved' ? '待核实，禁止新增使用' : e.license === 'LicenseRef-Project-Original' ? '仅内部复用；对外授权/商用由负责人确认' : e.license === 'MIT' ? 'MIT允许；随分发保留版权与许可全文' : 'CC0允许；其他不受许可影响的权利仍适用'} |`).join('\n') + '\n';
