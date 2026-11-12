@@ -28,6 +28,17 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm test
       - run: npm run build
+      # Chart fixture invariants: daily totals equal the sum of their parts, the
+      # heatmap has exactly 28 cells, histogram bins meet without gaps and each
+      # duration falls in exactly one of them, channel percentages sum to 100.
+      # It imports only relative paths (no npm package, no browser, no network),
+      # so it would run before `npm ci` too. It prints its JSON report to stdout
+      # even when it fails, leaving `"status": "failed"` as the last line; the
+      # exit code is the real signal, so read the log from the AssertionError
+      # upwards. Note that `scripts/frontend-experience-checks.mjs` is NOT this
+      # kind of checker: it exports a function that capture-w2-ui.mjs calls with
+      # a live page, and needs playwright + sharp, so it cannot be gated here.
+      - run: node scripts/check-chart-data.mjs
       - run: npm run assets:check
       - run: npm run assets:source-test
       - run: npm run assets:source-check
