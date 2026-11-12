@@ -623,7 +623,7 @@ if (manifest) {
     .filter(
       (f) =>
         /\.(?:svg|png|webp|ico)$/i.test(f) &&
-        !f.startsWith(assetsRoot) &&
+        path.relative(assetsRoot, f).startsWith('..') &&
         !f.includes(`${path.sep}ppt-kit${path.sep}`),
     )
   for (const f of mirrorFiles) {
