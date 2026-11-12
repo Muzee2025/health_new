@@ -601,7 +601,10 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
                         tags = json.loads(msg.emotion_tags)
                         stress_sum += (tags.get("sadness", 0) + tags.get("fear", 0) + tags.get("anger", 0)) / 3
                         count += 1
-                    except (TypeError, ValueError):
+                    except Exception:
+                        # emotion_tags is a free-text JSON column: legacy rows may hold a
+                        # list or null, so tags.get() can raise AttributeError as well as
+                        # json.loads raising TypeError/ValueError. Skip such rows.
                         pass
                 
                 avg_stress = stress_sum / count if count > 0 else 0

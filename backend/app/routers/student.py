@@ -281,7 +281,9 @@ def get_teachers(request: Request, db: Session = Depends(get_db), current_user: 
         if profile and profile.time_slots:
             try:
                 time_slots = json.loads(profile.time_slots)
-            except (TypeError, ValueError):
+            except Exception:
+                # time_slots is an unvalidated TEXT column; a malformed or deeply
+                # nested value must not break the teacher list for the student.
                 pass
 
         appointments = db.query(models.Appointment).filter(
