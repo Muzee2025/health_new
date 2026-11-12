@@ -15,7 +15,11 @@
     "assets:source-test": "node --test scripts/tests/check-design-sources.test.mjs",
     "perf:build": "node scripts/build-frontend-audit.mjs",
     "perf:preview": "node scripts/serve-frontend-audit.mjs",
-    "perf:check": "node scripts/check-frontend-loading.mjs"
+    "perf:check": "node scripts/check-frontend-loading.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{js,ts,vue,css}\" \"scripts/**/*.mjs\" \"public/sw.js\" \"vite.config.js\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,vue,css}\" \"scripts/**/*.mjs\" \"public/sw.js\" \"vite.config.js\""
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
@@ -28,8 +32,16 @@
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@vitejs/plugin-vue": "6.0.10",
     "@vitest/coverage-v8": "5.0.5",
+    "@vitest/eslint-plugin": "1.6.28",
+    "eslint": "10.14.0",
+    "eslint-plugin-vue": "10.12.1",
+    "globals": "16.5.0",
+    "prettier": "3.10.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
     "vite": "7.3.7",
     "vitest": "5.0.5"
   }

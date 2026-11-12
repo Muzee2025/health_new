@@ -1,0 +1,19 @@
+# Generated / vendored / runtime data
+node_modules/
+dist/
+coverage/
+tmp/
+deliverables/
+backend/
+docs/
+.venv/
+public/assets/
+src/assets/
+package-lock.json
+
+# Archived legacy fragment, not UTF-8 encoded (see 工程规范引入方案.md)
+scripts/archive/
+
+# Intermediate document output
+*.tmp
+docs/**/*.bak

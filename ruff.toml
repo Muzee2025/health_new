@@ -1,0 +1,40 @@
+# Ruff configuration for the FastAPI backend (Python 3.12).
+# Deliberately narrow: ruff's default rule set reports 837 issues on this tree,
+# so the selection is pinned to error-prone rules only. Style is delegated to
+# `ruff format` and the rule set is expected to widen in phase 2.
+target-version = "py312"
+line-length = 100
+
+exclude = [
+  ".venv",
+  "venv",
+  "node_modules",
+  "tmp",
+  "deliverables",
+  "docs",
+  "coverage",
+  "dist",
+  "backend/temp",
+  "backend/runtime",
+  "backend/uploads",
+  "backend/diagnostics_output",
+  "backend/chroma",
+  "**/__pycache__",
+]
+
+[lint]
+select = ["E4", "E7", "E9", "F", "I", "B"]
+# B008: FastAPI declares dependencies as `Depends()` in argument defaults.
+ignore = ["B008"]
+
+[lint.per-file-ignores]
+"backend/tests/**" = ["B011"]
+"**/__init__.py" = ["F401"]
+
+[lint.isort]
+known-first-party = ["app"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = false
