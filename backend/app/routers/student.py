@@ -782,7 +782,10 @@ def get_report_analysis(
         models.ReportAnalysisCache.report_type == report_type,
     ).first()
 
-    response.headers["Cache-Control"] = "public, max-age=300, stale-while-revalidate=30"
+    # A personal report must never enter a shared cache: a proxy that stored it
+    # would hand it to the next student asking for the same URL.
+    response.headers["Cache-Control"] = "private, max-age=300, stale-while-revalidate=30"
+    response.headers["Vary"] = "Authorization"
     if cache and cache.payload_json:
         etag = f'W/"{hashlib.md5(cache.payload_json.encode()).hexdigest()}"'
         if request.headers.get("If-None-Match") == etag:
@@ -1239,7 +1242,8 @@ def add_comment(post_id: int, comment_data: schemas.TreeholeCommentCreate, db: S
     return comment
 
 @router.get("/treehole/{post_id}/comments", response_model=List[schemas.TreeholeCommentResponse])
-def get_comments(post_id: int, db: Session = Depends(get_db)):
+def get_comments(post_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
+    check_student_role(current_user)
     return db.query(models.TreeholeComment).filter(models.TreeholeComment.post_id == post_id).order_by(models.TreeholeComment.created_at.asc()).all()
 
 @router.post("/questions/ask", response_model=schemas.QuestionResponse)

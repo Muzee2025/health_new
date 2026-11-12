@@ -203,6 +203,45 @@ def test_login_guard_returns_retry_after_after_repeated_failures(security_client
     assert int(limited.headers["retry-after"]) > 0
 
 
+def test_login_guard_counts_a_concurrent_burst_once_per_attempt(security_client):
+    """The limit must hold when the attempts arrive together.
+
+    A check that only read the counter let every concurrent request pass before
+    any of them was counted, so a burst of 40 all got through. The reservation
+    has to happen inside the same locked step as the check.
+    """
+    import threading
+
+    client, _ = security_client
+    with login_guard._lock:
+        login_guard._entries.clear()
+
+    burst = 40
+    statuses: list[int] = []
+    start = threading.Barrier(burst)
+    guard = threading.Lock()
+
+    def attempt() -> None:
+        start.wait()
+        response = client.post(
+            "/api/login",
+            json={"username": "burst-synthetic-account", "password": "WrongPass123"},
+        )
+        with guard:
+            statuses.append(response.status_code)
+
+    threads = [threading.Thread(target=attempt) for _ in range(burst)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    # Five attempts per account are allowed; everything past that is refused,
+    # however many arrived at once.
+    assert statuses.count(401) == 5
+    assert statuses.count(429) == burst - 5
+
+
 def test_anonymous_access_and_x_user_id_header_do_not_authenticate(security_client):
     client, _ = security_client
     headers = {"X-User-Id": "42"}

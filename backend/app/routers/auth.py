@@ -39,9 +39,9 @@ def register(user: schemas.UserCreate, request: Request, db: Session = Depends(g
     validate_new_password(user.password)
     if not user.username.strip() or user.username != user.username.strip():
         raise HTTPException(status_code=400, detail="Username must not be empty or have surrounding spaces")
+    # Registration charges the per-IP budget; check reserves it and success keeps
+    # it (keep_ip), so sign-ups stay CPU-bounded.
     login_guard.check(request, user.username)
-    # Registration also consumes the per-IP CPU budget without storing credentials.
-    login_guard.failure(request, user.username)
     try:
         if db.query(models.User).filter(models.User.username == user.username).first():
             raise HTTPException(status_code=400, detail="Unable to register this account")
@@ -58,7 +58,7 @@ def register(user: schemas.UserCreate, request: Request, db: Session = Depends(g
     except SQLAlchemyError:
         db.rollback()
         raise HTTPException(status_code=503, detail="Registration is temporarily unavailable") from None
-    login_guard.success(request, user.username)
+    login_guard.success(request, user.username, keep_ip=True)
     return {"access_token": create_access_token(user_id=new_user.id, auth_epoch=0), "token_type": "bearer", "user": new_user}
 
 
@@ -66,6 +66,8 @@ def register(user: schemas.UserCreate, request: Request, db: Session = Depends(g
 def login(user: schemas.UserLogin, request: Request, db: Session = Depends(get_db)):
     _ensure_auth_configuration()
     identifier = (user.username or "").strip()
+    # check reserves this attempt under the typed identifier and the IP, so the
+    # limits hold even when many requests arrive at once.
     login_guard.check(request, identifier)
     try:
         db_user = db.query(models.User).filter(models.User.username == identifier).first() if identifier else None
@@ -75,7 +77,10 @@ def login(user: schemas.UserLogin, request: Request, db: Session = Depends(get_d
         if not db_user and identifier:
             db_user = db.query(models.User).filter(models.User.student_id == identifier).first()
         principal = f"user-id:{db_user.id}" if db_user else identifier
-        login_guard.check(request, principal)
+        # The account key is checked without reserving again: check already
+        # counted this attempt, and the two keys would otherwise charge twice.
+        if principal != identifier:
+            login_guard.ensure(request, principal)
         valid = False
         try:
             password_bytes = user.password.encode("utf-8")
@@ -92,9 +97,11 @@ def login(user: schemas.UserLogin, request: Request, db: Session = Depends(get_d
         if disabled:
             valid = False
     if not valid or db_user.role not in ("student", "teacher"):
-        login_guard.failure(request, principal)
+        # Charge the account key as well as the typed identifier, so neither a
+        # display name nor a student number buys extra attempts.
+        login_guard.failure(request, identifier, principal)
         raise HTTPException(status_code=401, detail="Invalid sign-in credentials", headers={"WWW-Authenticate": "Bearer"})
-    login_guard.success(request, principal)
+    login_guard.success(request, identifier, principal)
     return {"access_token": create_access_token(user_id=db_user.id, auth_epoch=auth_epoch), "token_type": "bearer", "user": db_user}
 
 

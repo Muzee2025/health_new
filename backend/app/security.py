@@ -188,29 +188,75 @@ class LoginGuard:
         while len(self._entries) > self.max_entries:
             self._entries.popitem(last=False)
 
+    def _bump(self, key: str, now: float) -> None:
+        count, expiry = self._entries.get(key, (0, now + self.window_seconds))
+        self._entries[key] = (count + 1, expiry)
+        self._entries.move_to_end(key)
+
+    def _assert_under(self, keys: list[str], now: float) -> None:
+        for key, limit in zip(keys, (20, 5), strict=True):
+            count, expiry = self._entries.get(key, (0, now))
+            if count >= limit and expiry > now:
+                raise HTTPException(status_code=429, detail="Too many sign-in attempts; try again later",
+                                    headers={"Retry-After": str(max(1, int(expiry - now)))})
+
     def check(self, request: Request, identifier: str):
+        """Check the limits and reserve this attempt in one locked step.
+
+        Reserving here rather than counting after the password check is what
+        makes the limit hold under concurrency: a check that only read the
+        counter let every concurrent request pass before any of them counted.
+        A successful sign-in gives the reservation back (see success); a failed
+        one simply keeps it (see failure).
+        """
+        now = time.monotonic()
+        keys = list(self._keys(request, identifier))
+        with self._lock:
+            self._prune(now)
+            self._assert_under(keys, now)
+            for key in keys:
+                self._bump(key, now)
+
+    def ensure(self, request: Request, identifier: str):
+        """Reserve the account key a sign-in resolves to, once the database named it.
+
+        The typed identifier and the account behind it are different keys: a
+        user may type a username, a display name, or a student number, and each
+        spelling must not buy a fresh set of attempts.
+        """
+        now = time.monotonic()
+        key = self._keys(request, identifier)[1]
+        with self._lock:
+            self._prune(now)
+            self._assert_under([self._keys(request, "")[0], key], now)
+            self._bump(key, now)
+
+    def failure(self, request: Request, *identifiers: str):
+        """Keep the reservation check and ensure made.
+
+        A failed sign-in charges nothing more: check already counted this
+        attempt under the IP and the typed identifier, and ensure counted the
+        account behind it. Counting again here is what made a single attempt
+        cost two of its five.
+        """
         now = time.monotonic()
         with self._lock:
             self._prune(now)
-            for key, limit in zip(self._keys(request, identifier), (20, 5), strict=True):
-                count, expiry = self._entries.get(key, (0, now))
-                if count >= limit and expiry > now:
-                    raise HTTPException(status_code=429, detail="Too many sign-in attempts; try again later",
-                                        headers={"Retry-After": str(max(1, int(expiry - now)))})
 
-    def failure(self, request: Request, identifier: str):
+    def success(self, request: Request, *identifiers: str, keep_ip: bool = False):
+        """Settle the reservation check made: clear the account keys it charged and,
+        unless the caller keeps it (registration), give the IP budget back."""
         now = time.monotonic()
         with self._lock:
-            self._prune(now)
-            for key in self._keys(request, identifier):
-                count, expiry = self._entries.get(key, (0, now + self.window_seconds))
-                self._entries[key] = (count + 1, expiry)
-                self._entries.move_to_end(key)
-            self._prune(now)
-
-    def success(self, request: Request, identifier: str):
-        with self._lock:
-            self._entries.pop(self._keys(request, identifier)[1], None)
+            if not keep_ip:
+                ip_key = self._keys(request, "")[0]
+                count, expiry = self._entries.get(ip_key, (0, now))
+                if count <= 1 or expiry <= now:
+                    self._entries.pop(ip_key, None)
+                else:
+                    self._entries[ip_key] = (count - 1, expiry)
+            for identifier in identifiers:
+                self._entries.pop(self._keys(request, identifier)[1], None)
 
 
 login_guard = LoginGuard()
