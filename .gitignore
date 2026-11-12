@@ -28,6 +28,11 @@ __pycache__/
 *.db-*
 *.sqlite
 *.sqlite3
+# ...except this one: it is a delivered artifact whose sha256 is pinned in the
+# package manifest next to it, and the tests compare the rebuilt database
+# against it. Ignoring it made the tests pass locally (the file was on disk)
+# and fail in CI, where a clean checkout has no untracked files at all.
+!deliverables/心域智链_通用训练资料包_20261102/training-reference.sqlite3
 backend/chroma*/
 logs/
 uploads/

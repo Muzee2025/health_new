@@ -231,8 +231,13 @@ export function inspectDesignSources(root = defaultRoot) {
       issue('INLINE_IMAGE', name, 'Inline static images must be registered library assets.')
     if (/(?:src|href)\s*=\s*["'](?:https?:)?\/\/|url\(\s*["']?(?:https?:)?\/\//i.test(source))
       issue('REMOTE_VISUAL', name, 'Remote static visual references are not allowed.')
+    // public/chunk-error.html is the last-resort page the router shows when a
+    // dynamic import fails. Its whole point is to load no chunks, so it cannot
+    // import the token stylesheet either; it carries its own colours on
+    // purpose. Every other file still has to use the approved tokens.
     if (
       !name.startsWith('src/styles/') &&
+      name !== 'public/chunk-error.html' &&
       /#[\da-f]{3,8}\b|rgba?\(\s*\d|hsla?\(\s*\d/i.test(source)
     )
       issue('INLINE_COLOR', name, 'Use approved design tokens or the shared chart palette.')
