@@ -22,7 +22,11 @@ from app.services.crisis_pending_service import (
     merge_pending_records,
     paginate_rows,
 )
-from app.services.rag_service import add_document_to_rag, delete_document_from_rag
+from app.services.rag_service import (
+    add_document_to_rag,
+    delete_document_from_rag,
+    get_rag_status,
+)
 from app.student_access import assigned_student_ids, require_assigned_student
 from app.support_workflow import append_event, require_support_schema
 from app.upload_security import (
@@ -1026,12 +1030,17 @@ def create_knowledge(knowledge: schemas.KnowledgeBaseCreate, db: Session = Depen
     check_teacher_role(current_user)
     new_knowledge = models.KnowledgeBase(**knowledge.model_dump())
     db.add(new_knowledge)
+    # Index before committing: the SQL row stays authoritative, so a half-written
+    # pair (row without vectors) must never be committed silently. flush() assigns
+    # the primary key without ending the transaction, so the row can still be
+    # rolled back if the optional index refuses the document.
+    db.flush()
+    if get_rag_status()["enabled"]:
+        if not add_document_to_rag(new_knowledge.id, new_knowledge.title, new_knowledge.content):
+            db.rollback()
+            raise HTTPException(status_code=503, detail="Knowledge indexing is unavailable")
     db.commit()
     db.refresh(new_knowledge)
-    
-    # 异步或同步写入 RAG 向量库
-    add_document_to_rag(new_knowledge.id, new_knowledge.title, new_knowledge.content)
-    
     return new_knowledge
 
 @router.delete("/knowledge/{knowledge_id}")
@@ -1040,13 +1049,14 @@ def delete_knowledge(knowledge_id: int, db: Session = Depends(get_db), current_u
     knowledge = db.query(models.KnowledgeBase).filter(models.KnowledgeBase.id == knowledge_id).first()
     if not knowledge:
         raise HTTPException(status_code=404, detail="Knowledge not found")
-        
+    # Remove the vectors first. If that fails, the row is kept so the record stays
+    # visible and retryable -- a deleted row with surviving vectors would still be
+    # retrievable by students, which is a disclosure rather than a dirty row.
+    if get_rag_status()["enabled"]:
+        if not delete_document_from_rag(knowledge_id):
+            raise HTTPException(status_code=503, detail="Knowledge index removal is unavailable")
     db.delete(knowledge)
     db.commit()
-    
-    # 从 RAG 向量库删除
-    delete_document_from_rag(knowledge_id)
-    
     return {"message": "Deleted"}
 @router.get("/teachers_profiles")
 def get_teachers_profiles(
