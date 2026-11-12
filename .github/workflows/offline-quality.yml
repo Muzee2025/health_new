@@ -49,6 +49,11 @@ jobs:
       # the first file it cannot compile (verified against a deliberately broken
       # module), so it fails the job exactly like py_compile did.
       - run: python -m compileall -q backend scripts
+      # Repository hygiene: no secrets, no runtime state, no unexpected paths and
+      # no new blobs over 2 MB. It was red before this step existed, which is why
+      # nobody noticed. The oversized and pinned-database entries it accepts are
+      # exact paths, so a new file of either kind still fails the job.
+      - run: python scripts/check-repo.py
       # deploy/ had no gate at all, so a broken compose file could only be found
       # by hand. `config --quiet` parses and interpolates without starting
       # anything. Two details that are easy to get wrong:
