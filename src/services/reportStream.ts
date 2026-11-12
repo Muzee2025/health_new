@@ -38,7 +38,12 @@ export function parseSseBlocks(raw: string) {
   return { events, rest }
 }
 
-export function shouldWarnForStep(payload: any) {
+export type StepWarningPayload = {
+  status?: string
+  elapsedMs?: number | string
+}
+
+export function shouldWarnForStep(payload: StepWarningPayload | null | undefined) {
   return payload?.status === 'degraded' || Number(payload?.elapsedMs || 0) > 30000
 }
 

@@ -14,7 +14,17 @@ export function buildNewConversation(
   }
 }
 
-export function filterVisibleSessions(sessions: any[], searchQuery: string, showArchived: boolean) {
+export type ChatSessionLike = {
+  id: string
+  title?: string
+  archived?: boolean
+}
+
+export function filterVisibleSessions(
+  sessions: ChatSessionLike[],
+  searchQuery: string,
+  showArchived: boolean,
+) {
   const base = sessions.filter((s) => showArchived || !s.archived)
   if (!searchQuery) return base
   return base.filter((s) => String(s.title || '').includes(searchQuery))

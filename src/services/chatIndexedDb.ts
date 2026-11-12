@@ -1,5 +1,39 @@
 import type { createPrivateChatSession } from './privateChatSession'
 
+/** 本地会话记录：`conversations` 存储的 keyPath 是 `id`。 */
+export type ChatConversationRecord = {
+  id: string
+  title: string
+  mode: string
+  createdAt?: string
+  updatedAt?: string
+  updated_at?: string
+  archived?: boolean
+}
+
+/** 本地消息记录：`messages` 存储的 keyPath 是 `id`，按 `conversationId` 建索引。 */
+export type ChatMessageRecord = {
+  id: string
+  conversationId: string
+  role: string
+  content: string
+  model?: string
+  emotion_tags?: string[] | null
+  is_crisis?: boolean
+  timestamp: string
+  created_at?: string
+}
+
+/** 界面状态负载：不含 `conversationId`，由 `saveUiState` 补上。 */
+export type ChatUiStatePayload = {
+  draft?: string
+  scrollTop?: number
+  updatedAt?: string
+}
+
+/** `ui_states` 存储的完整记录：keyPath 是 `conversationId`。 */
+export type ChatUiState = ChatUiStatePayload & { conversationId: string }
+
 export function createChatStorage(session: ReturnType<typeof createPrivateChatSession>) {
   const DB_VERSION = 1
   const CONVERSATIONS = 'conversations'
@@ -100,17 +134,17 @@ export function createChatStorage(session: ReturnType<typeof createPrivateChatSe
     })
   }
 
-  async function upsertConversation(record: any) {
+  async function upsertConversation(record: ChatConversationRecord) {
     await withStore<void>(CONVERSATIONS, 'readwrite', (store) => {
       store.put(record)
     })
   }
 
   async function getAllConversations() {
-    return withStore<any[]>(CONVERSATIONS, 'readonly', (store) => {
-      return new Promise<any[]>((resolve, reject) => {
+    return withStore<ChatConversationRecord[]>(CONVERSATIONS, 'readonly', (store) => {
+      return new Promise<ChatConversationRecord[]>((resolve, reject) => {
         const req = store.getAll()
-        req.onsuccess = () => resolve(req.result || [])
+        req.onsuccess = () => resolve((req.result as ChatConversationRecord[]) || [])
         req.onerror = () => reject(req.error)
       })
     })
@@ -135,19 +169,19 @@ export function createChatStorage(session: ReturnType<typeof createPrivateChatSe
     })
   }
 
-  async function putMessage(record: any) {
+  async function putMessage(record: ChatMessageRecord) {
     await withStore<void>(MESSAGES, 'readwrite', (store) => {
       store.put(record)
     })
   }
 
   async function listMessages(conversationId: string) {
-    return withStore<any[]>(MESSAGES, 'readonly', (store) => {
+    return withStore<ChatMessageRecord[]>(MESSAGES, 'readonly', (store) => {
       const index = store.index('conversationId')
-      return new Promise<any[]>((resolve, reject) => {
+      return new Promise<ChatMessageRecord[]>((resolve, reject) => {
         const req = index.getAll(IDBKeyRange.only(conversationId))
         req.onsuccess = () => {
-          const rows = req.result || []
+          const rows = (req.result as ChatMessageRecord[]) || []
           rows.sort((a, b) => String(a.timestamp).localeCompare(String(b.timestamp)))
           resolve(rows)
         }
@@ -156,17 +190,17 @@ export function createChatStorage(session: ReturnType<typeof createPrivateChatSe
     })
   }
 
-  async function saveUiState(conversationId: string, state: any) {
+  async function saveUiState(conversationId: string, state: ChatUiStatePayload) {
     await withStore<void>(UI_STATES, 'readwrite', (store) => {
       store.put({ conversationId, ...state })
     })
   }
 
   async function getUiState(conversationId: string) {
-    return withStore<any | null>(UI_STATES, 'readonly', (store) => {
-      return new Promise<any | null>((resolve, reject) => {
+    return withStore<ChatUiState | null>(UI_STATES, 'readonly', (store) => {
+      return new Promise<ChatUiState | null>((resolve, reject) => {
         const req = store.get(conversationId)
-        req.onsuccess = () => resolve(req.result || null)
+        req.onsuccess = () => resolve((req.result as ChatUiState) || null)
         req.onerror = () => reject(req.error)
       })
     })
