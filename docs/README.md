@@ -138,7 +138,7 @@
 | [方案A执行清单](ops/方案A执行清单_20261113.md) | 待用户逐项批准 | 8项/125文件/18.74MiB移出清单与逐条断链风险；更正上表两处结论（`docs/ppt`两组previews非同字节、7个ZIP中2个各差1个sqlite）；A1/A2暂缓，A6/A7零引用零断链 |
 | [历史重写方案](ops/历史重写方案_20261113.md) | 方案待批；建议不重写 | 更正24.6MB口径：history-only打包后仅4.49MiB，24.36MiB是松散对象靠`git gc`回收；重写天花板15MiB、代价84提交SHA全变与27份文档引用失效；建议R0 gc + Release附件替代 |
 | [Release附件执行清单](ops/Release附件执行清单_20261113.md) | 待凭据；未执行 | 更正「移出ZIP减11.5MiB」：全量clone实测仅−1,275字节（blob仍从HEAD可达），真实收益在浅clone −11.03MiB；实测移出ZIP+两CSV会令`check-repo.py` exit 1；含tag/附件/两处引用改法与回滚 |
-| [picture迁移执行清单](ops/picture迁移执行清单_20261113.md) | 待前端执行 | 硬约束：`git mv`后不补manifest必触发`COVERAGE_MISSING`（`src/assets` 131文件↔131条目零豁免）；3图与现有`psych-teacher-*`哈希3/3不同须新增条目；含精确sha256/像素(632×732等)与三方顺序依赖 |
+| [picture迁移执行清单](ops/picture迁移执行清单_20261113.md) | 已执行（`56b44fd`），§8 待派 | 硬约束：`git mv`后不补manifest必触发`COVERAGE_MISSING`（迁移前131文件↔131条目零豁免，迁移后134↔134）；3图与现有`psych-teacher-*`哈希3/3不同须新增条目；含精确sha256/像素(632×732等)、三方顺序依赖（①–④均已完成）、`git mv`不自动建目录（须先建）、§8 `assets:build`整文件重写manifest的处置方案与「本机无sharp跑不了build」 |
 | [数据库内容目录与导入](ops/数据库内容目录与导入.md) | 新独立库技术通过 | 原创8指南、默认计划、全新输出、只读备份、重复跳过/冲突拒绝与只读检查 |
 | [文章指南本地预览](ops/文章指南本地预览.md) | 本机操作说明 | 5180/18081、指南新库与QA账号隔离、显式配置与上传目录、重启和新副本 |
 | [全栈隔离验收](ops/全栈隔离验收.md) | 工具/合成契约通过；目标构建阻塞 | 随机project、非root Nginx、HTTP恢复、缓存TLS/SSE/WebSocket与手动CI；[机器摘要](test/fullstack-verification.json) |
