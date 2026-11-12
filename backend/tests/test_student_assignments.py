@@ -11,7 +11,6 @@ import subprocess
 import sys
 import time
 import uuid
-import zipfile
 from pathlib import Path
 
 import bcrypt
@@ -26,7 +25,6 @@ from app import models  # noqa: E402
 from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.utils.websocket_manager import ConnectionManager  # noqa: E402
-
 
 KEY = "W2-security-test-only-key-7f41a2d9c03e8b65"
 

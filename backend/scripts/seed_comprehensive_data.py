@@ -1,14 +1,15 @@
-import os
-import sys
-import random
 import json
+import os
+import random
+import sys
 from datetime import datetime, timedelta
+
 from passlib.context import CryptContext
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.database import SessionLocal, engine
 from app import models
+from app.database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -129,7 +130,7 @@ def seed_data():
 
         print("Generating 80 Appointments...")
         statuses = ["pending", "approved", "completed", "cancelled"]
-        for i in range(80):
+        for _ in range(80):
             app_date = now - timedelta(days=random.randint(0, 14))
             app = models.Appointment(
                 student_id=random.choice(students).id,
@@ -144,7 +145,7 @@ def seed_data():
         print("Generating 200 Treehole Posts...")
         emotions = ["压力", "焦虑", "迷茫", "失眠", "开心", "难过", "孤独", "期待"]
         tags = ["学业", "情感", "生活", "求职", "人际"]
-        for i in range(200):
+        for _ in range(200):
             post_date = now - timedelta(hours=random.randint(1, 720))
             emo = random.choice(emotions)
             post = models.TreeholePost(
@@ -174,7 +175,7 @@ def seed_data():
         print("Generating 50 Intervention Records...")
         red_students = [s for s in students if db.query(models.TestResult).filter(models.TestResult.user_id == s.id).order_by(models.TestResult.created_at.desc()).first().standard_score >= 60]
         
-        for i in range(50):
+        for _ in range(50):
             target_student = random.choice(red_students) if red_students else random.choice(students)
             rec = models.InterventionRecord(
                 student_id=target_student.id,

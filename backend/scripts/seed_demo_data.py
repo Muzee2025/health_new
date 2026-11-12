@@ -1,14 +1,25 @@
-import os
-import sys
-import bcrypt
 import json
+import os
 import random
+import sys
 from datetime import datetime, timedelta
+
+import bcrypt
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.database import SessionLocal, engine
-from app.models import User, TeacherProfile, Appointment, TestResult, Article, TreeholePost, Question, InterventionRecord, Base
+from app.models import (
+    Appointment,
+    Article,
+    Base,
+    InterventionRecord,
+    TeacherProfile,
+    TestResult,
+    TreeholePost,
+    User,
+)
+
 
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(rounds=12)).decode("utf-8")
@@ -22,7 +33,7 @@ def seed_data():
             print("Data already exists. Dropping and recreating tables for clean seed...")
             Base.metadata.drop_all(bind=engine)
             Base.metadata.create_all(bind=engine)
-    except Exception as e:
+    except Exception:
         print("Tables did not exist, created them.")
         db.rollback()
 

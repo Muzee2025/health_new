@@ -168,6 +168,7 @@ def test_fake_provider_exception_degrades_to_local_rule(interpretation_client, m
 
 def test_chat_report_sends_only_count_and_validates_provider_shape(monkeypatch):
     import asyncio
+
     from app.services import qwen_service
     expected = {"overall_status": "仅有条数信息，无法据此判断心理状态。", "chart_interpretations": {
         "emotion_trend": "资料不足。", "stress_index": "资料不足。", "risk_level": "资料不足。"}}

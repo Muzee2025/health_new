@@ -5,8 +5,8 @@ import asyncio
 import io
 import os
 import time
-import zipfile
 import uuid
+import zipfile
 
 import bcrypt
 import jwt
@@ -26,7 +26,6 @@ from app.database import Base, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.security import login_guard  # noqa: E402
 from app.upload_body_limit import UPLOAD_PATHS, UPLOAD_REQUEST_LIMIT, UploadBodyLimitMiddleware  # noqa: E402
-
 
 TEST_KEY = os.environ["JWT_SECRET_KEY"]
 TOKEN_ISSUER = "health-new"
@@ -286,7 +285,7 @@ def test_teacher_scope_protects_appointments_interventions_and_profiles(security
     teacher_a_headers = _auth(_token("52"))
     teacher_b_headers = _auth(_token("53"))
 
-    for path, method, payload in (
+    for path, method, _payload in (
         ("/api/teacher/appointments", "get", None),
         ("/api/teacher/interventions", "get", None),
         ("/api/teacher/teachers_profiles", "get", None),

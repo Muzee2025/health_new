@@ -5,8 +5,8 @@ Failure retains the newly reserved file for operator inspection.
 """
 import argparse
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 
 def main():

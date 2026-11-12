@@ -1,12 +1,13 @@
 from types import SimpleNamespace
+
 import pytest
 
 from app.routers.advanced_chat import (
-    _normalize_history_for_model,
     _build_db_history_for_model,
-    _format_deep_think_reply,
-    _extract_target_date,
     _build_session_message_highlights,
+    _extract_target_date,
+    _format_deep_think_reply,
+    _normalize_history_for_model,
 )
 
 

@@ -1,8 +1,8 @@
 """The preview guard blocks outbound sockets without breaking asyncio wakeups."""
 import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 
 def test_preview_guard_blocks_dns_and_connect_but_allows_internal_socketpair(tmp_path):

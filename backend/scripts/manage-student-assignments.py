@@ -1,8 +1,8 @@
 """Offline operator-only SQLite ACL maintenance. No app/.env import or public API."""
 import argparse
 import json
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
 
 def require_role(connection, user_id, role):
@@ -30,9 +30,11 @@ def execute(connection, action, teacher_id=None, student_id=None):
             params = []
             filters = []
             if teacher_id is not None:
-                filters.append("teacher_id=?"); params.append(teacher_id)
+                filters.append("teacher_id=?")
+                params.append(teacher_id)
             if student_id is not None:
-                filters.append("student_id=?"); params.append(student_id)
+                filters.append("student_id=?")
+                params.append(student_id)
             if filters:
                 sql += " WHERE " + " AND ".join(filters)
             rows = connection.execute(sql + " ORDER BY teacher_id,student_id", params).fetchall()

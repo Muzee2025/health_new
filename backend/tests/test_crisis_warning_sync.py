@@ -1,4 +1,3 @@
-import asyncio
 import os
 import sys
 import tempfile
@@ -102,7 +101,7 @@ def test_crisis_keyword_trigger_rate_and_teacher_delivery(test_context, monkeypa
     ]
 
     hit = 0
-    for idx, text in enumerate(phrases):
+    for text in phrases:
         res = client.post(
             "/api/advanced-ai/chat",
             json={

@@ -1,14 +1,13 @@
 """Validate and import the reviewed platform-use article catalog into a new SQLite file."""
 
 import argparse
-from html.parser import HTMLParser
 import json
 import os
-from pathlib import Path
 import sqlite3
 import subprocess
 import sys
-
+from html.parser import HTMLParser
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = Path(__file__).with_name("content-catalog.json")

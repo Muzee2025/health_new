@@ -7,12 +7,12 @@ import argparse
 import hashlib
 import json
 import os
-from pathlib import Path
 import re
 import secrets
 import sqlite3
 import subprocess
 import sys
+from pathlib import Path
 
 BACKEND = Path(__file__).resolve().parents[1]
 
@@ -69,8 +69,9 @@ def prepare(output, source=None):
     os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
     os.environ['PYTHON_DOTENV_DISABLED'] = '1'
     sys.path.insert(0, str(BACKEND))
-    from app.models import Base
     from sqlalchemy import create_engine, inspect
+
+    from app.models import Base
     private_directory(output)
     active = output / 'health.db'
     backup = output / 'source-backup.db'

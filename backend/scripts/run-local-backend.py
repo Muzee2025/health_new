@@ -1,8 +1,8 @@
 """Run this project's backend on an explicit loopback port and private env file."""
 import argparse
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
 
 BACKEND=Path(__file__).resolve().parents[1]
 

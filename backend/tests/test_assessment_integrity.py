@@ -10,7 +10,12 @@ from app import models
 from app.database import Base, get_db
 from app.main import app
 from app.routers.auth import get_current_user
-from app.routers.student import _assessment_is_current, _assessment_provenance, _score_assessment, _submission_id
+from app.routers.student import (
+    _assessment_is_current,
+    _assessment_provenance,
+    _score_assessment,
+    _submission_id,
+)
 from app.schemas import TestSubmit
 
 

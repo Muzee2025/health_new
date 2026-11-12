@@ -4,20 +4,19 @@ import hashlib
 import importlib.util
 import json
 import os
-from pathlib import Path
 import sqlite3
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from fastapi.testclient import TestClient
 
-from app.models import Base
 from app.database import get_db
 from app.main import app
-
+from app.models import Base
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = ROOT / "backend" / "scripts" / "build-content-database.py"

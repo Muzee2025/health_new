@@ -3,13 +3,13 @@ import asyncio
 import importlib
 import json
 from datetime import datetime, timedelta, timezone
+from io import BytesIO
 from types import SimpleNamespace
 
 import pytest
+from fastapi import BackgroundTasks, HTTPException, UploadFile
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from fastapi import HTTPException, BackgroundTasks, UploadFile
-from io import BytesIO
 
 from app import models
 from app.routers import advanced_chat, assistant_v1, llm_gateway, report_v1, student, teacher
@@ -242,7 +242,12 @@ class MemoryIndex:
             raise RuntimeError("synthetic-private-error")
         self.rows = {key: row for key, row in self.rows.items() if row[1]["doc_id"] != where["doc_id"]}
     def upsert(self, documents, metadatas, ids):
-        self.rows.update({key: (document, metadata) for key, document, metadata in zip(ids, documents, metadatas)})
+        self.rows.update(
+            {
+                key: (document, metadata)
+                for key, document, metadata in zip(ids, documents, metadatas, strict=True)
+            }
+        )
     def count(self):
         return len(self.rows)
     def query(self, **kwargs):

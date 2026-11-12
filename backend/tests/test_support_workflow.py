@@ -8,7 +8,6 @@ import sqlite3
 import subprocess
 import sys
 import time
-import zipfile
 from pathlib import Path
 
 import bcrypt
@@ -22,7 +21,6 @@ from sqlalchemy.orm import sessionmaker
 from app import models
 from app.database import Base, get_db
 from app.main import app
-
 
 KEY = "support-workflow-test-only-key-2f3a9e6b8c1d4a70"
 

@@ -4,7 +4,6 @@ from pathlib import Path
 
 import pytest
 
-
 SCRIPT = Path(__file__).resolve().parents[2] / "scripts" / "backup-restore-database.py"
 SPEC = importlib.util.spec_from_file_location("backup_restore_database", SCRIPT)
 backup_restore = importlib.util.module_from_spec(SPEC)

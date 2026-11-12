@@ -20,6 +20,12 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       - run: npm run lint
+      # Type check. Only the 612 lines of .ts under src/ are covered: the 27
+      # single-file components are plain JS (none uses <script lang="ts">) and
+      # vue-tsc is not installed, so .vue is outside tsc's view entirely. This
+      # is a real gate for that 3.6% of the frontend, not a claim that the
+      # frontend is type-safe.
+      - run: npx tsc --noEmit
       - run: npm test
       - run: npm run build
       - run: npm run assets:check
@@ -36,8 +42,30 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements-test.txt
       - run: python -m pip install -r backend/requirements-test.txt
-      - run: python -m ruff check backend/app
-      - run: python -m py_compile scripts/backup-restore-database.py backend/tests/test_backup_restore_database.py
+      - run: python -m ruff check backend/app backend/tests backend/scripts
+      # Every Python file, not two hand-picked ones. All 127 files under backend/
+      # and scripts/ compile today, so this costs the same single step while it
+      # now catches a syntax error anywhere in the tree. `compileall` exits 1 on
+      # the first file it cannot compile (verified against a deliberately broken
+      # module), so it fails the job exactly like py_compile did.
+      - run: python -m compileall -q backend scripts
+      # deploy/ had no gate at all, so a broken compose file could only be found
+      # by hand. `config --quiet` parses and interpolates without starting
+      # anything. Two details that are easy to get wrong:
+      #   - docker-compose.tls.yml is an *override* layer; on its own it fails
+      #     with "service frontend has neither an image nor a build context".
+      #   - RUNTIME_ENV_FILE and TLS_CERT_DIR must be absolute paths, and the
+      #     env file they point at has to exist even though the values are fake.
+      - name: Validate compose files
+        run: |
+          printf 'DB_PASSWORD=ci-placeholder\n' > /tmp/ci-runtime.env
+          mkdir -p /tmp/ci-tls
+          export RUNTIME_ENV_FILE=/tmp/ci-runtime.env
+          export TLS_CERT_DIR=/tmp/ci-tls
+          docker compose -f deploy/backend/docker-compose.backend.yml config --quiet
+          docker compose -f deploy/fullstack/docker-compose.yml config --quiet
+          docker compose -f deploy/fullstack/docker-compose.yml \
+                         -f deploy/fullstack/docker-compose.tls.yml config --quiet
       - run: python scripts/run-backend-baseline.py
       # Every script test, not a hand-kept list of three: naming the files one by
       # one silently dropped test_synthetic_dialogues.py and

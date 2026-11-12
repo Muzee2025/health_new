@@ -1,6 +1,7 @@
 import random
 from datetime import datetime, timedelta
 
+
 def generate_article_content(title, topic, points, conclusion):
     # Professional generic introductions for topics
     intro_map = {

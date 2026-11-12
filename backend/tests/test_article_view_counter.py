@@ -4,11 +4,10 @@ import sys
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-import pytest
-from sqlalchemy import event
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import sessionmaker
 

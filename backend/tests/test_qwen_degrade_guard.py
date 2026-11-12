@@ -2,7 +2,6 @@ import asyncio
 import os
 import sys
 
-import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 

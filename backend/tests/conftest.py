@@ -3,7 +3,6 @@ import os
 
 import pytest
 
-
 if os.environ.get("HEALTH_TEST_ISOLATED") != "1":
     raise pytest.UsageError(
         "Run backend tests with: python scripts/run-backend-baseline.py. "

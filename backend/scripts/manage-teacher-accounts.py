@@ -9,10 +9,8 @@ import argparse
 import getpass
 import importlib.util
 import json
-from pathlib import Path
-import re
 import sqlite3
-import sys
+from pathlib import Path
 
 import bcrypt
 

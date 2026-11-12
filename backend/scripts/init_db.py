@@ -3,8 +3,8 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.database import engine, Base
-from app.models import User, Appointment, TestResult, Article, TreeholePost, Question
+from app.database import Base, engine
+
 
 def init_db():
     print("Dropping all existing tables...")

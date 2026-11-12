@@ -2,21 +2,18 @@
 from __future__ import annotations
 
 import importlib.util
-import json
 import os
-from pathlib import Path
 import sqlite3
 import subprocess
 import sys
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app import models
 from app.database import Base, get_db
 from app.main import app
-
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNNER_PATH = ROOT / "scripts" / "verify-fullstack.py"

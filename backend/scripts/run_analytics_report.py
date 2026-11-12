@@ -17,14 +17,14 @@ from __future__ import annotations
 
 import os
 import sys
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
 
 BACKEND_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BACKEND_ROOT))
 os.chdir(BACKEND_ROOT)
 
-from dotenv import load_dotenv
+from dotenv import load_dotenv  # noqa: E402
 
 load_dotenv(BACKEND_ROOT / ".env")
 
@@ -32,8 +32,9 @@ if not os.getenv("DATABASE_URL"):
     print("错误: 请在 backend/.env 中设置 DATABASE_URL")
     sys.exit(1)
 
-from app.database import SessionLocal
-from app.services import analytics_service
+# Imported after the sys.path insert above so `app` resolves from backend/.
+from app.database import SessionLocal  # noqa: E402
+from app.services import analytics_service  # noqa: E402
 
 
 def print_separator(title: str = "") -> None:
@@ -56,20 +57,20 @@ def run_analytics_report(days: int = 30) -> None:
         print_separator("平台整体统计")
         stats = analytics_service.get_platform_statistics(db)
 
-        print(f"\n用户统计:")
+        print("\n用户统计:")
         print(f"  - 总用户数: {stats['users']['total']}")
 
-        print(f"\n数据记录统计:")
+        print("\n数据记录统计:")
         print(f"  - 传感器记录: {stats['data_records']['sensor_records']} 条")
         print(f"  - 小程序健康指标: {stats['data_records']['mini_metrics']} 条")
         print(f"  - 健康同步记录: {stats['data_records']['health_sync']} 条")
 
-        print(f"\n社区活动统计:")
+        print("\n社区活动统计:")
         print(f"  - 帖子总数: {stats['community']['posts']} 篇")
         print(f"  - 评论总数: {stats['community']['comments']} 条")
         print(f"  - 对话记录: {stats['community']['conversations']} 条")
 
-        print(f"\n平台平均指标:")
+        print("\n平台平均指标:")
         print(f"  - 平均步数: {stats['averages']['steps']:.0f} 步/天")
         print(f"  - 平均屏幕时间: {stats['averages']['screen_time_hours']:.1f} 小时/天")
         print(f"  - 平均情绪评分: {stats['averages']['mood_score']:.1f}/10")
@@ -77,14 +78,14 @@ def run_analytics_report(days: int = 30) -> None:
         print_separator("用户健康分布")
         distribution = analytics_service.get_user_distribution(db)
 
-        print(f"\n活动水平分布:")
+        print("\n活动水平分布:")
         total = sum(distribution['activity_levels'].values())
         for level, count in distribution['activity_levels'].items():
             pct = count / total * 100 if total > 0 else 0
             level_name = {"low": "低", "medium": "中", "high": "高"}.get(level, level)
             print(f"  - {level_name}: {count} 人 ({pct:.1f}%)")
 
-        print(f"\n健康风险分布:")
+        print("\n健康风险分布:")
         for level, count in distribution['risk_levels'].items():
             pct = count / total * 100 if total > 0 else 0
             level_name = {"low": "低风险", "medium": "中风险", "high": "高风险"}.get(level, level)
@@ -101,7 +102,7 @@ def run_analytics_report(days: int = 30) -> None:
 
             report = analytics_service.generate_analytics_report(db, user.id, days)
 
-            print(f"\n健康画像:")
+            print("\n健康画像:")
             print(f"  - 用户类型: {report.health_profile.user_type}")
             print(f"  - 活动水平: {report.health_profile.activity_level}")
             print(f"  - 健康评分: {report.health_profile.overall_score}/100")
@@ -114,7 +115,7 @@ def run_analytics_report(days: int = 30) -> None:
                 print(f"  - 建议: {', '.join(report.health_profile.recommendations)}")
 
             if report.trends:
-                print(f"\n趋势分析:")
+                print("\n趋势分析:")
                 for trend in report.trends:
                     direction_emoji = {
                         "increasing": "📈",
@@ -135,12 +136,12 @@ def run_analytics_report(days: int = 30) -> None:
                     print(f"  {severity_emoji} {anomaly.date}: {anomaly.description}")
 
             if report.patterns:
-                print(f"\n行为模式:")
+                print("\n行为模式:")
                 for pattern in report.patterns:
                     print(f"  🔍 {pattern.pattern_name}: {pattern.description}")
                     print(f"      置信度: {pattern.confidence:.0%}")
 
-            print(f"\n洞察总结:")
+            print("\n洞察总结:")
             for insight in report.insights[:5]:
                 print(f"  • {insight}")
 
