@@ -1,29 +1,46 @@
 import asyncio
+import json
 import logging
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks, Query
-from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
-from sqlalchemy import func
-from sqlalchemy.exc import SQLAlchemyError, OperationalError
-from typing import List, Dict, Any, Optional, Tuple
+import re
 import time
 import uuid
-import json
-import re
-from datetime import datetime, timedelta
 from collections import Counter
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Tuple
+
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Query,
+    UploadFile,
+)
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from sqlalchemy import func
+from sqlalchemy.exc import OperationalError, SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import User, AIChatSession, AIChatMessage, TestResult, ChatHistoryArchive, CrisisWarning
+from app.models import (
+    AIChatMessage,
+    AIChatSession,
+    ChatHistoryArchive,
+    CrisisWarning,
+    TestResult,
+    User,
+)
 from app.routers.auth import get_current_user
-from app.services.qwen_service import QwenAiService
-from app.services.zhipu_emohaa_service import ZhipuEmohaaService
-from app.services.nlp_engine import NLPModelsService
-from app.services.rag_service import embedding_function
 from app.services.dialogue_analysis_service import enqueue_dialogue_analysis
-from app.utils.websocket_manager import manager
+from app.services.nlp_engine import NLPModelsService
+from app.services.qwen_service import QwenAiService
+from app.services.rag_service import embedding_function
+from app.services.zhipu_emohaa_service import ZhipuEmohaaService
 from app.upload_security import read_image_upload
+from app.utils.websocket_manager import manager
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -496,7 +513,7 @@ def _build_historical_session_context(
 def _cosine_similarity(vec_a: List[float], vec_b: List[float]) -> float:
     if not vec_a or not vec_b or len(vec_a) != len(vec_b):
         return 0.0
-    dot = sum(a * b for a, b in zip(vec_a, vec_b))
+    dot = sum(a * b for a, b in zip(vec_a, vec_b, strict=True))
     norm_a = sum(a * a for a in vec_a) ** 0.5
     norm_b = sum(b * b for b in vec_b) ** 0.5
     if norm_a <= 0 or norm_b <= 0:

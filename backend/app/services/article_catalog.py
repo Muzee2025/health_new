@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 
 from app.models import Article
 
-
 CATEGORY_TRIM_CHARS = " \t\r\n\v\f"
 NORMALIZED_CATEGORY = func.trim(Article.category, CATEGORY_TRIM_CHARS)
 
@@ -62,7 +61,7 @@ def page_articles(
                   .filter(Article.category.isnot(None), NORMALIZED_CATEGORY != "")
                   .distinct().order_by(NORMALIZED_CATEGORY.asc()).all()]
     return {
-        "items": [dict(zip((column.key for column in SUMMARY_COLUMNS), row)) for row in rows],
+        "items": [dict(zip((column.key for column in SUMMARY_COLUMNS), row, strict=True)) for row in rows],
         "total": total,
         "page": effective_page,
         "page_size": page_size,

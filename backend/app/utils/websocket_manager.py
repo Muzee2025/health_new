@@ -1,8 +1,11 @@
 import json
-from typing import Dict, List, Any
+from typing import Dict, List
+
 from fastapi import WebSocket
 from sqlalchemy.orm import Session
+
 from app.student_access import assigned_teacher_ids
+
 
 class ConnectionManager:
     def __init__(self):

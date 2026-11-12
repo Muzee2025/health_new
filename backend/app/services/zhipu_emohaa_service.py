@@ -5,7 +5,7 @@ import os
 import re
 import sys
 import time
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 import requests
 
@@ -40,7 +40,7 @@ class ZhipuEmohaaService:
 
                 self.client = ZhipuAiClient(api_key=api_key)
                 self.provider = "zai_sdk"
-            except Exception as exc:  # noqa: BLE001
+            except Exception:  # noqa: BLE001
                 logger.warning("zai_sdk_unavailable_fallback_to_http")
 
     def _http_chat_completion(
@@ -247,7 +247,6 @@ class ZhipuEmohaaService:
             f"\n文本：{clean}\n"
             "只返回JSON，不要返回任何解释。"
         )
-        last_error = ""
         for attempt in range(retry + 1):
             try:
                 if self.provider == "zai_sdk" and self.client is not None:
@@ -266,8 +265,7 @@ class ZhipuEmohaaService:
                 logger.info("emohaa_emotion_exit attempt=%s", attempt + 1)
                 return parsed
             except Exception as exc:
-                last_error = str(exc)
-                logger.warning("emohaa_emotion_call_failed attempt=%s", attempt + 1)
+                logger.warning("emohaa_emotion_call_failed attempt=%s error=%s", attempt + 1, type(exc).__name__)
                 if attempt < retry:
                     continue
         logger.error("emohaa_emotion_fallback")

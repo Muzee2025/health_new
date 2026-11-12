@@ -1,9 +1,11 @@
 import json
+
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
+
 from app.models import User
 from app.security import get_current_user
-from app.services.llm_fallback import _build_structured_fallback, _build_interpretation_fallback
+from app.services.llm_fallback import _build_interpretation_fallback, _build_structured_fallback
 
 router = APIRouter(tags=["llm-gateway"])
 

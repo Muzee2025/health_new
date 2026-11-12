@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field, field_validator
-from typing import Optional, List, Literal
 from datetime import datetime
+from typing import List, Literal, Optional
+
+from pydantic import BaseModel, Field, field_validator
+
 
 class UserCreate(BaseModel):
     username: str = Field(min_length=1, max_length=50)

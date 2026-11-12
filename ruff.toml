@@ -1,7 +1,10 @@
 # Ruff configuration for the FastAPI backend (Python 3.12).
-# Deliberately narrow: ruff's default rule set reports 837 issues on this tree,
-# so the selection is pinned to error-prone rules only. Style is delegated to
-# `ruff format` and the rule set is expected to widen in phase 2.
+# Ruff's built-in default select (E4, E7, E9, F) reports 617 issues on this tree;
+# this config adds import sorting (I) and bugbear (B) on top, so it reports 744.
+# `backend/app` is clean under this config; the remainder is almost entirely the
+# one-off document-generation scripts under scripts/, which are not worth
+# rewriting for style. Keep the selection pinned here and do not widen it to
+# `--select ALL` (16889 issues) without a separate cleanup plan.
 target-version = "py312"
 line-length = 100
 

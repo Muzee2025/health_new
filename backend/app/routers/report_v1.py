@@ -25,8 +25,8 @@ from app.services.dialogue_analysis_service import (
     mark_first_screen_breach,
     save_report,
 )
-from app.services.multi_model_orchestrator import orchestrator
 from app.services.llm_fallback import _build_interpretation_fallback, is_local_fallback_url
+from app.services.multi_model_orchestrator import orchestrator
 
 router = APIRouter(prefix="/api/v1/report", tags=["report-v1"])
 logger = logging.getLogger(__name__)
@@ -181,7 +181,7 @@ def stream_analysis(
                 full = build_structured_report(db, current_user.id, include_llm=True, deadline_ts=time.time() + 30, max_messages=5000)
                 status = "done" if full.get("generation", {}).get("source") == "provider" else "degraded"
                 thought = "模型支持性解释已生成，尚需人工核对。" if status == "done" else "已提供本地说明，未完成外部模型分析。"
-            except Exception as exc:
+            except Exception:
                 full = quick
                 status = "degraded"
                 thought = "Model temporarily unavailable; using local rules."
@@ -251,7 +251,7 @@ def stream_analysis(
             }
             _append_thought_log(current_user.id, request_id, {"step": "完成", "status": "success", "elapsedMs": total_ms})
             yield _sse("done", done_payload)
-        except Exception as exc:
+        except Exception:
             logger.exception("analysis_stream_failed request_id=%s user_id=%s", request_id, current_user.id)
             payload = {"step": "error", "status": "failed", "thought": "Analysis temporarily unavailable"}
             _append_thought_log(current_user.id, request_id, payload)

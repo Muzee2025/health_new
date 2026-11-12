@@ -1,35 +1,44 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status, UploadFile, File, Request
-import os
-import bcrypt
 import hashlib
-import uuid
-from fastapi.responses import FileResponse
-from sqlalchemy.orm import Session
-from sqlalchemy import exists, func, insert, literal, select, update
-from ..database import get_db
-from .. import models, schemas
-from .auth import get_current_user
-from typing import List
-from datetime import datetime, timedelta, timezone
 import json
-import re
+import os
 import random
-from pathlib import Path
+import re
+import uuid
 from collections import Counter
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from typing import List
+
+import bcrypt
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
-from app.utils.websocket_manager import manager
+from sqlalchemy import exists, func, insert, literal, select, update
+from sqlalchemy.orm import Session
+
 from app.security import validate_new_password
-from app.student_access import assigned_student_ids, require_assigned_student
-from app.support_workflow import require_support_schema, append_event
-from app.upload_security import (read_image_upload, read_bounded_upload, validate_image_content,
-                                 validate_document_content, MAX_IMAGE_BYTES, IMAGE_TYPES, DOCUMENT_TYPES)
+from app.services.article_catalog import page_articles
 from app.services.crisis_pending_service import (
-    load_mock_records,
-    mark_mock_reviewed,
     merge_pending_records,
     paginate_rows,
 )
-from app.services.article_catalog import page_articles
+from app.services.rag_service import add_document_to_rag, delete_document_from_rag
+from app.student_access import assigned_student_ids, require_assigned_student
+from app.support_workflow import append_event, require_support_schema
+from app.upload_security import (
+    DOCUMENT_TYPES,
+    IMAGE_TYPES,
+    MAX_IMAGE_BYTES,
+    read_bounded_upload,
+    read_image_upload,
+    validate_document_content,
+    validate_image_content,
+)
+from app.utils.websocket_manager import manager
+
+from .. import models, schemas
+from ..database import get_db
+from .auth import get_current_user
 
 router = APIRouter(prefix="/api/teacher", tags=["Teacher"])
 TEACHER_AVATAR_SUBDIR = "teacher_avatars"
@@ -206,7 +215,6 @@ async def review_pending_crisis(
         raise HTTPException(status_code=400, detail="recordId is required")
 
     if record_id.startswith("mock-"):
-        mock_id = record_id.removeprefix("mock-")
         raise HTTPException(status_code=404, detail="Warning not found")
 
     if not record_id.startswith("real-"):
@@ -578,7 +586,7 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
             latest_ai_msgs = db.query(models.AIChatMessage).filter(
                 models.AIChatMessage.session_id.in_(session_ids),
                 models.AIChatMessage.role == "ai",
-                models.AIChatMessage.emotion_tags != None
+                models.AIChatMessage.emotion_tags.is_not(None)
             ).order_by(models.AIChatMessage.created_at.desc()).limit(5).all()
             
             if latest_ai_msgs:
@@ -593,7 +601,7 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
                         tags = json.loads(msg.emotion_tags)
                         stress_sum += (tags.get("sadness", 0) + tags.get("fear", 0) + tags.get("anger", 0)) / 3
                         count += 1
-                    except:
+                    except (TypeError, ValueError):
                         pass
                 
                 avg_stress = stress_sum / count if count > 0 else 0
@@ -651,7 +659,7 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
                               "sample_count": len(values)})
 
     # Word cloud from chat content (AIChatMessage no longer stores keywords field)
-    chat_msgs = db.query(models.AIChatMessage.content).join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id).filter(models.AIChatSession.user_id.in_(assigned_student_ids(db, current_user.id)), models.AIChatMessage.content != None).all()
+    chat_msgs = db.query(models.AIChatMessage.content).join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id).filter(models.AIChatSession.user_id.in_(assigned_student_ids(db, current_user.id)), models.AIChatMessage.content.is_not(None)).all()
     stop_words = {
         "今天", "就是", "这个", "那个", "我们", "你们", "他们", "然后", "因为", "所以", "自己",
         "可以", "如果", "现在", "老师", "学生", "心理", "感觉", "有点", "没有", "已经", "一个",
@@ -1004,7 +1012,6 @@ def delete_article(article_id: int, db: Session = Depends(get_db), current_user:
     return {"message": "Deleted"}
 
 # Content Management: Knowledge Base
-from ..services.rag_service import add_document_to_rag, delete_document_from_rag
 
 @router.get("/knowledge", response_model=List[schemas.KnowledgeBaseResponse])
 def get_knowledge_base(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):

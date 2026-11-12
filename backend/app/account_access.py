@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 
 from app import models
 
-
 ACCOUNT_TABLES = {"user_access_states", "operator_account_events"}
 ACCOUNT_TRIGGERS = {
     "operator_account_events_no_update": "CREATE TRIGGER operator_account_events_no_update BEFORE UPDATE ON operator_account_events BEGIN SELECT RAISE(ABORT, 'operator account events are append-only'); END",

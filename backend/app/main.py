@@ -1,21 +1,36 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse
 import os
 from pathlib import Path
-from fastapi import HTTPException
-from app.security import validate_security_configuration, cors_origins
-from app.upload_security import IMAGE_TYPES
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+
+from app.security import cors_origins, validate_security_configuration
 from app.upload_body_limit import UploadBodyLimitMiddleware
+from app.upload_security import IMAGE_TYPES
 
 # Fail before startup callbacks when security settings are invalid.
 validate_security_configuration()
 
-from app.database import engine
-from app import models
-from app.routers import auth, student, teacher, advanced_chat, advanced_teacher, report_v1, assistant_v1, llm_gateway, websocket, health
-from app.services.multi_model_orchestrator import orchestrator
+# Imported after the security check on purpose: importing app.database opens the
+# configured engine and app.models registers every mapped table on Base.metadata,
+# so both must stay below validate_security_configuration().
+from app import models  # noqa: E402, F401 - register mapped tables in Base.metadata
+from app.database import engine  # noqa: E402, F401 - open the engine after the security check
+from app.routers import (  # noqa: E402
+    advanced_chat,
+    advanced_teacher,
+    assistant_v1,
+    auth,
+    health,
+    llm_gateway,
+    report_v1,
+    student,
+    teacher,
+    websocket,
+)
+from app.services.multi_model_orchestrator import orchestrator  # noqa: E402
 
 # 创建数据库表
 # Schema creation/migration is an explicit operator action, never an import side effect.

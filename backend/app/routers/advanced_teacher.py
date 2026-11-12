@@ -1,11 +1,8 @@
 import base64
 import io
-import os
-import asyncio
 import uuid
-from pathlib import Path
-from starlette.background import BackgroundTask
 from datetime import datetime
+from pathlib import Path
 from typing import Any, Dict, List
 
 from docx import Document
@@ -14,20 +11,24 @@ from docx.shared import Inches, Pt
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
-from sqlalchemy import func
 from sqlalchemy.orm import Session
+from starlette.background import BackgroundTask
 
-from app.database import get_db
 from app import models
-from app.models import User, ChatHistoryArchive, AIChatSession, AIChatMessage, CrisisWarning
+from app.database import get_db
+from app.models import AIChatMessage, AIChatSession, CrisisWarning, User
 from app.routers.auth import get_current_user
-from app.routers.teacher import check_teacher_role, CrisisReviewRequest, CrisisDecisionRequest, review_pending_crisis
-from app.utils.websocket_manager import manager
+from app.routers.teacher import (
+    CrisisDecisionRequest,
+    CrisisReviewRequest,
+    check_teacher_role,
+    review_pending_crisis,
+)
 from app.security import require_roles
 from app.student_access import assigned_student_ids, require_assigned_student
 from app.support_workflow import require_support_schema
-from app.teacher_analytics import dashboard_payload, audit_items
-from app.upload_security import validate_image_content, MAX_IMAGE_BYTES, IMAGE_TYPES
+from app.teacher_analytics import audit_items, dashboard_payload
+from app.upload_security import IMAGE_TYPES, validate_image_content
 
 router = APIRouter()
 

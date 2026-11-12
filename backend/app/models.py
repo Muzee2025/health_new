@@ -1,9 +1,9 @@
 from sqlalchemy import (
+    DDL,
     Boolean,
     CheckConstraint,
     Column,
     DateTime,
-    DDL,
     ForeignKey,
     Integer,
     String,

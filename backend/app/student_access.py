@@ -1,6 +1,7 @@
 """Fail-closed teacher/student access using explicit database assignments only."""
 from fastapi import HTTPException
 from sqlalchemy.orm import Session, aliased
+
 from app import models
 
 

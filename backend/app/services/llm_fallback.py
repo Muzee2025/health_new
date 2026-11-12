@@ -1,9 +1,7 @@
 """Pure local rule fallback, shared without HTTP self-calls or identity bypasses."""
-import json
-import re
+import ipaddress
 from typing import Any, Dict
 from urllib.parse import urlsplit
-import ipaddress
 
 
 def is_local_fallback_url(url: str) -> bool:

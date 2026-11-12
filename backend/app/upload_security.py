@@ -1,8 +1,8 @@
 """Bounded raster uploads; SVG/HTML and client paths are never accepted."""
-from pathlib import Path
-import struct
 import io
+import struct
 import zipfile
+from pathlib import Path
 from xml.etree import ElementTree
 
 from fastapi import HTTPException, UploadFile

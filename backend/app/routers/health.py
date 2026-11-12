@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from app import models  # noqa: F401 - register mapped tables in Base.metadata
 from app.database import Base, get_db
 
-
 router = APIRouter(tags=["health"])
 SERVICE_NAME = "health-new"
 

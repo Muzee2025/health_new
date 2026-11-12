@@ -1,25 +1,29 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status, Request, Response
-from sqlalchemy.orm import Session
-from sqlalchemy import inspect
-from ..database import get_db
-from .. import models, schemas
-from .auth import get_current_user
-from app.security import require_roles, get_optional_user
-from app.student_access import assigned_teacher_ids
-from typing import List, Optional
-from pydantic import BaseModel, Field
-import json
-import random
-import os
-import re
-import string
 import hashlib
+import json
+import os
+import random
+import re
 import sqlite3
+import string
 import time
+from datetime import date, datetime, timedelta, timezone
 from threading import Lock
+from typing import List, Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from pydantic import BaseModel, Field
+from sqlalchemy import func, inspect
 from sqlalchemy.exc import OperationalError
-from app.services.qwen_service import client as qwen_client
+from sqlalchemy.orm import Session
+
+from app.security import get_optional_user, require_roles
 from app.services.article_catalog import page_articles
+from app.services.qwen_service import client as qwen_client
+from app.student_access import assigned_teacher_ids
+
+from .. import models, schemas
+from ..database import get_db
+from .auth import get_current_user
 
 router = APIRouter(prefix="/api/student", tags=["Student"])
 
@@ -87,9 +91,6 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
         "pending_appointments": pending_appointments,
         "word_cloud": word_cloud
     }
-
-from datetime import date, datetime, timedelta, timezone
-from sqlalchemy import func
 
 def _adjust_liming_emotion_index(original_index: int, created_at: datetime, current_user: models.User) -> int:
     # Preserve the legacy response shape without user-specific fabricated adjustment.
@@ -280,7 +281,7 @@ def get_teachers(request: Request, db: Session = Depends(get_db), current_user: 
         if profile and profile.time_slots:
             try:
                 time_slots = json.loads(profile.time_slots)
-            except:
+            except (TypeError, ValueError):
                 pass
 
         appointments = db.query(models.Appointment).filter(
@@ -409,7 +410,7 @@ def _score_assessment(test_type: str, answers: dict):
         if any(type(normalized[str(i)]) is not str or normalized[str(i)] not in form["groups"][i] for i in range(form["count"])):
             raise HTTPException(status_code=422, detail="答题选项超出题本范围")
         dimensions = []
-        for offset, (left, right) in zip((0, 7, 14, 21), (("E", "I"), ("S", "N"), ("T", "F"), ("J", "P"))):
+        for offset, (left, right) in zip((0, 7, 14, 21), (("E", "I"), ("S", "N"), ("T", "F"), ("J", "P")), strict=True):
             vals = [normalized[str(i)] for i in range(offset, offset + 7)]
             dimensions.append(left if vals.count(left) > vals.count(right) else right)
         score, result_level, eligibility = 100, "".join(dimensions), "entertainment_only"
@@ -485,7 +486,6 @@ async def ai_analyze_test_result(
     if not test_row:
         raise HTTPException(status_code=404, detail="未找到可分析的测评结果")
 
-    detail = _json_object(test_row.result_json)
     provenance = _assessment_provenance(test_row)
     sources = [{"type": "scoring_provenance", "label": "本地计分规则记录（非外部文献）",
         "tool_id": test_row.test_type, "form_version": provenance.get("form_version"),
@@ -684,7 +684,7 @@ def _generate_report_analysis_payload(db: Session, current_user: models.User):
 
     deep_moments = db.query(models.TreeholePost).filter(
         models.TreeholePost.user_id == current_user.id,
-        models.TreeholePost.is_deep == True
+        models.TreeholePost.is_deep.is_(True)
     ).order_by(func.random()).first()
 
     deep_moment_data = None
@@ -1067,17 +1067,26 @@ def generate_anonymous_id():
 
 def _rule_based_treehole_summary(content: str, tags: list):
     emotion = "平静"
-    if any(kw in content for kw in ["焦虑", "压力", "紧张"]): emotion = "焦虑"
-    elif any(kw in content for kw in ["难过", "崩溃", "哭"]): emotion = "低落"
-    elif any(kw in content for kw in ["开心", "希望", "美好"]): emotion = "积极"
-    elif any(kw in content for kw in ["迷茫", "不知道", "未来"]): emotion = "迷茫"
+    if any(kw in content for kw in ["焦虑", "压力", "紧张"]):
+        emotion = "焦虑"
+    elif any(kw in content for kw in ["难过", "崩溃", "哭"]):
+        emotion = "低落"
+    elif any(kw in content for kw in ["开心", "希望", "美好"]):
+        emotion = "积极"
+    elif any(kw in content for kw in ["迷茫", "不知道", "未来"]):
+        emotion = "迷茫"
 
     keywords = []
-    if "人生意义" in tags or "意义" in content: keywords.append("人生意义")
-    if "自我成长" in tags or "成长" in content or "学习" in content: keywords.append("成长")
-    if "红色精神与我" in tags or "责任" in content: keywords.append("责任与担当")
-    if "人际关系" in tags or "朋友" in content or "室友" in content: keywords.append("人际关系")
-    if "未来规划" in tags or "未来" in content: keywords.append("未来探索")
+    if "人生意义" in tags or "意义" in content:
+        keywords.append("人生意义")
+    if "自我成长" in tags or "成长" in content or "学习" in content:
+        keywords.append("成长")
+    if "红色精神与我" in tags or "责任" in content:
+        keywords.append("责任与担当")
+    if "人际关系" in tags or "朋友" in content or "室友" in content:
+        keywords.append("人际关系")
+    if "未来规划" in tags or "未来" in content:
+        keywords.append("未来探索")
 
     if not keywords:
         keywords = ["日常随想", "自我探索"]

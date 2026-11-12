@@ -1,7 +1,8 @@
 import json
 import logging
 import os
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 import openai
 
 logger = logging.getLogger(__name__)

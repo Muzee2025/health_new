@@ -1,7 +1,8 @@
 """Lazy engine setup from an explicit process environment; no .env discovery or DDL."""
 import os
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 SQLALCHEMY_DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
 if not SQLALCHEMY_DATABASE_URL:

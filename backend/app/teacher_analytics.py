@@ -1,7 +1,9 @@
 """Measured teacher summaries; no demonstration students or global fallback."""
 import json
 from datetime import datetime, timedelta
+
 from sqlalchemy.orm import Session
+
 from app import models
 from app.student_access import assigned_student_ids
 

@@ -1,8 +1,8 @@
+from typing import Any, Dict, List, Tuple
+
 import jieba
 import jieba.analyse
-import re
-import math
-from typing import Dict, Any, List, Tuple
+
 
 class NLPModelsService:
     """
@@ -34,12 +34,18 @@ class NLPModelsService:
         emotions = {"joy": 0.0, "sadness": 0.0, "anger": 0.0, "fear": 0.0, "surprise": 0.0, "disgust": 0.0, "neutral": 0.0}
         
         # 启发式模拟强度
-        if any(w in text for w in ["开心", "高兴", "喜欢", "棒", "爽", "愉悦"]): emotions["joy"] += 0.8
-        if any(w in text for w in ["难过", "抑郁", "想哭", "失落", "绝望", "悲伤", "痛苦"]): emotions["sadness"] += 0.9
-        if any(w in text for w in ["气死", "烦躁", "火大", "可恶", "愤怒", "生气"]): emotions["anger"] += 0.8
-        if any(w in text for w in ["害怕", "发抖", "恐惧", "担心", "挂科"]): emotions["fear"] += 0.7
-        if any(w in text for w in ["竟然", "真的吗", "意外", "惊讶"]): emotions["surprise"] += 0.6
-        if any(w in text for w in ["恶心", "讨厌", "反胃", "厌恶"]): emotions["disgust"] += 0.6
+        if any(w in text for w in ["开心", "高兴", "喜欢", "棒", "爽", "愉悦"]):
+            emotions["joy"] += 0.8
+        if any(w in text for w in ["难过", "抑郁", "想哭", "失落", "绝望", "悲伤", "痛苦"]):
+            emotions["sadness"] += 0.9
+        if any(w in text for w in ["气死", "烦躁", "火大", "可恶", "愤怒", "生气"]):
+            emotions["anger"] += 0.8
+        if any(w in text for w in ["害怕", "发抖", "恐惧", "担心", "挂科"]):
+            emotions["fear"] += 0.7
+        if any(w in text for w in ["竟然", "真的吗", "意外", "惊讶"]):
+            emotions["surprise"] += 0.6
+        if any(w in text for w in ["恶心", "讨厌", "反胃", "厌恶"]):
+            emotions["disgust"] += 0.6
         
         # 归一化并加噪
         total = sum(emotions.values())
@@ -80,7 +86,6 @@ class NLPModelsService:
 
     def generate_attention_heatmap(self, text: str, keywords: List[Dict]) -> List[Dict[str, Any]]:
         """模拟 Token-level 注意力热图可视化，返回拆分的 token 与色温"""
-        tokens = list(text) # 按字拆分
         heatmap = []
         kw_words = [k["word"] for k in keywords]
         

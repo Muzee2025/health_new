@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, List
 
-
 MOCK_CRISIS_SEED: List[Dict[str, Any]] = [
     {
         "id": "c_1001",

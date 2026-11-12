@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import os
 from datetime import date, timedelta
-from typing import List, Sequence
 from pathlib import Path
+from typing import List, Sequence
 
 import requests
 from dotenv import load_dotenv

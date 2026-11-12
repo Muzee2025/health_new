@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 
 from app import models
 
-
 SUPPORT_TABLES = {"support_workflow_events", "support_follow_ups", "support_follow_up_events"}
 APPEND_ONLY_TRIGGERS = {
     "support_workflow_events_no_update", "support_workflow_events_no_delete",

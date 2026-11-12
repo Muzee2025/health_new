@@ -196,9 +196,9 @@ def _llm_analyze(messages: List[Dict[str, Any]], *, deadline_ts: float | None = 
                     }
                 last_error = f"{llm_url}:non_dict_payload"
             except Exception as exc:
-                last_error = f"{llm_url}:{str(exc)}"
+                last_error = f"{llm_url}:{type(exc).__name__}"
                 time.sleep(0.15)
-    logger.warning("LLM analyze degraded to local rule fallback")
+    logger.warning("LLM analyze degraded to local rule fallback last_error=%s", last_error or "none")
     return fallback
 
 
@@ -242,7 +242,6 @@ def _build_trend_advice_payload(
     s7 = [float(x["score"]) for x in last7 if x.get("score") is not None]
     s30 = [float(x["score"]) for x in last30 if x.get("score") is not None]
     dir7 = _series_direction(s7)
-    dir30 = _series_direction(s30)
     return {
         "trend": (f"近7天有{len(s7)}个有效日期，近30天有{len(s30)}个有效日期。"
                   + (f"规则标签展示值近7天{dir7}；" if len(s7) >= 2 else "有效日期不足，暂不判断趋势；")

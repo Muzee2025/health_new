@@ -17,6 +17,7 @@ from app import models
 from app.database import get_db
 from app.routers import advanced_chat, advanced_teacher
 from app.routers.auth import get_current_user
+from app.utils.websocket_manager import manager as ws_manager
 
 
 def _build_test_app():
@@ -142,7 +143,7 @@ def test_teacher_process_warning_sync_flow(test_context, monkeypatch):
         to_student_payloads.append({"message": message, "user_id": user_id, "role": role})
 
     monkeypatch.setattr(advanced_chat.manager, "broadcast_to_teachers", fake_broadcast)
-    monkeypatch.setattr(advanced_teacher.manager, "send_personal_message", fake_personal)
+    monkeypatch.setattr(ws_manager, "send_personal_message", fake_personal)
 
     def as_student():
         return student

@@ -1,16 +1,22 @@
+import secrets
+
+import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-import bcrypt
-import secrets
 
-from ..database import get_db
 from .. import models, schemas
-from ..security import (
-    create_access_token, get_current_user, login_guard, signing_key,
-    token_lifetime_minutes, SecurityConfigurationError, validate_new_password,
-)
 from ..account_access import access_state
+from ..database import get_db
+from ..security import (
+    SecurityConfigurationError,
+    create_access_token,
+    get_current_user,
+    login_guard,
+    signing_key,
+    token_lifetime_minutes,
+    validate_new_password,
+)
 
 # Re-export the identical dependency callable for existing routes and test overrides.
 router = APIRouter(prefix="/api", tags=["Auth"])

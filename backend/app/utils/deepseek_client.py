@@ -1,7 +1,8 @@
 import os
+from pathlib import Path
+
 import requests
 from dotenv import load_dotenv
-from pathlib import Path
 
 # 加载环境变量
 load_dotenv(dotenv_path=Path(__file__).resolve().parents[2] / ".env")

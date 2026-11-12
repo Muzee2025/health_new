@@ -15,12 +15,12 @@ from urllib.parse import urlsplit
 import jwt
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from app import models
-from app.database import get_db
 from app.account_access import access_state
+from app.database import get_db
 
 ALGORITHM = "HS256"
 TOKEN_VERSION = 2
@@ -192,7 +192,7 @@ class LoginGuard:
         now = time.monotonic()
         with self._lock:
             self._prune(now)
-            for key, limit in zip(self._keys(request, identifier), (20, 5)):
+            for key, limit in zip(self._keys(request, identifier), (20, 5), strict=True):
                 count, expiry = self._entries.get(key, (0, now))
                 if count >= limit and expiry > now:
                     raise HTTPException(status_code=429, detail="Too many sign-in attempts; try again later",
