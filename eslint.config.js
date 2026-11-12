@@ -65,7 +65,9 @@ export default [
   },
   {
     name: 'xinyu/vitest',
-    files: ['**/*.{test,spec}.{js,ts}', 'scripts/tests/**/*.mjs'],
+    // Only vitest-owned tests. scripts/tests/ runs under `node --test`
+    // (see package.json "assets:source-test"), so it must NOT get vitest rules.
+    files: ['**/*.{test,spec}.{js,ts}'],
     plugins: { vitest },
     languageOptions: {
       globals: { ...vitest.environments.env.globals },
@@ -73,9 +75,50 @@ export default [
     rules: { ...vitest.configs.recommended.rules },
   },
   {
+    // Shared tuning for the unused-code family. `caughtErrors: 'none'` restores
+    // the pre-ESLint-9 default: a defensive `catch (e) {}` that only wants to
+    // keep the flow going is normal, not dead code.
+    // `ignoreRestSiblings` is what makes the omit idiom `({ content, ...rest })`
+    // legal — `content` is named only to be excluded from the rest object.
+    name: 'xinyu/unused-vars-js',
+    files: ['**/*.{js,mjs,vue}'],
+    rules: {
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrors: 'none',
+          ignoreRestSiblings: true,
+        },
+      ],
+      // Empty catch is the deliberate "best effort, ignore failure" form used
+      // across the capture/check scripts and the IndexedDB abort path.
+      'no-empty': ['error', { allowEmptyCatch: true }],
+    },
+  },
+  {
+    // Same tuning for TypeScript, but through the TS-aware rule. Using the base
+    // rule on .ts re-enables it over typescript-eslint's own and misreports
+    // parameter names that only exist in type signatures.
+    name: 'xinyu/unused-vars-ts',
+    files: ['**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrors: 'none',
+          ignoreRestSiblings: true,
+        },
+      ],
+      'no-empty': ['error', { allowEmptyCatch: true }],
+    },
+  },
+  {
     name: 'xinyu/overrides',
     rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
       // The repo names single-word views (Layout.vue, Login.vue, ...); renaming
       // them is a refactor decision, not a lint fix. Revisit in phase 2.
       'vue/multi-word-component-names': 'off',
