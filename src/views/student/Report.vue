@@ -572,6 +572,7 @@ const reportData = ref(null)
 const interpretation = ref(null)
 const interpretationLoading = ref(false)
 const interpretationError = ref('')
+/** @type {AbortController | null} */
 let interpretationController = null
 let interpretationEpoch = 0
 const barRef = ref(null)
@@ -595,7 +596,9 @@ let echartsRuntime = null
 let echartsRuntimePromise = null
 let chartJsRuntimePromise = null
 let realtimeTimer = null
+/** @type {AbortController | null} */
 let esAbort = null
+/** @type {AbortController | null} */
 let collabAbort = null
 let reportSnapshot = null
 let assistantEventHandler = null
@@ -1041,8 +1044,9 @@ const formatEmotionTags = (emotion) => {
   if (!emoObj) return []
 
   const order = ['joy', 'sadness', 'neutral', 'fear', 'anxiety', 'anger']
+  /** @type {Array<[string, number]>} */
   const entries = order
-    .map((k) => [k, Number(emoObj[k] || 0)])
+    .map((k) => /** @type {[string, number]} */ ([k, Number(emoObj[k] || 0)]))
     .filter(([, v]) => Number.isFinite(v))
 
   const total = entries.reduce((sum, [, v]) => sum + Math.max(0, v), 0)

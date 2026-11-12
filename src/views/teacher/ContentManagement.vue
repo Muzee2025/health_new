@@ -4,7 +4,7 @@
       <!-- Article Management Tab -->
       <el-tab-pane label="文章管理" name="articles">
         <div class="action-bar">
-          <el-button type="primary" @click="openArticleDialog(null)">新增文章</el-button>
+          <el-button type="primary" @click="openArticleDialog()">新增文章</el-button>
         </div>
 
         <el-alert

@@ -272,7 +272,7 @@ const exportWord = async () => {
   exporting.value = true
   try {
     const response = await axios.get(
-      `/api/advanced-teacher/students/${encodeURIComponent(route.params.id)}/export/docx`,
+      `/api/advanced-teacher/students/${encodeURIComponent(String(route.params.id))}/export/docx`,
       { responseType: 'blob' },
     )
     const blob = new Blob([response.data])
@@ -358,7 +358,7 @@ const riskTimelineData = computed(() => {
   }
 
   // Sort by date descending
-  return timeline.sort((a, b) => new Date(b.date) - new Date(a.date))
+  return timeline.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 })
 
 const fetchStudentDetail = async () => {

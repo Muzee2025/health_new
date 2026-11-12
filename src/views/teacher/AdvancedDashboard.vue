@@ -109,7 +109,7 @@
                 <el-button size="small" type="danger" @click="handleReview(row, 'escalate')"
                   >升级处理</el-button
                 >
-                <el-button size="small" type="primary" @click="contactStudent(row)"
+                <el-button size="small" type="primary" @click="contactStudent()"
                   >联络说明</el-button
                 >
                 <el-button size="small" plain @click="$router.push('/teacher/support')"
@@ -518,7 +518,8 @@ const initWebSocket = () => {
 
 const playAlertSound = () => {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const Ctx = window.AudioContext || /** @type {any} */ (window).webkitAudioContext
+    const ctx = new Ctx()
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
     osc.type = 'sine'

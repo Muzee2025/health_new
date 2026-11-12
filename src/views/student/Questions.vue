@@ -188,7 +188,8 @@ const statusType = (question) =>
       ? 'success'
       : 'info'
 const formatDate = (value) => (value ? new Date(value).toLocaleString('zh-CN') : '时间未知')
-const focusComposer = () => document.querySelector('.question-compose textarea')?.focus()
+const focusComposer = () =>
+  /** @type {HTMLElement | null} */ (document.querySelector('.question-compose textarea'))?.focus()
 
 onMounted(fetchQuestions)
 onUnmounted(() => {
