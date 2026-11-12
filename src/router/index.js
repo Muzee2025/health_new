@@ -160,7 +160,10 @@ router.beforeEach((to, from, next) => {
 // page that says what happened instead of showing white.
 router.onError((error, to) => {
   const message = String(error?.message || error)
-  const isChunk = /Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk .* failed/i.test(message)
+  const isChunk =
+    /Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk .* failed/i.test(
+      message,
+    )
   if (!isChunk) return
   const target = to?.fullPath || window.location.pathname
   const attempt = Number(sessionStorage.getItem('router-chunk-retry') || 0)

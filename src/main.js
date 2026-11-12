@@ -77,7 +77,9 @@ axios.interceptors.response.use(
     // Only what a caller needs to react to. The whole response carried the
     // request config, so anything that logged this error — a console.error in a
     // view, a crash reporter — printed the Authorization header and body.
-    err.response = error.response ? { status: error.response.status, data: error.response.data } : undefined
+    err.response = error.response
+      ? { status: error.response.status, data: error.response.data }
+      : undefined
     return Promise.reject(err)
   },
 )
