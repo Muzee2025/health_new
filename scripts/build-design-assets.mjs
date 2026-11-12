@@ -480,13 +480,29 @@ for (const [key, output, author, license, sourceSha256] of externalAssets) {
   })
 }
 // Original files are only read. They remain outside the approved kit.
-for (const relative of [
-  'avatars/psych-teacher-cartoon.svg',
-  'avatars/psych-teacher-cartoon-48.png',
-  'avatars/psych-teacher-cartoon-96.png',
-  'avatars/psych-teacher-cartoon-192.png',
-  ...[1, 2, 3].map((n) => `avatars/teachers/psych-teacher-${n}.png`),
+// `source` is overridable: files archived out of picture/ keep their original
+// hashed filename here, because that path is their only provenance trail
+// (AGENTS.md: archived material must stay traceable with its original path).
+for (const item of [
+  { path: 'avatars/psych-teacher-cartoon.svg' },
+  { path: 'avatars/psych-teacher-cartoon-48.png' },
+  { path: 'avatars/psych-teacher-cartoon-96.png' },
+  { path: 'avatars/psych-teacher-cartoon-192.png' },
+  ...[1, 2, 3].map((n) => ({ path: `avatars/teachers/psych-teacher-${n}.png` })),
+  {
+    path: 'avatars/teachers/legacy/avatar-teacher-legacy-01.png',
+    source: '仓库既有文件 picture/22417447ee3b830390f4d781406424c3.png；原始来源与授权待核实',
+  },
+  {
+    path: 'avatars/teachers/legacy/avatar-teacher-legacy-02.png',
+    source: '仓库既有文件 picture/3d036892a3863e9799054c8f8635f898.png；原始来源与授权待核实',
+  },
+  {
+    path: 'avatars/teachers/legacy/avatar-teacher-legacy-03.png',
+    source: '仓库既有文件 picture/7afdb74a06b4906d8b6c31c5cbc23df9.png；原始来源与授权待核实',
+  },
 ]) {
+  const { path: relative } = item
   const data = await fs.readFile(path.join(assetRoot, relative))
   const meta = await sharp(data).metadata()
   entries.push({
@@ -496,7 +512,7 @@ for (const relative of [
     size: [meta.width, meta.height],
     usage: '既有引用保留，禁止新增使用；不纳入approved素材包',
     license: 'unverified',
-    source: '仓库既有文件；原始来源与授权待核实',
+    source: item.source ?? '仓库既有文件；原始来源与授权待核实',
     owner: '原作者待核实',
     status: 'legacy-unverified',
     sha256: digestFor(relative, data),

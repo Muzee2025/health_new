@@ -1998,7 +1998,7 @@
       "sha256": "029a8b166f6676cc4b8e2ef9aedbe6dbe89fb4ed30def24d0529f046bd9fe910"
     },
     {
-      "id": "legacy-teacher-photo-01-png",
+      "id": "legacy-avatar-teacher-legacy-01-png",
       "path": "avatars/teachers/legacy/avatar-teacher-legacy-01.png",
       "type": "png",
       "size": [
@@ -2013,7 +2013,7 @@
       "sha256": "318735b26a568df62e32231f90bcd62fe5271533a9f1456f47e87536d5d610e1"
     },
     {
-      "id": "legacy-teacher-photo-02-png",
+      "id": "legacy-avatar-teacher-legacy-02-png",
       "path": "avatars/teachers/legacy/avatar-teacher-legacy-02.png",
       "type": "png",
       "size": [
@@ -2028,7 +2028,7 @@
       "sha256": "17134b6446020e1c01bf6ced1cd70d62267c67c03c7e62ef0485f3d78f112df2"
     },
     {
-      "id": "legacy-teacher-photo-03-png",
+      "id": "legacy-avatar-teacher-legacy-03-png",
       "path": "avatars/teachers/legacy/avatar-teacher-legacy-03.png",
       "type": "png",
       "size": [
