@@ -1045,7 +1045,9 @@ async def ai_chat_interaction(
                 warning_state = "created"
                 db.refresh(warning)
 
-                # 广播给教师端（实时链路）
+                # Broadcast to the teacher side. ``db=None``: this coroutine is
+                # detached via create_task, so it must not borrow the request
+                # Session (get_db closes it when the response ends).
                 asyncio.create_task(manager.broadcast_to_teachers({
                     "type": "new_warning",
                     "data": {
@@ -1066,7 +1068,7 @@ async def ai_chat_interaction(
                         "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
                         "status": "pending",
                     }
-                }, db=db, student_id=current_user.id))
+                }, db=None, student_id=current_user.id))
             except Exception as e:
                 db.rollback()
                 logger.error("Warning persistence unavailable (%s)", type(e).__name__)
@@ -1322,7 +1324,7 @@ async def ai_chat_stream(
                                 "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
                                 "status": "pending",
                             }
-                        }, db=db, student_id=current_user.id))
+                        }, db=None, student_id=current_user.id))
 
                         if user_msg is not None:
                             _archive_dialogue(

@@ -4,6 +4,7 @@ from typing import Dict, List
 from fastapi import WebSocket
 from sqlalchemy.orm import Session
 
+from app.database import SessionLocal
 from app.student_access import assigned_teacher_ids
 
 
@@ -49,8 +50,19 @@ class ConnectionManager:
             except Exception:
                 pass
 
-    async def broadcast_to_teachers(self, message: dict, *, db: Session, student_id: int):
-        allowed = assigned_teacher_ids(db, student_id)
+    async def broadcast_to_teachers(self, message: dict, *, db: Session | None = None, student_id: int):
+        # ``db`` is optional because this coroutine is also handed to
+        # ``asyncio.create_task`` from request handlers. A request-scoped
+        # Session is closed by ``get_db`` as soon as the response finishes,
+        # which can happen before the task runs. Background callers pass
+        # ``db=None`` so the lookup owns (and closes) its own short session.
+        owned_db = db is None
+        session = SessionLocal() if owned_db else db
+        try:
+            allowed = assigned_teacher_ids(session, student_id)
+        finally:
+            if owned_db:
+                session.close()
         msg_str = json.dumps(message, ensure_ascii=False)
         for user_id, connections in list(self.teacher_connections.items()):
             if user_id not in allowed:
