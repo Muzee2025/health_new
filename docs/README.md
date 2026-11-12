@@ -1,6 +1,14 @@
 # 文档索引
 
-> owner: A ｜ version: 3.8 ｜ status: 高校两学期模拟库已登记 ｜ updated: 2026-11-04
+> owner: A ｜ version: 3.9 ｜ status: 工程规范与CI修复方案已登记 ｜ updated: 2026-11-12
+
+新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
+
+新增[工程规范引入方案](design/工程规范引入方案.md)：ESLint 10.14/Prettier 3.10/Ruff 0.17.4选型完成，6个配置文件已落盘、零存量改动、基线与开工前完全一致（前端41项、构建、素材检查；后端195通过/3跳过）。三处踩坑已记录：eslint@9已EOL、typescript须钉6.0.3、`flat/recommended`会与Prettier打架。
+
+新增[前端大文件拆分方案](design/前端大文件拆分方案.md)与[后端重复接口合并方案](design/后端重复接口合并方案.md)：前者给出Report.vue(2032行)/AdvancedAiChat.vue(1532行)的拆分路径并删除一个0字节无引用死文件；后者纠正两处判断——`python-docx`在真实使用不可删，六组同名接口中仅`/articles/page`为真重复。
+
+新增[交付资产盘点](ops/交付资产盘点_20261112.md)：跟踪1369文件/150.8MB。发现9个ZIP中7个成员100%重复(15.02MB)、策划书40页当前哈希与验收记录不一致、`docs/test/AI申报图表验收.md`页数口径过期(记26页实为32页)。归档与历史重写方案待批准。
 
 新增[高校两学期模拟库验收](test/高校两学期模拟库验收_20261104.md)和[机器记录](test/campus-simulation-verification-20261104.json)。同一批20,000名合成学生覆盖2025–2026两个学期，40,000条人学期和235,407条平台事件。[数据说明](../deliverables/心域智链_高校两学期模拟库_20261104/数据说明.md)记录学号编码、校历和CSV口径。
 
@@ -87,6 +95,9 @@
 | [截图与浏览器验证](design/screenshots/README.md) | 定稿 | 原14页合成基线与新旧展示页验证入口 |
 | [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
 | [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
+| [前端大文件拆分方案](design/前端大文件拆分方案.md) | 待评审 | Report.vue 2032行/AdvancedAiChat.vue 1532行的拆分路径、9+3组件与8composable、风险行号；含0字节死文件删除记录 |
+| [后端重复接口合并方案](design/后端重复接口合并方案.md) | 待评审 | 六组同名接口分级：仅`/articles/page`真重复，其余五组ACL或契约不同不建议合并；pymysql为残留、python-docx非残留 |
+| [工程规范引入方案](design/工程规范引入方案.md) | 待评审 | ESLint 10.14/Prettier 3.10/Ruff 0.17选型与规则集、分批格式化改动量（前端84文件、后端73文件）与三处踩坑记录 |
 
 其他入口：[素材工作台](design/library-preview.html)、[素材清单](../src/assets/manifest.json)、[当前科研配色QA](design/screenshots/scientific-palette/qa.json)、[静态绘图证据](design/screenshots/scientific-palette/scientific-export-qa.json)、[科研配色完整性](design/scientific-palette-integrity.json)、[前轮Data QA](design/screenshots/data-analysis/qa.json)、[Data完整性](design/data-analysis-integrity.json)、[前轮数据精修QA](design/screenshots/data-polish/qa.json)、[八图扩充QA](design/screenshots/charts/qa.json)、[品牌优化QA](design/screenshots/refinement/qa.json)、[Figma交接](design/figma-refinement.json)、[初始14页基线](design/screenshots/before/baseline.json)、[历史展示页QA](design/screenshots/library-preview-qa.json)。展示页通过Vite开发服务器访问。
 
@@ -114,6 +125,7 @@
 | [补齐独立复核](test/补齐任务独立复核.md) | 独立技术复核 | Luna后端/AI评测独立复核；部署配置只作交叉核对，不自评放行 |
 | [全栈隔离独立复核](test/全栈验收独立复核.md) | 部分通过；目标构建阻塞 | 工具/本机契约与缓存代理证据；固定目标容器未完成验收 |
 | [AI评测与试点方案](test/AI评测与试点方案.md) | 待专业/校内确认 | 12合成案例、失败分母、评分记录、提供商与试点前置；无真实效果结论 |
+| [CI失败定位](test/CI失败定位_20261112.md) | 已定位并给出修法 | 失败在frontend第7步`assets:check`而非后端；根因为`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是CRLF版(2236B)、CI为LF版(2198B)；已在WSL ext4复现 |
 
 ## 运维、运营与申报交付
 
@@ -122,6 +134,7 @@
 | 文档/工件 | 状态 | 说明 |
 | --- | --- | --- |
 | [全栈部署与恢复](ops/全栈部署与恢复.md) | 静态配置通过；镜像网络阻塞 | Linux Compose、TLS、迁移、SQLite一致性备份/恢复、CI与尚未通过的发布门禁 |
+| [交付资产盘点](ops/交付资产盘点_20261112.md) | 待批准 | 1369文件/150.8MB清点；9个ZIP中7个成员100%重复(15.02MB)；策划书40页当前哈希≠验收记录、图表验收页数口径过期两项待确认 |
 | [数据库内容目录与导入](ops/数据库内容目录与导入.md) | 新独立库技术通过 | 原创8指南、默认计划、全新输出、只读备份、重复跳过/冲突拒绝与只读检查 |
 | [文章指南本地预览](ops/文章指南本地预览.md) | 本机操作说明 | 5180/18081、指南新库与QA账号隔离、显式配置与上传目录、重启和新副本 |
 | [全栈隔离验收](ops/全栈隔离验收.md) | 工具/合成契约通过；目标构建阻塞 | 随机project、非root Nginx、HTTP恢复、缓存TLS/SSE/WebSocket与手动CI；[机器摘要](test/fullstack-verification.json) |
