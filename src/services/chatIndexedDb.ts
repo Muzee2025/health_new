@@ -69,7 +69,7 @@ export function createChatStorage(session: ReturnType<typeof createPrivateChatSe
     storeName: string,
     mode: IDBTransactionMode,
     run: (store: IDBObjectStore) => void | Promise<T>,
-  ) {
+  ): Promise<T> {
     session.assertActive()
     const db = await openDb()
     try {
@@ -117,12 +117,14 @@ export function createChatStorage(session: ReturnType<typeof createPrivateChatSe
         reject(tx.error || new DOMException('Chat transaction cancelled', 'AbortError'))
       }
       Promise.resolve()
-        .then(() => {
+        .then((): Promise<T> => {
           session.assertActive()
-          return run(store)
+          // run 可能返回 void（store.put 一类写操作），也可能返回 Promise<T>。
+          // Promise.resolve 把两种形态统一成可链式的 Promise，运行时行为不变。
+          return Promise.resolve(run(store)) as Promise<T>
         })
-        .then((res) => {
-          result = res as T
+        .then((res: T) => {
+          result = res
           operationDone = true
           finish()
         })
