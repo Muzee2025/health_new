@@ -108,7 +108,7 @@ const handleLogin = async () => {
       redirect.startsWith('/') &&
       !redirect.startsWith('//') &&
       !redirect.includes('\\') &&
-      !/[\u0000-\u0020]/.test(redirect)
+      ![...redirect].some((ch) => ch.codePointAt(0) <= 0x20)
     ) {
       const target = router.resolve(redirect)
       if (target.meta.requiresAuth && (!target.meta.role || target.meta.role === user.role))

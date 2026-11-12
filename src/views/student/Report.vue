@@ -751,7 +751,7 @@ const executiveSummaryItems = computed(() => {
   const normalized = raw.replace(/\r/g, '')
   const candidateLines = normalized
     .split(/\n+/)
-    .map((x) => x.replace(/^[\s•\-·\d\.)]+/, '').trim())
+    .map((x) => x.replace(/^[\s•\-·\d.)]+/, '').trim())
     .filter(Boolean)
   if (candidateLines.length > 1) return candidateLines.slice(0, 5)
   return normalized

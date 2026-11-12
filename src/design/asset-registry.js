@@ -15,7 +15,7 @@ export function getApprovedAsset(id) {
     !asset.license ||
     !asset.source ||
     !asset.sha256 ||
-    /(^|\/)\.\.(\/|$)|^[\/]|:/.test(asset.path)
+    /(^|\/)\.\.(\/|$)|^[/]|:/.test(asset.path)
   ) {
     throw new Error(`Invalid library asset record: ${id}`)
   }
