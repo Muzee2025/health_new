@@ -62,13 +62,11 @@ describe('useArticleCatalog', () => {
 
   it('resets page on category and sort changes with one immediate request each', async () => {
     const client = {
-      get: vi
-        .fn()
-        .mockImplementation((url, config) =>
-          Promise.resolve({
-            data: pageData({ total: 50, page: config.params.page, categories: ['分类', '新分类'] }),
-          }),
-        ),
+      get: vi.fn().mockImplementation((url, config) =>
+        Promise.resolve({
+          data: pageData({ total: 50, page: config.params.page, categories: ['分类', '新分类'] }),
+        }),
+      ),
     }
     const scope = effectScope()
     const catalog = scope.run(() => useArticleCatalog({ endpoint: '/page', client }))
