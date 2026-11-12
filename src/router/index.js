@@ -154,4 +154,30 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+// Every route is a dynamic import, so a chunk that fails to download (a deploy
+// that replaced the old files, a flaky network) leaves router-view with nothing
+// to render and the user with a blank page. Retry once, then send them to a
+// page that says what happened instead of showing white.
+router.onError((error, to) => {
+  const message = String(error?.message || error)
+  const isChunk = /Failed to fetch dynamically imported module|Importing a module script failed|Loading chunk .* failed/i.test(message)
+  if (!isChunk) return
+  const target = to?.fullPath || window.location.pathname
+  const attempt = Number(sessionStorage.getItem('router-chunk-retry') || 0)
+  if (attempt < 1) {
+    sessionStorage.setItem('router-chunk-retry', String(attempt + 1))
+    window.location.assign(target)
+    return
+  }
+  sessionStorage.removeItem('router-chunk-retry')
+  // A plain static page, not a route: the chunks that would render a Vue page
+  // are exactly what just failed to load.
+  window.location.assign('/chunk-error.html')
+})
+
+router.afterEach(() => {
+  // A successful navigation proves the chunks load again.
+  sessionStorage.removeItem('router-chunk-retry')
+})
+
 export default router
