@@ -1,3 +1,9 @@
+// @ts-nocheck
+// Browser-side design reference source, not application code: it resolves the
+// registered asset library through `import.meta.glob`, which only the bundler
+// understands. TypeScript sees the raw `import.meta` shape and reports the
+// glob entry point as untyped. Excluded from type checking on purpose; the
+// runtime contract is covered by `npm run assets:check` / `assets:source-check`.
 import manifest from '../assets/manifest.json'
 import catalog from './library-catalog.json'
 

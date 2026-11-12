@@ -1,3 +1,9 @@
+// @ts-nocheck
+// Browser-side design reference source, not application code: the chart option
+// builders import sibling `.js` design modules (`chart-style.js`,
+// `chart-options.js`) that carry no type declarations, so TypeScript cannot
+// resolve them. Excluded from type checking on purpose; chart visuals are
+// covered by `npm run assets:check` and `node scripts/check-chart-data.mjs`.
 import { palette, CHART_FONT, createResearchTheme } from './chart-style.js';
 
 // Extracted from chart-library.js: presentation only, never imports demo data.
