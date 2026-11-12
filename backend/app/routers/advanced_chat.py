@@ -839,12 +839,12 @@ async def delete_chat_session(
                 ChatHistoryArchive.session_id == session_id
             ).delete(synchronize_session=False)
             db.delete(session)
-            db.commit()
+            db.flush()
 
             remaining_session = db.query(AIChatSession).filter(
                 AIChatSession.id == session_id,
                 AIChatSession.user_id == current_user.id
-            ).first()
+            ).count()
             remaining_messages = db.query(AIChatMessage).filter(
                 AIChatMessage.session_id == session_id
             ).count()
@@ -853,6 +853,8 @@ async def delete_chat_session(
             ).count()
             if remaining_session or remaining_messages > 0 or remaining_archives > 0:
                 raise RuntimeError("delete_integrity_check_failed")
+
+            db.commit()
 
             return {
                 "status": "success",
