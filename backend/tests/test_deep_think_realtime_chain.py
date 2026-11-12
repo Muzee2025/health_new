@@ -60,7 +60,7 @@ def _build_test_app():
     return app
 
 
-def test_deep_think_realtime_chain_happy_sad_normal():
+def test_deep_think_realtime_chain_happy_sad_normal(monkeypatch):
     invoked = {"count": 0}
 
     async def _fake_emotion_pipeline(message: str):
@@ -83,9 +83,12 @@ def test_deep_think_realtime_chain_happy_sad_normal():
         invoked["count"] += 1
         return f"emohaa实时推理输出 trace={trace_id} prompt={prompt[:10]}"
 
-    advanced_chat._emotion_pipeline = _fake_emotion_pipeline
-    advanced_chat._vector_retrieve_memories = _fake_vector_recall
-    advanced_chat.zhipu_chat_service.deep_think_with_student = _fake_deep_think_with_student
+    # monkeypatch restores these after the test; plain assignment left the fakes
+    # installed for every later test in the same process, so a run could pass or
+    # fail depending on test order.
+    monkeypatch.setattr(advanced_chat, "_emotion_pipeline", _fake_emotion_pipeline)
+    monkeypatch.setattr(advanced_chat, "_vector_retrieve_memories", _fake_vector_recall)
+    monkeypatch.setattr(advanced_chat.zhipu_chat_service, "deep_think_with_student", _fake_deep_think_with_student)
 
     app = _build_test_app()
     client = TestClient(app)

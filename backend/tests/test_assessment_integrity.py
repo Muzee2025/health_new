@@ -1,6 +1,8 @@
 """Server-side questionnaire scoring and tamper rejection on synthetic inputs."""
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
+from pydantic import ValidationError
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -31,8 +33,12 @@ def test_sds_raw_options_are_reversed_once_and_marked_pending():
     {**{str(i): 1 for i in range(20)}, "0": 5},
 ])
 def test_sds_rejects_missing_extra_boolean_and_out_of_range_answers(answers):
-    with pytest.raises(Exception):
+    # A bare `Exception` also passes when the scorer crashes for an unrelated
+    # reason (a TypeError in a lookup, say), so the rejection has to be the one
+    # the endpoint documents: a 422 about the answers themselves.
+    with pytest.raises(HTTPException) as refused:
         _score_assessment("SDS", answers)
+    assert refused.value.status_code == 422
 
 
 def test_fun_tool_scoring_is_not_eligible_for_risk():
@@ -42,7 +48,9 @@ def test_fun_tool_scoring_is_not_eligible_for_risk():
 
 
 def test_submit_rejects_client_supplied_score_fields():
-    with pytest.raises(Exception):
+    # Validation has to refuse the extra field specifically, not fail for any
+    # reason at all (see the note above).
+    with pytest.raises(ValidationError):
         TestSubmit(test_type="SDS", answers={str(i): 1 for i in range(20)}, submission_id="submit-123456", score=1)
 
 

@@ -61,7 +61,7 @@ def _build_test_app():
     return app
 
 
-def test_deep_think_stream_emits_three_phases_and_done():
+def test_deep_think_stream_emits_three_phases_and_done(monkeypatch):
     async def _fake_deep_think_with_student(
         user_id: str,
         prompt: str,
@@ -71,7 +71,9 @@ def test_deep_think_stream_emits_three_phases_and_done():
     ) -> str:
         return "这是一段用于测试的深度思考回复内容。"
 
-    advanced_chat.zhipu_chat_service.deep_think_with_student = _fake_deep_think_with_student
+    # monkeypatch restores the real method after the test. Assigning it directly
+    # left the fake installed for every later test in the same process.
+    monkeypatch.setattr(advanced_chat.zhipu_chat_service, "deep_think_with_student", _fake_deep_think_with_student)
 
     app = _build_test_app()
     client = TestClient(app)
