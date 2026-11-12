@@ -95,7 +95,6 @@ const routes = [
 ]
 
 const fixtureFor = (path) => fixtureTable.find(([pattern]) => pattern.test(path))?.[1]()
-const isApi = (url) => new URL(url).pathname.startsWith('/api/')
 
 const results = []
 const configuredExecutablePath = process.env.BASELINE_EXECUTABLE_PATH
@@ -106,7 +105,7 @@ let browser
 try {
   browser = await chromium.launch(launchOptions)
 } catch (error) {
-  throw new Error(`Could not launch ${launchOptions.channel}; set BASELINE_BROWSER_CHANNEL or install/configure Edge. ${error.message}`)
+  throw new Error(`Could not launch ${launchOptions.channel}; set BASELINE_BROWSER_CHANNEL or install/configure Edge. ${error.message}`, { cause: error })
 }
 
 try {

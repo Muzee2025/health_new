@@ -403,7 +403,6 @@ async function main() {
               return { initialRowsPerPage: 12, total: 26, nextPage: 2 }
             })
 
-            const search = page.getByLabel('搜索文章标题、摘要或来源')
             await scenario('catalog-error-and-retry-retains-query', () => checkCatalogRecovery(rows))
             await scenario('teacher-search-and-category', async () => {
               await fillSearch('标题线索-008')

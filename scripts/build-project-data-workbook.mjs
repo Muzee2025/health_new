@@ -11,7 +11,7 @@ const data = JSON.parse(await fs.readFile(path.join(work, 'inventory.json'), 'ut
 const tokenText = await fs.readFile(path.join(root, 'src/styles/tokens.css'), 'utf8');
 const token = name => tokenText.match(new RegExp(`--${name}:\\s*(#[0-9A-Fa-f]{6})`))[1];
 const ink = token('gray-800'), purple = token('brand-600'), light = token('brand-50');
-const sage = token('accent-sage-soft'), warning = token('warning-100');
+const sage = token('accent-sage-soft');
 const font = 'Microsoft YaHei';
 const main = data.databases.find(d => d.source_id === 'PREVIEW');
 const model = data.models;

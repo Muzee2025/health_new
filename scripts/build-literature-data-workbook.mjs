@@ -11,7 +11,7 @@ const data=JSON.parse(await fs.readFile(path.join(root,'docs/plan/research-data-
 const d=data.datasets;
 const tokens=await fs.readFile(path.join(root,'src/styles/tokens.css'),'utf8');
 const color=name=>tokens.match(new RegExp(`--${name}:\\s*(#[0-9a-fA-F]{6})`))[1];
-const purple=color('brand-600'), ink=color('gray-800'), pale=color('brand-50'), sage=color('accent-sage-soft');
+const purple=color('brand-600'), ink=color('gray-800'), pale=color('brand-50');
 const font='Microsoft YaHei';
 const wb=Workbook.create();
 const names=['分析概览','文献与下载来源','调查波次','筛查汇总','发表年分组','相关因素','原始变量字典','原始数据质量','AI干预效果','AI试验特征','Woebot终点','来源问题'];
@@ -72,7 +72,7 @@ for(let r=7;r<=dict.end;r++)sh.原始变量字典.getRange(`G${r}:H${r}`).formul
 sh.原始变量字典.getRange(`E7:G${dict.end}`).setNumberFormat('#,##0');sh.原始变量字典.getRange(`H7:H${dict.end}`).setNumberFormat('0.00%');
 
 title(sh.原始数据质量,'原始补充数据的质量与权重','未拟合临床预测模型，未重估诊断患病率。权重和、样本数与Kish近似有效样本量分别列示。');
-const quality=table(sh.原始数据质量,'MicrodataQuality',['来源ID','检查指标','聚合结果','单位','解释与限制'],rows('microdata_quality',['source_id','metric','value','unit','interpretation']),[20,55,25,24,108],{height:42});
+table(sh.原始数据质量,'MicrodataQuality',['来源ID','检查指标','聚合结果','单位','解释与限制'],rows('microdata_quality',['source_id','metric','value','unit','interpretation']),[20,55,25,24,108],{height:42});
 d.microdata_quality.forEach((r,i)=>sh.原始数据质量.getRange(`C${i+7}`).setNumberFormat(r.unit==='条'||r.unit==='列'||(r.unit==='人'&&!r.metric.includes('近似'))?'#,##0':'#,##0.00'));
 
 title(sh.AI干预效果,'AI聊天干预的短期效果','Hedges g正值有利干预；效应与95%CI同时保留。综述数据不能当成本项目已有疗效。');
