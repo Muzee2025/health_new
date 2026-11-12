@@ -252,6 +252,7 @@ const trendSummary = ref(summarizeTrend([], 7))
 const latestScores = ref([])
 const redEnergy = ref([])
 const treeholeWords = ref([])
+/** @type {import('vue').Ref<{ total?: number, completed?: number, pending?: number, cancelled?: number, next_appointment?: { id?: number, time_slot?: string } | null }>} */
 const appointmentStats = ref({})
 const trendChartRef = ref(null)
 const scoreChartRef = ref(null)

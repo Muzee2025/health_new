@@ -261,6 +261,7 @@ import axios from 'axios'
 
 const router = useRouter()
 const route = useRoute()
+/** @type {import('vue').Ref<{ name?: string, username?: string }>} */
 const user = ref({})
 const mobileNavOpen = ref(false)
 const mobileNavTrigger = ref(null)

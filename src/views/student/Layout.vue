@@ -152,6 +152,7 @@ import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+/** @type {import('vue').Ref<{ name?: string, username?: string }>} */
 const user = ref({})
 const route = useRoute()
 const mobileNavOpen = ref(false)
