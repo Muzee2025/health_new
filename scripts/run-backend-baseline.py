@@ -17,6 +17,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    # tempfile.TemporaryDirectory(ignore_cleanup_errors=...) is 3.10+. Without this
+    # guard the caller sees a bare TypeError on line 83 and blames the tests.
+    if sys.version_info < (3, 10):
+        raise SystemExit(
+            "Python 3.10+ is required (tempfile ignore_cleanup_errors); "
+            f"this is {sys.version.split()[0]}. "
+            "Run: .venv/Scripts/python.exe scripts/run-backend-baseline.py"
+        )
     backend = ROOT / "backend"
     scratch = ROOT / "tmp" / "backend-baseline"
     scratch.mkdir(parents=True, exist_ok=True)
