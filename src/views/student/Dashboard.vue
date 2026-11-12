@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<template>
+<template>
   <div class="dashboard-container business-page">
     <el-alert v-if="loadError" class="data-error" :title="loadError" type="error" :closable="false" show-icon><el-button link type="primary" @click="retryDashboard">重新加载</el-button></el-alert>
     <section class="dashboard-content" aria-labelledby="dashboard-next-title">

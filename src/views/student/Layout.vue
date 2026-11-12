@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<template>
+<template>
   <div class="app-layout xy-business">
     <!-- Sidebar -->
     <button class="nav-scrim" type="button" aria-hidden="true" tabindex="-1" @click="closeMobileNav" v-if="mobileNavOpen"></button>

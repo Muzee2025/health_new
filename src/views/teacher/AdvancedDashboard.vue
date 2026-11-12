@@ -247,7 +247,7 @@ const reviewActionLabel = (action) => ({ pass: '通过', reject: '驳回校正',
 const reviewType = (action) => action === 'pass' ? 'success' : action === 'escalate' ? 'danger' : 'warning'
 const resetReviewDialog = () => { currentReview.value = { row: null, action: '' }; reviewReason.value = ''; reviewError.value = '' }
 
-const contactStudent = (row) => {
+const contactStudent = () => {
   ElMessageBox.alert('当前预警记录未提供可拨打的联络方式。请在学生管理中核实档案与校内联络流程。', '联络说明', {
     confirmButtonText: '知道了',
     type: 'info'
@@ -279,9 +279,15 @@ const initWebSocket = () => {
   }
   ws.value.onmessage = (event) => {
     if (unmounted) return
+    let msg
     try {
-      const msg = JSON.parse(event.data)
-      if (msg.type === 'new_warning') {
+      msg = JSON.parse(event.data)
+    } catch (error) {
+      console.error('Teacher WS message parse failed:', error)
+      return
+    }
+    if (msg.type === 'new_warning') {
+      try {
         const normalized = normalizeWsWarning(msg.data || {})
         if (!pendingList.value.some(item => item.id === normalized.id)) {
           pendingList.value.push(normalized)
@@ -293,8 +299,10 @@ const initWebSocket = () => {
           type: 'error',
           duration: 0
         })
+      } catch (error) {
+        console.error('Teacher WS warning handling failed:', error)
       }
-    } catch (e) {}
+    }
   }
   ws.value.onclose = (event) => {
     console.log('Teacher WS disconnected, retrying...')

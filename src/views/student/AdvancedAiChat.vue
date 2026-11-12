@@ -181,7 +181,6 @@ import { getVisualAsset } from '../../design/asset-registry'
 const userAvatar = getVisualAsset('studentAvatar').url
 const anonymousAvatar = getVisualAsset('anonymousAvatar').url
 
-import { businessAlpha } from '../../styles/business-theme.js'
 import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { ElMessage, ElMessageBox, ElButton, ElInput, ElDropdown, ElDropdownMenu, ElDropdownItem, ElSwitch, ElIcon, ElAvatar, vLoading } from 'element-plus'
 import axios from 'axios'
@@ -393,8 +392,9 @@ const loadSessionsFromLocal = async () => {
         archived: Boolean(x.archived),
       }))
       .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')))
-  } catch {
+  } catch (error) {
     if (!chatSession.isActive()) return
+    console.error('Failed to load chat sessions:', error)
     sessions.value = []
   } finally {
     loadingSessions.value = false
@@ -999,15 +999,6 @@ const triggerCrisisBanner = () => {
   crisisBannerTimer = setTimeout(() => {
     crisisBannerVisible.value = false
   }, 10000)
-}
-
-const getHeatmapStyle = (tokenObj) => {
-  if (!tokenObj.weight || tokenObj.weight <= 0) return {}
-  return {
-    backgroundColor: businessAlpha('data-risk-high', Math.min(tokenObj.weight * 0.8, 1)),
-    borderRadius: '4px',
-    padding: '0 2px'
-  }
 }
 
 const isDangerText = (text) => /跳楼|自杀|轻生|不想活|结束生命/.test(text || '')

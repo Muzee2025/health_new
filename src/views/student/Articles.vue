@@ -116,12 +116,6 @@ const showArticle = (article) => {
   router.push(`/article/${article.id}`)
 }
 
-const openSource = (url) => {
-  if (url) {
-    window.open(url, '_blank')
-  }
-}
-
 const handleImageError = (e) => {
   e.target.onerror = null
   e.target.src = articleFallback

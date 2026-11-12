@@ -415,7 +415,6 @@ const barRef = ref(null)
 const pieRef = ref(null)
 const heatmapRef = ref(null)
 const trendRef = ref(null)
-const networkRef = ref(null)
 const histogramRef = ref(null)
 const collabFlowRef = ref(null)
 const collabConfidenceCanvasRef = ref(null)
@@ -999,8 +998,6 @@ const buildPrintPayload = () => {
     charts,
   }
 }
-
-const formatJson = (v) => JSON.stringify(v, null, 2)
 
 const resetCollabState = () => {
   collabProgress.value = 0
