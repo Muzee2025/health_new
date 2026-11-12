@@ -1,27 +1,42 @@
 <template>
   <div v-if="!studentData" class="detail-state" role="status">
     <p v-if="detailLoading">正在加载学生档案…</p>
-    <template v-else><p>{{ detailError || '学生档案暂时无法显示。' }}</p><el-button type="primary" plain @click="fetchStudentDetail">重新加载</el-button></template>
+    <template v-else
+      ><p>{{ detailError || '学生档案暂时无法显示。' }}</p>
+      <el-button type="primary" plain @click="fetchStudentDetail">重新加载</el-button></template
+    >
   </div>
   <div class="detail-container business-page" v-else>
     <div class="header-card">
       <el-page-header @back="$router.back()" title="返回" class="page-header">
         <template #content>
           <div class="header-title-wrapper">
-            <div class="text-avatar" :style="{ backgroundColor: getAvatarColor(studentData.student_info.name) }">
+            <div
+              class="text-avatar"
+              :style="{ backgroundColor: getAvatarColor(studentData.student_info.name) }"
+            >
               {{ getSurname(studentData.student_info.name) }}
             </div>
-            <span class="header-title"><span>{{ studentData.student_info.name }}</span><span>的心理档案</span></span>
+            <span class="header-title"
+              ><span>{{ studentData.student_info.name }}</span
+              ><span>的心理档案</span></span
+            >
           </div>
         </template>
         <template #extra>
-          <el-button type="warning" plain :loading="exporting" :disabled="exporting" @click="exportWord">
-            <el-icon><LibraryIcon name="report"  /></el-icon> 导出个人心理报告 (Word)
+          <el-button
+            type="warning"
+            plain
+            :loading="exporting"
+            :disabled="exporting"
+            @click="exportWord"
+          >
+            <el-icon><LibraryIcon name="report" /></el-icon> 导出个人心理报告 (Word)
           </el-button>
         </template>
       </el-page-header>
     </div>
-    
+
     <div class="content-grid">
       <!-- Left Column -->
       <div class="left-col">
@@ -54,7 +69,9 @@
 
         <!-- AI Analysis -->
         <div class="info-card ai-card">
-          <h3 class="card-title"><el-icon><LibraryIcon name="audit"  /></el-icon> 风险预警分析与建议</h3>
+          <h3 class="card-title">
+            <el-icon><LibraryIcon name="audit" /></el-icon> 风险预警分析与建议
+          </h3>
           <p class="ai-text">{{ studentData.ai_analysis }}</p>
         </div>
 
@@ -76,7 +93,11 @@
                   <span v-if="item.score" class="timeline-score">得分: {{ item.score }}</span>
                 </div>
               </el-timeline-item>
-              <LibraryEmpty v-if="!riskTimelineData.length" description="暂无时间轴记录" :image-size="60" />
+              <LibraryEmpty
+                v-if="!riskTimelineData.length"
+                description="暂无时间轴记录"
+                :image-size="60"
+              />
             </el-timeline>
           </div>
         </div>
@@ -85,8 +106,19 @@
         <div class="info-card">
           <h3 class="card-title">教师干预记录</h3>
           <div class="intervention-add">
-            <el-input v-model="newRecordText" type="textarea" :rows="3" placeholder="添加新的干预记录..." />
-            <el-button type="primary" class="add-btn" @click="submitIntervention" :disabled="!newRecordText.trim()">保存记录</el-button>
+            <el-input
+              v-model="newRecordText"
+              type="textarea"
+              :rows="3"
+              placeholder="添加新的干预记录..."
+            />
+            <el-button
+              type="primary"
+              class="add-btn"
+              @click="submitIntervention"
+              :disabled="!newRecordText.trim()"
+              >保存记录</el-button
+            >
           </div>
           <div class="intervention-list">
             <el-timeline>
@@ -101,7 +133,11 @@
                   <small class="record-date">记录日期: {{ record.record_date }}</small>
                 </div>
               </el-timeline-item>
-              <LibraryEmpty v-if="!studentData.intervention_records?.length" description="暂无干预记录" :image-size="60" />
+              <LibraryEmpty
+                v-if="!studentData.intervention_records?.length"
+                description="暂无干预记录"
+                :image-size="60"
+              />
             </el-timeline>
           </div>
         </div>
@@ -112,16 +148,28 @@
         <!-- AI Chat History (Desensitized) -->
         <div class="info-card">
           <h3 class="card-title">最近对话记录 (脱敏)</h3>
-          <div class="chat-sessions-list" v-if="studentData.desensitized_chats && studentData.desensitized_chats.length > 0">
+          <div
+            class="chat-sessions-list"
+            v-if="studentData.desensitized_chats && studentData.desensitized_chats.length > 0"
+          >
             <el-collapse accordion>
-              <el-collapse-item v-for="(session, idx) in studentData.desensitized_chats" :key="session.session_id" :title="`${formatDate(session.created_at)} - ${session.title}`" :name="idx">
+              <el-collapse-item
+                v-for="(session, idx) in studentData.desensitized_chats"
+                :key="session.session_id"
+                :title="`${formatDate(session.created_at)} - ${session.title}`"
+                :name="idx"
+              >
                 <div class="chat-messages">
-                  <div v-for="(msg, midx) in session.messages" :key="midx" :class="['chat-msg', msg.role === 'user' ? 'msg-user' : 'msg-ai']">
+                  <div
+                    v-for="(msg, midx) in session.messages"
+                    :key="midx"
+                    :class="['chat-msg', msg.role === 'user' ? 'msg-user' : 'msg-ai']"
+                  >
                     <div class="msg-header">
                       <span class="msg-role">{{ msg.role === 'user' ? '学生' : 'AI' }}</span>
                       <span class="msg-time">{{ formatDate(msg.created_at) }}</span>
                     </div>
-                    <div class="msg-content" :class="{'text-red': msg.is_crisis}">
+                    <div class="msg-content" :class="{ 'text-red': msg.is_crisis }">
                       {{ msg.content }}
                     </div>
                   </div>
@@ -136,19 +184,27 @@
         <div class="bottom-grid mt-20">
           <div class="info-card flex-col">
             <h3 class="card-title">预约记录</h3>
-            <div class="business-table-wrap"><el-table :data="studentData.appointments" style="width: 100%" height="250" stripe empty-text="暂无预约记录。">
-              <el-table-column prop="time_slot" label="时间" width="160" />
-              <el-table-column prop="teacher_name" label="咨询老师" />
-              <el-table-column prop="status" label="状态">
-                <template #default="scope">
-                  <el-tag :type="getStatusType(scope.row.status)">
-                    {{ getStatusText(scope.row.status) }}
-                  </el-tag>
-                </template>
-              </el-table-column>
-            </el-table></div>
+            <div class="business-table-wrap">
+              <el-table
+                :data="studentData.appointments"
+                style="width: 100%"
+                height="250"
+                stripe
+                empty-text="暂无预约记录。"
+              >
+                <el-table-column prop="time_slot" label="时间" width="160" />
+                <el-table-column prop="teacher_name" label="咨询老师" />
+                <el-table-column prop="status" label="状态">
+                  <template #default="scope">
+                    <el-tag :type="getStatusType(scope.row.status)">
+                      {{ getStatusText(scope.row.status) }}
+                    </el-tag>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
           </div>
-          
+
           <div class="info-card flex-col">
             <h3 class="card-title">树洞发言汇总 (隐私保护)</h3>
             <div class="treehole-list">
@@ -160,12 +216,20 @@
                 >
                   <div class="treehole-tags">
                     <span class="tag-label">提取标签/情绪：</span>
-                    <el-tag v-if="post.emotion_keywords" type="danger" size="small" class="mr-5">{{ post.emotion_keywords }}</el-tag>
+                    <el-tag v-if="post.emotion_keywords" type="danger" size="small" class="mr-5">{{
+                      post.emotion_keywords
+                    }}</el-tag>
                     <el-tag v-if="post.tags" type="info" size="small">{{ post.tags }}</el-tag>
-                    <span v-if="!post.emotion_keywords && !post.tags" class="no-tags">无明显情绪标签</span>
+                    <span v-if="!post.emotion_keywords && !post.tags" class="no-tags"
+                      >无明显情绪标签</span
+                    >
                   </div>
                 </el-timeline-item>
-                <LibraryEmpty v-if="!studentData.treehole_summary?.length" description="暂无树洞发言" :image-size="60" />
+                <LibraryEmpty
+                  v-if="!studentData.treehole_summary?.length"
+                  description="暂无树洞发言"
+                  :image-size="60"
+                />
               </el-timeline>
             </div>
           </div>
@@ -181,7 +245,20 @@ import { businessColor } from '../../styles/business-theme.js'
 import { ref, onMounted, onUnmounted, computed, markRaw } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
-import { ElMessage, ElPageHeader, ElButton, ElIcon, ElTimeline, ElTimelineItem, ElInput, ElCollapse, ElCollapseItem, ElTable, ElTableColumn, ElTag } from 'element-plus'
+import {
+  ElMessage,
+  ElPageHeader,
+  ElButton,
+  ElIcon,
+  ElTimeline,
+  ElTimelineItem,
+  ElInput,
+  ElCollapse,
+  ElCollapseItem,
+  ElTable,
+  ElTableColumn,
+  ElTag,
+} from 'element-plus'
 
 const route = useRoute()
 const studentData = ref(null)
@@ -194,7 +271,10 @@ const exportWord = async () => {
   if (exporting.value) return
   exporting.value = true
   try {
-    const response = await axios.get(`/api/advanced-teacher/students/${encodeURIComponent(route.params.id)}/export/docx`, { responseType: 'blob' })
+    const response = await axios.get(
+      `/api/advanced-teacher/students/${encodeURIComponent(route.params.id)}/export/docx`,
+      { responseType: 'blob' },
+    )
     const blob = new Blob([response.data])
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -207,31 +287,44 @@ const exportWord = async () => {
     window.URL.revokeObjectURL(url)
     ElMessage.success('已导出 Word 报告')
   } catch (error) {
-    ElMessage.error(error?.response?.status === 404 || error?.response?.status === 403 ? '该学生不在你的分配范围内，无法导出。' : '个体档案导出失败，请稍后重试。')
+    ElMessage.error(
+      error?.response?.status === 404 || error?.response?.status === 403
+        ? '该学生不在你的分配范围内，无法导出。'
+        : '个体档案导出失败，请稍后重试。',
+    )
   } finally {
     exporting.value = false
   }
 }
 
 const getAvatarColor = (name) => {
-  const colors = [businessColor('brand-100'), businessColor('accent-sage-soft'), businessColor('warning-100'), businessColor('warning-100'), businessColor('brand-100'), businessColor('accent-sage-soft')];
-  const charCode = name ? name.charCodeAt(0) : 0;
-  return colors[charCode % colors.length];
+  const colors = [
+    businessColor('brand-100'),
+    businessColor('accent-sage-soft'),
+    businessColor('warning-100'),
+    businessColor('warning-100'),
+    businessColor('brand-100'),
+    businessColor('accent-sage-soft'),
+  ]
+  const charCode = name ? name.charCodeAt(0) : 0
+  return colors[charCode % colors.length]
 }
 
 const getSurname = (name) => {
-  return name ? name.charAt(0) : '未';
+  return name ? name.charAt(0) : '未'
 }
 
 const riskTimelineData = computed(() => {
   if (!studentData.value) return []
-  
+
   const timeline = []
-  
+
   // Add test results
   if (studentData.value.test_history) {
-    studentData.value.test_history.forEach(test => {
-      const pendingReview = test.assessment_status === 'pending_professional_review' || (test.risk_level == null && ['SDS', 'SAS'].includes(test.test_type))
+    studentData.value.test_history.forEach((test) => {
+      const pendingReview =
+        test.assessment_status === 'pending_professional_review' ||
+        (test.risk_level == null && ['SDS', 'SAS'].includes(test.test_type))
       const entertainmentOnly = test.assessment_status === 'entertainment_only'
       const riskLabel = test.risk_level != null ? `；服务器状态：${test.risk_level}` : ''
       timeline.push({
@@ -239,15 +332,19 @@ const riskTimelineData = computed(() => {
         date: test.created_at,
         type: pendingReview ? 'warning' : entertainmentOnly ? 'info' : 'primary',
         color: pendingReview ? businessColor('data-risk-mid') : businessColor('data-primary'),
-        title: entertainmentOnly ? '趣味问答记录' : pendingReview ? '测评记录 · 待专业复核' : `测评记录${riskLabel}`,
+        title: entertainmentOnly
+          ? '趣味问答记录'
+          : pendingReview
+            ? '测评记录 · 待专业复核'
+            : `测评记录${riskLabel}`,
         score: test.score,
       })
     })
   }
-  
+
   // Add interventions
   if (studentData.value.intervention_records) {
-    studentData.value.intervention_records.forEach(rec => {
+    studentData.value.intervention_records.forEach((rec) => {
       timeline.push({
         id: `rec_${rec.id}`,
         date: rec.created_at,
@@ -255,11 +352,11 @@ const riskTimelineData = computed(() => {
         color: businessColor('data-primary'),
         icon: markRaw(interventionIcon),
         title: '教师干预: ' + rec.notes.substring(0, 15) + '...',
-        score: null
+        score: null,
       })
     })
   }
-  
+
   // Sort by date descending
   return timeline.sort((a, b) => new Date(b.date) - new Date(a.date))
 })
@@ -271,15 +368,16 @@ const fetchStudentDetail = async () => {
   try {
     const token = localStorage.getItem('token')
     const res = await axios.get(`/api/teacher/student/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     if (unmounted) return
     studentData.value = res.data
   } catch (error) {
     if (unmounted) return
-    detailError.value = error?.response?.status === 403 || error?.response?.status === 404
-      ? '该学生不在你的分配范围内，无法查看档案。'
-      : '学生档案暂时无法加载，请重试。'
+    detailError.value =
+      error?.response?.status === 403 || error?.response?.status === 404
+        ? '该学生不在你的分配范围内，无法查看档案。'
+        : '学生档案暂时无法加载，请重试。'
   } finally {
     if (!unmounted) detailLoading.value = false
   }
@@ -290,13 +388,17 @@ const submitIntervention = async () => {
   try {
     const token = localStorage.getItem('token')
     const today = new Date().toISOString().split('T')[0]
-    await axios.post('/api/teacher/interventions', {
-      student_id: studentData.value.student_info.id,
-      record_date: today,
-      notes: newRecordText.value
-    }, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    await axios.post(
+      '/api/teacher/interventions',
+      {
+        student_id: studentData.value.student_info.id,
+        record_date: today,
+        notes: newRecordText.value,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
     ElMessage.success('记录添加成功')
     newRecordText.value = ''
     fetchStudentDetail() // Refresh data
@@ -340,8 +442,19 @@ onUnmounted(() => {
   gap: 20px;
   min-width: 0;
 }
-.detail-state { display: grid; justify-items: start; gap: 12px; padding: 28px; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
-.detail-container :deep(.business-table-wrap .el-table) { min-width: 520px; }
+.detail-state {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  padding: 28px;
+  color: var(--text-secondary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.detail-container :deep(.business-table-wrap .el-table) {
+  min-width: 520px;
+}
 
 .header-card {
   background: var(--surface);
@@ -382,7 +495,8 @@ onUnmounted(() => {
   min-width: 0;
 }
 
-.left-col, .right-col {
+.left-col,
+.right-col {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -448,7 +562,8 @@ onUnmounted(() => {
   overflow-wrap: anywhere;
 }
 
-.risk-timeline, .intervention-list {
+.risk-timeline,
+.intervention-list {
   max-height: 300px;
   overflow-y: auto;
   padding-right: 10px;
@@ -481,8 +596,16 @@ onUnmounted(() => {
 }
 
 .intervention-add :deep(.el-textarea),
-.intervention-add :deep(.el-textarea__inner) { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
-.add-btn { align-self: flex-end; max-width: 100%; }
+.intervention-add :deep(.el-textarea__inner) {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.add-btn {
+  align-self: flex-end;
+  max-width: 100%;
+}
 
 .record-content p {
   margin: 0 0 8px 0;
@@ -606,25 +729,89 @@ onUnmounted(() => {
   font-weight: 500;
 }
 @media (max-width: 900px) {
-  .content-grid, .bottom-grid { grid-template-columns: minmax(0, 1fr); }
+  .content-grid,
+  .bottom-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 @media (max-width: 600px) {
-  .header-card, .info-card { padding: 16px; }
-  .page-header :deep(.el-page-header__header) { align-items: stretch; flex-direction: column; gap: 12px; }
-  .page-header :deep(.el-page-header__left) { align-items: flex-start; width: 100%; min-width: 0; margin-right: 0; }
-  .page-header :deep(.el-page-header__back) { flex: 0 0 auto; min-width: max-content; }
-  .page-header :deep(.el-page-header__title) { white-space: nowrap; }
-  .page-header :deep(.el-page-header__content) { flex: 1 1 auto; min-width: 0; }
-  .page-header :deep(.el-page-header__extra) { width: 100%; margin: 0; }
-  .page-header :deep(.el-page-header__extra .el-button) { width: 100%; min-height: 44px; justify-content: center; white-space: normal; line-height: 1.4; }
-  .header-title-wrapper { align-items: flex-start; gap: 10px; }
-  .header-title-wrapper, .header-title { min-width: 0; }
-  .text-avatar { flex: 0 0 40px; width: 40px; height: 40px; font-size: 17px; }
-  .header-title { display: flex; flex: 1 1 auto; flex-wrap: wrap; column-gap: .3em; font-size: 17px; line-height: 1.4; }
-  .header-title > span { white-space: nowrap; }
-  .info-item { align-items: flex-start; gap: 12px; }
-  .value { text-align: right; overflow-wrap: anywhere; }
-  .chat-msg { max-width: 94%; }
-  .intervention-add :deep(.el-button) { align-self: stretch; width: 100%; margin-left: 0; }
+  .header-card,
+  .info-card {
+    padding: 16px;
+  }
+  .page-header :deep(.el-page-header__header) {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .page-header :deep(.el-page-header__left) {
+    align-items: flex-start;
+    width: 100%;
+    min-width: 0;
+    margin-right: 0;
+  }
+  .page-header :deep(.el-page-header__back) {
+    flex: 0 0 auto;
+    min-width: max-content;
+  }
+  .page-header :deep(.el-page-header__title) {
+    white-space: nowrap;
+  }
+  .page-header :deep(.el-page-header__content) {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .page-header :deep(.el-page-header__extra) {
+    width: 100%;
+    margin: 0;
+  }
+  .page-header :deep(.el-page-header__extra .el-button) {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    white-space: normal;
+    line-height: 1.4;
+  }
+  .header-title-wrapper {
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .header-title-wrapper,
+  .header-title {
+    min-width: 0;
+  }
+  .text-avatar {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    font-size: 17px;
+  }
+  .header-title {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    column-gap: 0.3em;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+  .header-title > span {
+    white-space: nowrap;
+  }
+  .info-item {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .value {
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .chat-msg {
+    max-width: 94%;
+  }
+  .intervention-add :deep(.el-button) {
+    align-self: stretch;
+    width: 100%;
+    margin-left: 0;
+  }
 }
 </style>

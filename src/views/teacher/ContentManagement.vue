@@ -7,31 +7,70 @@
           <el-button type="primary" @click="openArticleDialog(null)">新增文章</el-button>
         </div>
 
-        <el-alert v-if="articleLoadError" type="error" :closable="false" title="文章列表暂时无法加载。"><el-button text type="primary" @click="fetchArticles">重新加载</el-button></el-alert>
+        <el-alert
+          v-if="articleLoadError"
+          type="error"
+          :closable="false"
+          title="文章列表暂时无法加载。"
+          ><el-button text type="primary" @click="fetchArticles">重新加载</el-button></el-alert
+        >
         <div class="article-toolbar">
-          <el-input v-model="articleSearch" maxlength="100" clearable aria-label="搜索文章标题、摘要或来源" placeholder="搜索标题、摘要或来源" />
+          <el-input
+            v-model="articleSearch"
+            maxlength="100"
+            clearable
+            aria-label="搜索文章标题、摘要或来源"
+            placeholder="搜索标题、摘要或来源"
+          />
           <el-select v-model="articleCategory" aria-label="按分类筛选文章">
             <el-option label="全部分类" value="全部" />
-            <el-option v-for="category in articleCategories" :key="category" :label="category" :value="category" />
+            <el-option
+              v-for="category in articleCategories"
+              :key="category"
+              :label="category"
+              :value="category"
+            />
           </el-select>
         </div>
-        <div class="business-table-wrap"><el-table :data="articles" style="width: 100%" v-loading="loadingArticles" stripe :empty-text="loadingArticles ? '正在加载文章…' : articleLoadError ? '文章列表加载失败。' : total || hasArticleFilters ? '没有符合条件的文章。' : '还没有文章记录。'">
-          <el-table-column prop="title" label="标题" min-width="200" />
-          <el-table-column prop="category" label="分类" width="120" />
-          <el-table-column prop="source" label="来源" width="150" />
-          <el-table-column prop="views" label="阅读量" width="100" />
-          <el-table-column label="发布时间" width="180">
-            <template #default="scope">
-              {{ formatDate(scope.row.created_at) }}
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" width="170" align="right">
-            <template #default="scope">
-              <el-button link type="primary" @click="openArticle(scope.row.id)">阅读</el-button>
-              <el-button link type="danger" :loading="deletingArticleIds.includes(scope.row.id)" :disabled="deletingArticleIds.includes(scope.row.id)" @click="deleteArticle(scope.row.id)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <div class="business-table-wrap">
+          <el-table
+            :data="articles"
+            style="width: 100%"
+            v-loading="loadingArticles"
+            stripe
+            :empty-text="
+              loadingArticles
+                ? '正在加载文章…'
+                : articleLoadError
+                  ? '文章列表加载失败。'
+                  : total || hasArticleFilters
+                    ? '没有符合条件的文章。'
+                    : '还没有文章记录。'
+            "
+          >
+            <el-table-column prop="title" label="标题" min-width="200" />
+            <el-table-column prop="category" label="分类" width="120" />
+            <el-table-column prop="source" label="来源" width="150" />
+            <el-table-column prop="views" label="阅读量" width="100" />
+            <el-table-column label="发布时间" width="180">
+              <template #default="scope">
+                {{ formatDate(scope.row.created_at) }}
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="170" align="right">
+              <template #default="scope">
+                <el-button link type="primary" @click="openArticle(scope.row.id)">阅读</el-button>
+                <el-button
+                  link
+                  type="danger"
+                  :loading="deletingArticleIds.includes(scope.row.id)"
+                  :disabled="deletingArticleIds.includes(scope.row.id)"
+                  @click="deleteArticle(scope.row.id)"
+                  >删除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
         <div v-if="!loadingArticles && !articleLoadError && total" class="pagination-wrapper">
           <el-pagination
@@ -52,32 +91,58 @@
         <div class="action-bar">
           <el-button type="primary" @click="openTeacherDialog(null)">编辑我的老师档案</el-button>
         </div>
-        
-        <el-alert v-if="teacherLoadError" type="error" :closable="false" title="教师档案列表暂时无法加载。"><el-button text type="primary" @click="fetchTeachers">重新加载</el-button></el-alert>
-        <div class="business-table-wrap"><el-table :data="teachers" style="width: 100%" v-loading="loadingTeachers" stripe empty-text="暂无教师档案记录。">
-          <el-table-column label="头像" width="80">
-            <template #default>
-              <div class="teacher-avatar-small">
-                <el-icon><LibraryIcon name="user"  /></el-icon>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="120" />
-          <el-table-column prop="username" label="账号" width="120" />
-          <el-table-column prop="title" label="职称" width="150" />
-          <el-table-column prop="location" label="办公地点" min-width="150" />
-          <el-table-column label="操作" width="150" align="right">
-            <template #default="scope">
-              <el-button v-if="String(scope.row.user_id) === String(currentTeacherId)" link type="primary" @click="openTeacherDialog(scope.row)">编辑</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+
+        <el-alert
+          v-if="teacherLoadError"
+          type="error"
+          :closable="false"
+          title="教师档案列表暂时无法加载。"
+          ><el-button text type="primary" @click="fetchTeachers">重新加载</el-button></el-alert
+        >
+        <div class="business-table-wrap">
+          <el-table
+            :data="teachers"
+            style="width: 100%"
+            v-loading="loadingTeachers"
+            stripe
+            empty-text="暂无教师档案记录。"
+          >
+            <el-table-column label="头像" width="80">
+              <template #default>
+                <div class="teacher-avatar-small">
+                  <el-icon><LibraryIcon name="user" /></el-icon>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="姓名" width="120" />
+            <el-table-column prop="username" label="账号" width="120" />
+            <el-table-column prop="title" label="职称" width="150" />
+            <el-table-column prop="location" label="办公地点" min-width="150" />
+            <el-table-column label="操作" width="150" align="right">
+              <template #default="scope">
+                <el-button
+                  v-if="String(scope.row.user_id) === String(currentTeacherId)"
+                  link
+                  type="primary"
+                  @click="openTeacherDialog(scope.row)"
+                  >编辑</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
       </el-tab-pane>
     </el-tabs>
 
     <!-- Article Dialog -->
-    <el-dialog v-model="articleDialogVisible" title="新增文章" width="600px" :close-on-click-modal="!savingArticle" :close-on-press-escape="!savingArticle" :show-close="!savingArticle">
+    <el-dialog
+      v-model="articleDialogVisible"
+      title="新增文章"
+      width="600px"
+      :close-on-click-modal="!savingArticle"
+      :close-on-press-escape="!savingArticle"
+      :show-close="!savingArticle"
+    >
       <el-form :model="articleForm" label-width="80px" :disabled="savingArticle">
         <el-form-item label="标题" required>
           <el-input v-model="articleForm.title" maxlength="200" show-word-limit />
@@ -92,7 +157,13 @@
           <el-input v-model="articleForm.cover_url" maxlength="255" show-word-limit />
         </el-form-item>
         <el-form-item label="摘要">
-          <el-input v-model="articleForm.summary" type="textarea" :rows="2" maxlength="500" show-word-limit />
+          <el-input
+            v-model="articleForm.summary"
+            type="textarea"
+            :rows="2"
+            maxlength="500"
+            show-word-limit
+          />
         </el-form-item>
         <el-form-item label="正文" required>
           <el-upload
@@ -105,15 +176,32 @@
             :before-upload="beforeUpload"
             :show-file-list="false"
           >
-            <el-button type="success" size="small" plain style="margin-bottom: 10px;">上传PDF / DOCX附件或图片</el-button>
+            <el-button type="success" size="small" plain style="margin-bottom: 10px"
+              >上传PDF / DOCX附件或图片</el-button
+            >
           </el-upload>
-          <el-input v-model="articleForm.content" type="textarea" :rows="6" maxlength="100000" show-word-limit placeholder="请输入文章正文" />
+          <el-input
+            v-model="articleForm.content"
+            type="textarea"
+            :rows="6"
+            maxlength="100000"
+            show-word-limit
+            placeholder="请输入文章正文"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button :disabled="savingArticle" @click="articleDialogVisible = false">取消</el-button>
-          <el-button type="primary" :loading="savingArticle" :disabled="savingArticle" @click="submitArticle">保存</el-button>
+          <el-button :disabled="savingArticle" @click="articleDialogVisible = false"
+            >取消</el-button
+          >
+          <el-button
+            type="primary"
+            :loading="savingArticle"
+            :disabled="savingArticle"
+            @click="submitArticle"
+            >保存</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -135,7 +223,12 @@
           <el-input v-model="teacherForm.intro" type="textarea" :rows="3" />
         </el-form-item>
         <el-form-item label="可预约时段">
-          <el-input v-model="teacherForm.time_slots_str" type="textarea" :rows="3" placeholder='例如: ["周一 09:00-11:00", "周三 14:00-16:00"]' />
+          <el-input
+            v-model="teacherForm.time_slots_str"
+            type="textarea"
+            :rows="3"
+            placeholder='例如: ["周一 09:00-11:00", "周三 14:00-16:00"]'
+          />
           <span class="help-text">请填写合法的 JSON 数组字符串</span>
         </el-form-item>
       </el-form>
@@ -153,11 +246,37 @@
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import { ElMessage, ElMessageBox, ElTabs, ElTabPane, ElButton, ElTable, ElTableColumn, ElIcon, ElDialog, ElForm, ElFormItem, ElInput, ElUpload, ElInputNumber, ElAlert, ElSelect, ElOption, ElPagination, vLoading } from 'element-plus'
+import {
+  ElMessage,
+  ElMessageBox,
+  ElTabs,
+  ElTabPane,
+  ElButton,
+  ElTable,
+  ElTableColumn,
+  ElIcon,
+  ElDialog,
+  ElForm,
+  ElFormItem,
+  ElInput,
+  ElUpload,
+  ElInputNumber,
+  ElAlert,
+  ElSelect,
+  ElOption,
+  ElPagination,
+  vLoading,
+} from 'element-plus'
 import { useArticleCatalog } from '../../composables/useArticleCatalog'
 
 const router = useRouter()
-const currentTeacherId = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}').id } catch { return null } })()
+const currentTeacherId = (() => {
+  try {
+    return JSON.parse(localStorage.getItem('user') || '{}').id
+  } catch {
+    return null
+  }
+})()
 const activeTab = ref('articles')
 const uploadUrl = axios.getUri({ url: '/api/teacher/upload' })
 const handleUploadError = () => ElMessage.error('文件上传失败，请检查格式或稍后重试')
@@ -177,9 +296,15 @@ const beforeUpload = (file) => {
 
 const handleUploadSuccess = (res, file) => {
   const url = res.url || res.image_url
-  if (!url) { ElMessage.error('上传响应缺少文件地址'); return }
+  if (!url) {
+    ElMessage.error('上传响应缺少文件地址')
+    return
+  }
   if (/\.(pdf|docx)$/i.test(file.name)) {
-    const name = file.name.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]))
+    const name = file.name.replace(
+      /[&<>"']/g,
+      (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char],
+    )
     articleForm.value.content += '\n<br><a href="' + url + '">下载附件：' + name + '</a>'
   } else {
     articleForm.value.cover_url = url
@@ -189,9 +314,25 @@ const handleUploadSuccess = (res, file) => {
 
 // Articles
 const articlePageSize = 12
-const catalog = useArticleCatalog({ endpoint: '/api/teacher/articles/page', pageSize: articlePageSize })
-const { items: articles, total, categories: articleCategories, query: articleSearch, category: articleCategory, page: articlePage, loading: loadingArticles, error: articleLoadError, fetchPage: fetchArticles, resetFilters } = catalog
-const hasArticleFilters = computed(() => Boolean(articleSearch.value.trim()) || articleCategory.value !== '全部')
+const catalog = useArticleCatalog({
+  endpoint: '/api/teacher/articles/page',
+  pageSize: articlePageSize,
+})
+const {
+  items: articles,
+  total,
+  categories: articleCategories,
+  query: articleSearch,
+  category: articleCategory,
+  page: articlePage,
+  loading: loadingArticles,
+  error: articleLoadError,
+  fetchPage: fetchArticles,
+  resetFilters,
+} = catalog
+const hasArticleFilters = computed(
+  () => Boolean(articleSearch.value.trim()) || articleCategory.value !== '全部',
+)
 const articleDialogVisible = ref(false)
 const savingArticle = ref(false)
 const deletingArticleIds = ref([])
@@ -203,7 +344,7 @@ const articleForm = ref({
   content: '',
   cover_url: '',
   category: '心理科普',
-  source: ''
+  source: '',
 })
 
 const openArticleDialog = () => {
@@ -214,7 +355,7 @@ const openArticleDialog = () => {
     content: '',
     cover_url: '',
     category: '心理科普',
-    source: ''
+    source: '',
   }
   articleDialogVisible.value = true
 }
@@ -226,7 +367,14 @@ const submitArticle = async () => {
     ElMessage.warning('标题和正文必填')
     return
   }
-  if (title.length > 200 || content.length > 100000 || String(articleForm.value.summary || '').length > 500 || String(articleForm.value.category || '').length > 50 || String(articleForm.value.source || '').length > 100 || String(articleForm.value.cover_url || '').length > 255) {
+  if (
+    title.length > 200 ||
+    content.length > 100000 ||
+    String(articleForm.value.summary || '').length > 500 ||
+    String(articleForm.value.category || '').length > 50 ||
+    String(articleForm.value.source || '').length > 100 ||
+    String(articleForm.value.cover_url || '').length > 255
+  ) {
     ElMessage.warning('请检查各字段长度限制')
     return
   }
@@ -241,10 +389,10 @@ const submitArticle = async () => {
       summary: String(articleForm.value.summary || '').trim(),
       category: String(articleForm.value.category || '').trim(),
       source: String(articleForm.value.source || '').trim(),
-      cover_url: String(articleForm.value.cover_url || '').trim()
+      cover_url: String(articleForm.value.cover_url || '').trim(),
     }
     await axios.post('/api/teacher/articles', payload, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     ElMessage.success('保存成功')
     articleDialogVisible.value = false
@@ -264,14 +412,14 @@ const deleteArticle = async (id) => {
     await ElMessageBox.confirm('确定要删除这篇文章吗？', '警告', { type: 'warning' })
     const token = localStorage.getItem('token')
     await axios.delete(`/api/teacher/articles/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     ElMessage.success('删除成功')
     fetchArticles()
   } catch (error) {
     if (error !== 'cancel' && error !== 'close' && error !== 'closed') ElMessage.error('删除失败')
   } finally {
-    deletingArticleIds.value = deletingArticleIds.value.filter(articleId => articleId !== id)
+    deletingArticleIds.value = deletingArticleIds.value.filter((articleId) => articleId !== id)
   }
 }
 
@@ -287,7 +435,7 @@ const teacherForm = ref({
   title: '',
   intro: '',
   location: '',
-  time_slots_str: '[]'
+  time_slots_str: '[]',
 })
 
 const fetchTeachers = async () => {
@@ -295,7 +443,7 @@ const fetchTeachers = async () => {
   try {
     const token = localStorage.getItem('token')
     const res = await axios.get('/api/teacher/teachers_profiles', {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     teachers.value = res.data
     teacherLoadError.value = false
@@ -308,14 +456,17 @@ const fetchTeachers = async () => {
 }
 
 const openTeacherDialog = (row) => {
-  if (!currentTeacherId || (row && String(row.user_id) !== String(currentTeacherId))) { ElMessage.error('仅可编辑本人档案'); return }
+  if (!currentTeacherId || (row && String(row.user_id) !== String(currentTeacherId))) {
+    ElMessage.error('仅可编辑本人档案')
+    return
+  }
   if (row) {
     teacherForm.value = {
       user_id: row.user_id,
       title: row.title,
       intro: row.intro,
       location: row.location,
-      time_slots_str: JSON.stringify(row.time_slots || [])
+      time_slots_str: JSON.stringify(row.time_slots || []),
     }
   } else {
     teacherForm.value = {
@@ -323,7 +474,7 @@ const openTeacherDialog = (row) => {
       title: '',
       intro: '',
       location: '',
-      time_slots_str: '[]'
+      time_slots_str: '[]',
     }
   }
   teacherDialogVisible.value = true
@@ -339,17 +490,17 @@ const submitTeacher = async () => {
       ElMessage.error('可预约时段 JSON 格式错误')
       return
     }
-    
+
     const payload = {
       user_id: teacherForm.value.user_id,
       title: teacherForm.value.title,
       intro: teacherForm.value.intro,
       location: teacherForm.value.location,
-      time_slots: timeSlots
+      time_slots: timeSlots,
     }
-    
+
     await axios.post('/api/teacher/teachers_profiles', payload, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     ElMessage.success('保存成功')
     teacherDialogVisible.value = false
@@ -389,10 +540,22 @@ onMounted(() => {
   display: flex;
   justify-content: flex-end;
 }
-.article-toolbar { display: flex; gap: 12px; margin-bottom: 14px; }
-.article-toolbar :deep(.el-input) { max-width: 320px; }
-.article-toolbar :deep(.el-select) { width: 180px; }
-.pagination-wrapper { display: flex; justify-content: center; margin-top: 16px; }
+.article-toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.article-toolbar :deep(.el-input) {
+  max-width: 320px;
+}
+.article-toolbar :deep(.el-select) {
+  width: 180px;
+}
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
 
 .help-text {
   font-size: 12px;
@@ -412,12 +575,26 @@ onMounted(() => {
   justify-content: center;
   font-size: 14px;
 }
-.business-table-wrap :deep(.el-table) { min-width: 760px; }
+.business-table-wrap :deep(.el-table) {
+  min-width: 760px;
+}
 @media (max-width: 760px) {
-  .content-container { padding: 14px; }
-  .action-bar { justify-content: stretch; }
-  .action-bar :deep(.el-button) { width: 100%; }
-  .article-toolbar { flex-direction: column; }
-  .article-toolbar :deep(.el-input), .article-toolbar :deep(.el-select) { max-width: none; width: 100%; }
+  .content-container {
+    padding: 14px;
+  }
+  .action-bar {
+    justify-content: stretch;
+  }
+  .action-bar :deep(.el-button) {
+    width: 100%;
+  }
+  .article-toolbar {
+    flex-direction: column;
+  }
+  .article-toolbar :deep(.el-input),
+  .article-toolbar :deep(.el-select) {
+    max-width: none;
+    width: 100%;
+  }
 }
 </style>

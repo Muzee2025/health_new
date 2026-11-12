@@ -9,112 +9,265 @@
       </div>
     </div>
 
-    <el-alert :title="metrics?.data_status === 'empty' ? '当前尚未分配学生，请由学校完成分配。' : '仅统计明确分配给您的学生'" type="info" :closable="false" show-icon />
-    <el-alert v-if="metricsError" title="统计数据加载失败，请刷新后重试。" type="error" :closable="false" show-icon class="mt-20">
+    <el-alert
+      :title="
+        metrics?.data_status === 'empty'
+          ? '当前尚未分配学生，请由学校完成分配。'
+          : '仅统计明确分配给您的学生'
+      "
+      type="info"
+      :closable="false"
+      show-icon
+    />
+    <el-alert
+      v-if="metricsError"
+      title="统计数据加载失败，请刷新后重试。"
+      type="error"
+      :closable="false"
+      show-icon
+      class="mt-20"
+    >
       <el-button text type="primary" @click="fetchMetrics">重新加载统计</el-button>
     </el-alert>
     <div v-if="!metrics && !metricsError" class="loading-note" role="status">正在加载统计数据…</div>
 
-    <el-card shadow="never" class="mt-20 warning-card business-card" :class="{'has-unread': pendingCount > 0}">
+    <el-card
+      shadow="never"
+      class="mt-20 warning-card business-card"
+      :class="{ 'has-unread': pendingCount > 0 }"
+    >
       <template #header>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-weight: bold; color: var(--danger-text); display: flex; align-items: center;">
-            <el-icon class="mr-5"><LibraryIcon name="alert"  /></el-icon> 待审核危机预警记录
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <span
+            style="font-weight: bold; color: var(--danger-text); display: flex; align-items: center"
+          >
+            <el-icon class="mr-5"><LibraryIcon name="alert" /></el-icon> 待审核危机预警记录
             <el-badge v-if="pendingCount > 0" :value="pendingCount" class="ml-10" />
           </span>
           <el-tag type="danger">需心理教师人工校正闭环</el-tag>
         </div>
       </template>
 
-      <el-alert v-if="pendingLoadError" type="error" :closable="false" title="待审核预警暂时无法加载，当前列表可能不完整。">
+      <el-alert
+        v-if="pendingLoadError"
+        type="error"
+        :closable="false"
+        title="待审核预警暂时无法加载，当前列表可能不完整。"
+      >
         <el-button text type="primary" @click="fetchPendingList">重新加载预警</el-button>
       </el-alert>
       <div class="business-table-wrap">
-      <el-table :data="pendingList" border style="width: 100%" :row-class-name="tableRowClassName" v-loading="loadingPending" empty-text="当前没有待审核预警。">
-        <el-table-column prop="createdAt" label="预警时间" width="160" />
-        <el-table-column label="学生信息" width="170">
-          <template #default="{row}">
-            <div><strong>{{ row.studentName || '未知' }}</strong></div>
-            <div style="color: var(--text-secondary); font-size: 12px;">学号: {{ row.studentId || '-' }} / {{ row.className || '-' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="风险等级" width="100">
-          <template #default="{row}">
-            <el-tag type="danger" effect="dark" v-if="row.riskLevel === 'high'">高危</el-tag>
-            <el-tag type="warning" effect="dark" v-else-if="row.riskLevel === 'medium'">中危</el-tag>
-            <el-tag type="info" effect="dark" v-else-if="row.riskLevel === 'low'">低危</el-tag>
-            <el-tag type="info" v-else>待核验</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="预警描述" min-width="320">
-          <template #default="{row}">
-            <div class="audit-msg">{{ row.description || '未知' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" width="100">
-          <template #default="{row}">
-            <el-tag type="danger" v-if="row.status === 'pending'">待审核</el-tag>
-            <el-tag type="success" v-else>已审核</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="360">
-          <template #default="{row}">
-            <div class="audit-action-group">
-              <el-button size="small" type="success" @click="handleReview(row, 'pass')">通过</el-button>
-              <el-button size="small" type="warning" @click="handleReview(row, 'reject')">驳回校正</el-button>
-              <el-button size="small" type="danger" @click="handleReview(row, 'escalate')">升级处理</el-button>
-              <el-button size="small" type="primary" @click="contactStudent(row)">联络说明</el-button>
-              <el-button size="small" plain @click="$router.push('/teacher/support')">进入跟进</el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
+        <el-table
+          :data="pendingList"
+          border
+          style="width: 100%"
+          :row-class-name="tableRowClassName"
+          v-loading="loadingPending"
+          empty-text="当前没有待审核预警。"
+        >
+          <el-table-column prop="createdAt" label="预警时间" width="160" />
+          <el-table-column label="学生信息" width="170">
+            <template #default="{ row }">
+              <div>
+                <strong>{{ row.studentName || '未知' }}</strong>
+              </div>
+              <div style="color: var(--text-secondary); font-size: 12px">
+                学号: {{ row.studentId || '-' }} / {{ row.className || '-' }}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="风险等级" width="100">
+            <template #default="{ row }">
+              <el-tag type="danger" effect="dark" v-if="row.riskLevel === 'high'">高危</el-tag>
+              <el-tag type="warning" effect="dark" v-else-if="row.riskLevel === 'medium'"
+                >中危</el-tag
+              >
+              <el-tag type="info" effect="dark" v-else-if="row.riskLevel === 'low'">低危</el-tag>
+              <el-tag type="info" v-else>待核验</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="预警描述" min-width="320">
+            <template #default="{ row }">
+              <div class="audit-msg">{{ row.description || '未知' }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" width="100">
+            <template #default="{ row }">
+              <el-tag type="danger" v-if="row.status === 'pending'">待审核</el-tag>
+              <el-tag type="success" v-else>已审核</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="360">
+            <template #default="{ row }">
+              <div class="audit-action-group">
+                <el-button size="small" type="success" @click="handleReview(row, 'pass')"
+                  >通过</el-button
+                >
+                <el-button size="small" type="warning" @click="handleReview(row, 'reject')"
+                  >驳回校正</el-button
+                >
+                <el-button size="small" type="danger" @click="handleReview(row, 'escalate')"
+                  >升级处理</el-button
+                >
+                <el-button size="small" type="primary" @click="contactStudent(row)"
+                  >联络说明</el-button
+                >
+                <el-button size="small" plain @click="$router.push('/teacher/support')"
+                  >进入跟进</el-button
+                >
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </el-card>
 
     <el-card shadow="never" class="mt-20 review-history-card business-card">
       <template #header>
-        <div class="history-heading"><strong>预警审核历史</strong><el-button text @click="fetchReviewHistory" :loading="loadingReviewHistory">刷新历史</el-button></div>
+        <div class="history-heading">
+          <strong>预警审核历史</strong
+          ><el-button text @click="fetchReviewHistory" :loading="loadingReviewHistory"
+            >刷新历史</el-button
+          >
+        </div>
       </template>
-      <el-alert v-if="reviewHistoryError" type="error" :closable="false" title="预警审核历史暂时无法加载；请重试后再判断历史原因。">
+      <el-alert
+        v-if="reviewHistoryError"
+        type="error"
+        :closable="false"
+        title="预警审核历史暂时无法加载；请重试后再判断历史原因。"
+      >
         <el-button text type="primary" @click="fetchReviewHistory">重新加载审核历史</el-button>
       </el-alert>
-      <div class="business-table-wrap"><el-table :data="reviewHistory" style="width: 100%" v-loading="loadingReviewHistory" :empty-text="reviewHistoryError ? '审核历史加载失败。' : '还没有已审核预警记录。'">
-        <el-table-column prop="created_at" label="预警时间" width="170" />
-        <el-table-column prop="student_name" label="学生" width="130" />
-        <el-table-column label="审核结论" width="130">
-          <template #default="{row}"><el-tag v-if="row.latestReview" :type="reviewType(row.latestReview.action)">{{ reviewActionLabel(row.latestReview.action) }}</el-tag><span v-else>历史原因不可追溯</span></template>
-        </el-table-column>
-        <el-table-column label="审核原因" min-width="220">
-          <template #default="{row}">{{ row.latestReview?.reason || '没有可追溯的审核原因' }}</template>
-        </el-table-column>
-        <el-table-column label="跟进" width="120">
-          <template #default><el-button type="primary" @click="$router.push('/teacher/support')">创建跟进</el-button></template>
-        </el-table-column>
-      </el-table>
+      <div class="business-table-wrap">
+        <el-table
+          :data="reviewHistory"
+          style="width: 100%"
+          v-loading="loadingReviewHistory"
+          :empty-text="reviewHistoryError ? '审核历史加载失败。' : '还没有已审核预警记录。'"
+        >
+          <el-table-column prop="created_at" label="预警时间" width="170" />
+          <el-table-column prop="student_name" label="学生" width="130" />
+          <el-table-column label="审核结论" width="130">
+            <template #default="{ row }"
+              ><el-tag v-if="row.latestReview" :type="reviewType(row.latestReview.action)">{{
+                reviewActionLabel(row.latestReview.action)
+              }}</el-tag
+              ><span v-else>历史原因不可追溯</span></template
+            >
+          </el-table-column>
+          <el-table-column label="审核原因" min-width="220">
+            <template #default="{ row }">{{
+              row.latestReview?.reason || '没有可追溯的审核原因'
+            }}</template>
+          </el-table-column>
+          <el-table-column label="跟进" width="120">
+            <template #default
+              ><el-button type="primary" @click="$router.push('/teacher/support')"
+                >创建跟进</el-button
+              ></template
+            >
+          </el-table-column>
+        </el-table>
       </div>
     </el-card>
 
     <section class="insights-section" aria-labelledby="teacher-insights-heading">
-      <div class="insights-heading"><h2 id="teacher-insights-heading">分配范围内的统计与趋势</h2><p>数据用于工作观察；楼宇字段缺失时保留真实空态。</p></div>
+      <div class="insights-heading">
+        <h2 id="teacher-insights-heading">分配范围内的统计与趋势</h2>
+        <p>数据用于工作观察；楼宇字段缺失时保留真实空态。</p>
+      </div>
       <el-row :gutter="16" class="mt-20" v-if="metrics">
-        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">已分配学生（人）</div><div class="stat-value text-blue">{{ metrics.realtime_stats.uv }}</div></el-card></el-col>
-        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">每会话用户消息数</div><div class="stat-value">{{ metrics.realtime_stats.avg_session_rounds }}</div></el-card></el-col>
-        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">待处理预警（条）</div><div class="stat-value text-red">{{ metrics.realtime_stats.crisis_alerts }}</div></el-card></el-col>
-        <el-col :xs="12" :md="6"><el-card shadow="never" class="stat-card business-card"><div class="stat-title">对话消息（条）</div><div class="stat-value text-green">{{ metrics.realtime_stats.pv }}</div></el-card></el-col>
+        <el-col :xs="12" :md="6"
+          ><el-card shadow="never" class="stat-card business-card"
+            ><div class="stat-title">已分配学生（人）</div>
+            <div class="stat-value text-blue">{{ metrics.realtime_stats.uv }}</div></el-card
+          ></el-col
+        >
+        <el-col :xs="12" :md="6"
+          ><el-card shadow="never" class="stat-card business-card"
+            ><div class="stat-title">每会话用户消息数</div>
+            <div class="stat-value">{{ metrics.realtime_stats.avg_session_rounds }}</div></el-card
+          ></el-col
+        >
+        <el-col :xs="12" :md="6"
+          ><el-card shadow="never" class="stat-card business-card"
+            ><div class="stat-title">待处理预警（条）</div>
+            <div class="stat-value text-red">
+              {{ metrics.realtime_stats.crisis_alerts }}
+            </div></el-card
+          ></el-col
+        >
+        <el-col :xs="12" :md="6"
+          ><el-card shadow="never" class="stat-card business-card"
+            ><div class="stat-title">对话消息（条）</div>
+            <div class="stat-value text-green">{{ metrics.realtime_stats.pv }}</div></el-card
+          ></el-col
+        >
       </el-row>
       <el-row :gutter="16" class="mt-20" v-if="metrics">
-        <el-col :xs="24" :lg="8"><el-card shadow="never" class="chart-card business-card"><template #header>学生状态计数</template><div ref="funnelChartRef" class="chart-box"></div></el-card></el-col>
-        <el-col :xs="24" :lg="8"><el-card shadow="never" class="chart-card business-card"><template #header>近7日情绪均值</template><LibraryEmpty v-if="!hasEmotionSamples" description="近7日暂无有效情绪样本" :image-size="76" class="chart-empty" /><div v-show="hasEmotionSamples" ref="lineChartRef" class="chart-box"></div></el-card></el-col>
-        <el-col :xs="24" :lg="8"><el-card shadow="never" class="chart-card business-card"><template #header>楼栋风险密度</template><LibraryEmpty v-if="!metrics.campus_heatmap?.length" description="尚无可用楼宇数据" :image-size="76" class="chart-empty" /><div v-show="metrics.campus_heatmap?.length" ref="heatmapChartRef" class="chart-box"></div></el-card></el-col>
+        <el-col :xs="24" :lg="8"
+          ><el-card shadow="never" class="chart-card business-card"
+            ><template #header>学生状态计数</template>
+            <div ref="funnelChartRef" class="chart-box"></div></el-card
+        ></el-col>
+        <el-col :xs="24" :lg="8"
+          ><el-card shadow="never" class="chart-card business-card"
+            ><template #header>近7日情绪均值</template
+            ><LibraryEmpty
+              v-if="!hasEmotionSamples"
+              description="近7日暂无有效情绪样本"
+              :image-size="76"
+              class="chart-empty" />
+            <div v-show="hasEmotionSamples" ref="lineChartRef" class="chart-box"></div></el-card
+        ></el-col>
+        <el-col :xs="24" :lg="8"
+          ><el-card shadow="never" class="chart-card business-card"
+            ><template #header>楼栋风险密度</template
+            ><LibraryEmpty
+              v-if="!metrics.campus_heatmap?.length"
+              description="尚无可用楼宇数据"
+              :image-size="76"
+              class="chart-empty" />
+            <div
+              v-show="metrics.campus_heatmap?.length"
+              ref="heatmapChartRef"
+              class="chart-box"
+            ></div></el-card
+        ></el-col>
       </el-row>
     </section>
 
-    <el-dialog v-model="reviewDialogVisible" title="记录预警审核" width="520px" :close-on-click-modal="false" @closed="resetReviewDialog">
-      <p class="review-dialog-note">选择“{{ reviewActionLabel(currentReview.action) }}”并说明判断依据。保存后会写入审核历史。</p>
-      <el-input v-model="reviewReason" type="textarea" :rows="4" maxlength="1500" show-word-limit placeholder="填写审核原因" :disabled="submittingReview" />
+    <el-dialog
+      v-model="reviewDialogVisible"
+      title="记录预警审核"
+      width="520px"
+      :close-on-click-modal="false"
+      @closed="resetReviewDialog"
+    >
+      <p class="review-dialog-note">
+        选择“{{ reviewActionLabel(currentReview.action) }}”并说明判断依据。保存后会写入审核历史。
+      </p>
+      <el-input
+        v-model="reviewReason"
+        type="textarea"
+        :rows="4"
+        maxlength="1500"
+        show-word-limit
+        placeholder="填写审核原因"
+        :disabled="submittingReview"
+      />
       <p v-if="reviewError" class="review-error" role="alert">{{ reviewError }}</p>
-      <template #footer><el-button @click="reviewDialogVisible = false">返回</el-button><el-button type="primary" :loading="submittingReview" :disabled="submittingReview" @click="submitReview">保存审核</el-button></template>
+      <template #footer
+        ><el-button @click="reviewDialogVisible = false">返回</el-button
+        ><el-button
+          type="primary"
+          :loading="submittingReview"
+          :disabled="submittingReview"
+          @click="submitReview"
+          >保存审核</el-button
+        ></template
+      >
     </el-dialog>
   </div>
 </template>
@@ -123,13 +276,36 @@
 import { setLibraryChartOption } from '../../design/chart-registry'
 import { businessColor, businessPalette } from '../../styles/business-theme.js'
 import { ref, onMounted, onUnmounted, computed, nextTick, shallowRef } from 'vue'
-import { ElMessage, ElMessageBox, ElNotification, ElButton, ElIcon, ElAlert, ElRow, ElCol, ElCard, ElBadge, ElTag, ElTable, ElTableColumn, ElDialog, ElInput, vLoading } from 'element-plus'
+import {
+  ElMessage,
+  ElMessageBox,
+  ElNotification,
+  ElButton,
+  ElIcon,
+  ElAlert,
+  ElRow,
+  ElCol,
+  ElCard,
+  ElBadge,
+  ElTag,
+  ElTable,
+  ElTableColumn,
+  ElDialog,
+  ElInput,
+  vLoading,
+} from 'element-plus'
 import * as echarts from '../../design/charts/analytics'
 import axios from 'axios'
 
 const metrics = ref(null)
 const metricsError = ref(false)
-const hasEmotionSamples = computed(() => ['joy', 'anxiety'].some(field => metrics.value?.emotion_trends_7d?.[field]?.some(value => typeof value === 'number' && Number.isFinite(value))))
+const hasEmotionSamples = computed(() =>
+  ['joy', 'anxiety'].some((field) =>
+    metrics.value?.emotion_trends_7d?.[field]?.some(
+      (value) => typeof value === 'number' && Number.isFinite(value),
+    ),
+  ),
+)
 const pendingList = ref([])
 const loadingPending = ref(false)
 const pendingLoadError = ref(false)
@@ -145,7 +321,7 @@ const ws = ref(null)
 let pendingPollTimer = null
 let reconnectTimer = null
 let unmounted = false
-const resizeCharts = () => Object.values(chartInstances.value).forEach(chart => chart?.resize())
+const resizeCharts = () => Object.values(chartInstances.value).forEach((chart) => chart?.resize())
 
 const pendingCount = computed(() => pendingList.value.length)
 
@@ -156,7 +332,7 @@ const exporting = ref(false)
 const chartInstances = shallowRef({
   funnel: null,
   line: null,
-  heatmap: null
+  heatmap: null,
 })
 
 const tableRowClassName = ({ row }) => {
@@ -170,7 +346,7 @@ const fetchPendingList = async () => {
   loadingPending.value = true
   try {
     const res = await axios.get('/api/teacher/crisis/pending', {
-      params: { page: 1, pageSize: 200 }
+      params: { page: 1, pageSize: 200 },
     })
     pendingList.value = res.data?.data?.items || []
     pendingLoadError.value = false
@@ -194,7 +370,10 @@ const handleReview = (row, action) => {
 const submitReview = async () => {
   if (submittingReview.value) return
   const reason = reviewReason.value.trim()
-  if (!reason) { reviewError.value = '请填写审核原因。'; return }
+  if (!reason) {
+    reviewError.value = '请填写审核原因。'
+    return
+  }
   const { row, action } = currentReview.value
   if (!row) return
   submittingReview.value = true
@@ -203,16 +382,22 @@ const submitReview = async () => {
     await axios.post('/api/teacher/crisis/review', {
       recordId: row.id,
       action,
-      reason
+      reason,
     })
     reviewDialogVisible.value = false
-    const [pendingUpdated, historyUpdated] = await Promise.all([fetchPendingList(), fetchReviewHistory()])
-    if (pendingUpdated && historyUpdated) ElMessage.success('审核已保存，预警列表和审核历史已刷新。')
+    const [pendingUpdated, historyUpdated] = await Promise.all([
+      fetchPendingList(),
+      fetchReviewHistory(),
+    ])
+    if (pendingUpdated && historyUpdated)
+      ElMessage.success('审核已保存，预警列表和审核历史已刷新。')
     else ElMessage.warning('审核已保存，但页面刷新未完成，请稍后刷新查看。')
   } catch (error) {
-    if (error?.response?.status === 409) reviewError.value = '这条预警已被处理，请刷新预警列表后查看。'
+    if (error?.response?.status === 409)
+      reviewError.value = '这条预警已被处理，请刷新预警列表后查看。'
     else if (error?.response?.status === 404) reviewError.value = '这条预警不在你的分配范围内。'
-    else if (error?.response?.status === 422) reviewError.value = '审核原因未通过检查，请修改后重试。'
+    else if (error?.response?.status === 422)
+      reviewError.value = '审核原因未通过检查，请修改后重试。'
     else if (error?.response?.status === 503) reviewError.value = '审核服务尚未启用，请联系管理员。'
     else reviewError.value = '审核提交失败，请稍后重试。'
   } finally {
@@ -226,32 +411,50 @@ const fetchReviewHistory = async () => {
   try {
     const response = await axios.get('/api/advanced-teacher/warnings')
     const rows = Array.isArray(response.data?.data) ? response.data.data : []
-    const processed = rows.filter(row => row.status !== 'pending').slice(0, 30)
-    const reviews = await Promise.all(processed.map(async row => {
-      try {
-        const result = await axios.get(`/api/teacher/crisis/${encodeURIComponent(row.id)}/reviews`)
-        const items = Array.isArray(result.data?.data) ? result.data.data : []
-        return { ...row, latestReview: items.at(-1) || null }
-      } catch { return { ...row, latestReview: null } }
-    }))
+    const processed = rows.filter((row) => row.status !== 'pending').slice(0, 30)
+    const reviews = await Promise.all(
+      processed.map(async (row) => {
+        try {
+          const result = await axios.get(
+            `/api/teacher/crisis/${encodeURIComponent(row.id)}/reviews`,
+          )
+          const items = Array.isArray(result.data?.data) ? result.data.data : []
+          return { ...row, latestReview: items.at(-1) || null }
+        } catch {
+          return { ...row, latestReview: null }
+        }
+      }),
+    )
     reviewHistory.value = reviews
     reviewHistoryError.value = false
     return true
   } catch {
     reviewHistoryError.value = true
     return false
-  } finally { loadingReviewHistory.value = false }
+  } finally {
+    loadingReviewHistory.value = false
+  }
 }
 
-const reviewActionLabel = (action) => ({ pass: '通过', reject: '驳回校正', escalate: '升级处理' }[action] || '审核')
-const reviewType = (action) => action === 'pass' ? 'success' : action === 'escalate' ? 'danger' : 'warning'
-const resetReviewDialog = () => { currentReview.value = { row: null, action: '' }; reviewReason.value = ''; reviewError.value = '' }
+const reviewActionLabel = (action) =>
+  ({ pass: '通过', reject: '驳回校正', escalate: '升级处理' })[action] || '审核'
+const reviewType = (action) =>
+  action === 'pass' ? 'success' : action === 'escalate' ? 'danger' : 'warning'
+const resetReviewDialog = () => {
+  currentReview.value = { row: null, action: '' }
+  reviewReason.value = ''
+  reviewError.value = ''
+}
 
 const contactStudent = () => {
-  ElMessageBox.alert('当前预警记录未提供可拨打的联络方式。请在学生管理中核实档案与校内联络流程。', '联络说明', {
-    confirmButtonText: '知道了',
-    type: 'info'
-  })
+  ElMessageBox.alert(
+    '当前预警记录未提供可拨打的联络方式。请在学生管理中核实档案与校内联络流程。',
+    '联络说明',
+    {
+      confirmButtonText: '知道了',
+      type: 'info',
+    },
+  )
 }
 
 const normalizeWsWarning = (payload) => {
@@ -264,12 +467,15 @@ const normalizeWsWarning = (payload) => {
     riskLevel: payload.riskLevel || payload.risk_level || 'unknown',
     description: payload.description || payload.trigger_msg || '',
     status: payload.status || 'pending',
-    highlight: true
+    highlight: true,
   }
 }
 
 const initWebSocket = () => {
-  const token = (localStorage.getItem('token') || localStorage.getItem('access_token') || '').trim().replace(/^bearer\s+/i, '').trim()
+  const token = (localStorage.getItem('token') || localStorage.getItem('access_token') || '')
+    .trim()
+    .replace(/^bearer\s+/i, '')
+    .trim()
   if (!token) return
   const wsUrl = new URL(axios.getUri({ url: '/api/ws' }), window.location.href)
   wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
@@ -289,7 +495,7 @@ const initWebSocket = () => {
     if (msg.type === 'new_warning') {
       try {
         const normalized = normalizeWsWarning(msg.data || {})
-        if (!pendingList.value.some(item => item.id === normalized.id)) {
+        if (!pendingList.value.some((item) => item.id === normalized.id)) {
           pendingList.value.push(normalized)
         }
         playAlertSound()
@@ -297,7 +503,7 @@ const initWebSocket = () => {
           title: '新的心理危机预警！',
           message: `学生 ${normalized.studentName}（${normalized.className}）在 ${normalized.createdAt} 触发危机预警：${normalized.description}`,
           type: 'error',
-          duration: 0
+          duration: 0,
         })
       } catch (error) {
         console.error('Teacher WS warning handling failed:', error)
@@ -345,7 +551,7 @@ onUnmounted(() => {
   unmounted = true
   clearTimeout(reconnectTimer)
   window.removeEventListener('resize', resizeCharts)
-  Object.values(chartInstances.value).forEach(chart => chart?.dispose())
+  Object.values(chartInstances.value).forEach((chart) => chart?.dispose())
   if (ws.value) {
     ws.value.close()
   }
@@ -370,7 +576,7 @@ const exportComplianceReport = async () => {
     const snapshots = [
       { key: 'funnel', title: '学生状态计数' },
       { key: 'line', title: '近7日情绪均值' },
-      { key: 'heatmap', title: '楼栋风险密度' }
+      { key: 'heatmap', title: '楼栋风险密度' },
     ]
       .map(({ key, title }) => {
         const chart = chartInstances.value[key]
@@ -380,8 +586,8 @@ const exportComplianceReport = async () => {
           image_data_url: chart.getDataURL({
             type: 'png',
             pixelRatio: 3,
-            backgroundColor: businessColor('surface')
-          })
+            backgroundColor: businessColor('surface'),
+          }),
         }
       })
       .filter(Boolean)
@@ -389,9 +595,9 @@ const exportComplianceReport = async () => {
     const response = await axios.post(
       '/api/advanced-teacher/export/compliance-report',
       {
-        chart_snapshots: snapshots
+        chart_snapshots: snapshots,
       },
-      { responseType: 'blob' }
+      { responseType: 'blob' },
     )
 
     const blob = new Blob([response.data])
@@ -417,7 +623,7 @@ const initCharts = () => {
   if (!metrics.value) return
 
   // 1. Actual category counts, without an assumed conversion denominator.
-  Object.values(chartInstances.value).forEach(chart => chart?.dispose())
+  Object.values(chartInstances.value).forEach((chart) => chart?.dispose())
   chartInstances.value = { funnel: null, line: null, heatmap: null }
   const funnelChart = echarts.init(funnelChartRef.value, 'xinyu-business')
   chartInstances.value.funnel = funnelChart
@@ -425,13 +631,26 @@ const initCharts = () => {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     grid: { left: 10, right: 28, top: 16, bottom: 16, containLabel: true },
     xAxis: { type: 'value', min: 0, minInterval: 1 },
-    yAxis: { type: 'category', inverse: true, data: metrics.value.funnel_data.map(item => item.name) },
-    series: [{
-      name: '学生数', type: 'bar', barMaxWidth: 24,
-      label: { show: true, position: 'right', fontSize: 12, color: businessColor('text-secondary') },
-      itemStyle: { color: businessColor('data-primary'), borderRadius: [0, 4, 4, 0] },
-      data: metrics.value.funnel_data.map(item => item.value),
-    }],
+    yAxis: {
+      type: 'category',
+      inverse: true,
+      data: metrics.value.funnel_data.map((item) => item.name),
+    },
+    series: [
+      {
+        name: '学生数',
+        type: 'bar',
+        barMaxWidth: 24,
+        label: {
+          show: true,
+          position: 'right',
+          fontSize: 12,
+          color: businessColor('text-secondary'),
+        },
+        itemStyle: { color: businessColor('data-primary'), borderRadius: [0, 4, 4, 0] },
+        data: metrics.value.funnel_data.map((item) => item.value),
+      },
+    ],
   })
 
   // 2. Null days remain gaps; no sample never becomes a zero emotion score.
@@ -441,19 +660,43 @@ const initCharts = () => {
     chartInstances.value.line = lineChart
     setLibraryChartOption(lineChart, {
       tooltip: {
-        trigger: 'axis', renderMode: 'richText',
-        formatter: params => {
+        trigger: 'axis',
+        renderMode: 'richText',
+        formatter: (params) => {
           const index = params[0]?.dataIndex ?? 0
-          return [trend.dates[index], `有效样本：${trend.sample_counts?.[index] ?? '未提供'}`, ...params.map(item => `${item.seriesName}：${item.value == null ? '暂无样本' : item.value}`)].join('\n')
+          return [
+            trend.dates[index],
+            `有效样本：${trend.sample_counts?.[index] ?? '未提供'}`,
+            ...params.map(
+              (item) => `${item.seriesName}：${item.value == null ? '暂无样本' : item.value}`,
+            ),
+          ].join('\n')
         },
       },
       legend: { data: ['愉悦强度', '焦虑强度'], top: 0, bottom: 'auto' },
       grid: { left: 12, right: 16, top: 44, bottom: 20, containLabel: true },
-      xAxis: { type: 'category', boundaryGap: false, data: trend.dates, axisLabel: { formatter: value => value.length >= 10 ? value.slice(5) : value } },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: trend.dates,
+        axisLabel: { formatter: (value) => (value.length >= 10 ? value.slice(5) : value) },
+      },
       yAxis: { type: 'value', min: 0, max: 1.0 },
       series: [
-        { name: '愉悦强度', type: 'line', connectNulls: false, data: trend.joy, itemStyle: { color: businessPalette.emotions.joy } },
-        { name: '焦虑强度', type: 'line', connectNulls: false, data: trend.anxiety, itemStyle: { color: businessPalette.emotions.anxiety } },
+        {
+          name: '愉悦强度',
+          type: 'line',
+          connectNulls: false,
+          data: trend.joy,
+          itemStyle: { color: businessPalette.emotions.joy },
+        },
+        {
+          name: '焦虑强度',
+          type: 'line',
+          connectNulls: false,
+          data: trend.anxiety,
+          itemStyle: { color: businessPalette.emotions.anxiety },
+        },
       ],
     })
   }
@@ -466,45 +709,132 @@ const initCharts = () => {
       tooltip: { trigger: 'axis' },
       grid: { left: 12, right: 24, top: 16, bottom: 16, containLabel: true },
       xAxis: { type: 'value', min: 0, max: 1, name: '密度' },
-      yAxis: { type: 'category', data: metrics.value.campus_heatmap.map(item => item.building) },
-      series: [{ type: 'bar', barMaxWidth: 24, data: metrics.value.campus_heatmap.map(item => item.risk_density), itemStyle: { color: businessColor('data-primary') } }],
+      yAxis: { type: 'category', data: metrics.value.campus_heatmap.map((item) => item.building) },
+      series: [
+        {
+          type: 'bar',
+          barMaxWidth: 24,
+          data: metrics.value.campus_heatmap.map((item) => item.risk_density),
+          itemStyle: { color: businessColor('data-primary') },
+        },
+      ],
     })
   }
 }
 </script>
 
 <style scoped>
-.dashboard-container { display: flex; flex-direction: column; gap: 16px; }
-.header-actions { display: flex; justify-content: flex-end; align-items: center; }
-.dashboard-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
-.dashboard-actions :deep(.el-button) { margin-left: 0; }
-.insights-section { margin-top: 12px; }
-.insights-heading h2 { margin: 0; color: var(--text-primary); font-size: 18px; }
-.insights-heading p { margin: 5px 0 0; color: var(--text-secondary); }
-.loading-note { padding: 14px 4px; color: var(--text-secondary); }
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.dashboard-actions :deep(.el-button) {
+  margin-left: 0;
+}
+.insights-section {
+  margin-top: 12px;
+}
+.insights-heading h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 18px;
+}
+.insights-heading p {
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+}
+.loading-note {
+  padding: 14px 4px;
+  color: var(--text-secondary);
+}
 
-.stat-card { text-align: center; border-radius: 12px; }
-.stat-title { font-size: 14px; color: var(--text-secondary); margin-bottom: 10px; }
-.stat-value { font-size: 28px; font-weight: bold; }
-.text-blue { color: var(--brand-600); }
-.text-red { color: var(--danger-text); }
-.text-green { color: var(--success-text); }
+.stat-card {
+  text-align: center;
+  border-radius: 12px;
+}
+.stat-title {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+}
+.text-blue {
+  color: var(--brand-600);
+}
+.text-red {
+  color: var(--danger-text);
+}
+.text-green {
+  color: var(--success-text);
+}
 
-.chart-card { border-radius: 12px; }
-.chart-box { height: 250px; width: 100%; }
-.chart-empty { min-height: 250px; }
-:deep(.el-table) { min-width: 980px; }
+.chart-card {
+  border-radius: 12px;
+}
+.chart-box {
+  height: 250px;
+  width: 100%;
+}
+.chart-empty {
+  min-height: 250px;
+}
+:deep(.el-table) {
+  min-width: 980px;
+}
 
-.audit-msg { font-size: 14px; color: var(--text-primary); background: var(--surface-subtle); padding: 10px; border-radius: 6px; }
-.audit-reply { font-size: 13px; color: var(--text-secondary); border-left: 3px solid var(--brand-600); padding-left: 10px; }
+.audit-msg {
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--surface-subtle);
+  padding: 10px;
+  border-radius: 6px;
+}
+.audit-reply {
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-left: 3px solid var(--brand-600);
+  padding-left: 10px;
+}
 
-.slider-row { display: flex; align-items: center; gap: 15px; margin-bottom: 8px; }
-.slider-row span { width: 80px; font-size: 12px; color: var(--text-secondary); }
-.slider-row :deep(.el-progress) { flex: 1; }
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 8px;
+}
+.slider-row span {
+  width: 80px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.slider-row :deep(.el-progress) {
+  flex: 1;
+}
 
-.mt-10 { margin-top: 10px; }
-.mt-20 { margin-top: 20px; }
-.mr-5 { margin-right: 5px; }
+.mt-10 {
+  margin-top: 10px;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mr-5 {
+  margin-right: 5px;
+}
 
 .audit-action-group {
   display: flex;
@@ -528,9 +858,19 @@ const initCharts = () => {
   background-color: var(--danger-100) !important;
 }
 @media (max-width: 640px) {
-  .dashboard-actions { display: grid; grid-template-columns: 1fr; width: 100%; }
-  .dashboard-actions :deep(.el-button) { width: 100%; }
-  .stat-value { font-size: 24px; }
-  .insights-heading h2 { font-size: 17px; }
+  .dashboard-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+  .dashboard-actions :deep(.el-button) {
+    width: 100%;
+  }
+  .stat-value {
+    font-size: 24px;
+  }
+  .insights-heading h2 {
+    font-size: 17px;
+  }
 }
 </style>

@@ -9,10 +9,10 @@
         aria-label="搜索学生姓名、辅导老师或干预记录"
       >
         <template #prefix>
-          <el-icon><LibraryIcon name="search"  /></el-icon>
+          <el-icon><LibraryIcon name="search" /></el-icon>
         </template>
       </el-input>
-      
+
       <el-date-picker
         v-model="dateRange"
         type="daterange"
@@ -27,22 +27,31 @@
     </div>
 
     <div class="table-card business-card">
-      <el-alert v-if="loadError" type="error" :closable="false" title="干预记录暂时无法加载。"><el-button text type="primary" @click="fetchRecords">重新加载</el-button></el-alert>
-      <div class="business-table-wrap"><el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe empty-text="当前筛选下没有干预记录。">
-        <el-table-column prop="student_name" label="学生姓名" width="150" />
-        <el-table-column prop="teacher_name" label="干预教师" width="150" />
-        <el-table-column prop="record_date" label="干预日期" width="150" />
-        <el-table-column prop="notes" label="干预记录内容" min-width="300">
-          <template #default="scope">
-            <div class="notes-content">{{ scope.row.notes }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="系统记录时间" width="180">
-          <template #default="scope">
-            {{ formatDate(scope.row.created_at) }}
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-alert v-if="loadError" type="error" :closable="false" title="干预记录暂时无法加载。"
+        ><el-button text type="primary" @click="fetchRecords">重新加载</el-button></el-alert
+      >
+      <div class="business-table-wrap">
+        <el-table
+          :data="paginatedData"
+          style="width: 100%"
+          v-loading="loading"
+          stripe
+          empty-text="当前筛选下没有干预记录。"
+        >
+          <el-table-column prop="student_name" label="学生姓名" width="150" />
+          <el-table-column prop="teacher_name" label="干预教师" width="150" />
+          <el-table-column prop="record_date" label="干预日期" width="150" />
+          <el-table-column prop="notes" label="干预记录内容" min-width="300">
+            <template #default="scope">
+              <div class="notes-content">{{ scope.row.notes }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="系统记录时间" width="180">
+            <template #default="scope">
+              {{ formatDate(scope.row.created_at) }}
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
 
       <div class="pagination-wrapper">
@@ -62,7 +71,17 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { ElInput, ElIcon, ElDatePicker, ElTable, ElTableColumn, ElPagination, ElAlert, ElButton, vLoading } from 'element-plus'
+import {
+  ElInput,
+  ElIcon,
+  ElDatePicker,
+  ElTable,
+  ElTableColumn,
+  ElPagination,
+  ElAlert,
+  ElButton,
+  vLoading,
+} from 'element-plus'
 
 const loading = ref(false)
 const loadError = ref(false)
@@ -78,7 +97,7 @@ const fetchRecords = async () => {
   try {
     const token = localStorage.getItem('token')
     const res = await axios.get('/api/teacher/interventions', {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     records.value = res.data
     loadError.value = false
@@ -90,18 +109,19 @@ const fetchRecords = async () => {
 }
 
 const filteredData = computed(() => {
-  return records.value.filter(r => {
-    const matchSearch = (r.student_name && r.student_name.includes(searchQuery.value)) || 
-                        (r.teacher_name && r.teacher_name.includes(searchQuery.value)) ||
-                        (r.notes && r.notes.includes(searchQuery.value))
-    
+  return records.value.filter((r) => {
+    const matchSearch =
+      (r.student_name && r.student_name.includes(searchQuery.value)) ||
+      (r.teacher_name && r.teacher_name.includes(searchQuery.value)) ||
+      (r.notes && r.notes.includes(searchQuery.value))
+
     let matchDate = true
     if (dateRange.value && dateRange.value.length === 2) {
       const start = dateRange.value[0]
       const end = dateRange.value[1]
       matchDate = r.record_date >= start && r.record_date <= end
     }
-    
+
     return matchSearch && matchDate
   })
 })
@@ -172,8 +192,16 @@ onUnmounted(() => {
   width: 100%;
 }
 @media (max-width: 760px) {
-  .filter-card { align-items: stretch; flex-direction: column; padding: 14px; }
-  .search-input { width: 100%; max-width: 100%; min-width: 0; }
+  .filter-card {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 14px;
+  }
+  .search-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
   .filter-card :deep(.filter-date) {
     --el-date-editor-daterange-width: 100%;
     width: 100%;
@@ -181,8 +209,16 @@ onUnmounted(() => {
     min-width: 0;
     flex: 1 1 0;
   }
-  .filter-card :deep(.filter-date .el-range-input) { width: 0; min-width: 0; flex: 1 1 0; }
-  .filter-card :deep(.filter-date .el-range-separator) { flex: 0 0 auto; white-space: nowrap; padding-inline: 4px; }
+  .filter-card :deep(.filter-date .el-range-input) {
+    width: 0;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  .filter-card :deep(.filter-date .el-range-separator) {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding-inline: 4px;
+  }
   :global(.teacher-intervention-date-popper) {
     box-sizing: border-box;
     width: calc(100vw - 24px);
@@ -190,8 +226,15 @@ onUnmounted(() => {
     max-height: min(70dvh, calc(100dvh - 24px));
     overflow-y: auto;
   }
-  :global(.teacher-intervention-date-popper .el-date-range-picker) { box-sizing: border-box; width: 100%; }
-  :global(.teacher-intervention-date-popper .el-picker-panel__body) { box-sizing: border-box; width: 100%; min-width: 0; }
+  :global(.teacher-intervention-date-popper .el-date-range-picker) {
+    box-sizing: border-box;
+    width: 100%;
+  }
+  :global(.teacher-intervention-date-popper .el-picker-panel__body) {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
   :global(.teacher-intervention-date-popper .el-date-range-picker__content) {
     box-sizing: border-box;
     display: block;
@@ -202,7 +245,10 @@ onUnmounted(() => {
     border-right: 0;
     border-bottom: 1px solid var(--el-datepicker-inner-border-color);
   }
-  .pagination-wrapper { justify-content: flex-start; overflow: visible; }
+  .pagination-wrapper {
+    justify-content: flex-start;
+    overflow: visible;
+  }
   .pagination-wrapper :deep(.el-pagination) {
     display: flex;
     flex-wrap: wrap;
@@ -210,11 +256,28 @@ onUnmounted(() => {
     gap: 8px 10px;
     max-width: 100%;
   }
-  .pagination-wrapper :deep(.el-pagination__total) { order: 1; margin-right: 0; }
-  .pagination-wrapper :deep(.el-pagination__sizes) { order: 2; margin: 0; }
-  .pagination-wrapper :deep(.el-pagination__sizes .el-select) { width: 104px; }
-  .pagination-wrapper :deep(.btn-prev) { order: 3; margin: 0; }
-  .pagination-wrapper :deep(.el-pager) { order: 4; margin: 0; }
-  .pagination-wrapper :deep(.btn-next) { order: 5; margin: 0; }
+  .pagination-wrapper :deep(.el-pagination__total) {
+    order: 1;
+    margin-right: 0;
+  }
+  .pagination-wrapper :deep(.el-pagination__sizes) {
+    order: 2;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.el-pagination__sizes .el-select) {
+    width: 104px;
+  }
+  .pagination-wrapper :deep(.btn-prev) {
+    order: 3;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.el-pager) {
+    order: 4;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.btn-next) {
+    order: 5;
+    margin: 0;
+  }
 }
 </style>

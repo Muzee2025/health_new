@@ -1,7 +1,17 @@
 <template>
   <div class="management-container business-page">
-    <el-alert title="仅显示明确分配给你的学生；辅导员筛选仅用于当前列表。" type="info" :closable="false" />
-    <el-alert v-if="loadError" title="学生列表暂时无法加载，现有列表可能不完整。" type="error" :closable="false"><el-button text type="primary" @click="fetchStudents">重新加载</el-button></el-alert>
+    <el-alert
+      title="仅显示明确分配给你的学生；辅导员筛选仅用于当前列表。"
+      type="info"
+      :closable="false"
+    />
+    <el-alert
+      v-if="loadError"
+      title="学生列表暂时无法加载，现有列表可能不完整。"
+      type="error"
+      :closable="false"
+      ><el-button text type="primary" @click="fetchStudents">重新加载</el-button></el-alert
+    >
     <div class="filter-card business-actions">
       <el-input
         v-model="searchQuery"
@@ -11,16 +21,28 @@
         clearable
       >
         <template #prefix>
-          <el-icon><LibraryIcon name="search"  /></el-icon>
+          <el-icon><LibraryIcon name="search" /></el-icon>
         </template>
       </el-input>
-      
-      <el-select v-model="filterRisk" placeholder="预警与评估状态" aria-label="按预警与评估状态筛选" clearable class="filter-select">
+
+      <el-select
+        v-model="filterRisk"
+        placeholder="预警与评估状态"
+        aria-label="按预警与评估状态筛选"
+        clearable
+        class="filter-select"
+      >
         <el-option label="存在待处理预警" value="pending" />
         <el-option label="待人工评估" value="unassessed" />
       </el-select>
 
-      <el-select v-model="filterClass" placeholder="辅导员" aria-label="按辅导员筛选当前列表" clearable class="filter-select">
+      <el-select
+        v-model="filterClass"
+        placeholder="辅导员"
+        aria-label="按辅导员筛选当前列表"
+        clearable
+        class="filter-select"
+      >
         <el-option v-for="adv in uniqueAdvisors" :key="adv" :label="adv" :value="adv" />
       </el-select>
 
@@ -31,44 +53,63 @@
     </div>
 
     <div class="table-card business-card">
-      <div class="business-table-wrap"><el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe empty-text="当前筛选下没有学生记录。">
-        <el-table-column prop="student_id" label="学号" width="120" />
-        <el-table-column label="姓名" width="150">
-          <template #default="scope">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <div class="text-avatar" :style="{ backgroundColor: getAvatarColor(scope.row.name) }">
-                {{ getSurname(scope.row.name) }}
+      <div class="business-table-wrap">
+        <el-table
+          :data="paginatedData"
+          style="width: 100%"
+          v-loading="loading"
+          stripe
+          empty-text="当前筛选下没有学生记录。"
+        >
+          <el-table-column prop="student_id" label="学号" width="120" />
+          <el-table-column label="姓名" width="150">
+            <template #default="scope">
+              <div style="display: flex; align-items: center; gap: 10px">
+                <div
+                  class="text-avatar"
+                  :style="{ backgroundColor: getAvatarColor(scope.row.name) }"
+                >
+                  {{ getSurname(scope.row.name) }}
+                </div>
+                <span>{{ scope.row.name }}</span>
+                <span
+                  v-if="scope.row.has_pending_crisis"
+                  class="crisis-mark"
+                  :title="`存在 ${scope.row.pending_crisis_count} 条未处理危机预警`"
+                >
+                  <LibraryIcon name="alert" />
+                </span>
               </div>
-              <span>{{ scope.row.name }}</span>
-              <span
-                v-if="scope.row.has_pending_crisis"
-                class="crisis-mark"
-                :title="`存在 ${scope.row.pending_crisis_count} 条未处理危机预警`"
+            </template>
+          </el-table-column>
+          <el-table-column prop="class_name" label="班级" width="120" />
+          <el-table-column prop="advisor" label="辅导员" width="120" />
+          <el-table-column label="预警与评估状态" min-width="175">
+            <template #default="scope">
+              <el-tag v-if="scope.row.has_pending_crisis" type="warning"
+                >有待处理预警（{{ scope.row.pending_crisis_count || 1 }}）</el-tag
               >
-                <LibraryIcon name="alert" />
-              </span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="class_name" label="班级" width="120" />
-        <el-table-column prop="advisor" label="辅导员" width="120" />
-        <el-table-column label="预警与评估状态" min-width="175">
-          <template #default="scope">
-            <el-tag v-if="scope.row.has_pending_crisis" type="warning">有待处理预警（{{ scope.row.pending_crisis_count || 1 }}）</el-tag>
-            <el-tag v-else-if="scope.row.risk_level == null" type="info">待人工评估</el-tag>
-            <el-tag v-else type="info">有服务器状态记录</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="最近记录时间" width="200">
-          <template #default="scope">{{ formatDate(scope.row.latest_test_time) }}</template>
-        </el-table-column>
-        <el-table-column label="操作" align="right">
-          <template #default="scope">
-            <el-button type="warning" size="small" plain @click="openIntervention(scope.row)">添加干预</el-button>
-            <el-button type="primary" size="small" @click="$router.push(`/teacher/student/${scope.row.id}`)">查看详情</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+              <el-tag v-else-if="scope.row.risk_level == null" type="info">待人工评估</el-tag>
+              <el-tag v-else type="info">有服务器状态记录</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="最近记录时间" width="200">
+            <template #default="scope">{{ formatDate(scope.row.latest_test_time) }}</template>
+          </el-table-column>
+          <el-table-column label="操作" align="right">
+            <template #default="scope">
+              <el-button type="warning" size="small" plain @click="openIntervention(scope.row)"
+                >添加干预</el-button
+              >
+              <el-button
+                type="primary"
+                size="small"
+                @click="$router.push(`/teacher/student/${scope.row.id}`)"
+                >查看详情</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
 
       <div class="pagination-wrapper">
@@ -90,7 +131,12 @@
       :close-on-click-modal="false"
       @closed="resetStudentForm"
     >
-      <el-form ref="addStudentFormRef" :model="addStudentForm" :rules="addStudentRules" label-width="110px">
+      <el-form
+        ref="addStudentFormRef"
+        :model="addStudentForm"
+        :rules="addStudentRules"
+        label-width="110px"
+      >
         <el-form-item label="姓名" prop="name">
           <el-input v-model="addStudentForm.name" placeholder="请输入姓名" />
         </el-form-item>
@@ -98,7 +144,14 @@
           <el-input v-model="addStudentForm.student_id" placeholder="请输入学号/工号" />
         </el-form-item>
         <el-form-item label="初始密码" prop="initial_password">
-          <el-input v-model="addStudentForm.initial_password" type="password" show-password autocomplete="new-password" placeholder="至少8个字符，包含字母和数字" aria-label="初始密码" />
+          <el-input
+            v-model="addStudentForm.initial_password"
+            type="password"
+            show-password
+            autocomplete="new-password"
+            placeholder="至少8个字符，包含字母和数字"
+            aria-label="初始密码"
+          />
         </el-form-item>
         <el-form-item label="班级/年级" prop="class_name">
           <el-input v-model="addStudentForm.class_name" placeholder="请输入班级或年级" />
@@ -114,7 +167,12 @@
           <el-input v-model="addStudentForm.parent_phone" placeholder="选填：家长手机号" />
         </el-form-item>
         <el-form-item label="备注" prop="remarks">
-          <el-input v-model="addStudentForm.remarks" type="textarea" :rows="3" placeholder="选填：备注信息" />
+          <el-input
+            v-model="addStudentForm.remarks"
+            type="textarea"
+            :rows="3"
+            placeholder="选填：备注信息"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -132,7 +190,25 @@ import { passwordPolicyError } from '../../utils/passwordPolicy'
 import { businessColor } from '../../styles/business-theme.js'
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElInput, ElIcon, ElSelect, ElOption, ElButton, ElTable, ElTableColumn, ElTag, ElPagination, ElDialog, ElForm, ElFormItem, ElRadioGroup, ElRadio, ElAlert, vLoading } from 'element-plus'
+import {
+  ElMessage,
+  ElInput,
+  ElIcon,
+  ElSelect,
+  ElOption,
+  ElButton,
+  ElTable,
+  ElTableColumn,
+  ElTag,
+  ElPagination,
+  ElDialog,
+  ElForm,
+  ElFormItem,
+  ElRadioGroup,
+  ElRadio,
+  ElAlert,
+  vLoading,
+} from 'element-plus'
 
 const loading = ref(false)
 const loadError = ref(false)
@@ -153,12 +229,20 @@ const addStudentForm = ref({
   class_name: '',
   gender: '',
   parent_phone: '',
-  remarks: ''
+  remarks: '',
 })
 const addStudentRules = {
   name: [{ required: true, message: '姓名不能为空', trigger: 'blur' }],
   student_id: [{ required: true, message: '学号不能为空', trigger: 'blur' }],
-  initial_password: [{ validator: (_rule, value, callback) => { const error = passwordPolicyError(value); callback(error ? new Error(error) : undefined) }, trigger: 'blur' }]
+  initial_password: [
+    {
+      validator: (_rule, value, callback) => {
+        const error = passwordPolicyError(value)
+        callback(error ? new Error(error) : undefined)
+      },
+      trigger: 'blur',
+    },
+  ],
 }
 let pollTimer = null
 
@@ -167,7 +251,7 @@ const fetchStudents = async () => {
   try {
     const token = localStorage.getItem('token')
     const res = await axios.get('/api/teacher/students', {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     students.value = res.data
     loadError.value = false
@@ -180,17 +264,24 @@ const fetchStudents = async () => {
 }
 
 const uniqueAdvisors = computed(() => {
-  const advisors = students.value.map(s => s.advisor).filter(Boolean)
+  const advisors = students.value.map((s) => s.advisor).filter(Boolean)
   return [...new Set(advisors)]
 })
 
 const filteredData = computed(() => {
-  return students.value.filter(s => {
-    const matchSearch = (s.name && s.name.includes(searchQuery.value)) || 
-                        (s.student_id && s.student_id.includes(searchQuery.value))
-    const matchRisk = !filterRisk.value || (filterRisk.value === 'pending' ? Boolean(s.has_pending_crisis) : filterRisk.value === 'unassessed' ? s.risk_level == null : false)
+  return students.value.filter((s) => {
+    const matchSearch =
+      (s.name && s.name.includes(searchQuery.value)) ||
+      (s.student_id && s.student_id.includes(searchQuery.value))
+    const matchRisk =
+      !filterRisk.value ||
+      (filterRisk.value === 'pending'
+        ? Boolean(s.has_pending_crisis)
+        : filterRisk.value === 'unassessed'
+          ? s.risk_level == null
+          : false)
     const matchClass = filterClass.value ? s.advisor === filterClass.value : true
-    
+
     return matchSearch && matchRisk && matchClass
   })
 })
@@ -207,13 +298,20 @@ const formatDate = (dateString) => {
 }
 
 const getAvatarColor = (name) => {
-  const colors = [businessColor('brand-100'), businessColor('accent-sage-soft'), businessColor('warning-100'), businessColor('warning-100'), businessColor('brand-100'), businessColor('accent-sage-soft')];
-  const charCode = name ? name.charCodeAt(0) : 0;
-  return colors[charCode % colors.length];
+  const colors = [
+    businessColor('brand-100'),
+    businessColor('accent-sage-soft'),
+    businessColor('warning-100'),
+    businessColor('warning-100'),
+    businessColor('brand-100'),
+    businessColor('accent-sage-soft'),
+  ]
+  const charCode = name ? name.charCodeAt(0) : 0
+  return colors[charCode % colors.length]
 }
 
 const getSurname = (name) => {
-  return name ? name.charAt(0) : '未';
+  return name ? name.charAt(0) : '未'
 }
 
 const openIntervention = (row) => {
@@ -221,9 +319,11 @@ const openIntervention = (row) => {
     ElMessage.warning('没有可用的学生记录')
     return
   }
-  window.dispatchEvent(new CustomEvent('open-intervention-dialog', {
-    detail: { student_id: row.id }
-  }))
+  window.dispatchEvent(
+    new CustomEvent('open-intervention-dialog', {
+      detail: { student_id: row.id },
+    }),
+  )
 }
 
 const openAddStudentDialog = () => {
@@ -240,23 +340,26 @@ const resetStudentForm = () => {
   addStudentForm.value = {
     name: '',
     student_id: '',
-  initial_password: '',
+    initial_password: '',
     class_name: '',
     gender: '',
     parent_phone: '',
-    remarks: ''
+    remarks: '',
   }
 }
 
 const submitAddStudent = async () => {
   if (submitting.value) return
   const valid = await addStudentFormRef.value?.validate().catch(() => false)
-  if (!valid) { addStudentForm.value.initial_password = ''; return }
+  if (!valid) {
+    addStudentForm.value.initial_password = ''
+    return
+  }
   submitting.value = true
   try {
     const token = localStorage.getItem('token')
     await axios.post('/api/teacher/students', addStudentForm.value, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     ElMessage.success('学生添加成功')
     addDialogVisible.value = false
@@ -306,7 +409,9 @@ onUnmounted(() => {
   box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
   align-items: center;
 }
-.filter-card :deep(.el-button) { margin-left: 0; }
+.filter-card :deep(.el-button) {
+  margin-left: 0;
+}
 
 .search-input {
   width: 300px;
@@ -354,10 +459,22 @@ onUnmounted(() => {
   line-height: 1;
 }
 @media (max-width: 760px) {
-  .filter-card { align-items: stretch; flex-wrap: wrap; padding: 14px; }
-  .search-input, .filter-select { width: 100%; }
-  .filter-card :deep(.el-button) { flex: 1 1 100%; }
-  .pagination-wrapper { justify-content: flex-start; overflow: visible; }
+  .filter-card {
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 14px;
+  }
+  .search-input,
+  .filter-select {
+    width: 100%;
+  }
+  .filter-card :deep(.el-button) {
+    flex: 1 1 100%;
+  }
+  .pagination-wrapper {
+    justify-content: flex-start;
+    overflow: visible;
+  }
   .pagination-wrapper :deep(.el-pagination) {
     display: flex;
     flex-wrap: wrap;
@@ -365,11 +482,28 @@ onUnmounted(() => {
     gap: 8px 10px;
     max-width: 100%;
   }
-  .pagination-wrapper :deep(.el-pagination__total) { order: 1; margin-right: 0; }
-  .pagination-wrapper :deep(.el-pagination__sizes) { order: 2; margin: 0; }
-  .pagination-wrapper :deep(.el-pagination__sizes .el-select) { width: 104px; }
-  .pagination-wrapper :deep(.btn-prev) { order: 3; margin: 0; }
-  .pagination-wrapper :deep(.el-pager) { order: 4; margin: 0; }
-  .pagination-wrapper :deep(.btn-next) { order: 5; margin: 0; }
+  .pagination-wrapper :deep(.el-pagination__total) {
+    order: 1;
+    margin-right: 0;
+  }
+  .pagination-wrapper :deep(.el-pagination__sizes) {
+    order: 2;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.el-pagination__sizes .el-select) {
+    width: 104px;
+  }
+  .pagination-wrapper :deep(.btn-prev) {
+    order: 3;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.el-pager) {
+    order: 4;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.btn-next) {
+    order: 5;
+    margin: 0;
+  }
 }
 </style>

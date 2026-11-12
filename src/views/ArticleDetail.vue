@@ -1,35 +1,53 @@
 <template>
   <main class="article-detail-container" :aria-busy="loading">
-    <div v-if="loading" class="article-state" role="status" aria-label="正在加载文章"><el-skeleton :rows="7" animated /></div>
+    <div v-if="loading" class="article-state" role="status" aria-label="正在加载文章">
+      <el-skeleton :rows="7" animated />
+    </div>
     <section v-else-if="loadError" class="article-state" aria-labelledby="article-error-title">
       <LibraryEmpty role="networkError" :description="loadError" />
       <h1 id="article-error-title">文章暂时无法打开</h1>
-      <div class="article-recovery"><el-button type="primary" @click="fetchArticle">重新加载</el-button><el-button @click="goBack">返回列表</el-button></div>
+      <div class="article-recovery">
+        <el-button type="primary" @click="fetchArticle">重新加载</el-button
+        ><el-button @click="goBack">返回列表</el-button>
+      </div>
     </section>
     <template v-else-if="article">
-    <div class="header-card">
-      <el-page-header @back="goBack" @keydown.enter.prevent="goBack" @keydown.space.prevent="goBack" title="返回" class="page-header">
-        <template #content>
-          <span class="header-title">文章详情</span>
-        </template>
-      </el-page-header>
-    </div>
-    
-    <div class="content-card">
-      <h1 class="article-title">{{ article.title }}</h1>
-      <div class="article-meta">
-        <span>分类：<el-tag size="small">{{ article.category || '心理科普' }}</el-tag></span>
-        <span v-if="article.source">来源：{{ article.source }}</span>
-        <span>阅读量：{{ article.views }}</span>
-        <span>发布时间：{{ formatDate(article.created_at) }}</span>
+      <div class="header-card">
+        <el-page-header
+          @back="goBack"
+          @keydown.enter.prevent="goBack"
+          @keydown.space.prevent="goBack"
+          title="返回"
+          class="page-header"
+        >
+          <template #content>
+            <span class="header-title">文章详情</span>
+          </template>
+        </el-page-header>
       </div>
-      
-      <div v-if="article.cover_url" class="article-cover-wrapper">
-        <img :src="article.cover_url" class="article-cover" :alt="article.title" />
+
+      <div class="content-card">
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-meta">
+          <span
+            >分类：<el-tag size="small">{{ article.category || '心理科普' }}</el-tag></span
+          >
+          <span v-if="article.source">来源：{{ article.source }}</span>
+          <span>阅读量：{{ article.views }}</span>
+          <span>发布时间：{{ formatDate(article.created_at) }}</span>
+        </div>
+
+        <div v-if="article.cover_url" class="article-cover-wrapper">
+          <img :src="article.cover_url" class="article-cover" :alt="article.title" />
+        </div>
+
+        <article
+          class="article-content"
+          aria-label="文章正文"
+          v-html="safeArticleContent"
+          @click="handleArticleContentClick"
+        ></article>
       </div>
-      
-      <article class="article-content" aria-label="文章正文" v-html="safeArticleContent" @click="handleArticleContentClick"></article>
-    </div>
     </template>
   </main>
 </template>
@@ -43,7 +61,11 @@ import axios from 'axios'
 import { ElMessage, ElPageHeader, ElTag, ElButton, ElSkeleton } from 'element-plus'
 
 const handleArticleContentClick = async (event) => {
-  try { await downloadArticleDocument(event) } catch { ElMessage.error('附件下载失败，请重新登录或稍后重试') }
+  try {
+    await downloadArticleDocument(event)
+  } catch {
+    ElMessage.error('附件下载失败，请重新登录或稍后重试')
+  }
 }
 const route = useRoute()
 const router = useRouter()
@@ -52,7 +74,9 @@ const loading = ref(true)
 const loadError = ref('')
 let articleRequest
 let disposed = false
-const safeArticleContent = computed(() => DOMPurify.sanitize(article.value?.content || '', { USE_PROFILES: { html: true } }))
+const safeArticleContent = computed(() =>
+  DOMPurify.sanitize(article.value?.content || '', { USE_PROFILES: { html: true } }),
+)
 const VIEW_DEDUP_WINDOW_MS = 5 * 60 * 1000
 const VIEW_RETRY_QUEUE_KEY = 'article_view_retry_queue_v1'
 let retryTimer = null
@@ -60,7 +84,10 @@ let retryTimer = null
 const goBack = () => {
   const back = window.history.state?.back
   if (typeof back === 'string' && back.startsWith('/') && !back.startsWith('//')) router.back()
-  else router.push(localStorage.getItem('role') === 'teacher' ? '/teacher/content' : '/student/articles')
+  else
+    router.push(
+      localStorage.getItem('role') === 'teacher' ? '/teacher/content' : '/student/articles',
+    )
 }
 
 const getViewerId = () => {
@@ -109,7 +136,13 @@ const writeRetryQueue = (queue) => {
 
 const enqueueRetryTask = (task) => {
   const queue = readRetryQueue()
-  const deduped = queue.filter((x) => !(Number(x.articleId) === Number(task.articleId) && String(x.viewerId) === String(task.viewerId)))
+  const deduped = queue.filter(
+    (x) =>
+      !(
+        Number(x.articleId) === Number(task.articleId) &&
+        String(x.viewerId) === String(task.viewerId)
+      ),
+  )
   deduped.push(task)
   writeRetryQueue(deduped)
 }
@@ -123,9 +156,18 @@ const flushRetryQueue = async () => {
   if (!queue.length) return
   const [task, ...rest] = queue
   try {
-    const res = await axios.post(`/api/student/articles/${task.articleId}/view`, { viewer_id: task.viewerId }, { timeout: 5000 })
+    const res = await axios.post(
+      `/api/student/articles/${task.articleId}/view`,
+      { viewer_id: task.viewerId },
+      { timeout: 5000 },
+    )
     const nextViews = Number(res?.data?.views || 0)
-    if (!disposed && article.value && Number(article.value.id) === Number(task.articleId) && Number.isFinite(nextViews)) {
+    if (
+      !disposed &&
+      article.value &&
+      Number(article.value.id) === Number(task.articleId) &&
+      Number.isFinite(nextViews)
+    ) {
       article.value.views = Math.max(0, nextViews)
     }
     dispatchArticleViewUpdated(task.articleId, Math.max(0, nextViews))
@@ -146,9 +188,17 @@ const trackArticleView = async (articleId) => {
   const viewerId = getViewerId()
   if (shouldSkipTrack(articleId, viewerId)) return
   try {
-    const res = await axios.post(`/api/student/articles/${articleId}/view`, { viewer_id: viewerId }, { timeout: 5000 })
+    const res = await axios.post(
+      `/api/student/articles/${articleId}/view`,
+      { viewer_id: viewerId },
+      { timeout: 5000 },
+    )
     const nextViews = Number(res?.data?.views || 0)
-    if (!disposed && Number.isFinite(nextViews) && Number(article.value?.id) === Number(articleId)) {
+    if (
+      !disposed &&
+      Number.isFinite(nextViews) &&
+      Number(article.value?.id) === Number(articleId)
+    ) {
       const syncedViews = Math.max(0, nextViews)
       article.value.views = syncedViews
       dispatchArticleViewUpdated(articleId, syncedViews)
@@ -170,7 +220,10 @@ const fetchArticle = async () => {
   article.value = null
   try {
     if (!Number.isSafeInteger(id) || id <= 0) throw new Error('invalid-article')
-    const res = await axios.get(`/api/student/articles/${id}`, { signal: request.signal, timeout: 15000 })
+    const res = await axios.get(`/api/student/articles/${id}`, {
+      signal: request.signal,
+      timeout: 15000,
+    })
     if (disposed || request.signal.aborted) return
     if (!res.data || typeof res.data.title !== 'string') throw new Error('invalid-article')
     article.value = res.data
@@ -179,7 +232,10 @@ const fetchArticle = async () => {
   } catch (error) {
     if (disposed || request.signal.aborted) return
     const status = error.status || error.response?.status
-    loadError.value = status === 403 || status === 404 ? '文章不存在或当前账号无权查看。' : '文章加载失败，请检查连接后重试。'
+    loadError.value =
+      status === 403 || status === 404
+        ? '文章不存在或当前账号无权查看。'
+        : '文章加载失败，请检查连接后重试。'
   } finally {
     if (!disposed && !request.signal.aborted) loading.value = false
   }
@@ -201,7 +257,12 @@ onBeforeUnmount(() => {
   articleRequest?.abort()
   if (retryTimer) clearTimeout(retryTimer)
 })
-watch(() => route.params.id, () => { fetchArticle() })
+watch(
+  () => route.params.id,
+  () => {
+    fetchArticle()
+  },
+)
 </script>
 
 <style scoped>
@@ -280,16 +341,52 @@ watch(() => route.params.id, () => { fetchArticle() })
   overflow-wrap: anywhere;
   white-space: pre-line;
 }
-.article-state { padding: var(--space-7); background: var(--surface); border-radius: var(--radius-lg); }
-.article-state h1 { font-size: var(--text-h3); text-align: center; }
-.article-recovery { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-5); }
-:deep(.article-content table) { display: block; max-width: 100%; overflow-x: auto; }
-:deep(.article-content pre) { overflow-x: auto; max-width: 100%; padding: var(--space-4); background: var(--surface-subtle); }
+.article-state {
+  padding: var(--space-7);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+}
+.article-state h1 {
+  font-size: var(--text-h3);
+  text-align: center;
+}
+.article-recovery {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+:deep(.article-content table) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+:deep(.article-content pre) {
+  overflow-x: auto;
+  max-width: 100%;
+  padding: var(--space-4);
+  background: var(--surface-subtle);
+}
 @media (max-width: 600px) {
-  .article-detail-container { padding: var(--space-3); gap: var(--space-3); }
-  .content-card, .header-card, .article-state { padding: var(--space-4); box-shadow: none; }
-  .article-title { font-size: var(--text-h3); line-height: var(--line-height-heading); }
-  .article-meta { gap: var(--space-2) var(--space-4); margin-bottom: var(--space-5); }
+  .article-detail-container {
+    padding: var(--space-3);
+    gap: var(--space-3);
+  }
+  .content-card,
+  .header-card,
+  .article-state {
+    padding: var(--space-4);
+    box-shadow: none;
+  }
+  .article-title {
+    font-size: var(--text-h3);
+    line-height: var(--line-height-heading);
+  }
+  .article-meta {
+    gap: var(--space-2) var(--space-4);
+    margin-bottom: var(--space-5);
+  }
 }
 
 /* Add some styles for rich text content */

@@ -1,7 +1,13 @@
 <template>
   <div class="management-container business-page">
     <div class="filter-card business-actions">
-      <el-select v-model="filterStatus" placeholder="全部状态" aria-label="按预约状态筛选" clearable class="filter-select">
+      <el-select
+        v-model="filterStatus"
+        placeholder="全部状态"
+        aria-label="按预约状态筛选"
+        clearable
+        class="filter-select"
+      >
         <el-option label="待处理" value="pending" />
         <el-option label="已确认" value="confirmed" />
         <el-option label="已完成" value="completed" />
@@ -10,47 +16,70 @@
     </div>
 
     <div class="table-card business-card">
-      <el-alert v-if="loadError" type="error" :closable="false" title="预约列表暂时无法加载。"><el-button text type="primary" @click="fetchAppointments">重新加载</el-button></el-alert>
-      <div class="business-table-wrap"><el-table :data="paginatedData" style="width: 100%" v-loading="loading" stripe empty-text="当前筛选下没有预约记录。">
-        <el-table-column label="头像" width="92" align="center">
-          <template #default="scope">
-            <img
-              class="teacher-avatar-img"
-              :src="resolveTeacherAvatar(scope.row)"
-              :alt="PSYCH_TEACHER_AVATAR_ALT"
-              loading="lazy"
-              decoding="async"
-              @error="handleTeacherAvatarError"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column prop="student_name" label="学生姓名" width="150" />
-        <el-table-column prop="teacher_name" label="预约老师" width="150" />
-        <el-table-column prop="time_slot" label="预约时间段" />
-        <el-table-column label="状态" width="120">
-          <template #default="scope">
-            <el-tag :type="getStatusType(scope.row.status)">
-              {{ getStatusText(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="200" align="right">
-          <template #default="scope">
-            <el-dropdown trigger="click" @command="handleStatusChange(scope.row.id, $event)">
-              <el-button type="primary" size="small" :disabled="scope.row.status === 'completed' || scope.row.status === 'cancelled'">
-                修改状态<el-icon class="el-icon--right"><LibraryIcon name="arrow-down" /></el-icon>
-              </el-button>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="confirmed" :disabled="scope.row.status !== 'pending'">确认预约</el-dropdown-item>
-                  <el-dropdown-item command="completed" :disabled="!isConfirmed(scope.row.status)">完成</el-dropdown-item>
-                  <el-dropdown-item command="cancelled" :disabled="scope.row.status === 'completed'">取消</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-alert v-if="loadError" type="error" :closable="false" title="预约列表暂时无法加载。"
+        ><el-button text type="primary" @click="fetchAppointments">重新加载</el-button></el-alert
+      >
+      <div class="business-table-wrap">
+        <el-table
+          :data="paginatedData"
+          style="width: 100%"
+          v-loading="loading"
+          stripe
+          empty-text="当前筛选下没有预约记录。"
+        >
+          <el-table-column label="头像" width="92" align="center">
+            <template #default="scope">
+              <img
+                class="teacher-avatar-img"
+                :src="resolveTeacherAvatar(scope.row)"
+                :alt="PSYCH_TEACHER_AVATAR_ALT"
+                loading="lazy"
+                decoding="async"
+                @error="handleTeacherAvatarError"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="student_name" label="学生姓名" width="150" />
+          <el-table-column prop="teacher_name" label="预约老师" width="150" />
+          <el-table-column prop="time_slot" label="预约时间段" />
+          <el-table-column label="状态" width="120">
+            <template #default="scope">
+              <el-tag :type="getStatusType(scope.row.status)">
+                {{ getStatusText(scope.row.status) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="200" align="right">
+            <template #default="scope">
+              <el-dropdown trigger="click" @command="handleStatusChange(scope.row.id, $event)">
+                <el-button
+                  type="primary"
+                  size="small"
+                  :disabled="scope.row.status === 'completed' || scope.row.status === 'cancelled'"
+                >
+                  修改状态<el-icon class="el-icon--right"
+                    ><LibraryIcon name="arrow-down"
+                  /></el-icon>
+                </el-button>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="confirmed" :disabled="scope.row.status !== 'pending'"
+                      >确认预约</el-dropdown-item
+                    >
+                    <el-dropdown-item command="completed" :disabled="!isConfirmed(scope.row.status)"
+                      >完成</el-dropdown-item
+                    >
+                    <el-dropdown-item
+                      command="cancelled"
+                      :disabled="scope.row.status === 'completed'"
+                      >取消</el-dropdown-item
+                    >
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
 
       <div class="pagination-wrapper">
@@ -70,11 +99,23 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
-import { ElMessage, ElSelect, ElOption, ElTable, ElTableColumn, ElTag, ElDropdown, ElButton, ElIcon, ElDropdownMenu, ElDropdownItem, ElPagination, ElAlert, vLoading } from 'element-plus'
 import {
-  PSYCH_TEACHER_AVATAR_ALT,
-  getPsychTeacherAvatar,
-} from '../../utils/psychTeacherAvatar'
+  ElMessage,
+  ElSelect,
+  ElOption,
+  ElTable,
+  ElTableColumn,
+  ElTag,
+  ElDropdown,
+  ElButton,
+  ElIcon,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElPagination,
+  ElAlert,
+  vLoading,
+} from 'element-plus'
+import { PSYCH_TEACHER_AVATAR_ALT, getPsychTeacherAvatar } from '../../utils/psychTeacherAvatar'
 
 const loading = ref(false)
 const loadError = ref(false)
@@ -101,7 +142,7 @@ const fetchAppointments = async () => {
   try {
     const token = localStorage.getItem('token')
     const res = await axios.get('/api/teacher/appointments', {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
     appointments.value = res.data
     loadError.value = false
@@ -116,9 +157,13 @@ const fetchAppointments = async () => {
 const handleStatusChange = async (id, status) => {
   try {
     const token = localStorage.getItem('token')
-    await axios.post(`/api/teacher/appointments/${id}/status?status=${status}`, {}, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
+    await axios.post(
+      `/api/teacher/appointments/${id}/status?status=${status}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    )
     ElMessage.success('状态修改成功')
     fetchAppointments()
   } catch (error) {
@@ -127,7 +172,7 @@ const handleStatusChange = async (id, status) => {
 }
 
 const filteredData = computed(() => {
-  return appointments.value.filter(a => {
+  return appointments.value.filter((a) => {
     return filterStatus.value ? normalizeStatus(a.status) === filterStatus.value : true
   })
 })
@@ -137,7 +182,7 @@ const paginatedData = computed(() => {
   return filteredData.value.slice(start, start + pageSize.value)
 })
 
-const normalizeStatus = (status) => status === 'approved' ? 'confirmed' : status
+const normalizeStatus = (status) => (status === 'approved' ? 'confirmed' : status)
 const isConfirmed = (status) => normalizeStatus(status) === 'confirmed'
 
 const getStatusText = (status) => {
@@ -191,9 +236,16 @@ onMounted(() => {
   width: 100%;
 }
 @media (max-width: 760px) {
-  .filter-card { padding: 14px; }
-  .filter-select { width: 100%; }
-  .pagination-wrapper { justify-content: flex-start; overflow: visible; }
+  .filter-card {
+    padding: 14px;
+  }
+  .filter-select {
+    width: 100%;
+  }
+  .pagination-wrapper {
+    justify-content: flex-start;
+    overflow: visible;
+  }
   .pagination-wrapper :deep(.el-pagination) {
     display: flex;
     flex-wrap: wrap;
@@ -201,12 +253,29 @@ onMounted(() => {
     gap: 8px 10px;
     max-width: 100%;
   }
-  .pagination-wrapper :deep(.el-pagination__total) { order: 1; margin-right: 0; }
-  .pagination-wrapper :deep(.el-pagination__sizes) { order: 2; margin: 0; }
-  .pagination-wrapper :deep(.el-pagination__sizes .el-select) { width: 104px; }
-  .pagination-wrapper :deep(.btn-prev) { order: 3; margin: 0; }
-  .pagination-wrapper :deep(.el-pager) { order: 4; margin: 0; }
-  .pagination-wrapper :deep(.btn-next) { order: 5; margin: 0; }
+  .pagination-wrapper :deep(.el-pagination__total) {
+    order: 1;
+    margin-right: 0;
+  }
+  .pagination-wrapper :deep(.el-pagination__sizes) {
+    order: 2;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.el-pagination__sizes .el-select) {
+    width: 104px;
+  }
+  .pagination-wrapper :deep(.btn-prev) {
+    order: 3;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.el-pager) {
+    order: 4;
+    margin: 0;
+  }
+  .pagination-wrapper :deep(.btn-next) {
+    order: 5;
+    margin: 0;
+  }
 }
 
 .teacher-avatar-img {

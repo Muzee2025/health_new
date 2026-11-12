@@ -10,11 +10,27 @@
 import { ElButton } from 'element-plus'
 import { getVisualAsset } from '../design/asset-registry'
 const illustration = getVisualAsset('notFound').url
-
 </script>
 <style scoped>
-.not-found { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
-.not-found h1 { font-size: 24px; margin: 20px 0 4px; }
-.not-found p { color: var(--text-secondary); margin-bottom: 24px; }
-.not-found img { max-width: 100%; height: auto; }
+.not-found {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+.not-found h1 {
+  font-size: 24px;
+  margin: 20px 0 4px;
+}
+.not-found p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+.not-found img {
+  max-width: 100%;
+  height: auto;
+}
 </style>

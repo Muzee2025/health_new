@@ -8,8 +8,20 @@
       <el-button plain @click="fetchQuestions" :loading="loadingQuestions">刷新记录</el-button>
     </header>
 
-    <el-alert v-if="schemaDisabled" role="status" type="info" :closable="false" title="求助服务尚未启用，请联系管理员。" />
-    <el-alert v-else-if="loadError" role="alert" type="error" :closable="false" title="提问记录暂时无法加载，请检查网络后重试。" />
+    <el-alert
+      v-if="schemaDisabled"
+      role="status"
+      type="info"
+      :closable="false"
+      title="求助服务尚未启用，请联系管理员。"
+    />
+    <el-alert
+      v-else-if="loadError"
+      role="alert"
+      type="error"
+      :closable="false"
+      title="提问记录暂时无法加载，请检查网络后重试。"
+    />
 
     <section v-else class="question-compose" aria-label="提交问题">
       <label for="student-question-text" class="question-label">想留言咨询什么？</label>
@@ -25,8 +37,15 @@
         aria-describedby="question-service-note"
       />
       <div class="compose-footer">
-        <p id="question-service-note">留言只会提供给按学校明确分配关系负责你的老师。这里不提供紧急响应，也不承诺回复时效。</p>
-        <el-button type="primary" :loading="submitting" :disabled="submitting || !form.question_text.trim()" @click="submitQuestion">
+        <p id="question-service-note">
+          留言只会提供给按学校明确分配关系负责你的老师。这里不提供紧急响应，也不承诺回复时效。
+        </p>
+        <el-button
+          type="primary"
+          :loading="submitting"
+          :disabled="submitting || !form.question_text.trim()"
+          @click="submitQuestion"
+        >
           {{ submitting ? '正在提交' : '提交留言' }}
         </el-button>
       </div>
@@ -40,8 +59,19 @@
           <p>仅显示本人提交的问题和老师公开给你的回复。</p>
         </div>
       </div>
-      <div v-if="loadingQuestions && !questions.length" class="history-loading" role="status" aria-live="polite">正在加载留言…</div>
-      <LibraryEmpty v-else-if="!questions.length && !loadError && !schemaDisabled" description="还没有留言。你可以在上方写下想咨询老师的问题。" :image-size="100">
+      <div
+        v-if="loadingQuestions && !questions.length"
+        class="history-loading"
+        role="status"
+        aria-live="polite"
+      >
+        正在加载留言…
+      </div>
+      <LibraryEmpty
+        v-else-if="!questions.length && !loadError && !schemaDisabled"
+        description="还没有留言。你可以在上方写下想咨询老师的问题。"
+        :image-size="100"
+      >
         <el-button type="primary" plain @click="focusComposer">写一条留言</el-button>
       </LibraryEmpty>
       <ol v-else class="question-list" aria-live="polite">
@@ -61,7 +91,9 @@
             <strong>老师的回复</strong>
             <p>{{ question.answer_text }}</p>
           </div>
-          <div v-else-if="question.response_state !== 'unassigned'" class="pending-note">老师尚未回复；这里不会承诺具体回复时间。</div>
+          <div v-else-if="question.response_state !== 'unassigned'" class="pending-note">
+            老师尚未回复；这里不会承诺具体回复时间。
+          </div>
         </li>
       </ol>
     </section>
@@ -85,8 +117,9 @@ let active = true
 let requestController = null
 let submitController = null
 
-const isSchemaDisabled = (error) => error?.response?.status === 503
-  && error?.response?.data?.detail === 'Support workflow schema is not enabled'
+const isSchemaDisabled = (error) =>
+  error?.response?.status === 503 &&
+  error?.response?.data?.detail === 'Support workflow schema is not enabled'
 const friendlyError = (error, fallback) => {
   if (isSchemaDisabled(error)) return '求助服务尚未启用，请联系管理员。'
   if (error?.response?.status === 422) return '内容未通过检查，请修改后重试。'
@@ -126,7 +159,11 @@ const submitQuestion = async () => {
   submitError.value = ''
   submitController = new AbortController()
   try {
-    await axios.post('/api/student/questions', { question_text: text }, { signal: submitController.signal })
+    await axios.post(
+      '/api/student/questions',
+      { question_text: text },
+      { signal: submitController.signal },
+    )
     if (!active) return
     form.value.question_text = ''
     await fetchQuestions()
@@ -144,9 +181,13 @@ const statusLabel = (question) => {
   if (question.response_state === 'answered' || question.status === 'answered') return '已回复'
   return '等待老师查看'
 }
-const statusType = (question) => question.response_state === 'unassigned' ? 'warning'
-  : (question.response_state === 'answered' || question.status === 'answered' ? 'success' : 'info')
-const formatDate = (value) => value ? new Date(value).toLocaleString('zh-CN') : '时间未知'
+const statusType = (question) =>
+  question.response_state === 'unassigned'
+    ? 'warning'
+    : question.response_state === 'answered' || question.status === 'answered'
+      ? 'success'
+      : 'info'
+const formatDate = (value) => (value ? new Date(value).toLocaleString('zh-CN') : '时间未知')
 const focusComposer = () => document.querySelector('.question-compose textarea')?.focus()
 
 onMounted(fetchQuestions)
@@ -158,43 +199,175 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.questions-page { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: var(--space-5); width: 100%; max-width: var(--content-max-width); margin: 0; }
-.page-intro, .section-heading, .compose-footer, .entry-meta { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
-.page-intro { grid-column: 1 / -1; align-items: center; }
-.page-intro > div { min-width: 0; }
-.page-intro > :deep(.el-button) { flex-shrink: 0; margin: 0; }
-.page-intro p { max-width: 68ch; }
-.questions-page > :deep(.el-alert) { grid-column: 1 / -1; }
-.page-intro h2, .section-heading h3 { margin: 0; color: var(--text-primary); }
-.page-intro p, .section-heading p, .compose-footer p { color: var(--text-secondary); margin: 6px 0 0; line-height: 1.6; }
-.question-compose, .question-history { padding: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
-.question-label { display: block; margin-bottom: 8px; color: var(--text-primary); font-weight: 600; }
-.compose-footer { align-items: stretch; flex-direction: column; margin-top: var(--space-4); }
-.compose-footer p { max-width: 64ch; margin: 0; font-size: 13px; }
-.compose-footer > :deep(.el-button) { min-height: 44px; margin: 0; align-self: flex-start; padding-inline: var(--space-6); }
-.question-history { min-height: 240px; }
-.question-list { list-style: none; padding: 0; margin: 18px 0 0; }
-.question-entry { padding: 18px 0; border-top: 1px solid var(--border); }
-.entry-meta { align-items: center; color: var(--text-secondary); font-size: 13px; }
-.message-block, .answer-block { margin-top: 16px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
-.message-block p, .answer-block p { margin: 6px 0 0; }
-.message-block strong { color: var(--text-primary); }
-.answer-block { padding: 14px 16px; border-radius: var(--radius-md); background: var(--surface-warm); color: var(--text-primary); }
-.answer-block strong { color: var(--brand-700); }
-.assignment-note, .pending-note { margin: 14px 0 0; padding: 12px 14px; border-radius: var(--radius-md); background: var(--warning-100); color: var(--warning-text); line-height: 1.6; }
-.pending-note { background: var(--surface-subtle); color: var(--text-secondary); }
-.history-loading { padding: 28px; text-align: center; color: var(--text-secondary); }
+.questions-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0;
+}
+.page-intro,
+.section-heading,
+.compose-footer,
+.entry-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.page-intro {
+  grid-column: 1 / -1;
+  align-items: center;
+}
+.page-intro > div {
+  min-width: 0;
+}
+.page-intro > :deep(.el-button) {
+  flex-shrink: 0;
+  margin: 0;
+}
+.page-intro p {
+  max-width: 68ch;
+}
+.questions-page > :deep(.el-alert) {
+  grid-column: 1 / -1;
+}
+.page-intro h2,
+.section-heading h3 {
+  margin: 0;
+  color: var(--text-primary);
+}
+.page-intro p,
+.section-heading p,
+.compose-footer p {
+  color: var(--text-secondary);
+  margin: 6px 0 0;
+  line-height: 1.6;
+}
+.question-compose,
+.question-history {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+.question-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.compose-footer {
+  align-items: stretch;
+  flex-direction: column;
+  margin-top: var(--space-4);
+}
+.compose-footer p {
+  max-width: 64ch;
+  margin: 0;
+  font-size: 13px;
+}
+.compose-footer > :deep(.el-button) {
+  min-height: 44px;
+  margin: 0;
+  align-self: flex-start;
+  padding-inline: var(--space-6);
+}
+.question-history {
+  min-height: 240px;
+}
+.question-list {
+  list-style: none;
+  padding: 0;
+  margin: 18px 0 0;
+}
+.question-entry {
+  padding: 18px 0;
+  border-top: 1px solid var(--border);
+}
+.entry-meta {
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.message-block,
+.answer-block {
+  margin-top: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.message-block p,
+.answer-block p {
+  margin: 6px 0 0;
+}
+.message-block strong {
+  color: var(--text-primary);
+}
+.answer-block {
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  background: var(--surface-warm);
+  color: var(--text-primary);
+}
+.answer-block strong {
+  color: var(--brand-700);
+}
+.assignment-note,
+.pending-note {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--warning-100);
+  color: var(--warning-text);
+  line-height: 1.6;
+}
+.pending-note {
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+}
+.history-loading {
+  padding: 28px;
+  text-align: center;
+  color: var(--text-secondary);
+}
 @media (min-width: 1200px) {
-  .questions-page { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
-  .question-compose, .question-history { height: 100%; min-width: 0; }
-  .compose-footer > :deep(.el-button) { width: 100%; }
-  .question-list { margin-top: var(--space-4); }
+  .questions-page {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .question-compose,
+  .question-history {
+    height: 100%;
+    min-width: 0;
+  }
+  .compose-footer > :deep(.el-button) {
+    width: 100%;
+  }
+  .question-list {
+    margin-top: var(--space-4);
+  }
 }
 @media (max-width: 600px) {
-  .page-intro { align-items: stretch; flex-direction: column; }
-  .page-intro > :deep(.el-button) { align-self: flex-start; }
-  .question-compose, .question-history { padding: 18px; }
-  .compose-footer { align-items: stretch; flex-direction: column; }
-  .compose-footer > :deep(.el-button) { align-self: flex-start; }
+  .page-intro {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .page-intro > :deep(.el-button) {
+    align-self: flex-start;
+  }
+  .question-compose,
+  .question-history {
+    padding: 18px;
+  }
+  .compose-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .compose-footer > :deep(.el-button) {
+    align-self: flex-start;
+  }
 }
 </style>

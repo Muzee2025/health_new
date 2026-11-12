@@ -4,12 +4,18 @@
       <h2 class="page-title">预约咨询</h2>
       <p class="page-desc">查看可预约的老师和时间。可预约范围由学校分配关系决定。</p>
     </header>
-    <p class="support-entry">想先把问题写下来？<router-link to="/student/questions">向老师留言</router-link>，你可以在留言记录中查看回复。</p>
+    <p class="support-entry">
+      想先把问题写下来？<router-link to="/student/questions">向老师留言</router-link
+      >，你可以在留言记录中查看回复。
+    </p>
 
     <el-alert v-if="teacherError" type="error" :closable="false" show-icon :title="teacherError">
       <el-button link type="primary" @click="fetchTeachers">重新加载老师</el-button>
     </el-alert>
-    <LibraryEmpty v-if="!teacherLoading && !teacherError && teachers.length === 0" description="当前没有可展示的老师信息。" />
+    <LibraryEmpty
+      v-if="!teacherLoading && !teacherError && teachers.length === 0"
+      description="当前没有可展示的老师信息。"
+    />
     <el-row v-loading="teacherLoading" :gutter="20" class="mt-30" aria-label="可预约老师">
       <el-col :xs="24" :md="12" :lg="8" v-for="teacher in teachers" :key="teacher.id">
         <el-card shadow="hover" class="teacher-card">
@@ -30,19 +36,25 @@
               <div class="name">{{ teacher.name }}</div>
               <div class="title">{{ teacher.title }}</div>
               <div class="direction" v-if="teacher.consultation_direction">
-                <el-tag size="small" type="success" effect="plain">{{ teacher.consultation_direction }}</el-tag>
+                <el-tag size="small" type="success" effect="plain">{{
+                  teacher.consultation_direction
+                }}</el-tag>
               </div>
-              <div class="location"><el-icon><LibraryIcon name="location"  /></el-icon> {{ teacher.location }}</div>
+              <div class="location">
+                <el-icon><LibraryIcon name="location" /></el-icon> {{ teacher.location }}
+              </div>
             </div>
           </div>
           <div class="teacher-intro">{{ teacher.intro }}</div>
-          
+
           <el-divider border-style="dashed" />
           <div class="slots-header">可预约时间段</div>
-          <p v-if="!teacher.can_book" class="booking-note" :id="`booking-note-${teacher.id}`">需先由学校分配咨询老师</p>
+          <p v-if="!teacher.can_book" class="booking-note" :id="`booking-note-${teacher.id}`">
+            需先由学校分配咨询老师
+          </p>
           <div class="time-slots">
-            <el-button 
-              v-for="(slot, index) in teacher.time_slots" 
+            <el-button
+              v-for="(slot, index) in teacher.time_slots"
               :key="index"
               :type="teacher.booked_slots.includes(slot) ? 'info' : 'primary'"
               :plain="!teacher.booked_slots.includes(slot)"
@@ -61,33 +73,46 @@
         </el-card>
       </el-col>
     </el-row>
-    
-    <el-alert v-if="appointmentError" class="mt-30" type="error" :closable="false" show-icon :title="appointmentError">
+
+    <el-alert
+      v-if="appointmentError"
+      class="mt-30"
+      type="error"
+      :closable="false"
+      show-icon
+      :title="appointmentError"
+    >
       <el-button link type="primary" @click="fetchAppointments">重新加载预约记录</el-button>
     </el-alert>
     <el-card class="mt-30 table-card">
       <h3 class="business-card__header"><LibraryIcon name="appointment" /> 我的预约记录</h3>
       <div class="business-table-wrap" v-loading="appointmentLoading">
-      <el-table :data="appointments" style="width: 100%" stripe>
-        <template #empty><LibraryEmpty description="还没有预约记录。" /></template>
-        <el-table-column prop="time_slot" label="预约时间" width="180" />
-        <el-table-column prop="teacher_name" label="咨询老师" width="120" />
-        <el-table-column prop="location" label="地点" />
-        <el-table-column prop="status" label="状态" width="120">
-          <template #default="scope">
-            <el-tag :type="appointmentStatusType(scope.row.status)" round>
-              {{ appointmentStatusLabel(scope.row.status) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="120">
-          <template #default="scope">
-            <el-button v-if="scope.row.status !== 'cancelled'" type="danger" link size="small" @click="cancelAppointment(scope.row)">
-              取消预约
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+        <el-table :data="appointments" style="width: 100%" stripe>
+          <template #empty><LibraryEmpty description="还没有预约记录。" /></template>
+          <el-table-column prop="time_slot" label="预约时间" width="180" />
+          <el-table-column prop="teacher_name" label="咨询老师" width="120" />
+          <el-table-column prop="location" label="地点" />
+          <el-table-column prop="status" label="状态" width="120">
+            <template #default="scope">
+              <el-tag :type="appointmentStatusType(scope.row.status)" round>
+                {{ appointmentStatusLabel(scope.row.status) }}
+              </el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="120">
+            <template #default="scope">
+              <el-button
+                v-if="scope.row.status !== 'cancelled'"
+                type="danger"
+                link
+                size="small"
+                @click="cancelAppointment(scope.row)"
+              >
+                取消预约
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
     </el-card>
   </div>
@@ -97,11 +122,21 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import LibraryEmpty from '../../design/LibraryEmpty.vue'
-import { ElMessage, ElMessageBox, ElRow, ElCol, ElCard, ElTag, ElIcon, ElDivider, ElButton, ElTable, ElTableColumn, ElAlert } from 'element-plus'
 import {
-  PSYCH_TEACHER_AVATAR_ALT,
-  getPsychTeacherAvatar,
-} from '../../utils/psychTeacherAvatar'
+  ElMessage,
+  ElMessageBox,
+  ElRow,
+  ElCol,
+  ElCard,
+  ElTag,
+  ElIcon,
+  ElDivider,
+  ElButton,
+  ElTable,
+  ElTableColumn,
+  ElAlert,
+} from 'element-plus'
+import { PSYCH_TEACHER_AVATAR_ALT, getPsychTeacherAvatar } from '../../utils/psychTeacherAvatar'
 
 const teachers = ref([])
 const appointments = ref([])
@@ -109,8 +144,22 @@ const teacherLoading = ref(false)
 const appointmentLoading = ref(false)
 const teacherError = ref('')
 const appointmentError = ref('')
-const appointmentStatusLabel = (status) => ({ pending: '待确认', confirmed: '已确认', approved: '已确认', completed: '已完成', cancelled: '已取消' }[status] || status)
-const appointmentStatusType = (status) => ({ pending: 'warning', confirmed: 'primary', approved: 'primary', completed: 'success', cancelled: 'info' }[status] || 'info')
+const appointmentStatusLabel = (status) =>
+  ({
+    pending: '待确认',
+    confirmed: '已确认',
+    approved: '已确认',
+    completed: '已完成',
+    cancelled: '已取消',
+  })[status] || status
+const appointmentStatusType = (status) =>
+  ({
+    pending: 'warning',
+    confirmed: 'primary',
+    approved: 'primary',
+    completed: 'success',
+    cancelled: 'info',
+  })[status] || 'info'
 
 const resolveTeacherAvatar = (teacher) => {
   const seed = teacher?.id ?? teacher?.user_id ?? teacher?.name ?? ''
@@ -163,30 +212,31 @@ const fetchAppointments = async () => {
 }
 
 const confirmAppointment = (teacher, slot) => {
-  if (!teacher.can_book) { ElMessage.warning('需先由学校分配咨询老师'); return }
-  ElMessageBox.confirm(
-    `确定要预约 ${teacher.name} 老师的 [${slot}] 吗？`,
-    '确认预约',
-    {
-      confirmButtonText: '确定预约',
-      cancelButtonText: '取消',
-      type: 'info',
-    }
-  ).then(async () => {
-    try {
-      await axios.post('/api/student/appointments', {
-        teacher_id: teacher.id,
-        time_slot: slot
-      })
-      ElMessage.success('预约成功！')
-      fetchTeachers() // 刷新列表状态
-      fetchAppointments()
-    } catch (error) {
-      ElMessage.error(error.response?.data?.detail || '预约失败')
-    }
-  }).catch(() => {
-    // cancelled
+  if (!teacher.can_book) {
+    ElMessage.warning('需先由学校分配咨询老师')
+    return
+  }
+  ElMessageBox.confirm(`确定要预约 ${teacher.name} 老师的 [${slot}] 吗？`, '确认预约', {
+    confirmButtonText: '确定预约',
+    cancelButtonText: '取消',
+    type: 'info',
   })
+    .then(async () => {
+      try {
+        await axios.post('/api/student/appointments', {
+          teacher_id: teacher.id,
+          time_slot: slot,
+        })
+        ElMessage.success('预约成功！')
+        fetchTeachers() // 刷新列表状态
+        fetchAppointments()
+      } catch (error) {
+        ElMessage.error(error.response?.data?.detail || '预约失败')
+      }
+    })
+    .catch(() => {
+      // cancelled
+    })
 }
 
 const cancelAppointment = (appointment) => {
@@ -197,17 +247,19 @@ const cancelAppointment = (appointment) => {
       confirmButtonText: '确定取消',
       cancelButtonText: '暂不取消',
       type: 'warning',
-    }
-  ).then(async () => {
-    try {
-      await axios.post(`/api/student/appointments/${appointment.id}/cancel`)
-      ElMessage.success('已取消预约')
-      fetchTeachers()
-      fetchAppointments()
-    } catch (error) {
-      ElMessage.error(error.response?.data?.detail || '取消失败')
-    }
-  }).catch(() => {})
+    },
+  )
+    .then(async () => {
+      try {
+        await axios.post(`/api/student/appointments/${appointment.id}/cancel`)
+        ElMessage.success('已取消预约')
+        fetchTeachers()
+        fetchAppointments()
+      } catch (error) {
+        ElMessage.error(error.response?.data?.detail || '取消失败')
+      }
+    })
+    .catch(() => {})
 }
 </script>
 
@@ -221,8 +273,15 @@ const cancelAppointment = (appointment) => {
   color: var(--text-secondary);
   font-size: 14px;
 }
-.support-entry { margin: 14px 0 0; color: var(--text-secondary); font-size: 14px; }
-.support-entry a { color: var(--brand-700); text-underline-offset: 3px; }
+.support-entry {
+  margin: 14px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.support-entry a {
+  color: var(--brand-700);
+  text-underline-offset: 3px;
+}
 .mt-30 {
   margin-top: 30px;
 }
@@ -311,7 +370,14 @@ const cancelAppointment = (appointment) => {
   color: var(--text-secondary);
   font-style: italic;
 }
-.booking-note { color: var(--warning-text); background: var(--warning-100); border-radius: var(--radius-md); padding: 8px 10px; margin: 0 0 12px; font-size: 13px; }
+.booking-note {
+  color: var(--warning-text);
+  background: var(--warning-100);
+  border-radius: var(--radius-md);
+  padding: 8px 10px;
+  margin: 0 0 12px;
+  font-size: 13px;
+}
 
 .table-card {
   border-radius: 16px;
@@ -322,13 +388,27 @@ const cancelAppointment = (appointment) => {
   color: var(--text-primary);
   margin-bottom: 20px;
 }
-.business-page__header { margin-bottom: 20px; }
-.business-page__header .page-title { margin-bottom: 8px; }
-.table-card :deep(.el-card__body) { min-width: 0; }
-.table-card :deep(.el-table) { min-width: 620px; }
+.business-page__header {
+  margin-bottom: 20px;
+}
+.business-page__header .page-title {
+  margin-bottom: 8px;
+}
+.table-card :deep(.el-card__body) {
+  min-width: 0;
+}
+.table-card :deep(.el-table) {
+  min-width: 620px;
+}
 @media (max-width: 600px) {
-  .mt-30 { margin-top: 20px; }
-  .teacher-avatar { margin-right: 12px; }
-  .table-card :deep(.el-card__body) { padding: 16px; }
+  .mt-30 {
+    margin-top: 20px;
+  }
+  .teacher-avatar {
+    margin-right: 12px;
+  }
+  .table-card :deep(.el-card__body) {
+    padding: 16px;
+  }
 }
 </style>

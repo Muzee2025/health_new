@@ -2,11 +2,44 @@
   <AuthShell>
     <h1>欢迎回来</h1>
     <p class="auth-intro">使用账号、姓名或学号登录。</p>
-    <el-form :model="form" label-position="top" :aria-busy="submitting" @submit.prevent="handleLogin">
-      <el-form-item label="账号"><el-input v-model="form.username" placeholder="用户名、姓名或学号" autocomplete="username" aria-label="账号" /></el-form-item>
-      <el-form-item label="密码"><el-input v-model="form.password" type="password" placeholder="请输入密码" autocomplete="current-password" aria-label="密码" show-password /></el-form-item>
-      <el-alert v-if="errorMessage" :title="errorMessage" type="error" :closable="false" show-icon role="alert" />
-      <el-button type="primary" native-type="submit" class="auth-submit" :loading="submitting" :disabled="submitting">登录</el-button>
+    <el-form
+      :model="form"
+      label-position="top"
+      :aria-busy="submitting"
+      @submit.prevent="handleLogin"
+    >
+      <el-form-item label="账号"
+        ><el-input
+          v-model="form.username"
+          placeholder="用户名、姓名或学号"
+          autocomplete="username"
+          aria-label="账号"
+      /></el-form-item>
+      <el-form-item label="密码"
+        ><el-input
+          v-model="form.password"
+          type="password"
+          placeholder="请输入密码"
+          autocomplete="current-password"
+          aria-label="密码"
+          show-password
+      /></el-form-item>
+      <el-alert
+        v-if="errorMessage"
+        :title="errorMessage"
+        type="error"
+        :closable="false"
+        show-icon
+        role="alert"
+      />
+      <el-button
+        type="primary"
+        native-type="submit"
+        class="auth-submit"
+        :loading="submitting"
+        :disabled="submitting"
+        >登录</el-button
+      >
       <div class="auth-links"><router-link to="/register">没有账号？去注册</router-link></div>
     </el-form>
   </AuthShell>
@@ -24,10 +57,12 @@ const submitting = ref(false)
 const errorMessage = ref('')
 let requestController
 onBeforeUnmount(() => requestController?.abort())
-onBeforeRouteLeave(() => { requestController?.abort() })
+onBeforeRouteLeave(() => {
+  requestController?.abort()
+})
 const form = ref({
   username: '',
-  password: ''
+  password: '',
 })
 
 const handleLogin = async () => {
@@ -41,10 +76,20 @@ const handleLogin = async () => {
   submitting.value = true
   requestController = new AbortController()
   try {
-    const res = await axios.post('/api/login', { ...form.value }, { signal: requestController.signal, timeout: 15000 })
+    const res = await axios.post(
+      '/api/login',
+      { ...form.value },
+      { signal: requestController.signal, timeout: 15000 },
+    )
     if (requestController.signal.aborted) return
     const { access_token, user } = res.data || {}
-    if (typeof access_token !== 'string' || !access_token.trim() || !Number.isInteger(user?.id) || user.id <= 0 || !['student', 'teacher'].includes(user.role)) {
+    if (
+      typeof access_token !== 'string' ||
+      !access_token.trim() ||
+      !Number.isInteger(user?.id) ||
+      user.id <= 0 ||
+      !['student', 'teacher'].includes(user.role)
+    ) {
       errorMessage.value = '登录响应不完整，请稍后重试'
       return
     }
@@ -58,9 +103,16 @@ const handleLogin = async () => {
 
     let destination = user.role === 'teacher' ? '/teacher' : '/student'
     const redirect = route.query.redirect
-    if (typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//') && !redirect.includes('\\') && !/[\u0000-\u0020]/.test(redirect)) {
+    if (
+      typeof redirect === 'string' &&
+      redirect.startsWith('/') &&
+      !redirect.startsWith('//') &&
+      !redirect.includes('\\') &&
+      !/[\u0000-\u0020]/.test(redirect)
+    ) {
       const target = router.resolve(redirect)
-      if (target.meta.requiresAuth && (!target.meta.role || target.meta.role === user.role)) destination = target.fullPath
+      if (target.meta.requiresAuth && (!target.meta.role || target.meta.role === user.role))
+        destination = target.fullPath
     }
     await router.replace(destination)
   } catch (error) {
