@@ -56,10 +56,16 @@ jobs:
       #     with "service frontend has neither an image nor a build context".
       #   - RUNTIME_ENV_FILE and TLS_CERT_DIR must be absolute paths, and the
       #     env file they point at has to exist even though the values are fake.
+      #   - docker-compose.backend.yml hard-codes `env_file: ../../backend/.env`.
+      #     That file is git-ignored, so a clean checkout does not have it and
+      #     `config` fails with "env file ... not found" before reading anything
+      #     else. An empty placeholder is enough: this step only parses the file,
+      #     it never starts a container, so no real value is needed or written.
       - name: Validate compose files
         run: |
           printf 'DB_PASSWORD=ci-placeholder\n' > /tmp/ci-runtime.env
           mkdir -p /tmp/ci-tls
+          [ -f backend/.env ] || : > backend/.env
           export RUNTIME_ENV_FILE=/tmp/ci-runtime.env
           export TLS_CERT_DIR=/tmp/ci-tls
           docker compose -f deploy/backend/docker-compose.backend.yml config --quiet
