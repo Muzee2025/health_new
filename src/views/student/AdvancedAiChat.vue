@@ -2,7 +2,9 @@
   <div class="chat-page business-page">
     <aside class="session-panel">
       <div class="session-toolbar">
-        <el-button type="primary" plain class="new-conv-btn" @click="createNewChat(currentMode)"><LibraryIcon name="add" /> 新对话</el-button>
+        <el-button type="primary" plain class="new-conv-btn" @click="createNewChat(currentMode)"
+          ><LibraryIcon name="add" /> 新对话</el-button
+        >
       </div>
       <div class="session-search">
         <el-input v-model="searchQuery" placeholder="搜索聊天记录..." />
@@ -20,7 +22,10 @@
           @keydown.space.stop.prevent="loadSession(session.id)"
         >
           <div class="session-top">
-            <span class="session-mode-dot" :class="session.mode === 'daily' ? 'dot-daily' : 'dot-counsel'" />
+            <span
+              class="session-mode-dot"
+              :class="session.mode === 'daily' ? 'dot-daily' : 'dot-counsel'"
+            />
             <span class="session-name">{{ session.title }}</span>
             <span v-if="session.archived" class="session-archived">已归档</span>
             <span class="session-time">{{ formatSessionTime(session.updated_at) }}</span>
@@ -34,7 +39,9 @@
               </template>
             </el-dropdown>
           </div>
-          <div class="session-preview">{{ session.mode === 'daily' ? '日常聊天会话' : '心理咨询会话' }}</div>
+          <div class="session-preview">
+            {{ session.mode === 'daily' ? '日常聊天会话' : '心理咨询会话' }}
+          </div>
         </div>
       </div>
     </aside>
@@ -60,8 +67,12 @@
           >
             新心理咨询
           </button>
-          <router-link to="/student/questions" class="mode-pill support-link">向老师留言</router-link>
-          <span v-if="langStatus" class="voice-tag">语言 {{ langStatus.language }} · {{ Math.round(langStatus.confidence * 100) }}%</span>
+          <router-link to="/student/questions" class="mode-pill support-link"
+            >向老师留言</router-link
+          >
+          <span v-if="langStatus" class="voice-tag"
+            >语言 {{ langStatus.language }} · {{ Math.round(langStatus.confidence * 100) }}%</span
+          >
         </div>
         <div class="anon-switch">
           <span>实名</span>
@@ -73,17 +84,23 @@
       <div class="chat-content">
         <div class="messages-area" ref="chatScrollRef">
           <div v-if="crisisBannerVisible" class="crisis-banner">
-            <el-icon><LibraryIcon name="alert"  /></el-icon>
+            <el-icon><LibraryIcon name="alert" /></el-icon>
             <strong>高危预警</strong>
-            <span>检测到需要关注的求助信息。系统无法确认人工服务是否已接收，请优先联系实际人工支持。</span>
+            <span
+              >检测到需要关注的求助信息。系统无法确认人工服务是否已接收，请优先联系实际人工支持。</span
+            >
           </div>
 
           <template v-for="(msg, index) in chatHistory" :key="index">
             <div :class="['message-row', msg.role === 'user' ? 'row-user' : 'row-ai']">
               <div class="avatar-wrap">
-                <el-avatar v-if="msg.role === 'user'" :size="36" :src="isAnonymous ? anonymousAvatar : userAvatar" />
+                <el-avatar
+                  v-if="msg.role === 'user'"
+                  :size="36"
+                  :src="isAnonymous ? anonymousAvatar : userAvatar"
+                />
                 <el-avatar v-else :size="36" class="mail-avatar">
-                  <el-icon><LibraryIcon name="chat"  /></el-icon>
+                  <el-icon><LibraryIcon name="chat" /></el-icon>
                 </el-avatar>
               </div>
 
@@ -92,7 +109,7 @@
                   :class="[
                     'bubble',
                     msg.role === 'user' ? 'bubble-user' : 'bubble-ai',
-                    msg.role === 'user' && isDangerText(msg.content) ? 'bubble-danger' : ''
+                    msg.role === 'user' && isDangerText(msg.content) ? 'bubble-danger' : '',
                   ]"
                 >
                   <template v-if="msg.role === 'ai'">
@@ -106,15 +123,27 @@
             </div>
 
             <div
-              v-if="(isDeepStreaming || thinkingLogs.length) && thinkingAnchorMessageId && msg.id === thinkingAnchorMessageId"
+              v-if="
+                (isDeepStreaming || thinkingLogs.length) &&
+                thinkingAnchorMessageId &&
+                msg.id === thinkingAnchorMessageId
+              "
               class="thinking-panel"
             >
               <div class="thinking-title">
                 <strong>深度思考草稿</strong>
-                <span class="thinking-phase">{{ phaseLabelMap[thinkingPhase] || '准备中...' }}</span>
+                <span class="thinking-phase">{{
+                  phaseLabelMap[thinkingPhase] || '准备中...'
+                }}</span>
               </div>
               <div class="thinking-lines">
-                <div v-for="(line, idx) in thinkingLogs" :key="`thinking-${idx}`" class="thinking-line">{{ line }}</div>
+                <div
+                  v-for="(line, idx) in thinkingLogs"
+                  :key="`thinking-${idx}`"
+                  class="thinking-line"
+                >
+                  {{ line }}
+                </div>
               </div>
             </div>
           </template>
@@ -122,7 +151,7 @@
           <div v-if="isTyping && !isDeepStreaming" class="message-row row-ai">
             <div class="avatar-wrap">
               <el-avatar :size="36" class="mail-avatar">
-                <el-icon><LibraryIcon name="chat"  /></el-icon>
+                <el-icon><LibraryIcon name="chat" /></el-icon>
               </el-avatar>
             </div>
             <div class="message-body">
@@ -155,7 +184,7 @@
           aria-label="发送消息"
           class="send-btn"
           @click="sendMessage"
-          :disabled="!inputText.trim() || ((!isAnonymous && !currentSessionId) || isTyping)"
+          :disabled="!inputText.trim() || (!isAnonymous && !currentSessionId) || isTyping"
         >
           发送
         </button>
@@ -182,16 +211,43 @@ const userAvatar = getVisualAsset('studentAvatar').url
 const anonymousAvatar = getVisualAsset('anonymousAvatar').url
 
 import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
-import { ElMessage, ElMessageBox, ElButton, ElInput, ElDropdown, ElDropdownMenu, ElDropdownItem, ElSwitch, ElIcon, ElAvatar, vLoading } from 'element-plus'
+import {
+  ElMessage,
+  ElMessageBox,
+  ElButton,
+  ElInput,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElSwitch,
+  ElIcon,
+  ElAvatar,
+  vLoading,
+} from 'element-plus'
 import axios from 'axios'
 import RiskFactorFiveDimension from '../../components/RiskFactorFiveDimension.vue'
 import { createChatStorage } from '@/services/chatIndexedDb'
 import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
 
 const sessionAbort = new AbortController()
-const chatSession = createPrivateChatSession(storedSessionToken(), storedSessionToken, sessionAbort.signal)
-const { deleteConversationLocal, getAllConversations, getUiState, listMessages, putMessage, saveUiState, upsertConversation } = createChatStorage(chatSession)
-const sessionRequest = (method, url, data, config = {}) => chatSession.run(() => axios.request({ ...config, method, url, data, signal: sessionAbort.signal }))
+const chatSession = createPrivateChatSession(
+  storedSessionToken(),
+  storedSessionToken,
+  sessionAbort.signal,
+)
+const {
+  deleteConversationLocal,
+  getAllConversations,
+  getUiState,
+  listMessages,
+  putMessage,
+  saveUiState,
+  upsertConversation,
+} = createChatStorage(chatSession)
+const sessionRequest = (method, url, data, config = {}) =>
+  chatSession.run(() =>
+    axios.request({ ...config, method, url, data, signal: sessionAbort.signal }),
+  )
 const sessionHttp = {
   get: (url, config) => sessionRequest('get', url, undefined, config),
   post: (url, data, config) => sessionRequest('post', url, data, config),
@@ -235,14 +291,11 @@ const chatScrollRef = ref(null)
 const crisisBannerVisible = ref(false)
 let crisisBannerTimer = null
 
-
-
 const filteredSessions = computed(() => {
   const base = sessions.value.filter((s) => !s.archived)
   if (!searchQuery.value) return base
   return base.filter((s) => s.title.includes(searchQuery.value))
 })
-
 
 const ws = ref(null)
 
@@ -263,7 +316,7 @@ const initWebSocket = () => {
         ElMessage.success({
           message: msg.data.message || '老师已收到您的预警信息，正在处理中，请保持通讯畅通。',
           duration: 10000,
-          showClose: true
+          showClose: true,
         })
       }
     } catch (e) {
@@ -271,7 +324,8 @@ const initWebSocket = () => {
     }
   }
   ws.value.onclose = (event) => {
-    if (chatSession.isActive() && event.code !== 1008) wsReconnectTimer = setTimeout(initWebSocket, 5000)
+    if (chatSession.isActive() && event.code !== 1008)
+      wsReconnectTimer = setTimeout(initWebSocket, 5000)
   }
 }
 
@@ -303,7 +357,6 @@ onBeforeUnmount(() => {
   if (ws.value) ws.value.close()
 })
 
-
 watch(isAnonymous, async (val) => {
   if (val) {
     // 匿名模式：仅保留当前内存对话，不做任何持久化。
@@ -334,7 +387,7 @@ const fetchSessions = async () => {
     const res = await withApiRetry(
       () => sessionHttp.get('/api/advanced-ai/sessions'),
       'fetchSessions',
-      3
+      3,
     )
     const list = res.data.data || []
     const localMap = new Map((await getAllConversations()).map((x) => [x.id, x]))
@@ -421,7 +474,10 @@ const restoreUiState = async (sessionId) => {
   }
 }
 
-const uuid = () => (globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`)
+const uuid = () =>
+  globalThis.crypto?.randomUUID
+    ? globalThis.crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(16).slice(2)}`
 
 const getStoredToken = () => {
   const raw = localStorage.getItem('token') || localStorage.getItem('access_token') || ''
@@ -580,10 +636,18 @@ const createNewChat = async (mode) => {
   chatHistory.value = []
   crisisBannerVisible.value = false
   try {
-    const res = await sessionHttp.post('/api/advanced-ai/sessions', { mode, conversation_id: conversationId })
+    const res = await sessionHttp.post('/api/advanced-ai/sessions', {
+      mode,
+      conversation_id: conversationId,
+    })
     currentSessionId.value = res.data.session_id
     currentMode.value = mode
-    const initial = { id: `${conversationId}-ai-init`, role: 'ai', content: res.data.initial_message, timestamp: now }
+    const initial = {
+      id: `${conversationId}-ai-init`,
+      role: 'ai',
+      content: res.data.initial_message,
+      timestamp: now,
+    }
     chatHistory.value = [initial]
     await putMessage({ ...initial, conversationId })
     await upsertConversation({
@@ -628,7 +692,7 @@ const loadSession = async (id) => {
     const res = await withApiRetry(
       () => sessionHttp.get(`/api/advanced-ai/sessions/${id}/messages`),
       'loadSessionMessages',
-      2
+      2,
     )
     chatHistory.value = res.data.data || []
     for (const m of chatHistory.value) {
@@ -687,7 +751,8 @@ const loadSession = async (id) => {
 
 const sendMessage = async () => {
   if (!chatSession.isActive()) return
-  if (!inputText.value.trim() || isTyping.value || (!isAnonymous.value && !currentSessionId.value)) return
+  if (!inputText.value.trim() || isTyping.value || (!isAnonymous.value && !currentSessionId.value))
+    return
   const userMsg = inputText.value.trim()
   inputText.value = ''
   const userLocal = {
@@ -765,7 +830,10 @@ const sendMessage = async () => {
     if (deepRequested) {
       const detail = error?.response?.data?.detail || error?.message
       let msg = typeof detail === 'string' ? detail : '深度思考请求失败'
-      if (String(error?.name || '').includes('Abort') || String(detail || '').includes('timeout:70000')) {
+      if (
+        String(error?.name || '').includes('Abort') ||
+        String(detail || '').includes('timeout:70000')
+      ) {
         msg = '深度思考超时，请稍后重试'
       }
       ElMessage.error(msg)
@@ -782,7 +850,8 @@ const sendMessage = async () => {
     const currentChars = currentReply.replace(/\s+/g, '').length
     lastReplyChars.value = currentChars
 
-    const baseAvg = normalReplyAvgChars.value > 0 ? normalReplyAvgChars.value : Math.max(currentChars, 1)
+    const baseAvg =
+      normalReplyAvgChars.value > 0 ? normalReplyAvgChars.value : Math.max(currentChars, 1)
     lastReplyRatio.value = Math.max(currentChars / baseAvg, 1)
 
     if (!deepActuallyUsed) {
@@ -828,9 +897,14 @@ const sendMessage = async () => {
       })
       await upsertConversation({
         id: currentSessionId.value,
-        title: (sessions.value.find((x) => x.id === currentSessionId.value)?.title || userMsg.slice(0, 15) || '新对话'),
+        title:
+          sessions.value.find((x) => x.id === currentSessionId.value)?.title ||
+          userMsg.slice(0, 15) ||
+          '新对话',
         mode: currentMode.value,
-        createdAt: sessions.value.find((x) => x.id === currentSessionId.value)?.createdAt || new Date().toISOString(),
+        createdAt:
+          sessions.value.find((x) => x.id === currentSessionId.value)?.createdAt ||
+          new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         updated_at: new Date().toISOString(),
         archived: Boolean(sessions.value.find((x) => x.id === currentSessionId.value)?.archived),
@@ -838,14 +912,20 @@ const sendMessage = async () => {
     }
     if (data.is_crisis) {
       triggerCrisisBanner()
-      ElMessage.warning({ message: data.warning_state === 'created'
-        ? '需关注的提示已记录；尚不代表教师已查看或处理，请优先寻求实际人工支持。'
-        : '检测到需关注的信息，尚未确认预警已保存，请优先联系实际人工支持。', duration: 7000 })
+      ElMessage.warning({
+        message:
+          data.warning_state === 'created'
+            ? '需关注的提示已记录；尚不代表教师已查看或处理，请优先寻求实际人工支持。'
+            : '检测到需关注的信息，尚未确认预警已保存，请优先联系实际人工支持。',
+        duration: 7000,
+      })
     }
     if (!isAnonymous.value) {
-      window.dispatchEvent(new CustomEvent('assistant-message-saved', {
-        detail: { sessionId: currentSessionId.value, ts: Date.now() },
-      }))
+      window.dispatchEvent(
+        new CustomEvent('assistant-message-saved', {
+          detail: { sessionId: currentSessionId.value, ts: Date.now() },
+        }),
+      )
       await loadSessionsFromLocal()
     }
   } finally {
@@ -939,7 +1019,12 @@ const deleteSessionRemoteWithRetry = async (sessionId, maxRetries = 2) => {
         await sleep(250 * (attempt + 1))
         continue
       }
-      return { ok: false, state: isRetryable ? 'server_failed' : 'bad_request', attempt: attempt + 1, error }
+      return {
+        ok: false,
+        state: isRetryable ? 'server_failed' : 'bad_request',
+        attempt: attempt + 1,
+        error,
+      }
     }
   }
   return { ok: false, state: 'server_failed', attempt: maxRetries + 1, error: lastError }
@@ -1003,7 +1088,6 @@ const triggerCrisisBanner = () => {
 
 const isDangerText = (text) => /跳楼|自杀|轻生|不想活|结束生命/.test(text || '')
 
-
 const scrollToBottom = async () => {
   await nextTick()
   if (chatScrollRef.value) {
@@ -1030,7 +1114,11 @@ const scrollToBottom = async () => {
   height: calc(100vh - 120px);
   background: var(--bg);
 }
-.chat-page.business-page { width: 100%; max-width: none; margin: 0; }
+.chat-page.business-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
 
 .session-panel {
   width: 280px;
@@ -1081,7 +1169,10 @@ const scrollToBottom = async () => {
 .session-item:hover {
   background: var(--surface-subtle);
 }
-.session-item:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+.session-item:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
 
 .session-item.active {
   background: var(--brand-50);
@@ -1183,7 +1274,13 @@ const scrollToBottom = async () => {
   background: var(--primary);
   color: var(--surface);
 }
-.support-link { display: inline-flex; align-items: center; color: var(--brand-700); text-decoration: underline; text-underline-offset: 3px; }
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--brand-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 .voice-tag {
   border-radius: 999px;
@@ -1227,7 +1324,7 @@ const scrollToBottom = async () => {
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  animation: bannerFlash .35s ease;
+  animation: bannerFlash 0.35s ease;
 }
 
 .message-row {
@@ -1269,7 +1366,10 @@ const scrollToBottom = async () => {
   background: linear-gradient(135deg, var(--surface-subtle) 0%, var(--warm) 100%);
   color: var(--text-primary);
 }
-.ai-message-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+.ai-message-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
 .bubble-user {
   background: linear-gradient(135deg, var(--brand-600) 0%, var(--brand-600) 100%);
@@ -1305,11 +1405,11 @@ const scrollToBottom = async () => {
 }
 
 .typing i:nth-child(2) {
-  animation-delay: .15s;
+  animation-delay: 0.15s;
 }
 
 .typing i:nth-child(3) {
-  animation-delay: .3s;
+  animation-delay: 0.3s;
 }
 
 .thinking-panel {
@@ -1466,8 +1566,16 @@ const scrollToBottom = async () => {
 }
 
 @keyframes dot {
-  0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; }
-  40% { transform: scale(1); opacity: 1; }
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes bannerFlash {
@@ -1508,16 +1616,44 @@ const scrollToBottom = async () => {
   }
 }
 @media (max-width: 600px) {
-  .chat-page { gap: 10px; }
-  .session-panel { max-height: 240px; min-height: 0; }
-  .session-list { max-height: 130px; }
-  .chat-top-bar { align-items: stretch; flex-direction: column; gap: 10px; }
-  .mode-actions { flex-wrap: wrap; }
-  .anon-switch { justify-content: flex-start; }
-  .input-bar { flex-wrap: wrap; gap: 8px; }
-  .input-bar :deep(.el-textarea) { flex: 1 1 100%; min-width: 0; }
-  .input-bar .send-btn, .input-bar .deep-think-toggle { min-height: 44px; }
-  .message-row { max-width: 100%; }
-  .bubble { overflow-wrap: anywhere; }
+  .chat-page {
+    gap: 10px;
+  }
+  .session-panel {
+    max-height: 240px;
+    min-height: 0;
+  }
+  .session-list {
+    max-height: 130px;
+  }
+  .chat-top-bar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mode-actions {
+    flex-wrap: wrap;
+  }
+  .anon-switch {
+    justify-content: flex-start;
+  }
+  .input-bar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .input-bar :deep(.el-textarea) {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .input-bar .send-btn,
+  .input-bar .deep-think-toggle {
+    min-height: 44px;
+  }
+  .message-row {
+    max-width: 100%;
+  }
+  .bubble {
+    overflow-wrap: anywhere;
+  }
 }
 </style>
