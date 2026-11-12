@@ -48,7 +48,12 @@ SOURCE_DIRS = {
     "deliverables", "scripts", ".github",
 }
 # These are pre-existing source assets, pending the design/data migration waves.
-LEGACY_DIRS = {"dashboard", "picture"}
+# `picture` left this set once its three PNGs moved to
+# src/assets/avatars/teachers/legacy/ (with manifest entries). It must be removed
+# only after the move: the branch below is an `elif`, so a still-present
+# picture/*.png would otherwise fall through to `unexpected_tracked_paths` and
+# fail the check.
+LEGACY_DIRS = {"dashboard"}
 RUNTIME = re.compile(
     r"(^|/)(__pycache__|node_modules|dist|coverage|htmlcov|logs|tmp|"
     r"\.venv|venv|\.pytest_cache|\.idea|\.workbuddy)(/|$)"
