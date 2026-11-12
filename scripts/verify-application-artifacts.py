@@ -1,5 +1,5 @@
 """Read-only application/outline checks including all three-line table rules."""
-import argparse
+import argparse  # noqa: I001
 import hashlib
 import json
 from pathlib import Path
@@ -44,7 +44,7 @@ def verify(docx,outline,template,qa):
         assert set(old.namelist())==set(new.namelist())
         preserved=[p for p in old.namelist() if p!='word/document.xml']
         assert all(old.read(p)==new.read(p) for p in preserved)
-        a=etree.fromstring(old.read('word/document.xml'));b=etree.fromstring(new.read('word/document.xml'))
+        a=etree.fromstring(old.read('word/document.xml'));b=etree.fromstring(new.read('word/document.xml'))  # noqa: E702
         assert [etree.tostring(x) for x in a.findall('.//w:sectPr',NS)]==[etree.tostring(x) for x in b.findall('.//w:sectPr',NS)]
         text=''.join(b.xpath('//w:t/text()',namespaces=NS))
         assert text.count(summary)==2 and len(summary)==218
@@ -90,6 +90,6 @@ if __name__=='__main__':
     p.add_argument('--template',type=Path,default=Path('C:/University/Files/附件.docx'))
     p.add_argument('--qa',type=Path,default=ROOT/'tmp/application-delivery-20261026')
     p.add_argument('--report',type=Path,required=True)
-    a=p.parse_args();report=verify(a.docx.resolve(),a.outline.resolve(),a.template,a.qa.resolve())
+    a=p.parse_args();report=verify(a.docx.resolve(),a.outline.resolve(),a.template,a.qa.resolve())  # noqa: E702
     a.report.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(report,ensure_ascii=False))

@@ -1,5 +1,5 @@
 """Create a self-contained, plain HTML review copy of the application body."""
-import argparse, base64, html, re
+import argparse, base64, html, re  # noqa: E401, I001
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -10,38 +10,38 @@ source=ROOT/'docs/plan/心域智链申报计划书.md'
 lines=source.read_text(encoding='utf-8').splitlines()
 
 def inline(s):
-    parts=[];end=0
+    parts=[];end=0  # noqa: E702
     for m in re.finditer(r'\[([^\]]+)\]\((https://[^)]+)\)|(https://[^\s<>，。；）]+)',s):
-        parts.append(html.escape(s[end:m.start()]));url=m[2] or m[3];label=m[1] or url
-        parts.append(f'<a href="{html.escape(url)}">{html.escape(label)}</a>');end=m.end()
+        parts.append(html.escape(s[end:m.start()]));url=m[2] or m[3];label=m[1] or url  # noqa: E702
+        parts.append(f'<a href="{html.escape(url)}">{html.escape(label)}</a>');end=m.end()  # noqa: E702
     return ''.join(parts)+html.escape(s[end:])
 
-blocks=[];toc=[];i=0
+blocks=[];toc=[];i=0  # noqa: E702
 while i<len(lines):
-    line=lines[i].strip();i+=1
-    if not line or line.startswith('>'):continue
+    line=lines[i].strip();i+=1  # noqa: E702
+    if not line or line.startswith('>'):continue  # noqa: E701
     if line.startswith('#'):
-        level=len(line)-len(line.lstrip('#'));text=line[level:].strip()
+        level=len(line)-len(line.lstrip('#'));text=line[level:].strip()  # noqa: E702
         anchor=f'section-{len(toc)}' if level==2 else ''
-        if level==2:toc.append((anchor,text))
-        blocks.append(f'<h{level} id="{anchor}">{inline(text)}</h{level}>');continue
+        if level==2:toc.append((anchor,text))  # noqa: E701
+        blocks.append(f'<h{level} id="{anchor}">{inline(text)}</h{level}>');continue  # noqa: E702
     if line.startswith('|'):
         rows=[line]
-        while i<len(lines) and lines[i].strip().startswith('|'):rows.append(lines[i].strip());i+=1
+        while i<len(lines) and lines[i].strip().startswith('|'):rows.append(lines[i].strip());i+=1  # noqa: E701, E702
         cells=[[c.strip() for c in row.strip('|').split('|')] for row in rows]
         cells=[r for r in cells if not all(re.fullmatch(r':?-{3,}:?',v) for v in r)]
         header='<tr>'+''.join(f'<th scope="col">{inline(v)}</th>' for v in cells[0])+'</tr>'
         body=''.join('<tr>'+''.join(f'<td>{inline(v)}</td>' for v in r)+'</tr>' for r in cells[1:])
-        blocks.append(f'<div class="table-wrap"><table><thead>{header}</thead><tbody>{body}</tbody></table></div>');continue
+        blocks.append(f'<div class="table-wrap"><table><thead>{header}</thead><tbody>{body}</tbody></table></div>');continue  # noqa: E702
     image=re.fullmatch(r'!\[([^\]]*)\]\(([^)]+)\)',line)
     if image:
-        file=(source.parent/image[2]).resolve();file.relative_to(ROOT)
-        if args.prefer_svg and file.with_suffix('.svg').exists():file=file.with_suffix('.svg')
+        file=(source.parent/image[2]).resolve();file.relative_to(ROOT)  # noqa: E702
+        if args.prefer_svg and file.with_suffix('.svg').exists():file=file.with_suffix('.svg')  # noqa: E701
         data=base64.b64encode(file.read_bytes()).decode()
         mime='image/svg+xml' if file.suffix=='.svg' else 'image/png'
-        blocks.append(f'<img src="data:{mime};base64,{data}" alt="{html.escape(image[1])}">');continue
+        blocks.append(f'<img src="data:{mime};base64,{data}" alt="{html.escape(image[1])}">');continue  # noqa: E702
     if line.startswith('$$') and line.endswith('$$'):
-        blocks.append(f'<p class="equation">{inline(line[2:-2])}</p>');continue
+        blocks.append(f'<p class="equation">{inline(line[2:-2])}</p>');continue  # noqa: E702
     cls='caption' if re.match(r'^[图表]\d+\s',line) else 'source' if line.startswith(('来源：','项目方案示意')) else ''
     blocks.append(f'<p class="{cls}">{inline(line)}</p>')
 

@@ -3,11 +3,11 @@
 This never builds the application image or uses an application database/key.
 Run without --run to print a plan. Test certificates are generated locally.
 """
-import argparse
+import argparse  # noqa: I001
 import importlib.util
 import os
 import shutil
-import sys
+import sys  # noqa: F401
 import base64
 import gzip
 import hashlib
@@ -179,7 +179,7 @@ ThreadingHTTPServer(('0.0.0.0',8000),Handler).serve_forever()
 (OUT/'html/qa.js').write_text('const qa = "'+('synthetic '*600)+'";', encoding='utf-8')
 (OUT/'certs').mkdir(exist_ok=False)
 try:
-    port_free(args.http_port);port_free(args.tls_port)
+    port_free(args.http_port);port_free(args.tls_port)  # noqa: E702
     for tag, label in ((N,'nginx'), (P,'synthetic_python')):
         item = json.loads(docker(['image','inspect',tag,'--format','{{json .Id}}'], label+'-id').stdout)
         RESULT[label+'_image_id'] = item
@@ -193,12 +193,12 @@ try:
     (OUT/'certs/privkey.pem').chmod(0o444)
     docker(['network','create','--label',f'healthnew.qa={PREFIX}',NETWORK], 'network-create')
     NETWORK_CREATED = True
-    name = PREFIX+'-backend';NAMES.append(name)
+    name = PREFIX+'-backend';NAMES.append(name)  # noqa: E702
     docker(['run','-d','--name',name,'--pull','never','--network',NETWORK,'--network-alias','backend',
         '--label',f'healthnew.qa={PREFIX}','--read-only','--cap-drop','ALL','--security-opt','no-new-privileges:true',
         '--user','65534:65534',*mount(OUT/'probe-backend.py','/probe.py'),P,'python','-B','/probe.py'], 'backend-start')
     for tls in (False,True):
-        name=PREFIX+('-tls' if tls else '-http');NAMES.append(name)
+        name=PREFIX+('-tls' if tls else '-http');NAMES.append(name)  # noqa: E702
         site=ROOT/'deploy/fullstack'/('nginx-tls.conf' if tls else 'nginx.conf')
         frontend_args=['run','-d','--name',name,'--pull','never','--network',NETWORK,'--label',f'healthnew.qa={PREFIX}',
             '--read-only','--cap-drop','ALL','--security-opt','no-new-privileges:true','--user','nginx',
@@ -215,11 +215,11 @@ try:
         assert fields=='nginx|true|["ALL"]', fields
         RESULT['checks']['tls' if tls else 'http']['nonroot_readonly_capdrop'] = True
         docker(['stop','-t','2',name],'frontend-stop-'+str(tls))
-        docker(['rm',name],'frontend-remove-'+str(tls));NAMES.remove(name)
+        docker(['rm',name],'frontend-remove-'+str(tls));NAMES.remove(name)  # noqa: E702
         RESULT['cleanup'][name] = {'stop_exit':0, 'remove_exit':0}
     RESULT['status']='passed'
 except Exception as exc:
-    RESULT['status']='failed';RESULT['error']=str(exc)
+    RESULT['status']='failed';RESULT['error']=str(exc)  # noqa: E702
 finally:
     for name in reversed(NAMES):
         ownership = docker(['inspect','--format','{{index .Config.Labels "healthnew.qa"}}',name], name+'-ownership',False)

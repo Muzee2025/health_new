@@ -3,7 +3,7 @@
 The supplied template and every non-document ZIP part remain unchanged.
 Use the bundled workspace Python. Draft output paths must be new.
 """
-import argparse
+import argparse  # noqa: I001
 from copy import deepcopy
 import hashlib
 import json

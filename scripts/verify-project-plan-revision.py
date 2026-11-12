@@ -1,5 +1,5 @@
 """Verify the complete revised plan and its source/visual preservation."""
-from pathlib import Path
+from pathlib import Path  # noqa: I001
 from zipfile import ZipFile
 from hashlib import sha256
 import json
@@ -13,12 +13,12 @@ ROOT = Path(__file__).resolve().parents[1]
 WORK = ROOT / 'tmp/project-plan-revision-20261029'
 build = json.loads((WORK / 'build-verification.json').read_text(encoding='utf-8'))
 base, output = Path(build['base']), Path(build['output'])
-digest = lambda p: sha256(Path(p).read_bytes()).hexdigest()
+digest = lambda p: sha256(Path(p).read_bytes()).hexdigest()  # noqa: E731
 assert digest(base) == build['baseSha256'] == 'b57452d9cf98353e58c862778a7f4ba9fe7b804317db481c6ad000fe63e3641e'
 assert digest(output) == build['sha256']
 assert digest('C:/University/Files/附件.docx') == 'f2dc7a1b9fe60be8cdc37dd02f98c5856aa27bf7d780cb44b87a79b8126cc2ec'
 ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'm': 'http://schemas.openxmlformats.org/officeDocument/2006/math', 'r': 'http://schemas.openxmlformats.org/package/2006/relationships'}
-canonical = lambda e: etree.tostring(e, method='c14n', exclusive=True)
+canonical = lambda e: etree.tostring(e, method='c14n', exclusive=True)  # noqa: E731
 with ZipFile(base) as old, ZipFile(output) as final:
     a, b = [etree.fromstring(z.read('word/document.xml')) for z in (old, final)]
     old_tables, new_tables = [x.findall('.//w:tbl', ns) for x in (a, b)]

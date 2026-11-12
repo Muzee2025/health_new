@@ -1,9 +1,9 @@
 """Normalize public research aggregates; keep participant rows out of all outputs."""
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 import csv
 import hashlib
 import json
-import math
+import math  # noqa: F401
 import re
 import statistics
 import zipfile
@@ -48,9 +48,9 @@ def read_xlsx(path):
 
 
 def save_csv(name, rows):
-    if not rows: return
+    if not rows: return  # noqa: E701
     with (PUBLIC/name).open('w',encoding='utf-8-sig',newline='') as f:
-        w=csv.DictWriter(f, fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+        w=csv.DictWriter(f, fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)  # noqa: E702
 
 
 def main():
@@ -83,7 +83,7 @@ def main():
     supplement=RAW/'ZHOU2024-13034_2024_841_MOESM4_ESM.pdf'
     text='\n'.join(p.extract_text() for p in PdfReader(supplement).pages)
     (WORK/'zhou-supplement-extracted.txt').write_text(text,encoding='utf-8')
-    yearly=[];regions=[]
+    yearly=[];regions=[]  # noqa: E702
     for line in text.splitlines():
         m=re.match(r'^\s*(\d{4})\s+(\d+)\s+(\d+)\s+([0-9.]+)\s+\[([0-9.]+);\s*([0-9.]+)\]\s+(--|\d+%)',line)
         if m:
@@ -98,10 +98,10 @@ def main():
     screening=[{'source_id':'ZHOU2024','subgroup_type':'总体','group':'全部纳入研究','studies_k':439,'sample_n':1497524,'estimate':.2617,'ci95_lower':.25,'ci95_upper':.2741,'i2':1.0,'instrument':'多量表','cutoff':'不统一','source_location':'摘要/Results','limitation':'合并筛查阳性，不是临床诊断；不能跨重叠亚组相加'}]
     group=''
     for row in papers['ZHOU2024']['tables'][0]['cells'][1:]:
-        if len(row)<6: continue
-        if row[0]: group=row[0]
+        if len(row)<6: continue  # noqa: E701
+        if row[0]: group=row[0]  # noqa: E701
         match=re.search(r'([0-9.]+)\s*\[([0-9.]+)[–-]([0-9.]+)\]',row[4])
-        if not match: continue
+        if not match: continue  # noqa: E701
         p,lo,hi=map(float,match.groups())
         screening.append({'source_id':'ZHOU2024','subgroup_type':group,'group':row[1],'studies_k':int(row[2]),'sample_n':int(row[3]),'estimate':p/100,'ci95_lower':lo/100,'ci95_upper':hi/100,'i2':float(row[5].replace('%',''))/100,'instrument':row[1] if group=='Scale' else '多量表','cutoff':'不统一','source_location':'原文Table 1','limitation':'亚组n/k不可相加；保留原文数值'})
     screening.extend(regions)
@@ -118,24 +118,24 @@ def main():
     factors=[]
     pattern=r'([0-9.]+)\s*\(([0-9.]+)[–-]([0-9.]+),\s*p\s*([<=>]+)\s*([0-9.]+)\)'
     for ti,pop in [(1,'全部中学生'),(2,'初中'),(3,'高中')]:
-        factor='';ref=''
+        factor='';ref=''  # noqa: E702
         for row in papers['CHEN2023']['tables'][ti]['cells'][1:]:
-            if len(row)<6: continue
-            if row[0]: factor=row[0];ref=row[1] if row[5]=='-' else '连续变量每1单位'
+            if len(row)<6: continue  # noqa: E701
+            if row[0]: factor=row[0];ref=row[1] if row[5]=='-' else '连续变量每1单位'  # noqa: E701, E702
             m=re.search(pattern,row[5],re.I)
             if m:
                 val,lo,hi,op,p=m.groups()
                 factors.append({'source_id':'CHEN2023','table':f'Table {ti+1}','population':pop,'outcome':'心理困扰：PHQ-9≥10或GAD-7≥10','factor':factor,'comparison':row[1],'reference':ref,'adjusted_or':float(val),'ci95_lower':float(lo),'ci95_upper':float(hi),'p_reported':op+p,'causal_status':'横断面关联；OR不是风险比','source_cell':row[5]})
-    factor='';ref='原文二分类参考'
+    factor='';ref='原文二分类参考'  # noqa: E702
     direct_references={'Second survey completion':'第一次调查','Female':'男性','Senior secondary school':'初中','Major class':'原文未明示参照方向/编码','Participating in distance learning':'不参加远程学习','Concerned about entering a higher grade':'不担忧升学'}
     for row in papers['CHEN2021']['tables'][2]['cells'][3:]:
-        if len(row)==1: factor=row[0];ref='';continue
-        if len(row)<9: continue
-        if row[1]=='Ref': ref=row[0];continue
-        if row[0] in direct_references:factor=row[0];ref=direct_references[row[0]]
+        if len(row)==1: factor=row[0];ref='';continue  # noqa: E701, E702
+        if len(row)<9: continue  # noqa: E701
+        if row[1]=='Ref': ref=row[0];continue  # noqa: E701, E702
+        if row[0] in direct_references:factor=row[0];ref=direct_references[row[0]]  # noqa: E701, E702
         for offset,outcome in [(1,'CES-D>15'),(5,'GAD-7>4')]:
-            try:val,lo,hi=map(float,[row[offset+1],row[offset+2],row[offset+3]])
-            except ValueError:continue
+            try:val,lo,hi=map(float,[row[offset+1],row[offset+2],row[offset+3]])  # noqa: E701
+            except ValueError:continue  # noqa: E701
             factors.append({'source_id':'CHEN2021','table':'Table 3','population':'两次独立调查合并','outcome':outcome,'factor':factor or row[0],'comparison':row[0],'reference':ref or '原文对应参考组','adjusted_or':val,'ci95_lower':lo,'ci95_upper':hi,'p_reported':row[offset],'causal_status':'横断面关联；调整后波次OR不是发病率比','source_cell':' | '.join(row)})
     datasets['adjusted_associations']=factors
 
@@ -175,8 +175,8 @@ def main():
     for row in trial_doc.tables[0].rows[1:]:
         c=[' '.join(cell.text.split()) for cell in row.cells]
         def number(x):
-            try:return float(x)
-            except ValueError:return None
+            try:return float(x)  # noqa: E701
+            except ValueError:return None  # noqa: E701
         trial_rows.append({'source_id':'FENG2025','study':c[0],'sample_type':c[1],'reported_n':int(c[2]),'female_fraction':number(c[3])/100 if number(c[3]) is not None else None,'mean_age':number(c[4]),'agent_name':c[5],'platform':c[6],'mode':c[7],'therapy':c[8],'duration':c[10],'control':c[11],'outcomes':c[12],'source_location':'Multimedia Appendix 2, Table S2','limitation':'按原表15行保留；未把与Woebot单篇重叠样本再次相加'})
     assert len(trial_rows)==15
     datasets['ai_trial_characteristics']=trial_rows
@@ -197,9 +197,9 @@ def main():
     for outcome,analysis,k,g,lo,hi,i2,p,loc in effect_cfg:
         effects.append({'source_id':'FENG2025','outcome':outcome,'analysis':analysis,'trials_k_reported':k,'hedges_g':g,'ci95_lower':lo,'ci95_upper':hi,'i2':i2,'p_reported':p,'ci_excludes_zero':lo>0 or hi<0,'source_location':loc,'limitation':'正g有利干预；原文报告值，非本项目效果'+('；CI跨0却p<.001、k异常，标为不用于结论' if '冲突' in analysis else '')})
     datasets['ai_effects']=effects
-    moderators=[];group=''
+    moderators=[];group=''  # noqa: E702
     for row in papers['FENG2025']['tables'][1]['cells'][1:]:
-        if len(row)<=3:group=row[0];continue
+        if len(row)<=3:group=row[0];continue  # noqa: E701, E702
         m=re.search(r'([0-9.]+)\s*\(([–-]?[0-9.]+) to ([–-]?[0-9.]+)\)',row[3])
         if m:
             g,lo,hi=[float(x.replace('–','-')) for x in m.groups()]
@@ -207,7 +207,7 @@ def main():
     datasets['ai_moderators']=moderators
     endpoint=[]
     for row in papers['FITZ2017']['tables'][1]['cells'][2:]:
-        if len(row)<8:continue
+        if len(row)<8:continue  # noqa: E701
         for arm,offset in [('信息对照',1),('Woebot',3)]:
             mean,se=map(float,re.match(r'([0-9.]+)\s*\(([0-9.]+)\)',row[offset]).groups())
             lo,hi=map(float,re.split('[–-]',row[offset+1]))
@@ -234,22 +234,22 @@ def main():
       ('FITZ2017','原表统计量疑有不一致','PANAS negative F0.91/P.912；若干CI与SE不完全对应','按原表列示并标注，不据疑似错误重算疗效'),
       ('SCISPACE','受限数据不当作已获得','Chinese University Students Lifestyle Dataset 35,197记录/82字段需签章申请并有限制','未申请、未解密、未混入可分析数据'),
     ]
-    datasets['source_audits']=[dict(zip(['source_id','issue','observed_evidence','handling'],r)) for r in audits]
-    files=[];seen=set()
+    datasets['source_audits']=[dict(zip(['source_id','issue','observed_evidence','handling'],r)) for r in audits]  # noqa: B905
+    files=[];seen=set()  # noqa: E702
     for sid,p in papers.items():
         for d in p['downloads']:
-            if d.get('status')!=200:continue
-            f=WORK/d['path'];assert hashlib.sha256(f.read_bytes()).hexdigest()==d['sha256']
-            if d['sha256'] in seen:continue
+            if d.get('status')!=200:continue  # noqa: E701
+            f=WORK/d['path'];assert hashlib.sha256(f.read_bytes()).hexdigest()==d['sha256']  # noqa: E702
+            if d['sha256'] in seen:continue  # noqa: E701
             seen.add(d['sha256'])
             excluded=f.suffix.lower()=='.xlsx'
             files.append({'source_id':sid,'file':f.name,'sha256':d['sha256'],'bytes':d['bytes'],'url':d['url'],'downloaded_at':d['downloaded_at'],'delivery':'仅本地，含个体数据' if excluded else '研究资料包','license':'CC BY 4.0；数值/表格按原文许可','local_relative_path':d['path']})
     datasets['downloaded_files']=files
     result['microdata']={'source_id':'YANG2023','rows':len(rows),'columns':len(columns),'no_participant_rows_exported':True}
     result['summary']={'unique_downloaded_files':len(files),'sources':len(registry),'year_groups':len(yearly),'region_groups':len(regions),'screening_rows':len(screening),'or_rows':len(factors),'ai_trial_rows':len(trial_rows),'ai_trial_n_sum':sum(x['reported_n'] for x in trial_rows),'microdata_rows':len(rows),'microdata_columns':len(columns),'wave_depression_difference_pp':(.570-.366)*100,'wave_anxiety_difference_pp':(.367-.190)*100}
-    for name,values in datasets.items():save_csv(name+'.csv',values)
+    for name,values in datasets.items():save_csv(name+'.csv',values)  # noqa: E701
     (PUBLIC/'processed-data.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'summary':result['summary'],'quality':diag[:14]},ensure_ascii=False))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':main()  # noqa: E701

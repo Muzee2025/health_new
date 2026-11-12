@@ -1,16 +1,16 @@
 """Add reproducible statistics and literature data; use title-free publication figures."""
-import argparse,hashlib,importlib.util,json,re
+import argparse,hashlib,importlib.util,json,re  # noqa: E401, I001
 from pathlib import Path
 from docx import Document
-from docx.oxml import OxmlElement
+from docx.oxml import OxmlElement  # noqa: F401
 from docx.oxml.ns import qn
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH  # noqa: F401
 from docx.shared import Pt,RGBColor
 
-ROOT=Path(__file__).resolve().parents[1];BASE=ROOT/'docs/plan/ai-application'
-DATA=BASE/'sci-revision-20261027';QA=ROOT/'tmp/sci-application-20261027'
+ROOT=Path(__file__).resolve().parents[1];BASE=ROOT/'docs/plan/ai-application'  # noqa: E702
+DATA=BASE/'sci-revision-20261027';QA=ROOT/'tmp/sci-application-20261027'  # noqa: E702
 spec=importlib.util.spec_from_file_location('application_format',ROOT/'scripts/build-revised-application.py')
-g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)  # noqa: E702
 
 REGION_EN='Beijing Tianjin Hebei Shanxi Inner_Mongolia Liaoning Jilin Heilongjiang Shanghai Jiangsu Zhejiang Anhui Fujian Jiangxi Shandong Henan Hubei Hunan Guangdong Guangxi Hainan Chongqing Sichuan Guizhou Yunnan Tibet Shaanxi Gansu Qinghai Ningxia Xinjiang'.split()
 REGION_ZH='北京 天津 河北 山西 内蒙古 辽宁 吉林 黑龙江 上海 江苏 浙江 安徽 福建 江西 山东 河南 湖北 湖南 广东 广西 海南 重庆 四川 贵州 云南 西藏 陕西 甘肃 青海 宁夏 新疆'.split()
@@ -56,13 +56,13 @@ def content(source):
     block='### 1.2 从多项研究观察学段与地区差异\n\n'
     block+='除单项调查外，Zhou等的综述纳入439项研究、1,497,524名6—24岁参与者，抑郁症状筛查阳性的合并比例为26.17%，95%置信区间为25.00%—27.41%，总体异质性I²=100%。同一综述列出了四个学段，便于把高校需求放在成长阶段中理解。[25]\n'
     rows=[['学段研究亚组','研究数k','样本记录数n','合并比例（%）','95%置信区间（%）']]
-    for r in stages:rows.append([STAGES[r['stage']],str(r['studies_k']),f"{r['sample_n']:,}",f"{r['estimate_percent']:.2f}",f"{r['ci95_lower_percent']:.2f}—{r['ci95_upper_percent']:.2f}"])
+    for r in stages:rows.append([STAGES[r['stage']],str(r['studies_k']),f"{r['sample_n']:,}",f"{r['estimate_percent']:.2f}",f"{r['ci95_lower_percent']:.2f}—{r['ci95_upper_percent']:.2f}"])  # noqa: E701
     block+=mdtable('stage','文献学段亚组的抑郁症状筛查结果 [25]',rows)+figure('fig12-literature-stage')
     block+='高中和本科亚组的点估计分别为28.23%和27.72%，初中为24.15%，小学为16.97%。高中与小学点估计相差11.26个百分点。初高中阶段的学习适应和进入大学后的生活转变，都应在测评反馈与后续支持中有所体现。\n\n'
     block+='地区亚组呈现了另一层差异。下表按教育部地区顺序列出31省份的研究汇总，每行同时给出研究数、样本记录数和区间。项目调研将结合湖北高校的具体流程，了解不同学校怎样组织测评、解释记录和承接学生求助。[26]\n'
     index={r['region']:r for r in lit['geographic_subgroups']['rows']}
     rows=[['地区研究亚组','研究数k','样本记录数n','合并比例（%）','95%置信区间（%）']]
-    for en,zh in zip(REGION_EN,REGION_ZH):
+    for en,zh in zip(REGION_EN,REGION_ZH):  # noqa: B905
         r=index[en.replace('_',' ')]
         rows.append([zh+('（含多地）' if zh=='天津' else ''),str(r['studies_k']),f"{r['sample_n']:,}",f"{r['estimate_percent']:.2f}",f"{r['ci95_lower_percent']:.2f}—{r['ci95_upper_percent']:.2f}"])
     block+=mdtable('literature-regions','31省份文献地区亚组的抑郁症状筛查结果 [26]',rows)+figure('fig13-literature-regions')
@@ -71,12 +71,12 @@ def content(source):
     block='### 3.3 教育规模的数学分析\n\n'
     block+='把同一学段第i个地区的在校生数记为xᵢ，31个地区合计为S。地区占比pᵢ用于判断学生群体的分布；均值和中位数描述典型规模，变异系数CV衡量相对离散程度。\n\n{{EQ:share}}\n\n{{EQ:cv}}\n'
     rows=[['学段','合计（万人）','均值（万人）','中位数（万人）','总体SD（万人）']]
-    for stage,s in stats.items():rows.append([stage]+[f"{s[k]/10000:.2f}" for k in ['total','mean','median','population_sd']])
+    for stage,s in stats.items():rows.append([stage]+[f"{s[k]/10000:.2f}" for k in ['total','mean','median','population_sd']])  # noqa: E701
     block+=mdtable('descriptive','2024年31省份教育规模的描述统计',rows)
     block+='三个学段的均值都高于中位数，表明少数规模较大的地区提高了均值。以初中为例，地区均值为173.75万人、中位数为145.15万人；本专科地区均值为125.52万人、中位数为114.96万人。比较调研地区时，同时看规模和分布，比只看全国总量更有用。\n\n'
     block+='再将各地区人数从大到小排列为x₍ᵣ₎，前五地区份额CR₅反映人数最多五地占合计的比例。基尼系数G则汇总31个地区之间的人数差异。\n\n{{EQ:cr5}}\n\n{{EQ:gini}}\n'
     rows=[['学段','CV（%）','前五份额CR₅（%）','基尼系数G']]
-    for stage,s in stats.items():rows.append([stage,f"{s['cv']*100:.2f}",f"{s['cr5']*100:.2f}",f"{s['gini']:.4f}"])
+    for stage,s in stats.items():rows.append([stage,f"{s['cv']*100:.2f}",f"{s['cr5']*100:.2f}",f"{s['gini']:.4f}"])  # noqa: E701
     block+=mdtable('concentration','2024年三个学段教育规模的地区集中程度',rows)+figure('fig14-education-lorenz')
     block+='本专科、普通高中和初中的前五地区份额分别为34.01%、36.34%和38.02%，基尼系数依次为0.3545、0.3934和0.4122。初中规模在地区之间更集中，本专科分布相对分散。对本项目而言，先在湖北高校观察完整使用流程，再比较不同规模学校的组织方式，有助于安排后续调研范围。\n\n'
     text=text.replace('### 3.3 采购案例与产品切入',block+'### 3.3 采购案例与产品切入')
@@ -96,80 +96,86 @@ def content(source):
     text+='\n\n'+'\n\n'.join(f'[{n}] {title} {url}' for n,(title,url) in enumerate(refs,25))+'\n'
     # Resolve original figure/table cross-references after inserting new assets.
     for kind in ['表','图']:
-        tokens=re.findall(r'(?m)^'+kind+r'@([\w-]+) ',text);mapping={token:i for i,token in enumerate(tokens,1)}
+        tokens=re.findall(r'(?m)^'+kind+r'@([\w-]+) ',text);mapping={token:i for i,token in enumerate(tokens,1)}  # noqa: E702
         oldmap={int(k[3:]):v for k,v in mapping.items() if k.startswith('old')} if kind=='表' else {n:mapping[k] for n,k in old_figures.items()}
-        text=re.sub(kind+r'(\d+)(?!\d)',lambda m:kind+str(oldmap.get(int(m[1]),int(m[1]))),text)
-        text=re.sub(kind+r'@([\w-]+)',lambda m:kind+str(mapping[m[1]]),text)
+        # The two lambdas below close over `kind`/`oldmap`/`mapping` from the loop.
+        # `re.sub` consumes them synchronously inside the same iteration, so the
+        # late binding never triggers today. Verified with a minimal repro: the
+        # same pattern returns wrong values only if the closure is stored and
+        # called after the loop. Bind defaults (lambda m, k=kind: ...) if this is
+        # ever refactored to defer the call.
+        text=re.sub(kind+r'(\d+)(?!\d)',lambda m:kind+str(oldmap.get(int(m[1]),int(m[1]))),text)  # noqa: B023
+        text=re.sub(kind+r'@([\w-]+)',lambda m:kind+str(mapping[m[1]]),text)  # noqa: B023
     # Regenerate subsection numbers in reading order.
-    chapter=0;counts={}
+    chapter=0;counts={}  # noqa: E702
     lines=[]
     for line in text.splitlines():
-        if re.match(r'^## [1-6] ',line):chapter=int(line[3]);counts[chapter]=0
+        if re.match(r'^## [1-6] ',line):chapter=int(line[3]);counts[chapter]=0  # noqa: E701, E702
         if re.match(r'^### [1-6]\.\d+ ',line):
-            counts[chapter]+=1;line=re.sub(r'^### \d+\.\d+ ',f'### {chapter}.{counts[chapter]} ',line)
+            counts[chapter]+=1;line=re.sub(r'^### \d+\.\d+ ',f'### {chapter}.{counts[chapter]} ',line)  # noqa: E702
         lines.append(line)
     return '\n'.join(lines)+'\n'
 
 def build(source,base_docx,output):
-    if output.exists():raise ValueError('Use a new candidate output path')
-    md=content(source);doc=Document(base_docx)
+    if output.exists():raise ValueError('Use a new candidate output path')  # noqa: E701
+    md=content(source);doc=Document(base_docx)  # noqa: E702
     title=next(p for p in doc.paragraphs if p.style.name=='Title' and '项目申报书' in p.text)
     cursor=title._p.getnext()
     while cursor is not None:
         nxt=cursor.getnext()
-        if cursor.tag!=qn('w:sectPr'):cursor.getparent().remove(cursor)
+        if cursor.tag!=qn('w:sectPr'):cursor.getparent().remove(cursor)  # noqa: E701
         cursor=nxt
-    lines=md.splitlines();i=0;equations=0;images=[];tables=0;abstract=False
+    lines=md.splitlines();i=0;equations=0;images=[];tables=0;abstract=False  # noqa: E702
     while i<len(lines):
-        line=lines[i].strip();i+=1
-        if not line or line.startswith(('# ','>')):continue
-        if line.startswith('## 摘要'):g.b.pf.abstract_title(doc);abstract=True;continue
+        line=lines[i].strip();i+=1  # noqa: E702
+        if not line or line.startswith(('# ','>')):continue  # noqa: E701
+        if line.startswith('## 摘要'):g.b.pf.abstract_title(doc);abstract=True;continue  # noqa: E701, E702
         if line.startswith('## '):
-            if abstract:g.b.pf.keywords(doc,'高校心理测评；地区比较；描述统计；数据分析；大模型应用');abstract=False
-            value=line[3:];g.heading(doc,value,newpage=value.startswith(('1 ','附录','参考文献')));continue
-        if line.startswith('### '):g.heading(doc,line[4:],2);continue
+            if abstract:g.b.pf.keywords(doc,'高校心理测评；地区比较；描述统计；数据分析；大模型应用');abstract=False  # noqa: E701, E702
+            value=line[3:];g.heading(doc,value,newpage=value.startswith(('1 ','附录','参考文献')));continue  # noqa: E702
+        if line.startswith('### '):g.heading(doc,line[4:],2);continue  # noqa: E701, E702
         if line.startswith('表') and re.match(r'^表\d+ ',line):
-            p=g.b.pf.figure_caption(doc,line);p.paragraph_format.keep_with_next=True;continue
+            p=g.b.pf.figure_caption(doc,line);p.paragraph_format.keep_with_next=True;continue  # noqa: E702
         if line.startswith('|'):
             rows=[]
             while True:
                 row=[c.strip() for c in line.strip('|').split('|')]
-                if not all(re.fullmatch(':?-{3,}:?',c) for c in row):rows.append(row)
-                if i>=len(lines) or not lines[i].strip().startswith('|'):break
-                line=lines[i].strip();i+=1
-            g.native_table(doc,rows);tables+=1;continue
+                if not all(re.fullmatch(':?-{3,}:?',c) for c in row):rows.append(row)  # noqa: E701
+                if i>=len(lines) or not lines[i].strip().startswith('|'):break  # noqa: E701
+                line=lines[i].strip();i+=1  # noqa: E702
+            g.native_table(doc,rows);tables+=1;continue  # noqa: E702
         match=re.fullmatch(r'!\[.*?\]\(([^)]+)\)',line)
         if match:
-            file=ROOT/'docs/plan'/match[1];assert file.exists()
-            p=g.b.pf.image(doc,file,width_cm=14.5);p.paragraph_format.keep_with_next=True;images.append(file.name);continue
-        if re.match(r'^图\d+ ',line):g.b.pf.figure_caption(doc,line);continue
+            file=ROOT/'docs/plan'/match[1];assert file.exists()  # noqa: E702
+            p=g.b.pf.image(doc,file,width_cm=14.5);p.paragraph_format.keep_with_next=True;images.append(file.name);continue  # noqa: E702
+        if re.match(r'^图\d+ ',line):g.b.pf.figure_caption(doc,line);continue  # noqa: E701, E702
         match=re.fullmatch(r'\{\{EQ:(\w+)\}\}',line)
         if match:
-            equations+=1;p=g.b.pf.equation(doc,FORMULAS[match[1]][0]);p.paragraph_format.space_before=Pt(5);p.paragraph_format.space_after=Pt(5)
-            p.add_run(f'  （{equations}）');continue
+            equations+=1;p=g.b.pf.equation(doc,FORMULAS[match[1]][0]);p.paragraph_format.space_before=Pt(5);p.paragraph_format.space_after=Pt(5)  # noqa: E702
+            p.add_run(f'  （{equations}）');continue  # noqa: E702
         if re.match(r'^\[\d+\]',line):
             title_text,url=line.rsplit(' ',1) if ' https://' in line else (line,'')
             # Previous source lines separate Chinese title from URL with a full stop.
             hit=re.search(r'https://\S+',line)
-            if hit:title_text=line[:hit.start()].rstrip('。 ');url=hit[0]
-            p=g.b.pf.paragraph(doc,title_text+'。访问日期2026-10-27。');p.paragraph_format.keep_with_next=True
-            for run in p.runs:g.b.pf.set_run_font(run,size=10)
+            if hit:title_text=line[:hit.start()].rstrip('。 ');url=hit[0]  # noqa: E701, E702
+            p=g.b.pf.paragraph(doc,title_text+'。访问日期2026-10-27。');p.paragraph_format.keep_with_next=True  # noqa: E702
+            for run in p.runs:g.b.pf.set_run_font(run,size=10)  # noqa: E701
             p=g.b.pf.paragraph(doc,url)
-            for run in p.runs:g.b.pf.set_run_font(run,size=8.5)
+            for run in p.runs:g.b.pf.set_run_font(run,size=8.5)  # noqa: E701
             continue
         g.b.pf.body(doc,line)
-    for name in ['Title','Heading 1','Heading 2','Heading 3']:doc.styles[name].font.color.rgb=RGBColor(0,0,0)
-    for height in doc.element.body.xpath('.//w:trHeight[@w:hRule="exact"]'):height.set(qn('w:hRule'),'atLeast')
+    for name in ['Title','Heading 1','Heading 2','Heading 3']:doc.styles[name].font.color.rgb=RGBColor(0,0,0)  # noqa: E701
+    for height in doc.element.body.xpath('.//w:trHeight[@w:hRule="exact"]'):height.set(qn('w:hRule'),'atLeast')  # noqa: E701
     doc.save(output)
-    for number,(key,(_,display)) in enumerate(FORMULAS.items(),1):md=md.replace('{{EQ:'+key+'}}','$$'+display+f'  （{number}）$$')
+    for number,(key,(_,display)) in enumerate(FORMULAS.items(),1):md=md.replace('{{EQ:'+key+'}}','$$'+display+f'  （{number}）$$')  # noqa: E701
     (ROOT/'docs/plan/心域智链申报计划书.md').write_text(md,encoding='utf-8')
     report={'document':str(output),'sha256':hashlib.sha256(output.read_bytes()).hexdigest(),
       'baseSourceSha256':hashlib.sha256(source.read_bytes()).hexdigest(),'baseDocxSha256':hashlib.sha256(base_docx.read_bytes()).hexdigest(),
       'bodyTables':tables,'bodyFigures':len(images),'figureFiles':images,'nativeEquations':equations,'references':27,'educationRegions':31,'literatureRegions':31,'originalLiteratureRegions':33}
-    QA.mkdir(parents=True,exist_ok=True);(QA/'build.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+    QA.mkdir(parents=True,exist_ok=True);(QA/'build.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')  # noqa: E702
     print(json.dumps({k:v for k,v in report.items() if k not in ['figureFiles','baseSourceSha256','baseDocxSha256']}))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True)
-    p.add_argument('--base-docx',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
-    a=p.parse_args();build(a.source,a.base_docx,a.output)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--source',type=Path,required=True)  # noqa: E702
+    p.add_argument('--base-docx',type=Path,required=True);p.add_argument('--output',type=Path,required=True)  # noqa: E702
+    a=p.parse_args();build(a.source,a.base_docx,a.output)  # noqa: E702

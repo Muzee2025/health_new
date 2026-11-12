@@ -1,5 +1,5 @@
 """Render five statistical charts. Data: chart-data.csv; diagrams are separate HTML."""
-import csv, json, os, re, sys
+import csv, json, os, re, sys  # noqa: E401, I001
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -9,12 +9,12 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(QA / 'pydeps'))  # Optional task-local matplotlib installation.
 sys.path.insert(0, 'C:/Users/14012/.agents/skills/math-modeling/tools/figure/scripts')
 os.environ['MPLCONFIGDIR'] = str(QA / 'mpl-cache')
-import matplotlib
+import matplotlib  # noqa: E402, I001
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from setup_style import setup_style
-from export_figure import export_figure
-from visual_qa import audit_layout
+import matplotlib.pyplot as plt  # noqa: E402, I001
+from setup_style import setup_style  # noqa: E402
+from export_figure import export_figure  # noqa: E402
+from visual_qa import audit_layout  # noqa: E402
 
 manifest = json.loads((DATA / 'visual-manifest.json').read_text(encoding='utf-8'))
 with (DATA / 'chart-data.csv').open(encoding='utf-8-sig', newline='') as f:
@@ -46,7 +46,7 @@ def horizontal(stem, labels, keys, xmax, xlabel, note, shades=None):
     vals = [values[k] for k in keys]
     ax.barh(labels, vals, height=.54, color=shades or colors['purple'],
             edgecolor=colors['ink'], linewidth=.4)
-    ax.invert_yaxis(); ax.set(xlim=(0, xmax), xlabel=xlabel)
+    ax.invert_yaxis(); ax.set(xlim=(0, xmax), xlabel=xlabel)  # noqa: E702
     for i, v in enumerate(vals):
         text = f'{v:,.2f}' if xmax > 1000 else f'{v:.1f}%'
         ax.text(v + xmax * .012, i, text, va='center', fontsize=8.7)
@@ -57,14 +57,14 @@ fig, ax = plt.subplots(1, 2, figsize=(5.7, 3.25))
 fig.subplots_adjust(left=.11, right=.98, bottom=.25, top=.81, wspace=.46)
 vals = [values[k] for k in ['轻度风险组','高风险组']]
 ax[0].bar(['轻度风险','高风险'], vals, color=[colors['sage'],colors['purple']])
-for i, v in enumerate(vals): ax[0].text(i, v+1, f'{v:.1f}%', ha='center', fontsize=9)
+for i, v in enumerate(vals): ax[0].text(i, v+1, f'{v:.1f}%', ha='center', fontsize=9)  # noqa: E701
 ax[0].set(ylim=(0,55), ylabel='样本内比例（%）', title='经常或每天不想上学')
 ax[0].text(.5, -.22, '无抑郁风险组：<5%', transform=ax[0].transAxes, ha='center', fontsize=8)
 for offset, risk, shade in [(-.17,'无风险',colors['sage']),(.17,'高风险',colors['purple'])]:
     vals = [values[risk+'组'+k] for k in ['不做或抄作业','考试作弊']]
     positions = [offset, 1+offset]
     ax[1].bar(positions, vals, .34, label=risk, color=shade, hatch='///' if offset>0 else '')
-    for x, v in zip(positions, vals): ax[1].text(x, v+.5, f'{v:g}', ha='center', fontsize=8)
+    for x, v in zip(positions, vals): ax[1].text(x, v+.5, f'{v:g}', ha='center', fontsize=8)  # noqa: B905, E701
 ax[1].set(xticks=[0,1], xticklabels=['不做/抄作业','考试作弊'], ylim=(0,22), title='自陈学习问题（%）')
 ax[1].legend(frameon=False, loc='upper right', fontsize=8)
 save(fig, 'fig01-youth', '2024年五万余名四年级至高三样本；分组关联，非诊断率或因果效应。')
@@ -82,12 +82,12 @@ fig, ax = plt.subplots(1, 2, figsize=(5.7, 3.2))
 fig.subplots_adjust(left=.23, right=.97, bottom=.39, top=.76, wspace=1.2)
 vals = [values[k] for k in ['四川邮电单项软件','劳动关系学院综合系统']]
 ax[0].barh(['单项测评软件','高校综合系统'], vals, height=.5, color=[colors['sage'],colors['purple']])
-ax[0].invert_yaxis(); ax[0].set(xlim=(0,55), xlabel='公告金额（万元）', title='高校两类标的')
-for i, v in enumerate(vals): ax[0].text(v+1, i, f'{v:g}', va='center', fontsize=8)
+ax[0].invert_yaxis(); ax[0].set(xlim=(0,55), xlabel='公告金额（万元）', title='高校两类标的')  # noqa: E702
+for i, v in enumerate(vals): ax[0].text(v+1, i, f'{v:g}', va='center', fontsize=8)  # noqa: E701
 measure, support, regional = [values[k] for k in ['龙泉驿测评包','龙泉驿干预包','成都教科院区域服务']]
 ax[1].barh(['龙泉驿两包','成都教科院'], [measure,regional], height=.5, color=[colors['purple'],colors['sage']])
 ax[1].barh(['龙泉驿两包'], [support], left=[measure], height=.5, color=colors['apricot'], hatch='///')
-ax[1].invert_yaxis(); ax[1].set(xlim=(0,115), xlabel='公告金额（万元）', title='区域综合服务')
+ax[1].invert_yaxis(); ax[1].set(xlim=(0,115), xlabel='公告金额（万元）', title='区域综合服务')  # noqa: E702
 ax[1].text(measure/2, 0, str(measure), ha='center', va='center', color='white', fontsize=8)
 ax[1].text(measure+support/2, 0, str(support), ha='center', va='center', fontsize=8)
 ax[1].text(regional+1, 1, str(regional), va='center', fontsize=8)

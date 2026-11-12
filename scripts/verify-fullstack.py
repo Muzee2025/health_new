@@ -4,7 +4,7 @@ Default mode performs a read-only preflight and prints the planned stages. Use
 --run only after reviewing the plan. All run artifacts live in a new private
 directory below the repository's ignored tmp/ directory.
 """
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import argparse
 import json
@@ -15,7 +15,7 @@ import secrets
 import shutil
 import socket
 import subprocess
-import sys
+import sys  # noqa: F401
 import urllib.error
 import urllib.request
 

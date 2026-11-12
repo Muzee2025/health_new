@@ -4,7 +4,7 @@ Usage: .venv/Scripts/python.exe scripts/run-backend-baseline.py [pytest argument
 Does not install dependencies, read local .env values, or replace missing modules.
 """
 
-import os
+import os  # noqa: I001
 import re
 import socket
 import sys

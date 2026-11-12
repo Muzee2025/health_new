@@ -45,7 +45,7 @@ code/内提供采集和处理脚本。依赖Python及lxml、python-docx、pypdf�
 '''
     with zipfile.ZipFile(OUTPUT,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=7) as z:
         z.writestr('README.md',package_readme)
-        for f in sorted(PUBLIC.glob('*.csv')):z.write(f,'processed/'+f.name)
+        for f in sorted(PUBLIC.glob('*.csv')):z.write(f,'processed/'+f.name)  # noqa: E701
         for name in ['processed-data.json','search-log.json']:
             z.write(PUBLIC/name,('processed/' if name.startswith('processed') else 'provenance/')+name)
         source_records=[]
@@ -67,4 +67,4 @@ code/内提供采集和处理脚本。依赖Python及lxml、python-docx、pypdf�
     print(json.dumps({'output':str(OUTPUT),'sha256':hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),'bytes':OUTPUT.stat().st_size,'zip_entries':len(names),'public_raw_files':25,'participant_rows_exported':0},ensure_ascii=False))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':main()  # noqa: E701

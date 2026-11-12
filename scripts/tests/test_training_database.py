@@ -1,5 +1,5 @@
 """Tests for workbook fidelity and isolated dataset construction (no app imports)."""
-import importlib.util
+import importlib.util  # noqa: I001
 import json
 from pathlib import Path
 import sqlite3

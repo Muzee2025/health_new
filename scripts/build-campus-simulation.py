@@ -1,8 +1,8 @@
 """Build an isolated, reproducible 2025–2026 campus simulation (stdlib only)."""
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import argparse
-from collections import Counter
+from collections import Counter  # noqa: F401
 import csv
 from datetime import date, datetime, time, timedelta, timezone
 import hashlib
@@ -172,7 +172,7 @@ def allocate(total, programs):
     order = sorted(range(len(programs)), key=lambda i: -(total * programs[i][4] % weight))
     for index in order[:total - sum(seats)]:
         seats[index] += 1
-    return zip(programs, seats)
+    return zip(programs, seats)  # noqa: B905
 
 
 def add_roster(db):

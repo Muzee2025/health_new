@@ -1,5 +1,5 @@
 """Unit tests for the safety boundary and stage reporting of verify-fullstack."""
-import importlib.util
+import importlib.util  # noqa: I001
 from contextlib import nullcontext
 from pathlib import Path
 import tempfile
@@ -148,17 +148,17 @@ class FullstackVerificationTests(unittest.TestCase):
             calls = []
             def request(method, path, payload=None, token=None):
                 calls.append((method, path, payload, token))
-                if path == "/api/health/ready": return 200, "application/json", b'{"schema_ready":true}'
-                if path == "/": return 200, "text/html", b'<html><script type="module" src="/assets/main.js"></script></html>'
-                if path == "/assets/main.js": return 200, "application/javascript", b"export{}"
-                if path == "/api/register" and payload.get("role") == "teacher": return 422, "application/json", b"{}"
-                if path == "/api/register": return 200, "application/json", b'{"access_token":"register-token"}'
-                if path == "/api/login": return 200, "application/json", b'{"access_token":"login-token"}'
-                if path == "/api/me": return 200, "application/json", b'{"role":"student"}'
-                if path == "/api/teacher/students": return 403, "application/json", b"{}"
+                if path == "/api/health/ready": return 200, "application/json", b'{"schema_ready":true}'  # noqa: E701
+                if path == "/": return 200, "text/html", b'<html><script type="module" src="/assets/main.js"></script></html>'  # noqa: E701
+                if path == "/assets/main.js": return 200, "application/javascript", b"export{}"  # noqa: E701
+                if path == "/api/register" and payload.get("role") == "teacher": return 422, "application/json", b"{}"  # noqa: E701
+                if path == "/api/register": return 200, "application/json", b'{"access_token":"register-token"}'  # noqa: E701
+                if path == "/api/login": return 200, "application/json", b'{"access_token":"login-token"}'  # noqa: E701
+                if path == "/api/me": return 200, "application/json", b'{"role":"student"}'  # noqa: E701
+                if path == "/api/teacher/students": return 403, "application/json", b"{}"  # noqa: E701
                 if path == "/api/student/questions" and payload.get("question_text", "").strip():
                     return 200, "application/json", b'{"response_state":"unassigned"}'
-                if path == "/api/student/questions/ask": return 422, "application/json", b"{}"
+                if path == "/api/student/questions/ask": return 422, "application/json", b"{}"  # noqa: E701
                 raise AssertionError((method, path))
             runner.request = request
             result = runner.http_smoke()

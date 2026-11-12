@@ -1,5 +1,5 @@
 """Verify synthetic provenance, context integrity, fidelity and isolated writes."""
-import copy
+import copy  # noqa: I001
 import importlib.util
 import json
 from pathlib import Path

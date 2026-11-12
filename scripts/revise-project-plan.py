@@ -1,5 +1,5 @@
 """Complete the project plan while retaining the supplied forms and evidence."""
-from pathlib import Path
+from pathlib import Path  # noqa: I001
 from copy import deepcopy
 from hashlib import sha256
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -64,7 +64,7 @@ def insert(anchor, text, kind='body', page_break=False, keep_next=False):
 school_table = doc.tables[6]
 school_before = [c.text for c in school_table.rows[-1].cells]
 school_after = ['学校（规划）', '在明确授权和管理范围内查看汇总情况', '拟提供按口径汇总的统计信息；数据使用和展示范围需经校方确认']
-for cell, text in zip(school_table.rows[-1].cells, school_after):
+for cell, text in zip(school_table.rows[-1].cells, school_after):  # noqa: B905
     cell.text = text
     cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
     p = cell.paragraphs[0]
@@ -99,14 +99,14 @@ table = doc.add_table(rows=len(rows), cols=3)
 table.alignment = WD_TABLE_ALIGNMENT.CENTER
 table.autofit = False
 widths = [Cm(3.5), Cm(4.9), Cm(6.0)]
-for column, width in zip(table.columns, widths):
+for column, width in zip(table.columns, widths):  # noqa: B905
     column.width = width
-for row_index, (row, values) in enumerate(zip(table.rows, rows)):
+for row_index, (row, values) in enumerate(zip(table.rows, rows)):  # noqa: B905
     props = row._tr.get_or_add_trPr()
     props.append(OxmlElement('w:cantSplit'))
     if row_index == 0:
         props.append(OxmlElement('w:tblHeader'))
-    for cell, value, width in zip(row.cells, values, widths):
+    for cell, value, width in zip(row.cells, values, widths):  # noqa: B905
         cell.width = width
         cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
         cell.text = value
@@ -121,8 +121,8 @@ for row_index, (row, values) in enumerate(zip(table.rows, rows)):
         if row_index == 0:
             borders = OxmlElement('w:tcBorders')
             edge = OxmlElement('w:bottom')
-            edge.set(qn('w:val'), 'single'); edge.set(qn('w:sz'), '6')
-            borders.append(edge); cell._tc.get_or_add_tcPr().append(borders)
+            edge.set(qn('w:val'), 'single'); edge.set(qn('w:sz'), '6')  # noqa: E702
+            borders.append(edge); cell._tc.get_or_add_tcPr().append(borders)  # noqa: E702
 tbl_pr = table._tbl.tblPr
 borders = OxmlElement('w:tblBorders')
 for name in ('top', 'bottom', 'left', 'right', 'insideH', 'insideV'):
@@ -147,7 +147,7 @@ change(appendix, '附录A 系统截图与实现范围说明', size=13, bold=True
 # Restore the missing source list from the existing registered manuscript.
 support_table = next(t for t in doc.tables if t.cell(0, 0).text.startswith('附录1'))
 support_anchor_element = support_table._tbl.getprevious()
-from docx.text.paragraph import Paragraph
+from docx.text.paragraph import Paragraph  # noqa: E402, I001
 support_anchor = Paragraph(support_anchor_element, doc._body)
 insert(support_anchor, '附录B 资料口径与参考来源', 'heading', page_break=True)
 for text in [
@@ -177,13 +177,13 @@ for number, body in re.findall(r'^\[(\d+)\]\s+(.+)$', source_text, re.M):
         font(run, 10.5)
     hyperlink = OxmlElement('w:hyperlink')
     hyperlink.set(qn('r:id'), doc.part.relate_to(url, RT.HYPERLINK, is_external=True))
-    run = OxmlElement('w:r'); rp = OxmlElement('w:rPr')
-    fonts = OxmlElement('w:rFonts'); fonts.set(qn('w:eastAsia'), '宋体'); fonts.set(qn('w:ascii'), 'Times New Roman'); rp.append(fonts)
-    size = OxmlElement('w:sz'); size.set(qn('w:val'), '21'); rp.append(size)
-    color = OxmlElement('w:color'); color.set(qn('w:val'), '1F4E79'); rp.append(color)
-    underline = OxmlElement('w:u'); underline.set(qn('w:val'), 'single'); rp.append(underline)
-    run.append(rp); text = OxmlElement('w:t'); text.text = f'原文链接（{urlparse(url).hostname}）'; run.append(text)
-    hyperlink.append(run); p._p.append(hyperlink)
+    run = OxmlElement('w:r'); rp = OxmlElement('w:rPr')  # noqa: E702
+    fonts = OxmlElement('w:rFonts'); fonts.set(qn('w:eastAsia'), '宋体'); fonts.set(qn('w:ascii'), 'Times New Roman'); rp.append(fonts)  # noqa: E702
+    size = OxmlElement('w:sz'); size.set(qn('w:val'), '21'); rp.append(size)  # noqa: E702
+    color = OxmlElement('w:color'); color.set(qn('w:val'), '1F4E79'); rp.append(color)  # noqa: E702
+    underline = OxmlElement('w:u'); underline.set(qn('w:val'), 'single'); rp.append(underline)  # noqa: E702
+    run.append(rp); text = OxmlElement('w:t'); text.text = f'原文链接（{urlparse(url).hostname}）'; run.append(text)  # noqa: E702
+    hyperlink.append(run); p._p.append(hyperlink)  # noqa: E702
     references.append({'number': number, 'title': title, 'url': url})
 assert [x['number'] for x in references] == list(range(1, 27))
 
@@ -196,7 +196,7 @@ with ZipFile(BASE) as base, ZipFile(candidate) as generated, ZipFile(OUT, 'w', Z
         output.writestr(name, generated.read(name) if name in allowed else base.read(name))
 
 ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'm': 'http://schemas.openxmlformats.org/officeDocument/2006/math'}
-canonical = lambda node: etree.tostring(node, method='c14n', exclusive=True)
+canonical = lambda node: etree.tostring(node, method='c14n', exclusive=True)  # noqa: E731
 with ZipFile(BASE) as base, ZipFile(OUT) as output:
     base_xml, out_xml = [etree.fromstring(z.read('word/document.xml')) for z in (base, output)]
     old_tables = base_xml.findall('.//w:tbl', ns)

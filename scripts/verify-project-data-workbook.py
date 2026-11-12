@@ -45,7 +45,7 @@ def main():
         for r, original in enumerate(raw_regions, 7):
             assert sheets[5][f"A{r}"] == original["region"]
             keys = ["year", "regular_vocational_heis", "academic_bachelor_students", "vocational_normal_short_students", "normal_vocational_undergraduates", "regular_senior_students", "junior_students"]
-            for column, key in zip("BCDEFGH", keys):
+            for column, key in zip("BCDEFGH", keys):  # noqa: B905
                 assert sheets[5][f"{column}{r}"] == original[key]
             assert sheets[5][f"L{r}"] == 0
         values = [r["normal_vocational_undergraduates"] for r in raw_regions]

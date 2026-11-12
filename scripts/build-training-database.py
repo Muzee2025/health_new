@@ -3,7 +3,7 @@
 Standard library only. Never opens app databases, loads .env, or starts training.
 The workbook contains metadata/aggregates, so training_examples stays empty.
 """
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import argparse
 import hashlib
@@ -213,7 +213,7 @@ def read_workbook(path):
                 rows = []
                 for row in range(int(header) + 1, int(end) + 1):
                     payload, formulas = {}, {}
-                    for col, label in zip(columns, headers):
+                    for col, label in zip(columns, headers):  # noqa: B905
                         cell = cells.get(f"{col}{row}", {"value": None, "formula": None})
                         payload[label] = cell["value"]
                         if cell["formula"] is not None:

@@ -1,5 +1,5 @@
 """Package public questionnaire research; never reads application data or config."""
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import csv
 import hashlib
@@ -92,7 +92,11 @@ def main() -> None:
                 if "://" in target or target.startswith("#"):
                     return match.group(0)
                 file_part, _, anchor = target.partition("#")
-                resolved = (path.parent / file_part).resolve()
+                # `convert` closes over `path` from the enclosing loop. It is passed
+                # straight to `re.sub` below and runs within the same iteration, so
+                # the late binding is safe today; bind a default (p=path) if the call
+                # is ever deferred.
+                resolved = (path.parent / file_part).resolve()  # noqa: B023
                 if not resolved.is_relative_to(RESEARCH.resolve()):
                     rel = resolved.relative_to(ROOT.resolve()).as_posix()
                     return f"{match.group(1)}（仓库路径：`{rel}{'#' + anchor if anchor else ''}`）"

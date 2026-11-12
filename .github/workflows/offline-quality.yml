@@ -42,7 +42,14 @@ jobs:
           cache: pip
           cache-dependency-path: backend/requirements-test.txt
       - run: python -m pip install -r backend/requirements-test.txt
-      - run: python -m ruff check backend/app backend/tests backend/scripts
+      # `scripts/` is included so the one-off document generators cannot decay
+      # further. They were 667 issues, cleared by `ruff check --add-noqa` (525
+      # directives, comments only: the AST of all 38 files is byte-identical
+      # before and after). Deliberately not `ruff format`: scripts/tests/ asserts
+      # on literal source text (test_fullstack_verification.py:99-105) and
+      # reformatting breaks it. Treat these noqa lines as debt markers, not as
+      # approval to write new code this way.
+      - run: python -m ruff check backend/app backend/tests backend/scripts scripts
       # Every Python file, not two hand-picked ones. All 127 files under backend/
       # and scripts/ compile today, so this costs the same single step while it
       # now catches a syntax error anywhere in the tree. `compileall` exits 1 on

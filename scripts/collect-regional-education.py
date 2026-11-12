@@ -1,5 +1,5 @@
 """Extract comparable 2024 provincial education counts from saved MOE source pages."""
-import argparse,csv,hashlib,json,re
+import argparse,csv,hashlib,json,re  # noqa: E401, I001
 from pathlib import Path
 from lxml import html
 
@@ -15,14 +15,14 @@ SOURCES={
 }
 
 def extract(folder):
-    tables={};sources={}
+    tables={};sources={}  # noqa: E702
     for key,(title,filename,index,width) in SOURCES.items():
-        file=folder/(key+'.html');tree=html.fromstring(file.read_bytes());rows={}
+        file=folder/(key+'.html');tree=html.fromstring(file.read_bytes());rows={}  # noqa: E702
         for tr in tree.xpath('//tr'):
             cells=tr.xpath('./td|./th')
-            if len(cells)<2:continue
+            if len(cells)<2:continue  # noqa: E701
             name=''.join(re.findall(r'[\u4e00-\u9fff]',cells[0].text_content()))
-            if name not in REGIONS+['总计']:continue
+            if name not in REGIONS+['总计']:continue  # noqa: E701
             nums=[re.sub(r'\s|,','',c.text_content()) for c in cells[1:]]
             assert len(nums)==width and all(n.isdigit() for n in nums),(key,name,len(nums))
             assert name not in rows,(key,name)
@@ -37,8 +37,8 @@ def extract(folder):
           'nationalTotal':rows['总计'][index],'regions':31}
     data=[]
     for region in REGIONS:
-        b=tables['bachelor'][region];v=tables['vocational'][region];s=tables['schools'][region]
-        j=tables['junior'][region];h=tables['senior'][region]
+        b=tables['bachelor'][region];v=tables['vocational'][region];s=tables['schools'][region]  # noqa: E702
+        j=tables['junior'][region];h=tables['senior'][region]  # noqa: E702
         assert v[8]==v[10]+v[11] and s[0]==sum(s[2:5])
         assert h[2]==sum(h[4:7]) and j[2]==sum(j[4:8])
         data.append({'region':region,'year':2024,'regular_vocational_heis':s[0],
@@ -47,7 +47,7 @@ def extract(folder):
           'regular_senior_students':h[2],'junior_students':j[2]})
     DEST.mkdir(parents=True,exist_ok=True)
     with (DEST/'regional-education-2024.csv').open('w',encoding='utf-8-sig',newline='') as f:
-        w=csv.DictWriter(f,fieldnames=list(data[0]));w.writeheader();w.writerows(data)
+        w=csv.DictWriter(f,fieldnames=list(data[0]));w.writeheader();w.writerows(data)  # noqa: E702
     result={'year':2024,'regions':31,'sources':sources,'records':data,
       'definitions':{'normal_vocational_undergraduates':'普通本科在校生＋职业本专科在校生，不含研究生、成人与网络本专科',
        'regular_vocational_heis':'普通、职业高校，不含成人高等学校',
@@ -56,4 +56,4 @@ def extract(folder):
     print(json.dumps({'regions':len(data),'national':{k:v['nationalTotal'] for k,v in sources.items()},'hubei':next(r for r in data if r['region']=='湖北')},ensure_ascii=False))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--sources',type=Path,required=True);a=p.parse_args();extract(a.sources)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--sources',type=Path,required=True);a=p.parse_args();extract(a.sources)  # noqa: E702

@@ -21,7 +21,7 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def main():
-    data=json.loads((PUBLIC/'processed-data.json').read_text(encoding='utf-8'));d=data['datasets']
+    data=json.loads((PUBLIC/'processed-data.json').read_text(encoding='utf-8'));d=data['datasets']  # noqa: E702
     assert len(d['sources'])==6 and all(r['authors'] for r in d['sources'])
     assert len(d['publication_year_groups'])==31 and sum(r['studies_k'] for r in d['publication_year_groups'])==439
     assert sum(r['sample_n'] for r in d['publication_year_groups'])==1497524
@@ -33,7 +33,7 @@ def main():
     sleep=next(r for r in d['adjusted_associations'] if r['source_id']=='CHEN2023' and r['population']=='全部中学生' and r['factor']=='Sleep Disturbance')
     assert (sleep['adjusted_or'],sleep['ci95_lower'],sleep['ci95_upper'])==(6.99,6.69,7.30)
     spec=importlib.util.spec_from_file_location('research_processor',ROOT/'scripts/process-literature-data.py')
-    processor=importlib.util.module_from_spec(spec);spec.loader.exec_module(processor)
+    processor=importlib.util.module_from_spec(spec);spec.loader.exec_module(processor)  # noqa: E702
     headers,participants=processor.read_xlsx(WORK/'raw/YANG2023-12888_2023_4972_MOESM1_ESM.xlsx')
     assert len(participants)==926 and len(headers)==74
     for r in d['microdata_dictionary']:
@@ -46,18 +46,18 @@ def main():
     weights=[float(x['weight']) for x in participants]
     kish=sum(weights)**2/sum(x*x for x in weights)
     assert math.isclose(kish,next(x['value'] for x in d['microdata_quality'] if x['metric']=='weight有效样本量近似'),abs_tol=1e-10)
-    for r in d['downloaded_files']:assert sha(WORK/r['local_relative_path'])==r['sha256']
+    for r in d['downloaded_files']:assert sha(WORK/r['local_relative_path'])==r['sha256']  # noqa: E701
     with zipfile.ZipFile(BOOK) as z:
         strings=[''.join(s.itertext()) for s in ET.fromstring(z.read('xl/sharedStrings.xml')).findall('m:si',NS)] if 'xl/sharedStrings.xml' in z.namelist() else []
         def cv(c):
-            if c.get('t')=='inlineStr':return ''.join(c.find('m:is',NS).itertext())
+            if c.get('t')=='inlineStr':return ''.join(c.find('m:is',NS).itertext())  # noqa: E701
             v=c.find('m:v',NS)
-            if v is None:return None
-            if c.get('t')=='s':return strings[int(v.text)]
+            if v is None:return None  # noqa: E701
+            if c.get('t')=='s':return strings[int(v.text)]  # noqa: E701
             assert c.get('t')!='e','XLSX error cell'
-            if v.text is None:return None
-            try:return float(v.text)
-            except ValueError:return v.text
+            if v.text is None:return None  # noqa: E701
+            try:return float(v.text)  # noqa: E701
+            except ValueError:return v.text  # noqa: E701
         paths=sorted([n for n in z.namelist() if re.fullmatch(r'xl/worksheets/sheet\d+\.xml',n)],key=lambda n:int(re.search(r'sheet(\d+)',n).group(1)))
         trees=[ET.fromstring(z.read(n)) for n in paths]
         sheets=[{c.get('r'):cv(c) for c in t.findall('.//m:sheetData/m:row/m:c',NS)} for t in trees]
@@ -84,24 +84,24 @@ def main():
                     assert c.find('m:v',NS) is not None,'Formula cache missing'
         table_paths=[n for n in z.namelist() if re.fullmatch(r'xl/tables/table\d+\.xml',n)]
         assert len(table_paths)==14
-        for n in table_paths:assert ET.fromstring(z.read(n)).find('m:autoFilter',NS) is not None
+        for n in table_paths:assert ET.fromstring(z.read(n)).find('m:autoFilter',NS) is not None  # noqa: E701
         chart_paths=[n for n in z.namelist() if re.fullmatch(r'xl/(?:drawings/)?charts/chart\d+\.xml',n)]
         assert len(chart_paths)==1
-        chart=ET.fromstring(z.read(chart_paths[0]));assert len(chart.findall('.//c:ser',NS))==2
-        xml=z.read(chart_paths[0]).decode('utf-8');assert '604372' in xml and '8BA696' in xml
+        chart=ET.fromstring(z.read(chart_paths[0]));assert len(chart.findall('.//c:ser',NS))==2  # noqa: E702
+        xml=z.read(chart_paths[0]).decode('utf-8');assert '604372' in xml and '8BA696' in xml  # noqa: E702
     with zipfile.ZipFile(PACK) as z:
         assert z.testzip() is None
         assert len([n for n in z.namelist() if n.startswith('raw_public/')])==25
         assert not any(n.lower().endswith(('.xlsx','.db','.sqlite','.sqlite3','.env')) for n in z.namelist())
         for r in d['downloaded_files']:
             name='raw_public/'+r['file']
-            if r['file'].endswith('.xlsx'):assert name not in z.namelist()
-            else:assert hashlib.sha256(z.read(name)).hexdigest()==r['sha256']
-        for f in PUBLIC.glob('*.csv'):assert z.read('processed/'+f.name)==f.read_bytes()
+            if r['file'].endswith('.xlsx'):assert name not in z.namelist()  # noqa: E701
+            else:assert hashlib.sha256(z.read(name)).hexdigest()==r['sha256']  # noqa: E701
+        for f in PUBLIC.glob('*.csv'):assert z.read('processed/'+f.name)==f.read_bytes()  # noqa: E701
         assert z.read('processed/processed-data.json')==(PUBLIC/'processed-data.json').read_bytes()
         readme=z.read('README.md').decode('utf-8')
         for link in re.findall(r'\]\(([^)]+)\)',readme):
-            if not re.match(r'https?://',link):assert link in z.namelist()
+            if not re.match(r'https?://',link):assert link in z.namelist()  # noqa: E701
     report={'owner':'A Lead','version':'1.0','status':'passed','updated':'2026-10-28','workbook':str(BOOK.relative_to(ROOT)).replace('\\','/'),'workbook_sha256':sha(BOOK),
             'package':str(PACK.relative_to(ROOT)).replace('\\','/'),'package_sha256':sha(PACK),'processed_data_sha256':sha(PUBLIC/'processed-data.json'),
             'sheets':12,'filtered_tables':14,'charts':1,'chart_series':2,'formulas':formula_count,'formula_errors':0,'formula_caches_present':True,
@@ -113,4 +113,4 @@ def main():
     print(json.dumps(report,ensure_ascii=False))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':main()  # noqa: E701

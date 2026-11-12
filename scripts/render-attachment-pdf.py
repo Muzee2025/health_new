@@ -1,5 +1,5 @@
 """Rasterize a private Word PDF export for per-page visual review."""
-import argparse
+import argparse  # noqa: I001
 from pathlib import Path
 import pypdfium2 as pdfium
 from PIL import Image, ImageOps, ImageDraw

@@ -1,5 +1,5 @@
 """Exercise the transport CLI's read-only plan and port restrictions."""
-import json
+import json  # noqa: I001
 from pathlib import Path
 import subprocess
 import sys

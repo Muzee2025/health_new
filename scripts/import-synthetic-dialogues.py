@@ -3,7 +3,7 @@
 Copies the verified reference package read-only, never opens application DBs,
 loads .env, calls providers, or starts training. Existing output is rejected.
 """
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import argparse
 from collections import Counter, defaultdict

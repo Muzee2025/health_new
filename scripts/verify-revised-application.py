@@ -1,5 +1,5 @@
 """Read-only verification of the regional-data revision and appendix placement."""
-import argparse, hashlib, json, re
+import argparse, hashlib, json, re  # noqa: E401, I001
 from pathlib import Path
 from zipfile import ZipFile
 from lxml import etree
@@ -18,34 +18,34 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
     with ZipFile(docx) as z,ZipFile(original) as old:
         tree=etree.fromstring(z.read('word/document.xml'))
         oldtree=etree.fromstring(old.read('word/document.xml'))
-        tables=tree.findall('.//w:tbl',NS);assert len(tables)==15
+        tables=tree.findall('.//w:tbl',NS);assert len(tables)==15  # noqa: E702
         assert sum(txt(t).count('【待填写】') for t in tables[:3])==42
-        for a,b in zip(tables[:3],oldtree.findall('.//w:tbl',NS)[:3]):
+        for a,b in zip(tables[:3],oldtree.findall('.//w:tbl',NS)[:3]):  # noqa: B905
             for tag in ['tr','gridSpan','vMerge']:
-                aa=a.findall('.//w:'+tag,NS);bb=b.findall('.//w:'+tag,NS)
+                aa=a.findall('.//w:'+tag,NS);bb=b.findall('.//w:'+tag,NS)  # noqa: E702
                 assert len(aa)==len(bb)
-                if tag!='tr':assert [x.attrib for x in aa]==[x.attrib for x in bb]
+                if tag!='tr':assert [x.attrib for x in aa]==[x.attrib for x in bb]  # noqa: E701
         checks=[]
         for ti,t in enumerate(tables):
-            rows=t.findall('w:tr',NS);header=2 if ti==0 else 0
-            allowed={(0,'top'),(header,'bottom'),(len(rows)-1,'bottom')};rules=set()
+            rows=t.findall('w:tr',NS);header=2 if ti==0 else 0  # noqa: E702
+            allowed={(0,'top'),(header,'bottom'),(len(rows)-1,'bottom')};rules=set()  # noqa: E702
             for border in t.findall('w:tblPr/w:tblBorders/*',NS):
-                side=etree.QName(border).localname;value=border.get(W+'val')
+                side=etree.QName(border).localname;value=border.get(W+'val')  # noqa: E702
                 if value not in ('nil','none'):
                     assert side in ('top','bottom') and value=='single' and border.get(W+'sz')=='12'
                     rules.add((0 if side=='top' else len(rows)-1,side))
             for ri,row in enumerate(rows):
                 for cell in row.findall('w:tc',NS):
                     assert cell.find('w:tcPr/w:vAlign',NS).get(W+'val')=='center'
-                    for p in cell.findall('w:p',NS):assert p.find('w:pPr/w:jc',NS).get(W+'val')=='center'
+                    for p in cell.findall('w:p',NS):assert p.find('w:pPr/w:jc',NS).get(W+'val')=='center'  # noqa: E701
                     for border in cell.findall('w:tcPr/w:tcBorders/*',NS):
-                        side=etree.QName(border).localname;value=border.get(W+'val')
+                        side=etree.QName(border).localname;value=border.get(W+'val')  # noqa: E702
                         if value not in ('nil','none'):
                             assert (ri,side) in allowed and value=='single'
                             assert border.get(W+'sz')==('6' if (ri,side)==(header,'bottom') else '12')
                             rules.add((ri,side))
             assert rules==allowed,(ti,rules)
-            if ti>=3:assert rows[0].find('w:trPr/w:tblHeader',NS) is not None
+            if ti>=3:assert rows[0].find('w:trPr/w:tblHeader',NS) is not None  # noqa: E701
             checks.append({'table':ti+1,'rows':len(rows),'rules':3,'horizontal':'center','vertical':'center'})
         assert not tree.findall('.//w:trHeight[@w:hRule="exact"]',NS)
         paras=[txt(p) for p in tree.findall('.//w:body/w:p',NS)]
@@ -66,13 +66,13 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
         assert '18.7%' not in md and '44.6%' not in md
         assert txt(tables[13]).count('【后期手动填写】')==7
         records=json.loads((BASE/'revision-20261027/regional-education-2024.json').read_text(encoding='utf-8'))['records']
-        rows=tables[7].findall('w:tr',NS);assert len(rows)==32
-        for row,record in zip(rows[1:],records):
+        rows=tables[7].findall('w:tr',NS);assert len(rows)==32  # noqa: E702
+        for row,record in zip(rows[1:],records):  # noqa: B905
             values=[txt(c) for c in row.findall('w:tc',NS)]
             expected=[record['region'],str(record['regular_vocational_heis'])]+[
               f'{record[key]/10000:.2f}' for key in ['normal_vocational_undergraduates','regular_senior_students','junior_students']]
             assert values==expected,(values,expected)
-        services=tables[8].findall('w:tr',NS);assert len(services)==9
+        services=tables[8].findall('w:tr',NS);assert len(services)==9  # noqa: E702
         assert '2026年报道' in txt(services[1]) and '要求每校至少1名' in txt(services[-1])
     manifest=json.loads((BASE/'visual-manifest.json').read_text(encoding='utf-8'))
     figures=[]
@@ -81,7 +81,7 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
         with Image.open(p) as im:
             assert min(im.info.get('dpi',[0,0]))>=299
             figures.append({'id':f['id'],'sha256':sha(p),'pixels':im.size,'dpi':im.info['dpi']})
-        for source in f['sources']:assert source in manifest['sources']
+        for source in f['sources']:assert source in manifest['sources']  # noqa: E701
     assert len([f for f in figures if (BASE/'figures'/f"{f['id']}.svg").exists()])==7
     rendered=json.loads(render.read_text(encoding='utf-8-sig'))
     assert Path(rendered['input']).resolve()==docx.resolve() and rendered['readOnly']
@@ -93,7 +93,7 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
       'scope':'Checks source preservation, native table formatting, data display and appendix placement. Visual and independent reviews recorded separately.'}
     if delivery:
         assert sha(delivery)==sha(docx)
-        result['delivery']=str(delivery.relative_to(ROOT));result['deliverySha256']=sha(delivery)
+        result['delivery']=str(delivery.relative_to(ROOT));result['deliverySha256']=sha(delivery)  # noqa: E702
     if browser_report:
         checks=json.loads(browser_report.read_text(encoding='utf-8'))
         assert [c['width'] for c in checks]==[1440,390]
@@ -114,8 +114,8 @@ def verify(docx,render,report,delivery=None,browser_report=None,page_review=None
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--docx',required=True,type=Path);p.add_argument('--render',required=True,type=Path)
+    p.add_argument('--docx',required=True,type=Path);p.add_argument('--render',required=True,type=Path)  # noqa: E702
     p.add_argument('--report',required=True,type=Path)
-    p.add_argument('--delivery',type=Path);p.add_argument('--browser-report',type=Path);p.add_argument('--page-review',type=Path)
+    p.add_argument('--delivery',type=Path);p.add_argument('--browser-report',type=Path);p.add_argument('--page-review',type=Path)  # noqa: E702
     a=p.parse_args()
     verify(a.docx.resolve(),a.render,a.report,a.delivery.resolve() if a.delivery else None,a.browser_report,a.page_review)

@@ -1,5 +1,5 @@
 """Verify attachment preservation and publish synthetic screenshot provenance."""
-from pathlib import Path
+from pathlib import Path  # noqa: I001
 from hashlib import sha256
 from zipfile import ZipFile
 from shutil import copyfile
@@ -15,7 +15,7 @@ WORK = ROOT / 'tmp/attachment-system-20261029'
 OUT = ROOT / 'deliverables/心域智链项目计划书_系统内容与截图补充_20261029.docx'
 ASSETS = ROOT / 'docs/plan/application-ui-20261029'
 ASSETS.mkdir(parents=True, exist_ok=True)
-digest = lambda path: sha256(Path(path).read_bytes()).hexdigest()
+digest = lambda path: sha256(Path(path).read_bytes()).hexdigest()  # noqa: E731
 build = json.loads((WORK / 'document-verification.json').read_text(encoding='utf-8'))
 assert digest(OUT) == build['output_sha256']
 assert digest(WORK / 'source-private.docx') == build['source_sha256']
@@ -24,7 +24,7 @@ capture = json.loads((WORK / 'capture-evidence.json').read_text(encoding='utf-8'
 assert capture['synthetic'] and not capture['backendUsed']
 assert len(capture['cases']) == 8
 ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'm': 'http://schemas.openxmlformats.org/officeDocument/2006/math'}
-canonical = lambda node: etree.tostring(node, method='c14n', exclusive=True)
+canonical = lambda node: etree.tostring(node, method='c14n', exclusive=True)  # noqa: E731
 with ZipFile(WORK / 'source-private.docx') as old, ZipFile(OUT) as final:
     source_xml, output_xml = [etree.fromstring(z.read('word/document.xml')) for z in (old, final)]
     for tag in ('w:tbl', 'w:sectPr', 'm:oMath'):

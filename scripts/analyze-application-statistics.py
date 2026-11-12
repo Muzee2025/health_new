@@ -4,7 +4,7 @@
 Uses only Python's standard library. Run from any directory; outputs are
 written beside this script's designated analysis folder.
 """
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import csv
 import json
@@ -64,7 +64,7 @@ def stats(values: list[int]) -> dict[str, float | int]:
         "top5_regions": [
             {"region": region, "value": value}
             for region, value in sorted(
-                ((r, int(v)) for r, v in zip(_REGIONS, values)),
+                ((r, int(v)) for r, v in zip(_REGIONS, values)),  # noqa: B905
                 key=lambda item: item[1], reverse=True
             )[:5]
         ],

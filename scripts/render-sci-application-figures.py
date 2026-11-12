@@ -134,16 +134,16 @@ def main() -> int:
     vals = [20.2, 45.4]
     axs[0].bar([0, 1], vals, width=.55, color=[C["sage"], C["purple"]], edgecolor=C["ink"], linewidth=.65, zorder=3)
     axs[0].set(xticks=[0, 1], xticklabels=["轻度风险", "高风险"], ylim=(0, 55), ylabel="样本内比例（%）")
-    for x, v in enumerate(vals): axs[0].text(x, v + 1.2, f"{v:.1f}", ha="center", va="bottom", fontsize=8)
-    setup_axes(axs[0]); panel_label(axs[0], "a")
+    for x, v in enumerate(vals): axs[0].text(x, v + 1.2, f"{v:.1f}", ha="center", va="bottom", fontsize=8)  # noqa: E701
+    setup_axes(axs[0]); panel_label(axs[0], "a")  # noqa: E702
     groups = ["不做或抄作业", "考试作弊"]
-    ax = axs[1]; x = [0, 1]; w = .33
+    ax = axs[1]; x = [0, 1]; w = .33  # noqa: E702
     ax.bar([i-w/2 for i in x], [4, 3.5], width=w, color=C["sage"], edgecolor=C["ink"], linewidth=.65, label="无风险组", zorder=3)
     ax.bar([i+w/2 for i in x], [17.1, 14], width=w, color=C["purple"], edgecolor=C["ink"], linewidth=.65, hatch="///", label="高风险组", zorder=3)
     ax.set(xticks=x, xticklabels=groups, ylim=(0, 22))
-    for xp, v in zip([i-w/2 for i in x], [4, 3.5]): ax.text(xp, v+.45, f"{v:g}", ha="center", fontsize=8)
-    for xp, v in zip([i+w/2 for i in x], [17.1, 14]): ax.text(xp, v+.45, f"{v:g}", ha="center", fontsize=8)
-    setup_axes(ax); ax.grid(axis="y", color=C["grid"], linewidth=.55); panel_label(ax, "b")
+    for xp, v in zip([i-w/2 for i in x], [4, 3.5]): ax.text(xp, v+.45, f"{v:g}", ha="center", fontsize=8)  # noqa: B905, E701
+    for xp, v in zip([i+w/2 for i in x], [17.1, 14]): ax.text(xp, v+.45, f"{v:g}", ha="center", fontsize=8)  # noqa: B905, E701
+    setup_axes(ax); ax.grid(axis="y", color=C["grid"], linewidth=.55); panel_label(ax, "b")  # noqa: E702
     ax.legend(frameon=False, loc="upper right", handlelength=1.2, borderaxespad=.1)
     finish(fig, 1, "fig01-youth", "青少年筛查风险组的上学意愿与自陈学习行为", [
         {"panel": "a", "meaning": "轻度与高风险组经常或每天不想上学的比例", "y_unit": "%"},
@@ -152,39 +152,39 @@ def main() -> int:
 
     # 02: horizontal bars are a compact comparison of distinct survey items.
     pressure = rows("大学生竞争感知")
-    fig, ax = plt.subplots(figsize=(5.7087, 2.35)); fig.subplots_adjust(left=.30, right=.96, bottom=.24, top=.95)
-    labels = [r["indicator"] for r in pressure]; values = [float(r["value"]) for r in pressure]
+    fig, ax = plt.subplots(figsize=(5.7087, 2.35)); fig.subplots_adjust(left=.30, right=.96, bottom=.24, top=.95)  # noqa: E702
+    labels = [r["indicator"] for r in pressure]; values = [float(r["value"]) for r in pressure]  # noqa: E702
     yy = list(range(len(labels)))
     ax.barh(yy, values, height=.54, color=C["purple"], edgecolor=C["ink"], linewidth=.65, zorder=3)
     ax.set(yticks=yy, yticklabels=labels, xlim=(0, 105), xlabel="受访者认同比例（%）")
     ax.invert_yaxis()
-    for y, v in zip(yy, values): ax.text(v+1, y, f"{v:.1f}", va="center", fontsize=8)
-    setup_axes(ax); ax.grid(axis="y", visible=False)
+    for y, v in zip(yy, values): ax.text(v+1, y, f"{v:.1f}", va="center", fontsize=8)  # noqa: B905, E701
+    setup_axes(ax); ax.grid(axis="y", visible=False)  # noqa: E702
     finish(fig, 2, "fig02-pressure", "大学生对学业竞争的感知", [{"panel": "a", "meaning": "四项学业竞争感知题项的报告比例", "x_unit": "%"}], "%", "水平柱状图",
            "单色柱配合数值标签，灰度打印仍可比较柱长。", "四项为不同问项，不相加；不是焦虑或抑郁症状/诊断率。")
 
     # 03: independent reported totals, no uncertainty intervals are available.
     edu = rows("教育体量")
-    fig, ax = plt.subplots(figsize=(5.7087, 2.2)); fig.subplots_adjust(left=.27, right=.96, bottom=.25, top=.94)
-    labels = [r["indicator"] for r in edu]; values = [float(r["value"]) for r in edu]
+    fig, ax = plt.subplots(figsize=(5.7087, 2.2)); fig.subplots_adjust(left=.27, right=.96, bottom=.25, top=.94)  # noqa: E702
+    labels = [r["indicator"] for r in edu]; values = [float(r["value"]) for r in edu]  # noqa: E702
     yy = list(range(len(labels)))
     ax.barh(yy, values, height=.5, color=[C["purple"], C["apricot"], C["sage"]], edgecolor=C["ink"], linewidth=.65, zorder=3)
     ax.set(yticks=yy, yticklabels=labels, xlim=(0, 6600), xlabel="在校生（万人）")
     ax.invert_yaxis()
-    for y, v in zip(yy, values): ax.text(v+75, y, f"{v:,.2f}", va="center", fontsize=8)
-    setup_axes(ax); ax.grid(axis="y", visible=False)
+    for y, v in zip(yy, values): ax.text(v+75, y, f"{v:,.2f}", va="center", fontsize=8)  # noqa: B905, E701
+    setup_axes(ax); ax.grid(axis="y", visible=False)  # noqa: E702
     finish(fig, 3, "fig03-education", "全国普通本专科、普通高中及初中在校生规模", [{"panel": "a", "meaning": "三个教育学段报告在校生总量", "x_unit": "万人"}], "万人", "水平柱状图",
            "三种色相与直接数值标签共同区分学段。", "按教育统计原学段口径；没有报告置信区间，不添加区间。")
 
     # 04: differently scoped procurements are separated and never averaged.
     fig, axs = plt.subplots(1, 2, figsize=(5.7087, 2.55))
     fig.subplots_adjust(left=.18, right=.98, bottom=.25, top=.91, wspace=.78)
-    ax = axs[0]; yy=[0,1]; vals=[11.47,45]
+    ax = axs[0]; yy=[0,1]; vals=[11.47,45]  # noqa: E702
     ax.barh(yy, vals, height=.5, color=[C["sage"], C["purple"]], edgecolor=C["ink"], linewidth=.65, zorder=3)
-    ax.set(yticks=yy, yticklabels=["单项软件", "综合系统"], xlim=(0,55), xlabel="公告金额（万元）"); ax.invert_yaxis()
-    for y,v in zip(yy,vals): ax.text(v+1,y,f"{v:g}",va="center",fontsize=8)
-    setup_axes(ax); ax.grid(axis="y",visible=False); panel_label(ax,"a")
-    ax = axs[1]; ax.set_xlim(0,125); ax.set_ylim(-.55,2.25); ax.set_yticks([0,1], ["龙泉驿两包", "成都教科院"]); ax.invert_yaxis(); ax.set_xlabel("公告金额（万元）")
+    ax.set(yticks=yy, yticklabels=["单项软件", "综合系统"], xlim=(0,55), xlabel="公告金额（万元）"); ax.invert_yaxis()  # noqa: E702
+    for y,v in zip(yy,vals): ax.text(v+1,y,f"{v:g}",va="center",fontsize=8)  # noqa: B905, E701
+    setup_axes(ax); ax.grid(axis="y",visible=False); panel_label(ax,"a")  # noqa: E702
+    ax = axs[1]; ax.set_xlim(0,125); ax.set_ylim(-.55,2.25); ax.set_yticks([0,1], ["龙泉驿两包", "成都教科院"]); ax.invert_yaxis(); ax.set_xlabel("公告金额（万元）")  # noqa: E702
     ax.barh(0,40.7,height=.48,color=C["purple"],edgecolor=C["ink"],linewidth=.65,zorder=3)
     ax.barh(0,24.6,left=40.7,height=.48,color=C["apricot"],edgecolor=C["ink"],linewidth=.65,hatch="///",zorder=3)
     ax.barh(1,96.5,height=.48,color=C["sage"],edgecolor=C["ink"],linewidth=.65,zorder=3)
@@ -194,7 +194,7 @@ def main() -> int:
     from matplotlib.patches import Patch
     ax.legend(handles=[Patch(facecolor=C["purple"],edgecolor=C["ink"],label="测评包"), Patch(facecolor=C["apricot"],edgecolor=C["ink"],hatch="///",label="干预包"), Patch(facecolor=C["sage"],edgecolor=C["ink"],label="区域服务")],
               frameon=False,loc="lower right",fontsize=8,handlelength=1.2,borderaxespad=.1)
-    setup_axes(ax); ax.grid(axis="y",visible=False); panel_label(ax,"b")
+    setup_axes(ax); ax.grid(axis="y",visible=False); panel_label(ax,"b")  # noqa: E702
     finish(fig, 4, "fig04-procurement", "公开采购案例的标的金额与交付范围", [
         {"panel":"a","meaning":"高校单项软件与综合系统公告金额","x_unit":"万元"},
         {"panel":"b","meaning":"龙泉驿测评及干预分包金额与成都区域服务金额","x_unit":"万元"}], "万元", "分面水平条形图；区域测评/干预采用堆叠",
@@ -202,8 +202,8 @@ def main() -> int:
 
     # Concept diagrams use only thin, square-corner boxes and arrows.
     def concept_canvas(height):
-        fig, ax = plt.subplots(figsize=(5.7087, height)); fig.subplots_adjust(left=.035,right=.965,bottom=.07,top=.94)
-        ax.set(xlim=(0,1),ylim=(0,1)); ax.axis("off"); return fig,ax
+        fig, ax = plt.subplots(figsize=(5.7087, height)); fig.subplots_adjust(left=.035,right=.965,bottom=.07,top=.94)  # noqa: E702
+        ax.set(xlim=(0,1),ylim=(0,1)); ax.axis("off"); return fig,ax  # noqa: E702
     def box(ax,x,y,w,h,text,fill="white",linestyle="-"):
         ax.add_patch(Rectangle((x-w/2,y-h/2),w,h,facecolor=C[fill],edgecolor=C["purple_dark"],linewidth=.7,linestyle=linestyle))
         ax.text(x,y,text,ha="center",va="center",fontsize=8.3,linespacing=1.25,color=C["ink"])
@@ -214,7 +214,7 @@ def main() -> int:
     nodes=[(.25,.76,"青少年与高校压力\n学习适应与支持需要"),(.75,.76,"心理测评与持续观察\n记录与阶段变化"),(.75,.25,"统计分析与模型摘要\n已确认事实与审核资料"),(.25,.25,"人工复核与持续支持\n答复、预约与跟进")]
     for x,y,t in nodes:
         box(ax,x,y,.39,.26,t,fill="warm")
-    for p,q in [((.45,.76),(.55,.76)),((.75,.62),(.75,.39)),((.55,.25),(.45,.25))]:arrow(ax,p,q)
+    for p,q in [((.45,.76),(.55,.76)),((.75,.62),(.75,.39)),((.55,.25),(.45,.25))]:arrow(ax,p,q)  # noqa: E701
     finish(fig,5,"fig05-mindmap","AI+校园心理测评与持续支持逻辑",[
         {"panel":"a","meaning":"由左上经右上、右下到左下的四步工作顺序"}],"不适用","四区顺序逻辑图","细线方框与顺序箭头；不依赖颜色识别方向。","概念框描述项目构想，不代表功能已经实现或效果已经验证。")
 
@@ -222,14 +222,14 @@ def main() -> int:
     layers=[(.82,"业务工作区｜Vue 3","测评记录 · 留言预约 · 教师复核",False),(.59,"授权接口与现有数据层","身份角色 · 显式师生分配 · SQLite",False),(.36,"拟增强的数据分析","质量检查 · 描述统计 · 同口径趋势",True),(.13,"可选检索与大模型模块","审核知识 · 结构校验 · 人工复核",True)]
     for y,h1,h2,dashed in layers:
         box(ax,.5,y,.83,.155,h1+"\n"+h2,fill="pale" if not dashed else "warm",linestyle="--" if dashed else "-")
-    for y1,y2 in [(.735,.675),(.505,.445),(.275,.215)]: arrow(ax,(.5,y1),(.5,y2))
+    for y1,y2 in [(.735,.675),(.505,.445),(.275,.215)]: arrow(ax,(.5,y1),(.5,y2))  # noqa: E701
     finish(fig,6,"fig06-architecture","系统业务、数据与拟增强AI模块的层级关系",[
         {"panel":"a","meaning":"既有原型层与拟增强/可选能力的边界"}],"不适用","分层架构示意图","实线框表示既有原型范围，虚线框表示拟增强或可选能力；文字和线型双重编码。","图中技术状态依据当前仓库记录；虚线能力未表示已部署或已完成模型评测。")
 
     fig,ax=concept_canvas(2.8)
     nodes=[(.17,.76,"知情与授权\n任务和角色核对"),(.50,.76,"最少必要字段\n质量检查与统计"),(.83,.76,"审核知识检索\n获批模型调用"),(.83,.42,"来源与结构校验\n失败分母留存"),(.50,.42,"授权人员复核\n修订与确认"),(.17,.42,"学生说明支持\n答复与持续跟进")]
-    for x,y,t in nodes: box(ax,x,y,.255,.18,t,fill="pale",linestyle="--")
-    for p,q in [((.30,.76),(.37,.76)),((.63,.76),(.70,.76)),((.83,.66),(.83,.52)),((.70,.42),(.63,.42)),((.37,.42),(.30,.42))]: arrow(ax,p,q)
+    for x,y,t in nodes: box(ax,x,y,.255,.18,t,fill="pale",linestyle="--")  # noqa: E701
+    for p,q in [((.30,.76),(.37,.76)),((.63,.76),(.70,.76)),((.83,.66),(.83,.52)),((.70,.42),(.63,.42)),((.37,.42),(.30,.42))]: arrow(ax,p,q)  # noqa: E701
     box(ax,.5,.12,.82,.13,"无资料 / 超时 / 结构错误 → 明示不可判断 → 人工渠道",fill="warm",linestyle="--")
     arrow(ax,(.83,.32),(.83,.20),"--")
     finish(fig,7,"fig07-ai-workflow","受控AI分析与大模型协作的人机工作流",[
@@ -237,12 +237,12 @@ def main() -> int:
 
     # 09: two distinct questions from the same report; no conversion or ratio.
     service = rows("大学生免费心理咨询")
-    fig,ax=plt.subplots(figsize=(5.7087,1.9)); fig.subplots_adjust(left=.33,right=.96,bottom=.29,top=.94)
-    labels=[r["indicator"] for r in service]; vals=[float(r["value"]) for r in service]; yy=[0,1]
+    fig,ax=plt.subplots(figsize=(5.7087,1.9)); fig.subplots_adjust(left=.33,right=.96,bottom=.29,top=.94)  # noqa: E702
+    labels=[r["indicator"] for r in service]; vals=[float(r["value"]) for r in service]; yy=[0,1]  # noqa: E702
     ax.barh(yy,vals,height=.46,color=[C["purple"],C["sage"]],edgecolor=C["ink"],linewidth=.65,zorder=3)
-    ax.set(yticks=yy,yticklabels=labels,xlim=(0,100),xlabel="报告比例（%）"); ax.invert_yaxis()
-    for y,v in zip(yy,vals): ax.text(v+1,y,f"{v:.1f}",va="center",fontsize=8)
-    setup_axes(ax); ax.grid(axis="y",visible=False)
+    ax.set(yticks=yy,yticklabels=labels,xlim=(0,100),xlabel="报告比例（%）"); ax.invert_yaxis()  # noqa: E702
+    for y,v in zip(yy,vals): ax.text(v+1,y,f"{v:.1f}",va="center",fontsize=8)  # noqa: B905, E701
+    setup_axes(ax); ax.grid(axis="y",visible=False)  # noqa: E702
     finish(fig,9,"fig09-service","大学生对校内免费心理咨询的知晓与使用报告",[
         {"panel":"a","meaning":"知晓学校提供免费咨询的报告比例", "x_unit":"%"},
         {"panel":"b","meaning":"曾使用学校免费咨询的报告比例", "x_unit":"%"}],"%","水平柱状图（两项独立报告）",
@@ -251,13 +251,13 @@ def main() -> int:
     def bachelor_total(r):
         return int(r["academic_bachelor_students"]) + int(r["vocational_normal_short_students"])
     ranked=sorted(regional,key=bachelor_total,reverse=True)[:12]
-    labels=[r["region"] for r in ranked]; vals=[bachelor_total(r)/10000 for r in ranked]
-    fig,ax=plt.subplots(figsize=(5.7087,3.55)); fig.subplots_adjust(left=.18,right=.96,bottom=.18,top=.98)
-    yy=list(range(len(labels))); bars=ax.barh(yy,vals,height=.62,color=C["purple"],edgecolor=C["ink"],linewidth=.6,zorder=3)
+    labels=[r["region"] for r in ranked]; vals=[bachelor_total(r)/10000 for r in ranked]  # noqa: E702
+    fig,ax=plt.subplots(figsize=(5.7087,3.55)); fig.subplots_adjust(left=.18,right=.96,bottom=.18,top=.98)  # noqa: E702
+    yy=list(range(len(labels))); bars=ax.barh(yy,vals,height=.62,color=C["purple"],edgecolor=C["ink"],linewidth=.6,zorder=3)  # noqa: E702
     bars[0].set_color(C["sage"])
-    ax.set(yticks=yy,yticklabels=labels,xlim=(0,max(vals)*1.16),xlabel="普通、职业本专科在校生（万人）"); ax.invert_yaxis()
-    for y,v in zip(yy,vals): ax.text(v+max(vals)*.012,y,f"{v:.1f}",va="center",fontsize=8)
-    setup_axes(ax); ax.grid(axis="y",visible=False)
+    ax.set(yticks=yy,yticklabels=labels,xlim=(0,max(vals)*1.16),xlabel="普通、职业本专科在校生（万人）"); ax.invert_yaxis()  # noqa: E702
+    for y,v in zip(yy,vals): ax.text(v+max(vals)*.012,y,f"{v:.1f}",va="center",fontsize=8)  # noqa: B905, E701
+    setup_axes(ax); ax.grid(axis="y",visible=False)  # noqa: E702
     finish(fig,10,"fig10-regional-college","2024年普通本专科在校生规模居前的12个地区",[
         {"panel":"a","meaning":"31个省级地区中普通本科与职业本专科在校生合计前12位", "x_unit":"万人"}],"万人","按值排序的水平条形图",
         "首位用灰绿色强调，其余同色；标签与排序支持灰度阅读。","合计由普通本科在校生与职业本专科在校生相加；只显示前12位。")
@@ -272,12 +272,12 @@ def main() -> int:
     fig,axs=plt.subplots(1,3,figsize=(5.7087,3.15),sharey=True,sharex=True)
     fig.subplots_adjust(left=.14,right=.99,bottom=.25,top=.9,wspace=.43)
     common_max=max(bachelor+senior+junior)*1.27
-    for ax,values,title,color,letter in zip(axs,[bachelor,senior,junior],["普通本专科","普通高中","初中"],[C["purple"],C["apricot"],C["sage"]],["a","b","c"]):
-        yy=list(range(len(labels))); ax.barh(yy,values,height=.52,color=color,edgecolor=C["ink"],linewidth=.6,zorder=3)
+    for ax,values,title,color,letter in zip(axs,[bachelor,senior,junior],["普通本专科","普通高中","初中"],[C["purple"],C["apricot"],C["sage"]],["a","b","c"]):  # noqa: B007, B905
+        yy=list(range(len(labels))); ax.barh(yy,values,height=.52,color=color,edgecolor=C["ink"],linewidth=.6,zorder=3)  # noqa: E702
         ax.set(yticks=yy,yticklabels=labels,xlim=(0,common_max),xticks=[0,200,400,600],title=None)
         ax.set_xlabel("万人",labelpad=3)
-        for y,v in zip(yy,values): ax.text(v+max(values)*.025,y,f"{v:.0f}",va="center",fontsize=8)
-        setup_axes(ax); ax.grid(axis="y",visible=False); panel_label(ax,letter)
+        for y,v in zip(yy,values): ax.text(v+max(values)*.025,y,f"{v:.0f}",va="center",fontsize=8)  # noqa: B905, E701
+        setup_axes(ax); ax.grid(axis="y",visible=False); panel_label(ax,letter)  # noqa: E702
     axs[0].invert_yaxis()
     finish(fig,11,"fig11-hubei-neighbours","湖北及相邻地区2024年学生规模对照",[
         {"panel":"a","meaning":"普通本专科在校生", "x_unit":"万人"},
@@ -288,16 +288,16 @@ def main() -> int:
     # 12: pooled estimates and reported 95% CIs from one systematic review.
     stages=literature["study"]["education_stage_subgroups"]
     stage_labels={"Primary school":"小学","Middle school":"初中","High school":"高中","Undergraduate school":"本科阶段"}
-    fig,ax=plt.subplots(figsize=(5.7087,2.35)); fig.subplots_adjust(left=.26,right=.91,bottom=.25,top=.94)
+    fig,ax=plt.subplots(figsize=(5.7087,2.35)); fig.subplots_adjust(left=.26,right=.91,bottom=.25,top=.94)  # noqa: E702
     yy=list(range(len(stages)))
-    for y,r in zip(yy,stages):
-        est=float(r["estimate_percent"]); lo=float(r["ci95_lower_percent"]); hi=float(r["ci95_upper_percent"])
+    for y,r in zip(yy,stages):  # noqa: B905
+        est=float(r["estimate_percent"]); lo=float(r["ci95_lower_percent"]); hi=float(r["ci95_upper_percent"])  # noqa: E702
         ax.errorbar(est,y,xerr=[[est-lo],[hi-est]],fmt="o",markersize=4.1,color=C["purple_dark"],
                     ecolor=C["muted"],elinewidth=.75,capsize=2,capthick=.75,zorder=3)
         ax.text(37.2,y,f"k={r['studies_k']}",ha="left",va="center",fontsize=8,color=C["ink"])
     ax.set(yticks=yy,yticklabels=[stage_labels[r["stage"]] for r in stages],xlim=(0,42),
            xticks=[0,10,20,30,40],xlabel="抑郁症状筛查阳性合并比例（%）")
-    ax.invert_yaxis(); setup_axes(ax); ax.grid(axis="y",visible=False)
+    ax.invert_yaxis(); setup_axes(ax); ax.grid(axis="y",visible=False)  # noqa: E702
     finish(fig,12,"fig12-literature-stage","中国儿童青少年抑郁症状筛查阳性率的学段亚组Meta分析结果",[
         {"panel":"a","meaning":"同一系统综述按教育阶段报告的合并比例与原报95%置信区间；右侧k为研究数","x_unit":"%"}],"%（95%置信区间）","水平森林图",
         "统一实心圆点、细置信区间线与端帽；灰度下依靠位置和形状可辨。",
@@ -313,25 +313,25 @@ def main() -> int:
     geographic=literature["geographic_subgroups"]["rows"]
     geo_by_cn={english_to_cn[r["region"]]:r for r in geographic if r["region"] in english_to_cn}
     geo=[geo_by_cn[r["region"]] for r in regional]
-    if len(geo)!=31: raise ValueError("Literature geography must map to all 31 mainland education regions")
-    fig=plt.figure(figsize=(5.7087,4.65)); gs=fig.add_gridspec(1,5,width_ratios=[10,.7,2.1,10,.7],wspace=.03)
+    if len(geo)!=31: raise ValueError("Literature geography must map to all 31 mainland education regions")  # noqa: E701
+    fig=plt.figure(figsize=(5.7087,4.65)); gs=fig.add_gridspec(1,5,width_ratios=[10,.7,2.1,10,.7],wspace=.03)  # noqa: E702
     fig.subplots_adjust(left=.12,right=.99,bottom=.14,top=.96)
     for row,subset,label in [(0,geo[:16],"a"),(1,geo[16:],"b")]:
         col=0 if row==0 else 3
-        ax=fig.add_subplot(gs[0,col]); kax=fig.add_subplot(gs[0,col+1],sharey=ax); yy=list(range(len(subset)))
-        for y,r in zip(yy,subset):
-            est=float(r["estimate_percent"]); lo=float(r["ci95_lower_percent"]); hi=float(r["ci95_upper_percent"])
+        ax=fig.add_subplot(gs[0,col]); kax=fig.add_subplot(gs[0,col+1],sharey=ax); yy=list(range(len(subset)))  # noqa: E702
+        for y,r in zip(yy,subset):  # noqa: B905
+            est=float(r["estimate_percent"]); lo=float(r["ci95_lower_percent"]); hi=float(r["ci95_upper_percent"])  # noqa: E702
             single=int(r["studies_k"])==1
             ax.errorbar(est,y,xerr=[[est-lo],[hi-est]],fmt="o",markersize=4.0,
                 markerfacecolor="white" if single else C["purple"],markeredgecolor=C["purple_dark"],markeredgewidth=.8,
                 ecolor=C["muted"],elinewidth=.65,capsize=1.8,capthick=.65,zorder=3)
             kax.text(.5,y,str(r["studies_k"]),ha="center",va="center",fontsize=8,color=C["ink"])
         ax.set(yticks=yy,yticklabels=[english_to_cn[r["region"]] for r in subset],xlim=(0,100),xticks=[0,25,50,75,100])
-        ax.invert_yaxis(); setup_axes(ax); ax.grid(axis="y",visible=False)
+        ax.invert_yaxis(); setup_axes(ax); ax.grid(axis="y",visible=False)  # noqa: E702
         ax.text(.01,1.01,label,transform=ax.transAxes,ha="left",va="bottom",fontsize=9,fontweight="bold",color=C["ink"],clip_on=False)
-        kax.set_ylim(ax.get_ylim()); kax.set_xlim(0,1); kax.axis("off")
+        kax.set_ylim(ax.get_ylim()); kax.set_xlim(0,1); kax.axis("off")  # noqa: E702
         kax.text(.5,1.01,"k",transform=kax.transAxes,ha="center",va="bottom",fontsize=8,color=C["ink"])
-    fig.axes[0].set_xlabel("合并比例（%）"); fig.axes[2].set_xlabel("合并比例（%）")
+    fig.axes[0].set_xlabel("合并比例（%）"); fig.axes[2].set_xlabel("合并比例（%）")  # noqa: E702
     finish(fig,13,"fig13-literature-regions","中国大陆省级地区儿童青少年抑郁症状筛查合并比例",[
         {"panel":"a","meaning":"依2024年教育统计顺序排列的前16个大陆省级地区；空心点表示k=1","x_unit":"%（95%置信区间）"},
         {"panel":"b","meaning":"同序排列的其余15个大陆省级地区；空心点表示k=1","x_unit":"%（95%置信区间）"}],
@@ -342,18 +342,18 @@ def main() -> int:
     # 14: each province contributes equally to the Lorenz curve's horizontal share.
     stage_fields=[("普通本专科","normal_vocational_undergraduates",C["purple"],"-","o"),
         ("普通高中","regular_senior_students",C["apricot"],"--","s"),("初中","junior_students",C["sage"],"-.","^")]
-    fig,ax=plt.subplots(figsize=(5.7087,3.25)); fig.subplots_adjust(left=.16,right=.97,bottom=.21,top=.96)
+    fig,ax=plt.subplots(figsize=(5.7087,3.25)); fig.subplots_adjust(left=.16,right=.97,bottom=.21,top=.96)  # noqa: E702
     ax.plot([0,100],[0,100],color=C["muted"],linestyle=(0,(3,2)),linewidth=.7,label="完全平等线",zorder=1)
     region_share=[100*i/len(regional) for i in range(len(regional)+1)]
     for title,field,color,linestyle,marker in stage_fields:
-        values=sorted(int(r[field]) for r in regional); total=sum(values); cumulative=[0]
-        for value in values: cumulative.append(cumulative[-1]+value)
+        values=sorted(int(r[field]) for r in regional); total=sum(values); cumulative=[0]  # noqa: E702
+        for value in values: cumulative.append(cumulative[-1]+value)  # noqa: E701
         shares=[100*v/total for v in cumulative]
         ax.plot(region_share,shares,color=color,linestyle=linestyle,linewidth=.8,marker=marker,
                 markersize=3.6,markerfacecolor="white",markeredgewidth=.7,markevery=4,label=title,zorder=3)
     ax.set(xlim=(0,100),ylim=(0,100),xticks=[0,20,40,60,80,100],yticks=[0,20,40,60,80,100],
            xlabel="省级地区累计占比（%）",ylabel="在校生累计占比（%）")
-    setup_axes(ax,grid_axis="both"); ax.legend(frameon=False,loc="upper left",ncol=2,handlelength=2.0,columnspacing=1.1)
+    setup_axes(ax,grid_axis="both"); ax.legend(frameon=False,loc="upper left",ncol=2,handlelength=2.0,columnspacing=1.1)  # noqa: E702
     finish(fig,14,"fig14-education-lorenz","2024年31个省级地区分学段在校生规模的Lorenz曲线",[
         {"panel":"a","meaning":"各省级地区按本学段在校生数升序排列后的累计地区份额与累计在校生份额","x_unit":"%","y_unit":"%"}],
         "%（横轴为省级地区份额；纵轴为在校生份额）","Lorenz曲线（本专科、普通高中、初中）",

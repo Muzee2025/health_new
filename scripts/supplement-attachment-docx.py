@@ -1,5 +1,5 @@
 """Supplement the supplied application, preserving all original non-body parts."""
-from pathlib import Path
+from pathlib import Path  # noqa: I001
 from copy import deepcopy
 from hashlib import sha256
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -138,7 +138,7 @@ for text in [
     insert(appendix_anchor, text)
 
 # Keep supporting awards/transcript starting on their own page, as in the source.
-from docx.oxml import OxmlElement
+from docx.oxml import OxmlElement  # noqa: E402, I001
 support_break = OxmlElement('w:p')
 support_props = OxmlElement('w:pPr')
 support_props.append(OxmlElement('w:pageBreakBefore'))
@@ -167,7 +167,7 @@ ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'm': 
 with ZipFile(SOURCE) as src, ZipFile(OUTPUT) as dst:
     old_xml = etree.fromstring(src.read('word/document.xml'))
     new_xml = etree.fromstring(dst.read('word/document.xml'))
-    canonical = lambda e: etree.tostring(e, method='c14n', exclusive=True)
+    canonical = lambda e: etree.tostring(e, method='c14n', exclusive=True)  # noqa: E731
     original_tables = old_xml.findall('.//w:tbl', ns)
     final_tables = new_xml.findall('.//w:tbl', ns)
     assert [canonical(e) for e in original_tables] == [canonical(e) for e in final_tables]

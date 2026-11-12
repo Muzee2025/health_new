@@ -1,5 +1,5 @@
 """Create the requested PPT outline as editable Word and Markdown, without slides."""
-import argparse
+import argparse  # noqa: I001
 import json
 from pathlib import Path
 from docx import Document
@@ -81,7 +81,7 @@ def build(output, markdown):
         raise ValueError('Use a new draft output path')
     doc=Document()
     s=doc.sections[0]
-    s.page_width=Cm(21);s.page_height=Cm(29.7)
+    s.page_width=Cm(21);s.page_height=Cm(29.7)  # noqa: E702
     s.top_margin=s.bottom_margin=Cm(2.3)
     s.left_margin=s.right_margin=Cm(2.5)
     s.header_distance=s.footer_distance=Cm(1.2)
@@ -89,25 +89,25 @@ def build(output, markdown):
         st=doc.styles[style_name]
         st.font.name='宋体'
         st._element.get_or_add_rPr().get_or_add_rFonts().set(qn('w:eastAsia'),'宋体')
-        st.font.size=Pt(11.5);st.font.color.rgb=RGBColor(0,0,0)
+        st.font.size=Pt(11.5);st.font.color.rgb=RGBColor(0,0,0)  # noqa: E702
         st.paragraph_format.line_spacing=1.15
         st.paragraph_format.space_after=Pt(4)
-    doc.styles['Title'].font.name='黑体';doc.styles['Title'].font.size=Pt(20)
+    doc.styles['Title'].font.name='黑体';doc.styles['Title'].font.size=Pt(20)  # noqa: E702
     doc.styles['Title']._element.rPr.rFonts.set(qn('w:eastAsia'),'黑体')
-    doc.styles['Heading 2'].font.bold=True;doc.styles['Heading 2'].font.size=Pt(13)
+    doc.styles['Heading 2'].font.bold=True;doc.styles['Heading 2'].font.size=Pt(13)  # noqa: E702
     doc.styles['Heading 2'].paragraph_format.space_before=Pt(11)
     doc.styles['Heading 2'].paragraph_format.keep_with_next=True
     for old in list(doc.styles.element.xpath('.//w:pBdr')):
         old.getparent().remove(old)
-    header=s.header.paragraphs[0];header.text='心域智链项目申报答辩大纲'
+    header=s.header.paragraphs[0];header.text='心域智链项目申报答辩大纲'  # noqa: E702
     header.runs[0].font.size=Pt(9)
-    footer=s.footer.paragraphs[0];footer.alignment=2
-    fld=OxmlElement('w:fldSimple');fld.set(qn('w:instr'),'PAGE');footer._p.append(fld)
+    footer=s.footer.paragraphs[0];footer.alignment=2  # noqa: E702
+    fld=OxmlElement('w:fldSimple');fld.set(qn('w:instr'),'PAGE');footer._p.append(fld)  # noqa: E702
     doc.add_paragraph('心域智链项目答辩大纲','Title')
     doc.add_paragraph('本文件提供16个建议页面的主题和要点，供后续自行制作PPT。首期聚焦高校心理测评与后续支持，初中和高中为独立拓展分析。统计和采购来源见申报书参考资料。')
     lines=['# 心域智链项目答辩大纲','','> owner: A ｜ version: 1.1 ｜ status: 仅交付大纲，暂不制作PPT ｜ updated: 2026-10-27','','16个建议页面，供后续自行制作PPT。高校心理测评为主场景，初高中单独论证；真实人员、导师、周期和经费后期手填。数据与采购口径见[市场分析](../plan/学生心理测评市场分析.md)及[来源元数据](../plan/市场分析来源.json)。','']
     for i,(title,bullets) in enumerate(OUTLINE,1):
-        if i in (5,9,13):doc.add_page_break()
+        if i in (5,9,13):doc.add_page_break()  # noqa: E701
         doc.add_paragraph(f'{i:02d} {title}','Heading 2')
         lines.extend([f'## {i:02d} {title}',''])
         for b in bullets:
@@ -126,4 +126,4 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output',required=True,type=Path)
     p.add_argument('--markdown',type=Path,default=ROOT/'docs/ppt/答辩方案.md')
-    a=p.parse_args();build(a.output,a.markdown)
+    a=p.parse_args();build(a.output,a.markdown)  # noqa: E702

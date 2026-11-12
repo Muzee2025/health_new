@@ -4,7 +4,7 @@
 No API, database, student records, network, package installation or LaTeX is used.
 Run from any directory. Each invocation creates a new directory under --output.
 """
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
 import argparse
 import hashlib
@@ -61,9 +61,9 @@ def validate_data(data):
     daily = data["daily"]
     require(len(daily) == data["range"], "Daily-row count differs from selected range.")
     dates = [datetime.strptime(day["date"], "%Y-%m-%d").replace(tzinfo=timezone.utc) for day in daily]
-    require(all((b-a).days == 1 for a,b in zip(dates, dates[1:])), "UTC dates are not consecutive.")
+    require(all((b-a).days == 1 for a,b in zip(dates, dates[1:])), "UTC dates are not consecutive.")  # noqa: B905
     require(dates[-1].date().isoformat() == "2026-10-21", "Unexpected synthetic fixture end date.")
-    for day, date in zip(daily, dates):
+    for day, date in zip(daily, dates):  # noqa: B905
         require(day["weekday"] == date.weekday(), "UTC weekday mismatch.")
         require(day["support"] == sum(day["channels"]) == len(day["durations"]), "Support/channel/duration totals differ.")
         require(day["planned"] == sum(day["slots"]) and 0 <= day["completed"] <= day["planned"], "Appointment counts differ.")
@@ -133,7 +133,7 @@ def configure_style(requested, palette):
     result = {"requested":requested, "effective":"matplotlib-builtin", "scienceplots":"unavailable", "fallback_reason":None}
     if requested == "science":
         try:
-            import scienceplots  # noqa: F401; registers style files only
+            import scienceplots  # noqa: F401 - registers style files only
             plt.style.use(["science", "no-latex"])
             result.update(effective="science+no-latex", scienceplots=importlib.metadata.version("SciencePlots"))
         except (ImportError, OSError) as error:
@@ -158,7 +158,7 @@ def configure_style(requested, palette):
 
 
 def draw_panel(kind, fig, ax, data, palette, metrics, compact=False):
-    import numpy as np
+    import numpy as np  # noqa: I001
     import matplotlib.dates as mdates
     from matplotlib.ticker import MaxNLocator
     from matplotlib.colors import LinearSegmentedColormap, to_rgb
@@ -181,7 +181,7 @@ def draw_panel(kind, fig, ax, data, palette, metrics, compact=False):
         values = [row["value"] for row in data["risks"]]
         bars = ax.barh(labels, values, color=[palette["risks"][row["field"]] for row in data["risks"]], height=0.55,
                        edgecolor=colors["text"], linewidth=0.5)
-        for bar, value, hatch in zip(bars,values,["", "///", "xxx"]):
+        for bar, value, hatch in zip(bars,values,["", "///", "xxx"]):  # noqa: B905
             bar.set_hatch(hatch)
             ax.text(value+max(values)*0.025,bar.get_y()+bar.get_height()/2,str(value),va="center",fontsize=8)
         ax.set_xlim(0,max(values)*1.2)
@@ -203,7 +203,7 @@ def draw_panel(kind, fig, ax, data, palette, metrics, compact=False):
         ax.set_ylabel("Time slot (hour, UTC)")
         def luminance(color):
             rgb = to_rgb(color)
-            return sum(weight*(v/12.92 if v<=0.04045 else ((v+0.055)/1.055)**2.4) for weight,v in zip((0.2126,0.7152,0.0722),rgb))
+            return sum(weight*(v/12.92 if v<=0.04045 else ((v+0.055)/1.055)**2.4) for weight,v in zip((0.2126,0.7152,0.0722),rgb))  # noqa: B905
         for time,weekday in np.ndindex(matrix.shape):
             fill_luminance = luminance(cmap(matrix[time,weekday]/maximum if maximum else 0))
             candidate = max((colors["text"],colors["surface"]), key=lambda c:(max(luminance(c),fill_luminance)+0.05)/(min(luminance(c),fill_luminance)+0.05))
@@ -353,7 +353,7 @@ def main():
         size = (10.0,8.0)
         fig,axes = plt.subplots(2,2,figsize=size,dpi=100)
         fig.subplots_adjust(left=0.09,right=0.94,top=0.90,bottom=0.21,wspace=0.43,hspace=0.58)
-        for label,kind,ax in zip("abcd",("trend","risk","heatmap","histogram"),axes.flat):
+        for label,kind,ax in zip("abcd",("trend","risk","heatmap","histogram"),axes.flat):  # noqa: B905
             draw_panel(kind,fig,ax,chosen,palette,metrics,compact=True)
             ax.text(-0.16,1.12,label,transform=ax.transAxes,fontweight="bold",fontsize=11)
         fig.suptitle("Synthetic support-activity figure collection",x=0.09,ha="left",fontsize=13,fontweight="bold")

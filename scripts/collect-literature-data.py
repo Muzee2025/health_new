@@ -1,5 +1,5 @@
 """Download open research articles/supplements and preserve table-level provenance."""
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 import concurrent.futures
 import hashlib
 import json
