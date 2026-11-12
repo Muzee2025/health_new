@@ -397,12 +397,17 @@ const openComments = async (post) => {
   activeCommentPostId.value = post.id
   replyParentId.value = null
   newComment.value = ''
+  // Clear before asking: the list belongs to the post that was open, and a
+  // failed request must not leave it showing under the new post.
+  postComments.value = []
   await fetchComments(post.id)
 }
 
 const fetchComments = async (postId) => {
   try {
     const res = await axios.get(`/api/student/treehole/${postId}/comments`)
+    // Ignore a late answer for a post the user has already closed or replaced.
+    if (activeCommentPostId.value !== postId) return
     postComments.value = res.data
   } catch (e) {
     console.error('fetch comments error:', e)
