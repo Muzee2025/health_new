@@ -3,7 +3,14 @@
     <template #header>
       <div class="risk-header">
         <span>五个方面的观察数据</span>
-        <el-button v-if="error" size="small" class="action-btn" :loading="loading" @click="loadRiskData">重试</el-button>
+        <el-button
+          v-if="error"
+          size="small"
+          class="action-btn"
+          :loading="loading"
+          @click="loadRiskData"
+          >重试</el-button
+        >
       </div>
     </template>
     <div v-if="loading" class="placeholder">加载中...</div>
@@ -21,17 +28,17 @@
 <script setup>
 import { setLibraryChartOption } from '../design/chart-registry'
 import { businessAlpha, businessColor } from '../styles/business-theme.js'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
-import axios from "axios"
-import { getFiveDimensionFailure, getFiveDimensionResult } from "../services/fiveDimensionData"
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+import axios from 'axios'
+import { getFiveDimensionFailure, getFiveDimensionResult } from '../services/fiveDimensionData'
 import { ElCard, ElButton } from 'element-plus'
 
 const radarRef = ref(null)
 const loading = ref(false)
 const error = ref(false)
 const riskData = ref(null)
-const provenanceLabel = ref("")
-const emptyDescription = ref("暂无可核验的五维观察数据")
+const provenanceLabel = ref('')
+const emptyDescription = ref('暂无可核验的五维观察数据')
 let requestController = null
 let requestEpoch = 0
 let activeIdentity = readIdentity()
@@ -40,15 +47,17 @@ let unmounted = false
 
 function readIdentity() {
   try {
-    const user = JSON.parse(localStorage.getItem("user") || "null")
-    return `${user?.id ?? ""}:${localStorage.getItem("token") || localStorage.getItem("access_token") || ""}`
-  } catch { return `:${localStorage.getItem("token") || localStorage.getItem("access_token") || ""}` }
+    const user = JSON.parse(localStorage.getItem('user') || 'null')
+    return `${user?.id ?? ''}:${localStorage.getItem('token') || localStorage.getItem('access_token') || ''}`
+  } catch {
+    return `:${localStorage.getItem('token') || localStorage.getItem('access_token') || ''}`
+  }
 }
 
 const hasData = computed(() => {
   if (!riskData.value) return false
-  return ["academic", "interpersonal", "family", "emotion", "physical"].every(
-    (key) => typeof riskData.value[key] === "number"
+  return ['academic', 'interpersonal', 'family', 'emotion', 'physical'].every(
+    (key) => typeof riskData.value[key] === 'number',
   )
 })
 
@@ -63,20 +72,20 @@ const renderChart = async (epoch = requestEpoch, identity = activeIdentity) => {
   if (!hasData.value || !radarRef.value) return
   if (!radarChart) radarChart = echarts.init(radarRef.value, 'xinyu-business')
   setLibraryChartOption(radarChart, {
-    tooltip: { trigger: "item" },
+    tooltip: { trigger: 'item' },
     radar: {
       indicator: [
-        { name: "学业", max: 100 },
-        { name: "人际", max: 100 },
-        { name: "家庭", max: 100 },
-        { name: "情绪", max: 100 },
-        { name: "身体", max: 100 },
+        { name: '学业', max: 100 },
+        { name: '人际', max: 100 },
+        { name: '家庭', max: 100 },
+        { name: '情绪', max: 100 },
+        { name: '身体', max: 100 },
       ],
       axisName: { color: businessColor('data-primary') },
     },
     series: [
       {
-        type: "radar",
+        type: 'radar',
         data: [
           {
             value: [
@@ -107,31 +116,35 @@ const loadRiskData = async () => {
   loading.value = true
   error.value = false
   riskData.value = null
-  provenanceLabel.value = ""
+  provenanceLabel.value = ''
   radarChart?.dispose()
   radarChart = null
   try {
-    const res = await axios.get("/api/v1/assistant/risk-factor", { timeout: 12000, signal: controller.signal })
+    const res = await axios.get('/api/v1/assistant/risk-factor', {
+      timeout: 12000,
+      signal: controller.signal,
+    })
     if (unmounted || epoch !== requestEpoch || identity !== readIdentity()) return
-    if (res.status !== 200 || !res.data) throw new Error("invalid response")
+    if (res.status !== 200 || !res.data) throw new Error('invalid response')
     const result = getFiveDimensionResult(res.data)
-    if (result.status === "ready") {
+    if (result.status === 'ready') {
       riskData.value = result.dimensions
       provenanceLabel.value = result.provenance
-      emptyDescription.value = "暂无可核验的五维观察数据"
+      emptyDescription.value = '暂无可核验的五维观察数据'
     } else {
       emptyDescription.value = result.message
     }
     loading.value = false
-    if (result.status === "ready") {
+    if (result.status === 'ready') {
       await nextTick()
-      if (!unmounted && epoch === requestEpoch && identity === readIdentity()) await renderChart(epoch, identity)
+      if (!unmounted && epoch === requestEpoch && identity === readIdentity())
+        await renderChart(epoch, identity)
     }
   } catch (err) {
-    if (unmounted || epoch !== requestEpoch || err?.code === "ERR_CANCELED") return
+    if (unmounted || epoch !== requestEpoch || err?.code === 'ERR_CANCELED') return
     if (identity !== readIdentity()) return
     const result = getFiveDimensionFailure(err)
-    if (result.status === "network-error") {
+    if (result.status === 'network-error') {
       error.value = true
       emptyDescription.value = result.message
     } else {
@@ -152,20 +165,20 @@ const handleIdentityChange = () => {
   requestController?.abort()
   requestController = null
   riskData.value = null
-  provenanceLabel.value = ""
+  provenanceLabel.value = ''
   loading.value = false
   error.value = false
   radarChart?.dispose()
   radarChart = null
   activeIdentity = identity
-  if (identity !== ":") loadRiskData()
+  if (identity !== ':') loadRiskData()
 }
 
 onMounted(() => {
   loadRiskData()
-  window.addEventListener("resize", resizeChart)
-  window.addEventListener("storage", handleIdentityChange)
-  window.addEventListener("focus", handleIdentityChange)
+  window.addEventListener('resize', resizeChart)
+  window.addEventListener('storage', handleIdentityChange)
+  window.addEventListener('focus', handleIdentityChange)
 })
 
 const resizeChart = () => radarChart?.resize()
@@ -175,9 +188,9 @@ onBeforeUnmount(() => {
   requestEpoch += 1
   requestController?.abort()
   requestController = null
-  window.removeEventListener("resize", resizeChart)
-  window.removeEventListener("storage", handleIdentityChange)
-  window.removeEventListener("focus", handleIdentityChange)
+  window.removeEventListener('resize', resizeChart)
+  window.removeEventListener('storage', handleIdentityChange)
+  window.removeEventListener('focus', handleIdentityChange)
   if (radarChart) radarChart.dispose()
   radarChart = null
 })
@@ -195,7 +208,12 @@ onBeforeUnmount(() => {
   justify-content: space-between;
 }
 
-.provenance { margin: 0 0 12px; color: var(--text-secondary); font-size: 12px; line-height: 1.5; }
+.provenance {
+  margin: 0 0 12px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
 
 .placeholder {
   min-height: 220px;
