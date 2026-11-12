@@ -15,7 +15,10 @@ installBusinessPalette()
 const favicon = document.querySelector('#app-favicon')
 if (favicon) favicon.href = getVisualAsset('favicon').url
 const themeColor = document.querySelector('#app-theme-color')
-if (themeColor) themeColor.content = getComputedStyle(document.documentElement).getPropertyValue('--brand-600').trim()
+if (themeColor)
+  themeColor.content = getComputedStyle(document.documentElement)
+    .getPropertyValue('--brand-600')
+    .trim()
 import router from './router'
 
 const rawBaseURL = String(import.meta.env.VITE_API_BASE_URL || '').trim()
@@ -39,7 +42,7 @@ axios.interceptors.request.use(
     }
     return config
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 )
 
 axios.interceptors.response.use(
@@ -47,7 +50,9 @@ axios.interceptors.response.use(
   (error) => {
     const status = error.response?.status
     const reqUrl = String(error.config?.url || '')
-    const requestToken = String(error.config?.headers?.Authorization || '').replace(/^bearer\s+/i, '').trim()
+    const requestToken = String(error.config?.headers?.Authorization || '')
+      .replace(/^bearer\s+/i, '')
+      .trim()
     if (status === 401 && !reqUrl.includes('/api/login') && requestToken === getStoredToken()) {
       localStorage.removeItem('token')
       localStorage.removeItem('access_token')
@@ -71,13 +76,16 @@ axios.interceptors.response.use(
     err.status = status
     err.response = error.response
     return Promise.reject(err)
-  }
+  },
 )
 
 const app = createApp(App)
 
 app.component('LibraryIcon', LibraryIcon)
-app.component('LibraryEmpty', defineAsyncComponent(() => import('./design/LibraryEmpty.vue')))
+app.component(
+  'LibraryEmpty',
+  defineAsyncComponent(() => import('./design/LibraryEmpty.vue')),
+)
 
 provideGlobalConfig({ locale: zhCn }, app, true)
 app.use(router)
@@ -87,8 +95,8 @@ app.mount('#app')
 // Register Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(err => {
-      console.error('ServiceWorker registration failed: ', err);
-    });
-  });
+    navigator.serviceWorker.register('/sw.js').catch((err) => {
+      console.error('ServiceWorker registration failed: ', err)
+    })
+  })
 }
