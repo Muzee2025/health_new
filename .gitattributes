@@ -1,0 +1,33 @@
+# Normalise text files to LF in the repository and in every checkout.
+#
+# Why this exists: .prettierrc.json sets `endOfLine: "lf"`, while Windows
+# checkouts with the system-level `core.autocrlf=true` produced 62 false
+# `npm run format:check` failures (files that were byte-identical to the
+# index but checked out with CRLF). Pinning `eol=lf` here makes the working
+# tree match what CI sees, so the formatter gate can be trusted locally.
+#
+# Deeper .gitattributes files win for their own subtree:
+#   src/assets/.gitattributes                 (*.svg -text)
+#   src/assets/icons/phosphor/.gitattributes  (*.svg -text)
+#   docs/design/ppt-kit/upstream/.gitattributes (* -text)
+
+* text=auto eol=lf
+
+# Binary assets: never normalise line endings, never diff as text.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.bmp   binary
+*.pdf   binary
+*.docx  binary
+*.pptx  binary
+*.xlsx  binary
+*.zip   binary
+*.emf   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
