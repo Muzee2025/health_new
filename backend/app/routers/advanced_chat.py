@@ -21,7 +21,7 @@ from fastapi import (
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy import func
-from sqlalchemy.exc import OperationalError, SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, OperationalError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -152,7 +152,24 @@ def _format_deep_think_reply(
 
 
 def _safe_json_loads(value: Any, default: Any = None) -> Any:
+    """Parse a JSON text column, or `default` when it is empty or unreadable.
+
+    The columns this reads (emotion_tags, heatmap) are unvalidated TEXT: a row
+    may hold NULL, an empty string, `[]`, or a value written by an older
+    release, so a bad one must degrade to `default` instead of failing the
+    whole history response.
+    """
     if value is None:
+        return default
+    if not isinstance(value, (str, bytes, bytearray)):
+        # Some drivers hand back an already-decoded value; keep it as it is.
+        return value
+    text = value.decode("utf-8", "replace") if isinstance(value, (bytes, bytearray)) else value
+    if not text.strip():
+        return default
+    try:
+        return json.loads(text)
+    except (TypeError, ValueError):
         return default
 
 
@@ -766,7 +783,15 @@ async def create_chat_session(
         content=initial_prompt
     )
     db.add(initial_msg)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        # The lookup above and this insert are not one step: two requests that
+        # carried the same conversation_id both saw nothing and both inserted.
+        # The primary key settled it, so answer the duplicate the way the
+        # lookup would have.
+        db.rollback()
+        raise HTTPException(status_code=400, detail="Session id already exists") from None
     return {"status": "success", "session_id": new_session.id, "initial_message": initial_prompt}
 
 @router.patch("/sessions/{session_id}")
@@ -1269,8 +1294,10 @@ async def ai_chat_stream(
                             status="pending"
                         )
                         db.add(warning)
-                        db.commit()
-                        final_payload["warning_state"] = "created"
+                        # Flush, not commit: the warning, the archived dialogue, and
+                        # the session touch are one unit. Committing here left a
+                        # warning behind whenever the archive below failed.
+                        db.flush()
                         db.refresh(warning)
 
                         asyncio.create_task(manager.broadcast_to_teachers({
@@ -1307,6 +1334,7 @@ async def ai_chat_stream(
                             )
                         session.updated_at = func.now()
                         db.commit()
+                        final_payload["warning_state"] = "created"
                         background_tasks.add_task(enqueue_dialogue_analysis, current_user.id)
                     except Exception as exc:
                         db.rollback()

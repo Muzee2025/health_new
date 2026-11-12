@@ -279,7 +279,10 @@ def generate_ai_interpret(
         report = {}
     if not isinstance(report, dict):
         report = {}
-    messages = report.get("source", {}).get("messages", [])
+    # `source` is written by several generations of the report writer and may be
+    # absent, null, or a plain string; only a dict carries the message list.
+    source = report.get("source")
+    messages = source.get("messages", []) if isinstance(source, dict) else []
     sample = messages[max(0, req.recordId - 5): req.recordId + 1] if isinstance(messages, list) else []
     if not sample:
         return {"text": FALLBACK_TEXT, "source": "local_rules", "status": "insufficient", "model_id": None}

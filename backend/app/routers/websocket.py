@@ -35,13 +35,21 @@ async def websocket_endpoint(
         await websocket.close(code=1008)
         return
     token = protocols[1]
-    user = await get_user_from_token(token, db)
-    if not user:
-        await websocket.close(code=1008)
-        return
+    # Authenticate, then release the connection before the long loop starts.
+    # FastAPI would keep this session (and its pool connection) open for the
+    # whole socket, so a handful of idle clients would starve every request.
+    # The identity is copied out because the session is closed from here on.
+    try:
+        user = await get_user_from_token(token, db)
+        if user is None:
+            await websocket.close(code=1008)
+            return
+        user_id, user_role = user.id, user.role
+    finally:
+        db.close()
 
     expires_at = decode_access_token(token)["exp"]
-    await manager.connect(websocket, user.id, user.role, subprotocol="access_token")
+    await manager.connect(websocket, user_id, user_role, subprotocol="access_token")
     try:
         while True:
             remaining = expires_at - time.time()
@@ -57,8 +65,8 @@ async def websocket_endpoint(
             if data == "ping":
                 await websocket.send_text("pong")
     except WebSocketDisconnect:
-        manager.disconnect(websocket, user.id, user.role)
+        manager.disconnect(websocket, user_id, user_role)
     except Exception as e:
         logger.error("WebSocket receive failed error_type=%s", type(e).__name__)
     finally:
-        manager.disconnect(websocket, user.id, user.role)
+        manager.disconnect(websocket, user_id, user_role)

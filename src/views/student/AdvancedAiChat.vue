@@ -368,6 +368,9 @@ watch(isAnonymous, async (val) => {
     return
   }
   ElMessage.success('已切回实名模式：聊天记录将正常保存。')
+  // The anonymous draft must not survive the switch: it was typed under the
+  // "not saved" promise, and the next loadSession would otherwise store it.
+  inputText.value = ''
   if (sessions.value.length > 0) {
     await loadSession(sessions.value[0].id)
   } else {
@@ -455,7 +458,11 @@ const loadSessionsFromLocal = async () => {
 }
 
 const persistUiState = async () => {
-  if (!chatSession.isActive() || !currentSessionId.value) return
+  // An anonymous session keeps nothing: its draft is exactly the text the user
+  // typed believing it would not be stored. The switch back to a named session
+  // calls loadSession, which persists first, so the check has to be here and
+  // not only in the caller.
+  if (isAnonymous.value || !chatSession.isActive() || !currentSessionId.value) return
   await saveUiState(currentSessionId.value, {
     draft: inputText.value,
     scrollTop: chatScrollRef.value?.scrollTop || 0,
@@ -755,6 +762,12 @@ const sendMessage = async () => {
     return
   const userMsg = inputText.value.trim()
   inputText.value = ''
+  // Pin the conversation this message belongs to. Everything below used to read
+  // currentSessionId at the moment the reply arrived, so switching chats while
+  // a reply was streaming stored it in the session the user had just opened.
+  const requestSessionId = currentSessionId.value
+  const requestAnonymous = Boolean(isAnonymous.value)
+  const requestMode = currentMode.value
   const userLocal = {
     id: uuid(),
     role: 'user',
@@ -763,10 +776,10 @@ const sendMessage = async () => {
     created_at: new Date().toISOString(),
   }
   chatHistory.value.push(userLocal)
-  if (!isAnonymous.value) {
+  if (!requestAnonymous) {
     await putMessage({
       id: userLocal.id,
-      conversationId: currentSessionId.value,
+      conversationId: requestSessionId,
       role: 'user',
       content: userMsg,
       model: 'user',
@@ -782,11 +795,11 @@ const sendMessage = async () => {
   }, 2000)
 
   const buildPayload = (useDeepThink) => ({
-    session_id: currentSessionId.value,
+    session_id: requestSessionId,
     message: userMsg,
     modality: 'text',
-    anonymous: Boolean(isAnonymous.value),
-    mode: currentMode.value,
+    anonymous: requestAnonymous,
+    mode: requestMode,
     deep_think: Boolean(useDeepThink),
     history: chatHistory.value
       .filter((m) => m.role === 'user' || m.role === 'ai')
@@ -884,10 +897,10 @@ const sendMessage = async () => {
       aiLocal.is_crisis = Boolean(data.is_crisis)
       aiLocal.emotion_tags = data.emotion_tags || null
     }
-    if (!isAnonymous.value) {
+    if (!requestAnonymous) {
       await putMessage({
         id: aiLocal.id,
-        conversationId: currentSessionId.value,
+        conversationId: requestSessionId,
         role: 'ai',
         content: data.reply,
         model: 'emohaa',
@@ -896,18 +909,18 @@ const sendMessage = async () => {
         timestamp: aiLocal.created_at,
       })
       await upsertConversation({
-        id: currentSessionId.value,
+        id: requestSessionId,
         title:
-          sessions.value.find((x) => x.id === currentSessionId.value)?.title ||
+          sessions.value.find((x) => x.id === requestSessionId)?.title ||
           userMsg.slice(0, 15) ||
           '新对话',
-        mode: currentMode.value,
+        mode: requestMode,
         createdAt:
-          sessions.value.find((x) => x.id === currentSessionId.value)?.createdAt ||
+          sessions.value.find((x) => x.id === requestSessionId)?.createdAt ||
           new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-        archived: Boolean(sessions.value.find((x) => x.id === currentSessionId.value)?.archived),
+        archived: Boolean(sessions.value.find((x) => x.id === requestSessionId)?.archived),
       })
     }
     if (data.is_crisis) {
@@ -920,10 +933,10 @@ const sendMessage = async () => {
         duration: 7000,
       })
     }
-    if (!isAnonymous.value) {
+    if (!requestAnonymous) {
       window.dispatchEvent(
         new CustomEvent('assistant-message-saved', {
-          detail: { sessionId: currentSessionId.value, ts: Date.now() },
+          detail: { sessionId: requestSessionId, ts: Date.now() },
         }),
       )
       await loadSessionsFromLocal()
