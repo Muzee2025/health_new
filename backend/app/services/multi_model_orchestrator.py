@@ -591,10 +591,10 @@ class MultiModelOrchestrator:
                             raise RuntimeError(
                                 f"{model_id}_all_fallbacks_failed:"
                                 f"{str(primary_exc_2)[:220]} | {'; '.join(fallback_errors)}"
-                            )
+                            ) from primary_exc_2
                 else:
                     # 严格模式：不再静默回退，直接让前端看到真实模型不可用状态。
-                    raise RuntimeError(f"{model_id}_invoke_failed:{str(exc)}")
+                    raise RuntimeError(f"{model_id}_invoke_failed:{str(exc)}") from exc
 
         content = (response.choices[0].message.content or "{}").strip()
         try:

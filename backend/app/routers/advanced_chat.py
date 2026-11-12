@@ -145,12 +145,6 @@ def _safe_datetime_str(value: Any) -> str | None:
     if isinstance(value, datetime):
         return value.isoformat(timespec="seconds")
     return str(value)
-    if isinstance(value, (dict, list)):
-        return value
-    try:
-        return json.loads(value)
-    except Exception:
-        return default
 
 async def _emotion_pipeline(message: str) -> Dict[str, Any]:
     clean = str(message or "").strip()
@@ -722,7 +716,7 @@ async def get_chat_sessions(
         return {"status": "success", "data": data}
     except Exception as exc:
         logger.error("get_chat_sessions_failed user_id=%s error=%s", getattr(current_user, "id", None), type(exc).__name__)
-        raise HTTPException(status_code=500, detail="加载会话失败")
+        raise HTTPException(status_code=500, detail="加载会话失败") from exc
 
 @router.post("/sessions")
 async def create_chat_session(
@@ -842,7 +836,7 @@ async def delete_chat_session(
             if attempt < max_retries:
                 await asyncio.sleep(0.2 * (attempt + 1))
                 continue
-            raise HTTPException(status_code=503, detail="服务端删除暂时失败，请稍后重试")
+            raise HTTPException(status_code=503, detail="服务端删除暂时失败，请稍后重试") from exc
         except SQLAlchemyError as exc:
             db.rollback()
             logger.error(
@@ -851,7 +845,7 @@ async def delete_chat_session(
                 session_id,
                 type(exc).__name__,
             )
-            raise HTTPException(status_code=500, detail="服务端删除失败（数据库异常）")
+            raise HTTPException(status_code=500, detail="服务端删除失败（数据库异常）") from exc
         except Exception as exc:
             db.rollback()
             logger.error(
@@ -860,7 +854,7 @@ async def delete_chat_session(
                 session_id,
                 type(exc).__name__,
             )
-            raise HTTPException(status_code=500, detail="服务端删除失败（一致性校验未通过）")
+            raise HTTPException(status_code=500, detail="服务端删除失败（一致性校验未通过）") from exc
 
 @router.get("/sessions/{session_id}/messages")
 async def get_session_messages(
@@ -877,8 +871,8 @@ async def get_session_messages(
     if target_date:
         try:
             day = datetime.strptime(target_date, "%Y-%m-%d")
-        except ValueError:
-            raise HTTPException(status_code=400, detail="target_date must be YYYY-MM-DD")
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail="target_date must be YYYY-MM-DD") from exc
         day_start, day_end = _day_range(day)
         query = query.filter(
             AIChatMessage.created_at >= day_start,
@@ -1096,7 +1090,7 @@ async def ai_chat_interaction(
                 raise HTTPException(
                     status_code=500,
                     detail={"error": "deep_think_invoke_failed", "trace_id": trace_id, "cause": "model_unavailable"},
-                )
+                ) from exc
         else:
             reply = await zhipu_chat_service.chat_with_student(
                 user_id=f"anon-{current_user.id}" if req.anonymous else str(current_user.id),
@@ -1414,7 +1408,7 @@ async def ai_chat_stream(
                             yield _sse_event("trend_chunk", {"text": f"模型响应较慢，正在进行第 {attempt + 1} 次重试..."})
                             await asyncio.sleep(0.8 * attempt)
                             continue
-                        raise RuntimeError(f"deep_think_failed trace_id={trace_id} cause={exc}")
+                        raise RuntimeError(f"deep_think_failed trace_id={trace_id} cause={exc}") from exc
                 model_latency_ms = round((time.perf_counter() - deep_phase_start) * 1000, 2)
                 model_invoked = True
                 reply = _format_deep_think_reply(raw_reply, trace_id=trace_id)
