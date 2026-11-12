@@ -5,12 +5,14 @@ from sqlalchemy import (
     Column,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
     UniqueConstraint,
     event,
     func,
+    text,
 )
 from sqlalchemy.orm import relationship
 
@@ -135,6 +137,18 @@ class TeacherAvatar(Base):
 
 class Appointment(Base):
     __tablename__ = "appointments"
+    # First-come-first-served: one teacher can only have one active booking per slot.
+    # Cancelled rows are excluded so a released slot can be booked again -- a plain
+    # UNIQUE(teacher_id, time_slot) would let a cancellation hold the slot forever.
+    __table_args__ = (
+        Index(
+            "uq_appointment_active_slot",
+            "teacher_id",
+            "time_slot",
+            unique=True,
+            sqlite_where=text("status != 'cancelled'"),
+        ),
+    )
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     student_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
@@ -199,6 +213,11 @@ class TreeholePost(Base):
 
 class TreeholeLike(Base):
     __tablename__ = "treehole_likes"
+    # One like per user per post: without this a double tap under concurrency leaves
+    # two rows, and unliking removes only one, so the count drifts permanently.
+    __table_args__ = (
+        UniqueConstraint("post_id", "user_id", name="uq_treehole_like_post_user"),
+    )
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     post_id = Column(Integer, ForeignKey("treehole_posts.id", ondelete="CASCADE"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
@@ -221,6 +240,9 @@ class TreeholeComment(Base):
 
 class TreeholeFavorite(Base):
     __tablename__ = "treehole_favorites"
+    __table_args__ = (
+        UniqueConstraint("post_id", "user_id", name="uq_treehole_favorite_post_user"),
+    )
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     post_id = Column(Integer, ForeignKey("treehole_posts.id", ondelete="CASCADE"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

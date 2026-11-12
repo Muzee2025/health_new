@@ -57,6 +57,53 @@ def table_fingerprints(connection):
     return result
 
 
+# Explicit unique indexes for tables that predate these constraints. create_all only
+# creates absent tables, so an existing database never picks up new constraints on its
+# own; applying them here keeps copied data safe and refuses to hide duplicates.
+REQUIRED_UNIQUE_INDEXES = (
+    (
+        'uq_appointment_active_slot',
+        "CREATE UNIQUE INDEX IF NOT EXISTS uq_appointment_active_slot "
+        "ON appointments (teacher_id, time_slot) WHERE status != 'cancelled'",
+        "SELECT COUNT(*) FROM (SELECT teacher_id, time_slot FROM appointments "
+        "WHERE status != 'cancelled' GROUP BY teacher_id, time_slot HAVING COUNT(*) > 1)",
+    ),
+    (
+        'uq_treehole_like_post_user',
+        "CREATE UNIQUE INDEX IF NOT EXISTS uq_treehole_like_post_user "
+        "ON treehole_likes (post_id, user_id)",
+        "SELECT COUNT(*) FROM (SELECT post_id, user_id FROM treehole_likes "
+        "GROUP BY post_id, user_id HAVING COUNT(*) > 1)",
+    ),
+    (
+        'uq_treehole_favorite_post_user',
+        "CREATE UNIQUE INDEX IF NOT EXISTS uq_treehole_favorite_post_user "
+        "ON treehole_favorites (post_id, user_id)",
+        "SELECT COUNT(*) FROM (SELECT post_id, user_id FROM treehole_favorites "
+        "GROUP BY post_id, user_id HAVING COUNT(*) > 1)",
+    ),
+)
+
+
+def apply_unique_indexes(connection):
+    """Add the constraints a copied database cannot inherit; fail loudly on duplicates."""
+    tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    existing_indexes = {row[0] for row in connection.execute(
+        "SELECT name FROM sqlite_master WHERE type='index'")}
+    created = []
+    for name, statement, duplicate_check in REQUIRED_UNIQUE_INDEXES:
+        table = statement.split(' ON ')[1].split(' ')[0]
+        if table not in tables or name in existing_indexes:
+            continue
+        duplicates = connection.execute(duplicate_check).fetchone()[0]
+        if duplicates:
+            raise ValueError(f'{name}: existing rows violate the unique constraint; review before deployment')
+        connection.execute(statement)
+        created.append(name)
+    connection.commit()
+    return created
+
+
 def prepare(output, source=None):
     output = output.expanduser().absolute()
     if output.exists() or output.is_symlink() or not output.parent.is_dir() or output.parent.is_symlink():
@@ -96,7 +143,11 @@ def prepare(output, source=None):
                 raise ValueError('Existing schema has missing columns; review a versioned migration before deployment')
     Base.metadata.create_all(engine)
     engine.dispose()
-    with open_existing(active) as db:
+    # The prepared copy is ours to write; the source stays read-only in every path.
+    with open_existing(active, 'rw') as db:
+        # Indexes carry no rows, so they are applied before the data fingerprint check
+        # and cannot mask a copy failure. A duplicate-bearing source is refused here.
+        created_indexes = apply_unique_indexes(db)
         after = table_fingerprints(db)
         if any(after.get(name) != fingerprint for name, fingerprint in before.items()):
             raise ValueError('Copy verification failed; source database was not modified')
@@ -116,7 +167,8 @@ def prepare(output, source=None):
     report = {'schemaVersion':1, 'status':'prepared', 'database':'sqlite', 'expectedTables':len(Base.metadata.tables),
               'copiedExistingTables':len(before), 'newTables':sorted(set(Base.metadata.tables)-existing),
               'existingTableDataPreserved':True, 'sourceChanged':False, 'assignmentRowsPreserved':assignment_rows,
-              'createdAssignments':0, 'settingsFile':'.env', 'backupCreated':source is not None}
+              'createdAssignments':0, 'settingsFile':'.env', 'backupCreated':source is not None,
+              'uniqueIndexesApplied':created_indexes}
     with (output/'deployment.json').open('x',encoding='utf8') as stream:
         json.dump(report,stream,indent=2)
     return report

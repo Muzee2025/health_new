@@ -171,7 +171,15 @@ def _upsert_teacher_avatar_content(
         profile.avatar = avatar_url
     else:
         db.add(models.TeacherProfile(user_id=teacher_id, avatar=avatar_url, time_slots="[]"))
-    db.commit()
+    try:
+        db.commit()
+    except Exception:
+        # The file was written before the row: roll it back so a failed commit cannot
+        # leave an unreferenced image on disk. Only the file written just above is
+        # removed; the previous avatar is untouched.
+        db.rollback()
+        _safe_remove_file(abs_path)
+        raise
 
     if old_abs_path and old_abs_path != abs_path:
         _safe_remove_file(old_abs_path)

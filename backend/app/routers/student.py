@@ -13,7 +13,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
 from sqlalchemy import func, inspect
-from sqlalchemy.exc import OperationalError
+from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 
 from app.security import get_optional_user, require_roles
@@ -333,7 +333,13 @@ def create_appointment(app_data: schemas.AppointmentCreate, db: Session = Depend
         time_slot=app_data.time_slot
     )
     db.add(appointment)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        # Two students can pass the check above simultaneously; the partial unique
+        # index is the real guard, so translate its rejection into the same answer.
+        db.rollback()
+        raise HTTPException(status_code=400, detail="该时间段已被预约") from None
     db.refresh(appointment)
     return appointment
 
@@ -1211,7 +1217,13 @@ def toggle_like(post_id: int, db: Session = Depends(get_db), current_user: model
     else:
         like = models.TreeholeLike(post_id=post_id, user_id=current_user.id)
         db.add(like)
-        db.commit()
+        try:
+            db.commit()
+        except IntegrityError:
+            # A concurrent tap already inserted this like. The desired end state is
+            # "liked", so report it instead of surfacing a constraint error.
+            db.rollback()
+            return {"status": "liked"}
         return {"status": "liked"}
 
 @router.post("/treehole/{post_id}/favorite")
@@ -1224,7 +1236,11 @@ def toggle_favorite(post_id: int, db: Session = Depends(get_db), current_user: m
     else:
         fav = models.TreeholeFavorite(post_id=post_id, user_id=current_user.id)
         db.add(fav)
-        db.commit()
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            return {"status": "favorited"}
         return {"status": "favorited"}
 
 @router.post("/treehole/{post_id}/comment", response_model=schemas.TreeholeCommentResponse)
