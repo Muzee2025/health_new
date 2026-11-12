@@ -4,8 +4,12 @@ import { palette, applyChartPalette, createResearchTheme } from '../../docs/desi
 export function installBusinessPalette() {
   const root = document.documentElement
   applyChartPalette(root)
-  Object.entries(palette.colors).forEach(([name, value]) => root.style.setProperty(`--data-${name}`, value))
-  Object.entries(palette.risks).forEach(([name, value]) => root.style.setProperty(`--data-risk-${name}`, value))
+  Object.entries(palette.colors).forEach(([name, value]) =>
+    root.style.setProperty(`--data-${name}`, value),
+  )
+  Object.entries(palette.risks).forEach(([name, value]) =>
+    root.style.setProperty(`--data-risk-${name}`, value),
+  )
 }
 
 export function installBusinessCharts(echarts) {
@@ -19,9 +23,17 @@ export function businessColor(name) {
 }
 
 export function businessAlpha(name, opacity) {
-  const alpha = Math.round(Math.min(1, Math.max(0, opacity)) * 255).toString(16).padStart(2, '0')
+  const alpha = Math.round(Math.min(1, Math.max(0, opacity)) * 255)
+    .toString(16)
+    .padStart(2, '0')
   return `${businessColor(name)}${alpha}`
 }
 
 export { palette as businessPalette }
-export { setLibraryChartOption, createLibraryChartOption, createLibraryChartJsConfig, libraryChartFont, LIBRARY_CHART_STYLE } from '../../docs/design/chart-options.js'
+export {
+  setLibraryChartOption,
+  createLibraryChartOption,
+  createLibraryChartJsConfig,
+  libraryChartFont,
+  LIBRARY_CHART_STYLE,
+} from '../../docs/design/chart-options.js'

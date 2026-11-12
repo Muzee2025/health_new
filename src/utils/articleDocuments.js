@@ -5,8 +5,12 @@ export function protectedDocumentPath(href, origin = window.location.origin) {
   try {
     const url = new URL(href, origin)
     if (url.origin !== origin) return null
-    return /^\/api\/teacher\/documents\/[a-f0-9-]{32,36}\.(pdf|docx)$/i.test(url.pathname) ? url.pathname : null
-  } catch { return null }
+    return /^\/api\/teacher\/documents\/[a-f0-9-]{32,36}\.(pdf|docx)$/i.test(url.pathname)
+      ? url.pathname
+      : null
+  } catch {
+    return null
+  }
 }
 
 export async function downloadArticleDocument(event) {

@@ -4,23 +4,23 @@ const routes = [
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: () => import('../views/NotFound.vue') },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/login',
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login.vue'),
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('../views/Register.vue')
+    component: () => import('../views/Register.vue'),
   },
   {
     path: '/article/:id',
     name: 'ArticleDetail',
     component: () => import('../views/ArticleDetail.vue'),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
   },
   {
     path: '/student',
@@ -32,44 +32,44 @@ const routes = [
       {
         path: 'dashboard',
         name: 'StudentDashboard',
-        component: () => import('../views/student/Dashboard.vue')
+        component: () => import('../views/student/Dashboard.vue'),
       },
       {
         path: 'appointments',
         name: 'StudentAppointments',
-        component: () => import('../views/student/Appointments.vue')
+        component: () => import('../views/student/Appointments.vue'),
       },
       {
         path: 'test',
         name: 'StudentTest',
-        component: () => import('../views/student/Test.vue')
+        component: () => import('../views/student/Test.vue'),
       },
       {
         path: 'report',
         name: 'StudentReport',
-        component: () => import('../views/student/Report.vue')
+        component: () => import('../views/student/Report.vue'),
       },
       {
         path: 'advanced-chat',
         name: 'AdvancedAiChat',
-        component: () => import('../views/student/AdvancedAiChat.vue')
+        component: () => import('../views/student/AdvancedAiChat.vue'),
       },
       {
         path: 'articles',
         name: 'StudentArticles',
-        component: () => import('../views/student/Articles.vue')
+        component: () => import('../views/student/Articles.vue'),
       },
       {
         path: 'treehole',
         name: 'StudentTreehole',
-        component: () => import('../views/student/Treehole.vue')
+        component: () => import('../views/student/Treehole.vue'),
       },
       {
         path: 'questions',
         name: 'StudentQuestions',
-        component: () => import('../views/student/Questions.vue')
-      }
-    ]
+        component: () => import('../views/student/Questions.vue'),
+      },
+    ],
   },
   {
     path: '/teacher',
@@ -78,57 +78,57 @@ const routes = [
     redirect: '/teacher/advanced-dashboard',
     meta: { requiresAuth: true, role: 'teacher' },
     children: [
-        {
-          path: 'advanced-dashboard',
-          name: 'AdvancedTeacherDashboard',
-          component: () => import('../views/teacher/AdvancedDashboard.vue')
-        },
-        {
-          path: 'support',
-          name: 'TeacherSupportWorkspace',
-          component: () => import('../views/teacher/SupportWorkspace.vue')
-        },
-        {
-          path: 'students',
-          name: 'StudentManagement',
-        component: () => import('../views/teacher/StudentManagement.vue')
+      {
+        path: 'advanced-dashboard',
+        name: 'AdvancedTeacherDashboard',
+        component: () => import('../views/teacher/AdvancedDashboard.vue'),
+      },
+      {
+        path: 'support',
+        name: 'TeacherSupportWorkspace',
+        component: () => import('../views/teacher/SupportWorkspace.vue'),
+      },
+      {
+        path: 'students',
+        name: 'StudentManagement',
+        component: () => import('../views/teacher/StudentManagement.vue'),
       },
       {
         path: 'appointments',
         name: 'TeacherAppointmentManagement',
-        component: () => import('../views/teacher/AppointmentManagement.vue')
+        component: () => import('../views/teacher/AppointmentManagement.vue'),
       },
       {
         path: 'content',
         name: 'TeacherContentManagement',
-        component: () => import('../views/teacher/ContentManagement.vue')
+        component: () => import('../views/teacher/ContentManagement.vue'),
       },
       {
         path: 'interventions',
         name: 'TeacherInterventionRecords',
-        component: () => import('../views/teacher/InterventionRecords.vue')
+        component: () => import('../views/teacher/InterventionRecords.vue'),
       },
       {
         path: 'student/:id',
         name: 'TeacherStudentDetail',
-        component: () => import('../views/teacher/StudentDetail.vue')
-      }
-    ]
-  }
+        component: () => import('../views/teacher/StudentDetail.vue'),
+      },
+    ],
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 })
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
   const role = localStorage.getItem('role')
-  
+
   // Verify if role is valid
   const isValidRole = role === 'teacher' || role === 'student'
-  
+
   if (to.meta.requiresAuth) {
     if (!token || !isValidRole) {
       // If token is missing or role is invalid, clear storage and go to login

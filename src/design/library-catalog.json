@@ -19,31 +19,108 @@
     "teacherAvatar3": "avatar-teacher-03-256-webp"
   },
   "icons": {
-    "assessment": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "assessment" },
+    "assessment": {
+      "kind": "symbol",
+      "assetId": "icon-domain-sprite-24-svg",
+      "symbol": "assessment"
+    },
     "report": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "report" },
     "treehole": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "treehole" },
     "alert": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "alert" },
     "support": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "support" },
     "audit": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "audit" },
-    "appointment": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "appointment" },
-    "knowledge": { "kind": "symbol", "assetId": "icon-domain-sprite-24-svg", "symbol": "knowledge" },
+    "appointment": {
+      "kind": "symbol",
+      "assetId": "icon-domain-sprite-24-svg",
+      "symbol": "appointment"
+    },
+    "knowledge": {
+      "kind": "symbol",
+      "assetId": "icon-domain-sprite-24-svg",
+      "symbol": "knowledge"
+    },
     "heart": { "kind": "asset", "assetId": "icon-phosphor-heart-svg" },
     "hand-heart": { "kind": "asset", "assetId": "icon-phosphor-hand-heart-svg" },
     "chat": { "kind": "asset", "assetId": "icon-phosphor-chat-circle-dots-svg" },
     "book": { "kind": "asset", "assetId": "icon-phosphor-book-open-svg" },
-    "home": { "kind": "element-plus", "export": "House", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "search": { "kind": "element-plus", "export": "Search", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "arrow-left": { "kind": "element-plus", "export": "ArrowLeft", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "arrow-down": { "kind": "element-plus", "export": "ArrowDown", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "location": { "kind": "element-plus", "export": "Location", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "view": { "kind": "element-plus", "export": "View", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "collection": { "kind": "element-plus", "export": "Collection", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "help": { "kind": "element-plus", "export": "QuestionFilled", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "logout": { "kind": "element-plus", "export": "SwitchButton", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "user": { "kind": "element-plus", "export": "User", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "star": { "kind": "element-plus", "export": "Star", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "star-filled": { "kind": "element-plus", "export": "StarFilled", "source": "@element-plus/icons-vue", "scope": "standard-control" },
-    "add": { "kind": "element-plus", "export": "Plus", "source": "@element-plus/icons-vue", "scope": "standard-control" }
+    "home": {
+      "kind": "element-plus",
+      "export": "House",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "search": {
+      "kind": "element-plus",
+      "export": "Search",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "arrow-left": {
+      "kind": "element-plus",
+      "export": "ArrowLeft",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "arrow-down": {
+      "kind": "element-plus",
+      "export": "ArrowDown",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "location": {
+      "kind": "element-plus",
+      "export": "Location",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "view": {
+      "kind": "element-plus",
+      "export": "View",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "collection": {
+      "kind": "element-plus",
+      "export": "Collection",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "help": {
+      "kind": "element-plus",
+      "export": "QuestionFilled",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "logout": {
+      "kind": "element-plus",
+      "export": "SwitchButton",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "user": {
+      "kind": "element-plus",
+      "export": "User",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "star": {
+      "kind": "element-plus",
+      "export": "Star",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "star-filled": {
+      "kind": "element-plus",
+      "export": "StarFilled",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    },
+    "add": {
+      "kind": "element-plus",
+      "export": "Plus",
+      "source": "@element-plus/icons-vue",
+      "scope": "standard-control"
+    }
   },
   "charts": {
     "styleSource": "docs/design/chart-style.js",

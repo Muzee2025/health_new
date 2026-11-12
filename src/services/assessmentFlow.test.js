@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { buildAssessmentSubmission, isValidAssessmentDraft, matchesAssessmentResult } from './assessmentFlow'
+import {
+  buildAssessmentSubmission,
+  isValidAssessmentDraft,
+  matchesAssessmentResult,
+} from './assessmentFlow'
 
 const test = {
   id: 'SDS',
@@ -9,7 +13,9 @@ const test = {
 describe('assessment submission contract', () => {
   it('keeps raw answers and uses the existing zero-based question index', () => {
     expect(buildAssessmentSubmission('SDS', [2, 1], 'same-attempt-id')).toEqual({
-      test_type: 'SDS', answers: { '0': 2, '1': 1 }, submission_id: 'same-attempt-id',
+      test_type: 'SDS',
+      answers: { 0: 2, 1: 1 },
+      submission_id: 'same-attempt-id',
     })
   })
 
@@ -20,7 +26,14 @@ describe('assessment submission contract', () => {
   })
 
   it('validates draft identity, version, expiry, and answer options', () => {
-    const draft = { version: 2, identity: 'student-4', testId: 'SDS', submissionId: 'same-attempt-id-1', savedAt: 1000, answers: [2, undefined] }
+    const draft = {
+      version: 2,
+      identity: 'student-4',
+      testId: 'SDS',
+      submissionId: 'same-attempt-id-1',
+      savedAt: 1000,
+      answers: [2, undefined],
+    }
     const context = { identity: 'student-4', test, now: 1500 }
     expect(isValidAssessmentDraft(draft, context)).toBe(true)
     expect(isValidAssessmentDraft({ ...draft, identity: 'other-user' }, context)).toBe(false)

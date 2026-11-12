@@ -2,8 +2,19 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { effectScope, nextTick } from 'vue'
 import { useArticleCatalog } from './useArticleCatalog'
 
-const pageData = (overrides = {}) => ({ items: [{ id: 1, title: '摘要', summary: '内容', views: 2 }], total: 1, page: 1, page_size: 12, categories: ['分类'], ...overrides })
-const flush = async () => { await Promise.resolve(); await Promise.resolve(); await nextTick() }
+const pageData = (overrides = {}) => ({
+  items: [{ id: 1, title: '摘要', summary: '内容', views: 2 }],
+  total: 1,
+  page: 1,
+  page_size: 12,
+  categories: ['分类'],
+  ...overrides,
+})
+const flush = async () => {
+  await Promise.resolve()
+  await Promise.resolve()
+  await nextTick()
+}
 
 afterEach(() => vi.useRealTimers())
 
@@ -30,7 +41,9 @@ describe('useArticleCatalog', () => {
 
   it('ignores late responses from superseded requests and clamps page from server without refetch loop', async () => {
     const pending = []
-    const client = { get: vi.fn((url, config) => new Promise(resolve => pending.push({ resolve, config }))) }
+    const client = {
+      get: vi.fn((url, config) => new Promise((resolve) => pending.push({ resolve, config }))),
+    }
     const scope = effectScope()
     const catalog = scope.run(() => useArticleCatalog({ endpoint: '/page', client }))
     catalog.fetchPage()
@@ -48,7 +61,15 @@ describe('useArticleCatalog', () => {
   })
 
   it('resets page on category and sort changes with one immediate request each', async () => {
-    const client = { get: vi.fn().mockImplementation((url, config) => Promise.resolve({ data: pageData({ total: 50, page: config.params.page, categories: ['分类', '新分类'] }) })) }
+    const client = {
+      get: vi
+        .fn()
+        .mockImplementation((url, config) =>
+          Promise.resolve({
+            data: pageData({ total: 50, page: config.params.page, categories: ['分类', '新分类'] }),
+          }),
+        ),
+    }
     const scope = effectScope()
     const catalog = scope.run(() => useArticleCatalog({ endpoint: '/page', client }))
     catalog.setPage(3)
@@ -70,9 +91,12 @@ describe('useArticleCatalog', () => {
   })
 
   it('resets a category missing from the server category set and refreshes once', async () => {
-    const client = { get: vi.fn()
-      .mockResolvedValueOnce({ data: pageData({ items: [], total: 0, categories: ['分类'] }) })
-      .mockResolvedValueOnce({ data: pageData({ categories: ['分类'] }) }) }
+    const client = {
+      get: vi
+        .fn()
+        .mockResolvedValueOnce({ data: pageData({ items: [], total: 0, categories: ['分类'] }) })
+        .mockResolvedValueOnce({ data: pageData({ categories: ['分类'] }) }),
+    }
     const scope = effectScope()
     const catalog = scope.run(() => useArticleCatalog({ endpoint: '/page', client }))
     catalog.category.value = '已失效分类'
@@ -86,7 +110,14 @@ describe('useArticleCatalog', () => {
   })
 
   it('rejects malformed responses without exposing stale rows and aborts on scope disposal', async () => {
-    const client = { get: vi.fn().mockResolvedValueOnce({ data: pageData({ items: [{ id: 1, content: 'unexpected body' }] }) }).mockResolvedValueOnce({ data: pageData() }) }
+    const client = {
+      get: vi
+        .fn()
+        .mockResolvedValueOnce({
+          data: pageData({ items: [{ id: 1, content: 'unexpected body' }] }),
+        })
+        .mockResolvedValueOnce({ data: pageData() }),
+    }
     const scope = effectScope()
     const catalog = scope.run(() => useArticleCatalog({ endpoint: '/page', client }))
     await catalog.fetchPage()

@@ -20,7 +20,12 @@ describe('private chat session isolation', () => {
     let identity = 'synthetic-session-A'
     const a = createPrivateChatSession(identity, () => identity)
     let complete!: (value: string) => void
-    const result = a.run(() => new Promise<string>(resolve => { complete = resolve }))
+    const result = a.run(
+      () =>
+        new Promise<string>((resolve) => {
+          complete = resolve
+        }),
+    )
     identity = 'synthetic-session-B'
     complete('private-A-result')
     await expect(result).rejects.toMatchObject({ name: 'AbortError' })
@@ -33,7 +38,12 @@ describe('private chat session isolation', () => {
     const session = createPrivateChatSession('synthetic-A', () => 'synthetic-A', controller.signal)
     controller.abort()
     let started = false
-    await expect(session.run(async () => { started = true; return 'private' })).rejects.toMatchObject({ name: 'AbortError' })
+    await expect(
+      session.run(async () => {
+        started = true
+        return 'private'
+      }),
+    ).rejects.toMatchObject({ name: 'AbortError' })
     expect(started).toBe(false)
   })
 })

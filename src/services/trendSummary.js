@@ -10,7 +10,12 @@ function parseDay(value) {
   const day = Number(dayText)
   const time = Date.UTC(year, month - 1, day)
   const parsed = new Date(time)
-  if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) return null
+  if (
+    parsed.getUTCFullYear() !== year ||
+    parsed.getUTCMonth() !== month - 1 ||
+    parsed.getUTCDate() !== day
+  )
+    return null
   return { key: `${yearText}-${monthText}-${dayText}`, time }
 }
 
@@ -42,11 +47,17 @@ export function summarizeTrend(records, days = 30, now = new Date()) {
     const date = parseDay(record?.date_key) || parseDay(record?.date)
     const value = parseIndex(record?.index)
     if (!date || value === null || date.time < start || date.time > end) continue
-    candidates.push({ date, value, instrument: ['SDS', 'SAS'].includes(record?.test_type) ? record.test_type : null })
+    candidates.push({
+      date,
+      value,
+      instrument: ['SDS', 'SAS'].includes(record?.test_type) ? record.test_type : null,
+    })
   }
   // SDS and SAS describe different constructs. Use the latest identified tool,
   // rather than mixing their values in a single average or daily trend.
-  const identified = candidates.filter(item => item.instrument).sort((a, b) => a.date.time - b.date.time)
+  const identified = candidates
+    .filter((item) => item.instrument)
+    .sort((a, b) => a.date.time - b.date.time)
   const instrument = identified.at(-1)?.instrument || null
   for (const item of candidates) {
     if (!instrument || item.instrument !== instrument) continue
@@ -56,8 +67,10 @@ export function summarizeTrend(records, days = 30, now = new Date()) {
   const observations = [...byDate.entries()]
     .map(([date, value]) => ({ date, value, time: parseDay(date).time }))
     .sort((left, right) => left.time - right.time)
-  const values = observations.map(item => item.value)
-  const mean = values.length ? values.reduce((total, value) => total + value, 0) / values.length : null
+  const values = observations.map((item) => item.value)
+  const mean = values.length
+    ? values.reduce((total, value) => total + value, 0) / values.length
+    : null
   const first = observations[0] ?? null
   const last = observations.at(-1) ?? null
   const dailyPoints = []
