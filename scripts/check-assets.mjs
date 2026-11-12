@@ -617,7 +617,7 @@ if (manifest) {
     const f = path.resolve(assetsRoot, item.path)
     if (exists(f)) approvedByHash.set(hashFile(f), item.path)
   }
-  const mirrorRoots = ['src', 'public', 'picture'].map((p) => path.join(root, p))
+  const mirrorRoots = ['src', 'public'].map((p) => path.join(root, p))
   const mirrorFiles = mirrorRoots
     .flatMap(walk)
     .filter(
@@ -666,7 +666,7 @@ const result = {
   },
   limitations: [
     'ICO dimensions are not parsed; SVG viewBox is validated and raster PNG/WebP dimensions are parsed from headers.',
-    'Mirror scan covers versioned src, public, and picture; it excludes ppt-kit copies and does not scan backend/uploads or ignored dependency/cache directories.',
+    'Mirror scan covers versioned src and public; it excludes ppt-kit copies and does not scan backend/uploads or ignored dependency/cache directories.',
   ],
 }
 function pathsCount(list) {
