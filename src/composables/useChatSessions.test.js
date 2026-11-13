@@ -137,6 +137,38 @@ describe('useChatSessions contract', () => {
     expect(context.state.chatHistory.value[0].content).toBe('surviving session')
   })
 
+  it('cascades a 404 cleanup and creates a session when no survivor exists', async () => {
+    const context = createHarness()
+    context.conversations.set('missing-session', conversation('missing-session'))
+    context.messageRows.set('stale-message', {
+      id: 'stale-message',
+      conversationId: 'missing-session',
+      role: 'ai',
+      content: 'stale content',
+      timestamp: '2026-11-14T00:00:00.000Z',
+    })
+    context.uiStates.set('missing-session', { draft: 'stale draft', scrollTop: 12 })
+    context.sessionHttp.get.mockRejectedValue({ response: { status: 404 } })
+    context.sessionHttp.post.mockImplementation(async (_url, payload) => ({
+      data: { session_id: payload.conversation_id, initial_message: 'new chat' },
+    }))
+
+    await context.lifecycle.loadSessionsFromLocal()
+    await context.lifecycle.loadSession('missing-session')
+
+    expect(context.storage.deleteConversationLocal).toHaveBeenCalledWith('missing-session')
+    expect(context.conversations.has('missing-session')).toBe(false)
+    expect(context.messageRows.has('stale-message')).toBe(false)
+    expect(context.uiStates.has('missing-session')).toBe(false)
+    expect(context.sessionHttp.post).toHaveBeenCalledWith(
+      '/api/advanced-ai/sessions',
+      expect.objectContaining({ mode: 'daily', conversation_id: expect.any(String) }),
+    )
+    const createdId = context.sessionHttp.post.mock.calls[0][1].conversation_id
+    expect(context.state.currentSessionId.value).toBe(createdId)
+    expect(context.state.sessions.value).toMatchObject([{ id: createdId, mode: 'daily' }])
+  })
+
   it('keeps cached messages visible when both message loading and server sync fail', async () => {
     const context = createHarness()
     context.conversations.set('cached-session', conversation('cached-session'))
@@ -196,5 +228,54 @@ describe('useChatSessions contract', () => {
     await context.lifecycle.restoreUiState('saved-session')
     expect(context.state.inputText.value).toBe('draft text')
     expect(context.state.chatScrollRef.value.scrollTop).toBe(42)
+  })
+
+  it('keeps local messages and UI state when remote deletion fails', async () => {
+    const context = createHarness()
+    context.conversations.set('delete-failure', conversation('delete-failure'))
+    context.messageRows.set('delete-message', {
+      id: 'delete-message',
+      conversationId: 'delete-failure',
+      role: 'ai',
+      content: 'keep this cache',
+      timestamp: '2026-11-14T00:00:00.000Z',
+    })
+    context.uiStates.set('delete-failure', { draft: 'keep this draft', scrollTop: 25 })
+    context.sessionHttp.delete.mockRejectedValue({ response: { status: 500 } })
+
+    await context.lifecycle.deleteSession({ id: 'delete-failure', title: 'delete-failure' })
+
+    expect(context.sessionHttp.delete).toHaveBeenCalledTimes(3)
+    expect(context.storage.deleteConversationLocal).not.toHaveBeenCalled()
+    expect(context.conversations.has('delete-failure')).toBe(true)
+    expect(context.messageRows.has('delete-message')).toBe(true)
+    expect(context.uiStates.has('delete-failure')).toBe(true)
+  })
+
+  it('deletes local messages and UI state after remote deletion succeeds', async () => {
+    const context = createHarness()
+    context.conversations.set('delete-success', conversation('delete-success'))
+    context.messageRows.set('delete-message', {
+      id: 'delete-message',
+      conversationId: 'delete-success',
+      role: 'ai',
+      content: 'remove this cache',
+      timestamp: '2026-11-14T00:00:00.000Z',
+    })
+    context.uiStates.set('delete-success', { draft: 'remove this draft', scrollTop: 25 })
+    context.state.currentSessionId.value = 'delete-success'
+    context.sessionHttp.delete.mockResolvedValue({})
+    context.sessionHttp.get.mockResolvedValue({ data: { data: [] } })
+    context.sessionHttp.post.mockImplementation(async (_url, payload) => ({
+      data: { session_id: payload.conversation_id, initial_message: 'replacement chat' },
+    }))
+
+    await context.lifecycle.deleteSession({ id: 'delete-success', title: 'delete-success' })
+
+    expect(context.storage.deleteConversationLocal).toHaveBeenCalledWith('delete-success')
+    expect(context.conversations.has('delete-success')).toBe(false)
+    expect(context.messageRows.has('delete-message')).toBe(false)
+    expect(context.uiStates.has('delete-success')).toBe(false)
+    expect(context.state.sessions.value.map((row) => row.id)).not.toContain('delete-success')
   })
 })

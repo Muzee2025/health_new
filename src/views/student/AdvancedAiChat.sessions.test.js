@@ -122,6 +122,14 @@ function conversation(id) {
   }
 }
 
+function deferred() {
+  let resolve
+  const promise = new Promise((resolvePromise) => {
+    resolve = resolvePromise
+  })
+  return { promise, resolve }
+}
+
 beforeEach(() => {
   vi.clearAllMocks()
   mocks.conversations.clear()
@@ -239,6 +247,65 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
       expect(mocks.request).not.toHaveBeenCalled()
     } finally {
       scope.stop()
+    }
+  })
+
+  it('ignores account A late responses after the login token switches to account B', async () => {
+    mocks.conversations.set('account-A-session', conversation('account-A-session'))
+    mocks.conversations.set('account-B-session', conversation('account-B-session'))
+    mocks.messageRows.set('account-B-message', {
+      id: 'account-B-message',
+      conversationId: 'account-B-session',
+      role: 'ai',
+      content: 'account B cache',
+      timestamp: '2026-11-14T00:00:00.000Z',
+    })
+    const lateResponse = deferred()
+    mocks.request.mockImplementation(({ url }) => {
+      if (url === '/api/advanced-ai/sessions/account-A-session/messages') {
+        return lateResponse.promise
+      }
+      throw new Error(`Unexpected URL: ${url}`)
+    })
+
+    const { page: pageA, scope: scopeA } = createPage()
+    const pendingLoad = pageA.loadSession('account-A-session')
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      expect(mocks.request).toHaveBeenCalledTimes(1)
+      localStorage.setItem('token', 'synthetic-session-B')
+      const { page: pageB, scope: scopeB } = createPage()
+      try {
+        const accountBHistory = [
+          { id: 'account-B-message', role: 'ai', content: 'account B cache' },
+        ]
+        pageB.currentSessionId.value = 'account-B-session'
+        pageB.chatHistory.value = accountBHistory
+
+        lateResponse.resolve({
+          data: {
+            data: [
+              {
+                id: 'late-account-A-message',
+                role: 'ai',
+                content: 'late account A response',
+                created_at: '2026-11-14T00:00:01.000Z',
+              },
+            ],
+          },
+        })
+        await pendingLoad
+
+        expect(pageA.chatHistory.value).toEqual([])
+        expect(pageB.chatHistory.value).toEqual(accountBHistory)
+        expect(mocks.putMessage).not.toHaveBeenCalled()
+        expect([...mocks.messageRows.keys()]).toEqual(['account-B-message'])
+        expect(mocks.conversations.has('account-A-session')).toBe(true)
+      } finally {
+        scopeB.stop()
+      }
+    } finally {
+      scopeA.stop()
     }
   })
 

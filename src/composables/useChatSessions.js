@@ -228,6 +228,7 @@ export function useChatSessions({
       }
       if (status === 404) {
         await storage.deleteConversationLocal(id)
+        if (currentSessionId.value === id) currentSessionId.value = null
         await loadSessionsFromLocal()
         const next = sessions.value.find((row) => !row.archived)
         if (next) await loadSession(next.id)
@@ -349,14 +350,16 @@ export function useChatSessions({
       return
     }
 
+    const shouldReplaceCurrentSession = currentSessionId.value === session.id
     await storage.deleteConversationLocal(session.id)
+    if (currentSessionId.value === session.id) currentSessionId.value = null
     await loadSessionsFromLocal()
     if (result.state === 'already_deleted') {
       ElMessage.success('删除成功：服务端会话已不存在，本地索引已同步清理')
     } else {
       ElMessage.success('删除成功：服务端与本地索引已同步删除')
     }
-    if (currentSessionId.value === session.id) {
+    if (shouldReplaceCurrentSession && currentSessionId.value === null) {
       const next = sessions.value.find((row) => row.id !== session.id && !row.archived)
       if (next) await loadSession(next.id)
       else await createNewChat(currentMode.value)

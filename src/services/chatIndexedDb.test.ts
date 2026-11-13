@@ -63,6 +63,28 @@ class MemoryIndex {
     const result = [...this.rows.values()].filter((row) => row[this.name] === key.value)
     return requestFor(result.map((row) => structuredClone(row)))
   }
+
+  openCursor(key: { value: unknown }) {
+    const entries = [...this.rows.entries()].filter(([, row]) => row[this.name] === key.value)
+    const request: RequestLike = { result: undefined, onsuccess: null, onerror: null }
+    let index = 0
+    const advance = () => {
+      const entry = entries[index]
+      request.result = entry
+        ? {
+            value: structuredClone(entry[1]),
+            delete: () => this.rows.delete(entry[0]),
+            continue: () => {
+              index += 1
+              queueMicrotask(advance)
+            },
+          }
+        : null
+      request.onsuccess?.()
+    }
+    queueMicrotask(advance)
+    return request
+  }
 }
 
 class MemoryTransaction {
@@ -188,5 +210,10 @@ describe('chatIndexedDb persistence', () => {
     const storageB = createChatStorage(createPrivateChatSession(identityB, () => identityB))
     expect(await storageB.getAllConversations()).toEqual([])
     expect(await storageB.getUiState('conversation-1')).toBeNull()
+
+    await reopenedA.deleteConversationLocal('conversation-1')
+    expect(await reopenedA.getAllConversations()).toEqual([])
+    expect(await reopenedA.listMessages('conversation-1')).toEqual([])
+    expect(await reopenedA.getUiState('conversation-1')).toBeNull()
   })
 })
