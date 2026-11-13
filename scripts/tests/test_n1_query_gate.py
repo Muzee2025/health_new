@@ -212,6 +212,18 @@ class CommandLineTest(unittest.TestCase):
         self.assertEqual(proc.returncode, 2)
         self.assertIn('unexpected extra arguments', proc.stderr)
 
+    def test_help_exits_0_and_documents_the_flags(self):
+        # Not a bug fix, a usability one: `--help` used to exit 2 and report
+        # "unknown option --help", which reads like the script is broken.
+        proc = self._run('--help')
+        self.assertEqual(proc.returncode, 0)
+        self.assertIn('--fail-on-findings', proc.stdout)
+        self.assertIn('--git', proc.stdout)
+        self.assertIn('usage:', proc.stdout)
+
+    def test_short_help_flag_also_works(self):
+        self.assertEqual(self._run('-h').returncode, 0)
+
 
 if __name__ == '__main__':
     unittest.main()

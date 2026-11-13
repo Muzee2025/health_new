@@ -29,6 +29,25 @@ import subprocess
 import sys
 from pathlib import Path
 
+USAGE = """\
+Static N+1 scanner: finds database round-trips that sit inside a loop body.
+
+usage: check-n1-queries.py [--fail-on-findings] [--git REV] [PATH]
+
+  PATH                 directory to scan (default: backend/app)
+  --git REV            scan a git revision instead of the worktree
+  --fail-on-findings   exit 1 when any real N+1 is found (default: report only)
+  -h, --help           show this message
+
+Exit codes: 0 ok / nothing found, 1 findings with --fail-on-findings,
+2 bad usage.
+
+Loop-local queries whose cost does not grow with data are reported separately
+as retry/constant and never fail the gate: a query that is the loop iterable
+(one round-trip for the whole loop), a fixed `for attempt in range(n)` retry
+loop, and dict/list methods such as `mapping.get(k)` or `vals.count(v)`.
+"""
+
 # Methods that actually hit the database when called on a Query / Session.
 TERMINALS = {
     'all', 'first', 'one', 'one_or_none', 'scalar', 'scalar_one',
@@ -241,6 +260,9 @@ def main(argv: list[str]) -> int:
     # silently ignored.
     while i < len(args):
         arg = args[i]
+        if arg in ('--help', '-h'):
+            print(USAGE)
+            return 0
         if arg == '--git':
             if i + 1 >= len(args):
                 print('--git needs a revision', file=sys.stderr)
