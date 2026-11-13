@@ -476,21 +476,26 @@
   },
   {
     "order": 95,
+    "path": "/api/ws",
+    "method": "WS"
+  },
+  {
+    "order": 96,
     "path": "/api/health",
     "method": "GET"
   },
   {
-    "order": 96,
+    "order": 97,
     "path": "/api/health/ready",
     "method": "GET"
   },
   {
-    "order": 97,
+    "order": 98,
     "path": "/",
     "method": "GET"
   },
   {
-    "order": 98,
+    "order": 99,
     "path": "/api/v1/model/current",
     "method": "GET"
   }

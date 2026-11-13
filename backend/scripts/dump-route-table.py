@@ -8,16 +8,23 @@ Usage (from the repository root):
   .venv/Scripts/python.exe backend/scripts/dump-route-table.py --check
   .venv/Scripts/python.exe backend/scripts/dump-route-table.py --compare a.json b.json
 
-Scope: the snapshot is taken from app.openapi(), i.e. the fully mounted application,
-so it includes include_router() prefixes and @app-level routes. Two narrower sources
-were tried and are wrong for a gate:
+Scope: the snapshot covers the fully mounted application, both HTTP and WebSocket.
+Paths and prefixes come from the mounted app, so include_router() prefixes and
+@app-level routes are included. Two narrower sources were tried and are wrong for a
+gate:
 
 * app.routes holds lazy _IncludedRouter wrappers on FastAPI 0.140 (18 entries, only 2
   APIRoute), so most endpoints are invisible there.
 * Walking each router module's own .routes ignores the prefix given at mount time
-  (advanced_chat is mounted under /api/advanced-ai) and misses @app routes such as
-  "/" and /api/v1/model/current. That version reported 98 pairs where the mounted app
-  has 99, with 18 paths spelled wrongly.
+  (advanced_chat is mounted under /api/advanced-ai, 10 pairs) and misses @app routes
+  such as "/" and /api/v1/model/current. That version reported 98 pairs where the
+  mounted app has 99, with every advanced-ai path spelled wrongly.
+
+WebSocket routes are recorded with the method "WS". They are NOT in app.openapi() --
+OpenAPI describes HTTP operations only -- so they cannot come from the same source as
+the HTTP pairs. They are walked from APIWebSocketRoute objects instead, and counted a
+second time by an independent scan of the app tree, so a FastAPI internal change that
+hides them from the walk fails the gate instead of silently dropping /api/ws.
 
 Registration order is part of the snapshot because it is semantic: /articles/page must
 be registered before /articles/{article_id} on both the student and teacher routers,
@@ -56,6 +63,26 @@ def _bootstrap_env() -> None:
     sys.path.insert(0, str(BACKEND))
 
 
+WS_METHOD = "WS"
+
+
+def _methods_of(route) -> list[str]:
+    """HTTP methods of one route, or ["WS"] for a WebSocket endpoint.
+
+    APIWebSocketRoute has no ``methods`` attribute at all, so the previous walk skipped
+    it and the snapshot claimed to cover "the whole app" while /api/ws was invisible.
+    """
+    from fastapi.routing import APIWebSocketRoute
+
+    if isinstance(route, APIWebSocketRoute):
+        return [WS_METHOD]
+    return [
+        method.upper()
+        for method in (getattr(route, "methods", None) or ())
+        if method.upper() not in ("HEAD", "OPTIONS")
+    ]
+
+
 def _mounted_routes(application):
     """Yield (registration_index, path, method) in true registration order.
 
@@ -64,9 +91,10 @@ def _mounted_routes(application):
     knows the order but not the paths. Each lazy entry keeps the router it wrapped in
     ``original_router`` and the mount arguments in ``include_context`` (whose ``prefix``
     is where e.g. /api/advanced-ai comes from), so walking both reconstructs the real
-    order. collect() asserts the result matches app.openapi() exactly.
+    order. collect() asserts the HTTP part matches app.openapi() exactly and the
+    WebSocket part matches an independent count.
     """
-    from fastapi.routing import APIRoute
+    from fastapi.routing import APIRoute, APIWebSocketRoute
 
     index = 0
     for route in application.routes:
@@ -76,25 +104,46 @@ def _mounted_routes(application):
             mount_prefix = getattr(context, "prefix", "") or ""
             for inner in getattr(router, "routes", []):
                 path = getattr(inner, "path", None)
-                methods = getattr(inner, "methods", None)
-                if not path or not methods:
+                if not path:
                     continue
                 # inner.path already contains the router's own prefix (e.g. auth's
                 # "/api/register" under router.prefix "/api"); only the prefix given to
                 # include_router() is still missing.
                 full = f"{mount_prefix}{path}"
-                for method in methods:
-                    if method in ("HEAD", "OPTIONS"):
-                        continue
-                    yield index, full, method.upper()
+                for method in _methods_of(inner):
+                    yield index, full, method
                     index += 1
             continue
-        if isinstance(route, APIRoute):
-            for method in getattr(route, "methods", ()):
-                if method in ("HEAD", "OPTIONS"):
-                    continue
-                yield index, route.path, method.upper()
+        if isinstance(route, (APIRoute, APIWebSocketRoute)):
+            for method in _methods_of(route):
+                yield index, route.path, method
                 index += 1
+
+
+def _count_websocket_routes(node, _seen=None) -> int:
+    """Count WebSocket endpoints reachable from a router or app, descending wrappers.
+
+    Deliberately independent of _mounted_routes(): it only counts, and it descends
+    original_router, so if a FastAPI internal change ever hides WS endpoints from the
+    ordered walk the two numbers disagree and collect() fails instead of quietly
+    dropping /api/ws from the snapshot.
+    """
+    from fastapi.routing import APIWebSocketRoute
+
+    if _seen is None:
+        _seen = set()
+    if id(node) in _seen:
+        return 0
+    _seen.add(id(node))
+
+    total = 0
+    for route in getattr(node, "routes", ()) or ():
+        if isinstance(route, APIWebSocketRoute):
+            total += 1
+        original = getattr(route, "original_router", None)
+        if original is not None:
+            total += _count_websocket_routes(original, _seen)
+    return total
 
 
 def collect() -> tuple[list[dict], list[str]]:
@@ -124,13 +173,26 @@ def collect() -> tuple[list[dict], list[str]]:
         {"order": order, "path": path, "method": method}
         for order, path, method in _mounted_routes(application)
     ]
-    seen = {(entry["path"], entry["method"]) for entry in routes}
+    http_seen = {(e["path"], e["method"]) for e in routes if e["method"] != WS_METHOD}
+    ws_seen = [e for e in routes if e["method"] == WS_METHOD]
 
-    missing, extra = expected - seen, seen - expected
+    # HTTP and WebSocket are verified separately because they have different sources of
+    # truth: HTTP against app.openapi(), WebSocket against an independent count, since
+    # OpenAPI never describes WebSocket endpoints.
+    missing, extra = expected - http_seen, http_seen - expected
     if missing:
         return [], [f"walked routes missing from app.openapi(): {sorted(missing)[:5]}"]
     if extra:
         return [], [f"walked routes not in app.openapi(): {sorted(extra)[:5]}"]
+
+    ws_expected = _count_websocket_routes(application)
+    if len(ws_seen) != ws_expected:
+        return [], [
+            f"websocket routes: walk found {len(ws_seen)}, independent count found "
+            f"{ws_expected}; the snapshot would silently drop a WS endpoint"
+        ]
+    if ws_expected and not ws_seen:
+        return [], ["websocket routes exist but none were walked"]
     return routes, []
 
 
