@@ -20,7 +20,6 @@ import os
 import sys
 import tempfile
 
-import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event
@@ -149,20 +148,16 @@ def test_crisis_review_statements_do_not_grow_with_events():
     _assert_flat(seed, "/api/teacher/crisis/9500/reviews")
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="open defect: get_treehole_posts has no pagination, and _get_treehole_responses "
-           "filters five queries on post_id IN (post_ids), so the parameter count is N+1. "
-           "Measured: 10 posts bind 11 parameters, 32766 posts raise 'too many SQL variables'. "
-           "Remove this marker once the lookups are joined instead of passed as an id list.",
-)
 def test_treehole_post_statements_do_not_grow_with_posts():
-    """The statements are flat here, but the bound parameters are not.
+    """Both properties are flat here, and this test is what forced the second one.
 
     ``_get_treehole_response`` used to run five counts per post, costing 5N+1
-    statements; that was batched, and the statement count is now flat. What is
-    still linear is the parameter count: each of the five batched queries binds
-    one variable per post id, and the route returns the whole table.
+    statements; that was batched and the statement count went flat. The parameter
+    count did not: each of the five batched queries bound one variable per post id,
+    and the route returns the whole table with no pagination, so 32766 posts raised
+    "too many SQL variables". That is why the response builder now references the
+    post set as a subquery instead of a materialised id list, and why this test
+    asserts the parameter count as well as the statement count.
     """
     def seed(db, teacher_user, student_user, rows):
         for index in range(rows):
