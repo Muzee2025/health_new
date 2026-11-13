@@ -315,8 +315,14 @@ def get_crisis_review_history(warning_id: int, db: Session = Depends(get_db),
     events = (db.query(models.SupportWorkflowEvent)
         .filter_by(subject_type="crisis_warning", subject_id=warning_id)
         .order_by(models.SupportWorkflowEvent.id.asc()).all())
+    # One lookup for every actor the events name, instead of one query per event.
+    actor_ids = {event.actor_id for event in events if event.actor_id}
+    actor_names = {
+        actor.id: (actor.name or actor.username)
+        for actor in db.query(models.User).filter(models.User.id.in_(actor_ids)).all()
+    } if actor_ids else {}
     return {"status": "success", "data": [{"action": e.action, "reason": e.reason,
-        "reviewed_at": e.created_at, "reviewed_by": _support_actor_name(db, e.actor_id)} for e in events]}
+        "reviewed_at": e.created_at, "reviewed_by": actor_names.get(e.actor_id)} for e in events]}
 
 
 def _support_actor_name(db: Session, actor_id: int | None):
@@ -872,10 +878,16 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
     students = db.query(models.User).filter(models.User.role == "student", models.User.id.in_(assigned_student_ids(db, current_user.id))).all()
     if not students:
         return []
-    student_ids = [s.id for s in students]
     # Three batched lookups instead of four per student. The newest SDS/SAS result is
     # ranked per student in one window query, and the pending-warning count and newest
     # timestamp come from a single GROUP BY, so the per-row values are unchanged.
+    # The assigned students are referenced as a subquery, not as an IN list of ids: a
+    # teacher's student list has no upper bound, and SQLite rejects a statement once it
+    # binds more than 32766 variables, which the per-row loop never did.
+    assigned_ids = db.query(models.User.id).filter(
+        models.User.role == "student",
+        models.User.id.in_(assigned_student_ids(db, current_user.id)),
+    )
     ranked_tests = (
         db.query(
             models.TestResult.user_id.label("user_id"),
@@ -886,7 +898,7 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
             ).label("position"),
         )
         .filter(
-            models.TestResult.user_id.in_(student_ids),
+            models.TestResult.user_id.in_(assigned_ids.subquery().select()),
             models.TestResult.test_type.in_(["SDS", "SAS"]),
         )
         .subquery()
@@ -902,7 +914,9 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
     }
     profiles = {
         profile.user_id: profile
-        for profile in db.query(models.StudentProfile).filter(models.StudentProfile.user_id.in_(student_ids)).all()
+        for profile in db.query(models.StudentProfile).filter(
+            models.StudentProfile.user_id.in_(assigned_ids.subquery().select())
+        ).all()
     }
     pending_crisis = {
         student_id: (count, newest)
@@ -913,7 +927,7 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
                 func.max(models.CrisisWarning.created_at),
             )
             .filter(
-                models.CrisisWarning.student_id.in_(student_ids),
+                models.CrisisWarning.student_id.in_(assigned_ids.subquery().select()),
                 models.CrisisWarning.status == "pending",
             )
             .group_by(models.CrisisWarning.student_id)

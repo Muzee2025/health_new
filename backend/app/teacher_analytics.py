@@ -54,10 +54,16 @@ def audit_items(db: Session, teacher_id: int) -> list[dict]:
         return []
     # Two batched lookups instead of two per warning: the students behind the warnings,
     # and the triggering messages (joined so a message from another student cannot leak).
+    # The student set comes from a subquery over the same warnings, not from an IN list of
+    # ids: a warning list has no upper bound, and SQLite rejects a statement once it binds
+    # more than 32766 variables, which the per-row loop never did.
+    warning_students = db.query(models.CrisisWarning.student_id).filter(
+        models.CrisisWarning.student_id.in_(assigned_student_ids(db, teacher_id))
+    )
     students = {
         student.id: student
         for student in db.query(models.User).filter(
-            models.User.id.in_({warning.student_id for warning in warnings}),
+            models.User.id.in_(warning_students.subquery().select()),
             models.User.role == "student",
         ).all()
     }
