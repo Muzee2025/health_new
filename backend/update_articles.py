@@ -1,7 +1,9 @@
-from app.database import engine
-from sqlalchemy import text
-from datetime import datetime
 import random
+from datetime import datetime
+
+from sqlalchemy import text
+
+from app.database import engine
 
 PSYCHOLOGY_ARTICLES = [
     {

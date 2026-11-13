@@ -1,9 +1,10 @@
-import os
 import glob
-from langchain_community.document_loaders import TextLoader, UnstructuredMarkdownLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+import os
+
 from langchain_chroma import Chroma
+from langchain_community.document_loaders import TextLoader, UnstructuredMarkdownLoader
 from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # 目录配置
 DOCS_DIR = "./psychology_docs"
@@ -71,7 +72,7 @@ def main():
 
     print(f"正在生成向量并存入持久化目录 {CHROMA_DIR} ...")
     # 存入 ChromaDB 进行持久化
-    vectorstore = Chroma.from_documents(
+    Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
         persist_directory=CHROMA_DIR

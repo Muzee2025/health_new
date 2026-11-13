@@ -5,8 +5,8 @@ Downgrade refuses a nonempty assignment table; existing user data is never delet
 """
 import argparse
 import json
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
 TABLE = "teacher_student_assignments"
 

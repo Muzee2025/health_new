@@ -5,14 +5,13 @@ import statistics
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import requests
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from scipy.stats import binomtest
 from snownlp import SnowNLP
-
 
 BASE_URL = "http://127.0.0.1:8000"
 INPUT_TEXT = "我最近获得比赛第二名 我很开心"
