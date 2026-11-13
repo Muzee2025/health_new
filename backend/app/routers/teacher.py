@@ -218,14 +218,18 @@ def get_pending_crisis_records(
     # One batched message lookup instead of one per warning row. Keyed by
     # (message id, owning student): the same message can be named by two warnings, so a
     # lookup keyed by message id alone would hand one student's message to the other.
-    pending_message_ids = {w.chat_message_id for w in real_warnings if w.chat_message_id}
+    # The warnings are joined rather than passed as an IN list: a pending-warning list has
+    # no upper bound, and SQLite rejects a statement once it binds more than 32766
+    # variables (SQLITE_LIMIT_VARIABLE_NUMBER), which a per-row loop never did.
     pending_messages: dict[tuple[int, int], str] = {}
-    if pending_message_ids:
+    if real_warnings:
         for message_id, content, owner in (
             db.query(models.AIChatMessage.id, models.AIChatMessage.content,
                      models.AIChatSession.user_id)
             .join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id)
-            .filter(models.AIChatMessage.id.in_(pending_message_ids))
+            .join(models.CrisisWarning, models.CrisisWarning.chat_message_id == models.AIChatMessage.id)
+            .filter(models.CrisisWarning.status == "pending",
+                    models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
             .all()
         ):
             pending_messages[(message_id, owner)] = content or ""
@@ -336,7 +340,15 @@ def list_assigned_questions(status: str | None = None, db: Session = Depends(get
     if not questions:
         return {"status": "success", "data": []}
     # The newest answer event per question in one query, then one lookup for every
-    # actor named by those events: two statements instead of two per question.
+    # actor named by those events: two statements instead of two per question. Both are
+    # joined to the question set rather than passed as an IN list, so a teacher with a very
+    # long question list cannot exceed SQLite's 32766 bound-variable limit.
+    assigned_questions = (
+        db.query(models.Question.id)
+        .filter(models.Question.user_id.in_(assigned_student_ids(db, current_user.id)))
+    )
+    if status:
+        assigned_questions = assigned_questions.filter(models.Question.status == status)
     ranked_events = (
         db.query(
             models.SupportWorkflowEvent.id.label("event_id"),
@@ -348,7 +360,7 @@ def list_assigned_questions(status: str | None = None, db: Session = Depends(get
         )
         .filter(
             models.SupportWorkflowEvent.subject_type == "question",
-            models.SupportWorkflowEvent.subject_id.in_([question.id for question in questions]),
+            models.SupportWorkflowEvent.subject_id.in_(assigned_questions.subquery().select()),
             models.SupportWorkflowEvent.action == "answer",
         )
         .subquery()

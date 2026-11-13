@@ -64,13 +64,16 @@ def audit_items(db: Session, teacher_id: int) -> list[dict]:
     message_ids = {warning.chat_message_id for warning in warnings if warning.chat_message_id}
     # message id -> (content, owning student). The owning student is fetched with the
     # message so the same guard as before holds: a message is only shown when it
-    # belongs to the student the warning names.
+    # belongs to the student the warning names. The warnings are joined rather than
+    # passed as an IN list: the list has no upper bound, and SQLite rejects a statement
+    # once it binds more than 32766 variables, which a per-row loop never did.
     message_rows = {}
     if message_ids:
         for message_id, content, owner in (
             db.query(models.AIChatMessage.id, models.AIChatMessage.content, models.AIChatSession.user_id)
             .join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id)
-            .filter(models.AIChatMessage.id.in_(message_ids))
+            .join(models.CrisisWarning, models.CrisisWarning.chat_message_id == models.AIChatMessage.id)
+            .filter(models.CrisisWarning.student_id.in_(assigned_student_ids(db, teacher_id)))
             .all()
         ):
             message_rows[message_id] = (content, owner)

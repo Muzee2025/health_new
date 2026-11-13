@@ -132,14 +132,17 @@ async def get_crisis_warnings(db: Session = Depends(get_db), current_user: User 
     warnings = db.query(CrisisWarning).filter(CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).options(joinedload(CrisisWarning.student), joinedload(CrisisWarning.processor)).order_by(CrisisWarning.created_at.desc()).all()
     # One batched lookup for every triggering message instead of one per warning.
     # The join keeps the original guard: a message only counts when it belongs to the
-    # student the warning names.
+    # student the warning names. The warnings are joined rather than passed as an IN
+    # list: that list has no upper bound, and SQLite rejects a statement once it binds
+    # more than 32766 variables, which a per-row loop never did.
     message_ids = {w.chat_message_id for w in warnings if w.chat_message_id}
     trigger_messages = {}
     if message_ids:
         for message_id, content, owner in (
             db.query(AIChatMessage.id, AIChatMessage.content, AIChatSession.user_id)
             .join(AIChatSession, AIChatSession.id == AIChatMessage.session_id)
-            .filter(AIChatMessage.id.in_(message_ids))
+            .join(CrisisWarning, CrisisWarning.chat_message_id == AIChatMessage.id)
+            .filter(CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
             .all()
         ):
             trigger_messages[message_id] = (content, owner)

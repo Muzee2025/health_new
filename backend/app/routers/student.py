@@ -1330,7 +1330,11 @@ def get_questions(db: Session = Depends(get_db), current_user: models.User = Dep
             )
             .filter(
                 models.SupportWorkflowEvent.subject_type == "question",
-                models.SupportWorkflowEvent.subject_id.in_([question.id for question in questions]),
+                models.SupportWorkflowEvent.subject_id.in_(
+                    db.query(models.Question.id)
+                    .filter(models.Question.user_id == current_user.id)
+                    .subquery().select()
+                ),
                 models.SupportWorkflowEvent.action == "answer",
             )
             .subquery()
