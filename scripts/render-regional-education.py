@@ -2,7 +2,10 @@
 import csv,json,os,re,sys  # noqa: E401, I001
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];QA=ROOT/'tmp/ai-application-20261027'  # noqa: E702
-sys.path.insert(0,str(QA/'pydeps'));sys.path.insert(0,'C:/Users/14012/.agents/skills/math-modeling/tools/figure/scripts')  # noqa: E702
+# The math-modeling skill lives outside this repo. Override it with
+# MATH_MODELING_SKILL; the default is the skill's usual per-user location.
+SKILL=Path(os.environ.get('MATH_MODELING_SKILL') or Path.home()/'.agents/skills/math-modeling')
+sys.path.insert(0,str(QA/'pydeps'));sys.path.insert(0,str(SKILL/'tools/figure/scripts'))  # noqa: E702
 os.environ['MPLCONFIGDIR']=str(QA/'mpl-cache')
 import matplotlib  # noqa: E402, I001
 matplotlib.use('Agg')

@@ -44,7 +44,10 @@ jobs:
       - run: npm run assets:source-check
       # Runs copied scripts with stub modules; no browser, optional packages or
       # capture/build output is used. --check-deps must stop before main work.
-      - run: node --test scripts/tests/optional-script-dependencies.test.mjs
+      # The glob picks up every test file in scripts/tests/, so new ones are
+      # gated without touching this workflow. Do not pass the directory itself:
+      # `node --test scripts/tests/` fails instead of discovering files.
+      - run: node --test "scripts/tests/*.test.mjs"
 
   backend:
     runs-on: ubuntu-latest

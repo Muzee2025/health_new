@@ -6,8 +6,11 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / 'docs/plan/ai-application'
 QA = ROOT / 'tmp/ai-application-20261027'
 sys.dont_write_bytecode = True
+# The math-modeling skill lives outside this repo. Override it with
+# MATH_MODELING_SKILL; the default is the skill's usual per-user location.
+SKILL = Path(os.environ.get('MATH_MODELING_SKILL') or Path.home() / '.agents/skills/math-modeling')
 sys.path.insert(0, str(QA / 'pydeps'))  # Optional task-local matplotlib installation.
-sys.path.insert(0, 'C:/Users/14012/.agents/skills/math-modeling/tools/figure/scripts')
+sys.path.insert(0, str(SKILL / 'tools/figure/scripts'))
 os.environ['MPLCONFIGDIR'] = str(QA / 'mpl-cache')
 import matplotlib  # noqa: E402, I001
 matplotlib.use('Agg')

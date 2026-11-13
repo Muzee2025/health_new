@@ -1,8 +1,10 @@
 """Assemble six Luna-authored chapters, centered native tables and source-backed figures."""
-import sys,re,json,hashlib,argparse,importlib.util  # noqa: E401, I001
+import os,sys,re,json,hashlib,argparse,importlib.util  # noqa: E401, I001
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];QA=ROOT/'tmp/ai-application-20261027'  # noqa: E702
-SKILL=Path('C:/Users/14012/.agents/skills/math-modeling')
+# The math-modeling skill lives outside this repo. Override it with
+# MATH_MODELING_SKILL; the default is the skill's usual per-user location.
+SKILL=Path(os.environ.get('MATH_MODELING_SKILL') or Path.home()/'.agents/skills/math-modeling')
 sys.dont_write_bytecode=True
 sys.path.insert(0,str(SKILL/'tools/docx/scripts'))
 import paper_format as pf  # noqa: E402, I001

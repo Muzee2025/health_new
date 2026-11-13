@@ -12,7 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 QA_DEFAULT = ROOT / "docs" / "plan" / "ai-application" / "figures-sci"
-SKILL = Path(r"C:\Users\14012\.agents\skills\math-modeling")
+SKILL = Path(
+    os.environ.get("MATH_MODELING_SKILL") or Path.home() / ".agents" / "skills" / "math-modeling"
+)
 PYDEPS = ROOT / "tmp" / "ai-application-20261027" / "pydeps"
 
 
