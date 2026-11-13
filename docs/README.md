@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 4.4 ｜ status: 路由快照门禁独立评审已通过并登记 ｜ updated: 2026-11-14
+> owner: A ｜ version: 4.5 ｜ status: 学生端路由拆分第 1、2 批已登记；后续模块仍待推进 ｜ updated: 2026-11-14
 
 新增[仓库可瘦身项盘点](ops/仓库可瘦身项盘点_20261113.md)：按 `-z` NUL 分隔精确清点为 **1404 文件 / 152.79 MiB**（此前 1369/150.8MB 与今日 1403 两个口径都少算了 2 个被中文路径编码吞掉的文件）。用 git blob SHA1 逐成员复核 9 个 ZIP，**更正旧结论「7 个 100% 重复」为「5 个 100% 可还原、合计 3.31 MiB」**：`高校两学期模拟库.zip` 与 `合成问答训练集.zip` 各含 1 个被 `.gitignore` 排除、不在库内的 sqlite，删 ZIP 会永久丢失。另实测 16 个 PPTX 的磁盘 mtime **全部是入库时间 `2026-11-12 22:16:52`、完全不可用于判版本**，改用 `docProps/core.xml` + 幻灯片文本 SHA 比对，发现 3 个 PPTX 文本完全相同（仅图片渲染数 88/46/7 不同）。全库 93 组字节级重复浪费 12.73 MiB。`docs/` 184 个 md 中 6 个未进索引，逐个核实后**仅 1 个真零引用**。含保守/激进两方案与 6 项待确认清单，**未删除、未移动、未提交任何文件**。
 
@@ -13,6 +13,8 @@
 新增[CI复现复核](test/CI复现复核_20261113.md)（v1.1，2026-11-14）：只读 GitHub Actions 证据确认原 run 42049558772 失败点为 frontend `assets:check`（SVG manifest HASH_MISMATCH），backend 全成功；当前 HEAD `9a81c48` 的 run 43464692028 全绿。
 
 新增[路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md)：固定 `e224cb6`/`1af1375` 复核——HTTP 修订 15 项独立检查通过（导入失败各模式 exit 1、真实 student/teacher 路由重排均被抓、99 对与基线一致），但「整个 app」仍有覆盖缺口：隔离进程内移除真实 `/api/ws`（WebSocket，`APIWebSocketRoute` 不在 `openapi()` 内）后 `--check` 仍 `IDENTICAL 99` exit 0，验收断言 1 failed；另更正方案中 `/api/advanced-ai` 实为 10 对（18 是 `app.routes` 条目数）。**v1.1（2026-11-14）**：`307368b` 补 WS 快照后独立复验 **20 passed exit 0**（18 独立 + 2 仓库，100 项 = 99 HTTP + 1 WS），真实移除 WS 与遍历器失明均被拒绝，路径前缀漂移也能抓，**路由门禁验收关闭**；嵌套挂载限制仍是后续拆分前提。P2 已关闭，不与路由门禁混算。
+
+后端 student 路由拆分第 1、2 批已推送并复核：`378f789` 拆出 dashboard 7 条，`1ca688a` 拆出 report 6 条与 treehole 7 条；共享 helper 保留，100 个 path+method 对的原注册顺序不变。方案修订 `c30aae3` 补列 `_treehole_id_scope`。独立复核见[首批报告](test/后端首批路由拆分独立复核_20261114.md)（提交 `07a6b3e`）和[第二批报告](test/后端第二批路由拆分独立复核_20261114.md)（提交 `eca2900`）。执行者报告两批隔离基线均为 **231 passed / 3 skipped / 26 warnings**，Ruff 与 N+1 门禁 exit 0；首批 CI [#113](https://github.com/Muzee2025/health_new/actions/runs/43467298917)、第二批及方案修订 CI [#115](https://github.com/Muzee2025/health_new/actions/runs/43475016880) / [#116](https://github.com/Muzee2025/health_new/actions/runs/43475394004)、第二批复核报告 CI [#117](https://github.com/Muzee2025/health_new/actions/runs/43477177241) 均成功。此登记只覆盖 student dashboard/report/treehole；未改 teacher 或 advanced_chat 路由，也不代表部署或商业化门禁通过。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
 
@@ -108,6 +110,7 @@
 | [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
 | [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
 | [前端大文件拆分方案](design/前端大文件拆分方案.md) | 待评审 | Report.vue 2032行/AdvancedAiChat.vue 1532行的拆分路径、9+3组件与8composable、风险行号；含0字节死文件删除记录 |
+| [后端路由拆分方案](design/后端路由拆分方案.md) | student 第 1、2 批完成；后续模块待推进 | dashboard 7 条、report 6 条、treehole 7 条已拆分；共享 helper 与 100 对原路由顺序保持，teacher/advanced_chat 未纳入这两批 |
 | [后端重复接口合并方案](design/后端重复接口合并方案.md) | 待评审 | 六组同名接口分级：仅`/articles/page`真重复，其余五组ACL或契约不同不建议合并；pymysql为残留、python-docx非残留 |
 | [工程规范引入方案](design/工程规范引入方案.md) | 待评审 | ESLint 10.14/Prettier 3.10/Ruff 0.17选型与规则集、分批格式化改动量（前端84文件、后端73文件）与三处踩坑记录 |
 
@@ -140,6 +143,8 @@
 | [CI失败定位](test/CI失败定位_20261112.md) | 已定位并给出修法 | 失败在frontend第7步`assets:check`而非后端；根因为`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是CRLF版(2236B)、CI为LF版(2198B)；已在WSL ext4复现 |
 | [treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md) | 独立评审通过；P2 已修复落仓 | `f97ed0b` 修复并发取消收藏计数清零（52 项独立复验、父提交 1 项失败）；回归 `ae5063c` 落仓，基线 229 passed；上限与并发两结论以固定提交为准 |
 | [路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md) | 独立评审通过（v1.1） | `307368b` 补 WS 快照后 20 项独立复验通过（99 HTTP + 1 WS）；真实移除 WS 与遍历器失明均被拒绝；路由门禁验收关闭，P2 不混算 |
+| [后端首批路由拆分独立复核](test/后端首批路由拆分独立复核_20261114.md) | 独立复核通过 | `378f789` 拆出 dashboard 7 条；12 个迁移函数 AST 一致、路由 7/7 顺序一致；100 对快照、231/3 基线、Ruff、N+1 与 CI #113 通过 |
+| [后端第二批路由拆分独立复核](test/后端第二批路由拆分独立复核_20261114.md) | 独立复核通过 | `1ca688a`/`c30aae3`；report 6 条、treehole 7 条，qwen 注入兼容与 helper 归属核对；独立快照及专项通过，CI #115/#116/#117 成功；全量基线/Ruff/N+1 为执行者报告 |
 | [CI复现复核](test/CI复现复核_20261113.md) | 复核通过（v1.1） | `4e7e611` 干净 LF 树 17/17 步 exit 0；2026-11-05 失败点定位为 frontend `assets:check`（非后端）；原 run 42049558772 为 SVG manifest HASH_MISMATCH、backend 全成功，当前 HEAD `9a81c48` run 43464692028 全绿（只读 GitHub Actions 证据）；已取到旧失败 job 127321666743 的 decoded log 并核对到 HASH_MISMATCH 行 |
 
 ## 运维、运营与申报交付
