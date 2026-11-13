@@ -12,7 +12,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import BaseModel, Field
-from sqlalchemy import func, inspect
+from sqlalchemy import func, inspect, select
 from sqlalchemy.exc import IntegrityError, OperationalError
 from sqlalchemy.orm import Session
 
@@ -1194,42 +1194,62 @@ def create_treehole_post(post_data: schemas.TreeholeCreate, db: Session = Depend
         is_favorited=False
     )
 
-def _get_treehole_responses(posts, user_id, db, post_ids_query):
+def _treehole_id_scope(post_ids):
+    """Bind an already-read id set as one JSON parameter instead of N ``IN`` values.
+
+    Two properties are needed at once and each fix alone breaks the other:
+
+    * The id set must be *fixed* before the aggregates run. Referencing the filter
+      query as a live subquery re-evaluated it per statement, so a concurrent
+      unfavourite changed which ids the later aggregates saw: the post stayed in the
+      response (it was already loaded) while its counts silently became 0. Passing the
+      ids that were actually loaded keeps one response internally consistent.
+    * The id set must not cost one bound variable per row. ``get_treehole_posts`` has
+      no pagination, so it reads the whole table; a materialised ``IN (...)`` list
+      raised "too many SQL variables" at 32766 posts. ``json_each`` binds the whole
+      list as a single TEXT parameter regardless of length.
+
+    ``json_each`` is part of SQLite's built-in JSON support (compiled in by default;
+    verified present on the 3.53.1 build this project uses).
+    """
+    payload = json.dumps([int(post_id) for post_id in post_ids])
+    return select(func.json_each(payload).column_valued("value"))
+
+
+def _get_treehole_responses(posts, user_id, db):
     """Build the list responses with five batched lookups instead of five per post.
 
     The per-post helper issued three COUNTs plus two existence checks, so a page of N
-    posts cost 5N+1 statements. Each of the five values is now one GROUP BY (or one IN
-    over the same post set), so both the statement count and the bound-parameter count
-    are flat.
+    posts cost 5N+1 statements. Each of the five values is now one GROUP BY (or one
+    IN over the same post set), so both the statement count and the bound-parameter
+    count are flat.
 
-    The post set is passed in as a query and referenced as a subquery, not as a
-    materialised list of ids: get_treehole_posts has no pagination, so the list is the
-    whole table and has no upper bound. SQLite rejects a statement once it binds more
-    than 32766 variables, which the per-row loop never did. Measured before this change:
-    treehole_likes.post_id IN (...) raised "too many SQL variables" at 32766 posts.
+    The post set is the ids of the posts actually loaded by the caller, bound through
+    ``_treehole_id_scope``: a fixed set (so one response cannot mix two database
+    states) that costs exactly one bound parameter at any size.
 
     The per-post values are unchanged: a post with no likes/comments/favourites still
     gets 0, and is_liked/is_favorited stay False when no user is given.
     """
     if not posts:
         return []
-    post_ids = post_ids_query.order_by(None).subquery()
+    id_scope = _treehole_id_scope(post.id for post in posts)
     likes = dict(db.query(models.TreeholeLike.post_id, func.count(models.TreeholeLike.id))
-                 .filter(models.TreeholeLike.post_id.in_(post_ids.select()))
+                 .filter(models.TreeholeLike.post_id.in_(id_scope))
                  .group_by(models.TreeholeLike.post_id).all())
     comments = dict(db.query(models.TreeholeComment.post_id, func.count(models.TreeholeComment.id))
-                    .filter(models.TreeholeComment.post_id.in_(post_ids.select()))
+                    .filter(models.TreeholeComment.post_id.in_(id_scope))
                     .group_by(models.TreeholeComment.post_id).all())
     favorites = dict(db.query(models.TreeholeFavorite.post_id, func.count(models.TreeholeFavorite.id))
-                     .filter(models.TreeholeFavorite.post_id.in_(post_ids.select()))
+                     .filter(models.TreeholeFavorite.post_id.in_(id_scope))
                      .group_by(models.TreeholeFavorite.post_id).all())
     liked_ids, favorited_ids = set(), set()
     if user_id:
         liked_ids = {row[0] for row in db.query(models.TreeholeLike.post_id).filter(
-            models.TreeholeLike.post_id.in_(post_ids.select()),
+            models.TreeholeLike.post_id.in_(id_scope),
             models.TreeholeLike.user_id == user_id).all()}
         favorited_ids = {row[0] for row in db.query(models.TreeholeFavorite.post_id).filter(
-            models.TreeholeFavorite.post_id.in_(post_ids.select()),
+            models.TreeholeFavorite.post_id.in_(id_scope),
             models.TreeholeFavorite.user_id == user_id).all()}
 
     return [
@@ -1269,11 +1289,11 @@ def get_treehole_posts(tab: str = "home", tag: str = None, db: Session = Depends
     if tab != "hot":
         query = query.order_by(models.TreeholePost.created_at.desc())
 
-    # The same filtered post set, handed to the response builder so it can reference the
-    # ids as a subquery instead of materialising them into an IN list.
-    post_id_query = query.with_entities(models.TreeholePost.id)
+    # Load the posts first, then hand their ids to the response builder. The ids are
+    # the ones actually returned, so the aggregates below cannot disagree with the list
+    # even if a concurrent request changes the filter (e.g. unfavourites a post).
     posts = query.all()
-    return _get_treehole_responses(posts, current_user.id, db, post_id_query)
+    return _get_treehole_responses(posts, current_user.id, db)
 
 @router.post("/treehole/{post_id}/like")
 def toggle_like(post_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
