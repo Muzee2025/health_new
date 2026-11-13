@@ -27,6 +27,7 @@ from app.routers import (  # noqa: E402
     llm_gateway,
     report_v1,
     student,
+    student_dashboard,
     teacher,
     websocket,
 )
@@ -78,6 +79,7 @@ for public_subdir in ("public_images", "teacher_avatars"):
 
 # 注册路由模块
 app.include_router(auth.router)
+app.include_router(student_dashboard.router, prefix="/api/student", tags=["Student"])
 app.include_router(student.router)
 app.include_router(teacher.router)
 app.include_router(advanced_chat.router, prefix="/api/advanced-ai", tags=["advanced-ai"])
