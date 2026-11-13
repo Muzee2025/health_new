@@ -1,0 +1,497 @@
+[
+  {
+    "order": 0,
+    "path": "/api/register",
+    "method": "POST"
+  },
+  {
+    "order": 1,
+    "path": "/api/login",
+    "method": "POST"
+  },
+  {
+    "order": 2,
+    "path": "/api/me",
+    "method": "GET"
+  },
+  {
+    "order": 3,
+    "path": "/api/student/dashboard/stats",
+    "method": "GET"
+  },
+  {
+    "order": 4,
+    "path": "/api/student/dashboard/emotion_trend",
+    "method": "GET"
+  },
+  {
+    "order": 5,
+    "path": "/api/student/dashboard/emotion_trend/compare",
+    "method": "GET"
+  },
+  {
+    "order": 6,
+    "path": "/api/student/dashboard/latest_scores",
+    "method": "GET"
+  },
+  {
+    "order": 7,
+    "path": "/api/student/dashboard/red_energy",
+    "method": "GET"
+  },
+  {
+    "order": 8,
+    "path": "/api/student/dashboard/treehole_words",
+    "method": "GET"
+  },
+  {
+    "order": 9,
+    "path": "/api/student/dashboard/appointment_stats",
+    "method": "GET"
+  },
+  {
+    "order": 10,
+    "path": "/api/student/treehole/search_by_word",
+    "method": "GET"
+  },
+  {
+    "order": 11,
+    "path": "/api/student/teachers",
+    "method": "GET"
+  },
+  {
+    "order": 12,
+    "path": "/api/student/appointments",
+    "method": "POST"
+  },
+  {
+    "order": 13,
+    "path": "/api/student/appointments",
+    "method": "GET"
+  },
+  {
+    "order": 14,
+    "path": "/api/student/appointments/{appointment_id}/cancel",
+    "method": "POST"
+  },
+  {
+    "order": 15,
+    "path": "/api/student/tests/submit",
+    "method": "POST"
+  },
+  {
+    "order": 16,
+    "path": "/api/student/tests/history",
+    "method": "GET"
+  },
+  {
+    "order": 17,
+    "path": "/api/student/tests/ai-analyze",
+    "method": "POST"
+  },
+  {
+    "order": 18,
+    "path": "/api/student/report/analysis",
+    "method": "GET"
+  },
+  {
+    "order": 19,
+    "path": "/api/student/report/cache/metrics",
+    "method": "GET"
+  },
+  {
+    "order": 20,
+    "path": "/api/student/report/analysis/refresh",
+    "method": "GET"
+  },
+  {
+    "order": 21,
+    "path": "/api/student/articles/page",
+    "method": "GET"
+  },
+  {
+    "order": 22,
+    "path": "/api/student/articles",
+    "method": "GET"
+  },
+  {
+    "order": 23,
+    "path": "/api/student/articles/{article_id}",
+    "method": "GET"
+  },
+  {
+    "order": 24,
+    "path": "/api/student/articles/{article_id}/view",
+    "method": "POST"
+  },
+  {
+    "order": 25,
+    "path": "/api/student/treehole/post",
+    "method": "POST"
+  },
+  {
+    "order": 26,
+    "path": "/api/student/treehole/posts",
+    "method": "GET"
+  },
+  {
+    "order": 27,
+    "path": "/api/student/treehole/{post_id}/like",
+    "method": "POST"
+  },
+  {
+    "order": 28,
+    "path": "/api/student/treehole/{post_id}/favorite",
+    "method": "POST"
+  },
+  {
+    "order": 29,
+    "path": "/api/student/treehole/{post_id}/comment",
+    "method": "POST"
+  },
+  {
+    "order": 30,
+    "path": "/api/student/treehole/{post_id}/comments",
+    "method": "GET"
+  },
+  {
+    "order": 31,
+    "path": "/api/student/questions",
+    "method": "POST"
+  },
+  {
+    "order": 32,
+    "path": "/api/student/questions/ask",
+    "method": "POST"
+  },
+  {
+    "order": 33,
+    "path": "/api/student/questions",
+    "method": "GET"
+  },
+  {
+    "order": 34,
+    "path": "/api/teacher/crisis/pending",
+    "method": "GET"
+  },
+  {
+    "order": 35,
+    "path": "/api/teacher/crisis/review",
+    "method": "POST"
+  },
+  {
+    "order": 36,
+    "path": "/api/teacher/crisis/{warning_id}/reviews",
+    "method": "GET"
+  },
+  {
+    "order": 37,
+    "path": "/api/teacher/questions",
+    "method": "GET"
+  },
+  {
+    "order": 38,
+    "path": "/api/teacher/questions/{question_id}/answer",
+    "method": "POST"
+  },
+  {
+    "order": 39,
+    "path": "/api/teacher/follow-ups",
+    "method": "GET"
+  },
+  {
+    "order": 40,
+    "path": "/api/teacher/follow-ups",
+    "method": "POST"
+  },
+  {
+    "order": 41,
+    "path": "/api/teacher/follow-ups/{task_id}/complete",
+    "method": "POST"
+  },
+  {
+    "order": 42,
+    "path": "/api/teacher/follow-ups/{task_id}/cancel",
+    "method": "POST"
+  },
+  {
+    "order": 43,
+    "path": "/api/teacher/upload",
+    "method": "POST"
+  },
+  {
+    "order": 44,
+    "path": "/api/teacher/documents/{filename}",
+    "method": "GET"
+  },
+  {
+    "order": 45,
+    "path": "/api/teacher/avatar",
+    "method": "POST"
+  },
+  {
+    "order": 46,
+    "path": "/api/teacher/avatar/from-picture",
+    "method": "POST"
+  },
+  {
+    "order": 47,
+    "path": "/api/teacher/dashboard/stats",
+    "method": "GET"
+  },
+  {
+    "order": 48,
+    "path": "/api/teacher/appointments",
+    "method": "GET"
+  },
+  {
+    "order": 49,
+    "path": "/api/teacher/appointments/{appointment_id}/status",
+    "method": "POST"
+  },
+  {
+    "order": 50,
+    "path": "/api/teacher/students",
+    "method": "GET"
+  },
+  {
+    "order": 51,
+    "path": "/api/teacher/students",
+    "method": "POST"
+  },
+  {
+    "order": 52,
+    "path": "/api/teacher/student/{student_id}",
+    "method": "GET"
+  },
+  {
+    "order": 53,
+    "path": "/api/teacher/interventions",
+    "method": "POST"
+  },
+  {
+    "order": 54,
+    "path": "/api/teacher/interventions",
+    "method": "GET"
+  },
+  {
+    "order": 55,
+    "path": "/api/teacher/articles/page",
+    "method": "GET"
+  },
+  {
+    "order": 56,
+    "path": "/api/teacher/articles",
+    "method": "GET"
+  },
+  {
+    "order": 57,
+    "path": "/api/teacher/articles/{article_id}",
+    "method": "GET"
+  },
+  {
+    "order": 58,
+    "path": "/api/teacher/articles",
+    "method": "POST"
+  },
+  {
+    "order": 59,
+    "path": "/api/teacher/articles/{article_id}",
+    "method": "DELETE"
+  },
+  {
+    "order": 60,
+    "path": "/api/teacher/knowledge",
+    "method": "GET"
+  },
+  {
+    "order": 61,
+    "path": "/api/teacher/knowledge",
+    "method": "POST"
+  },
+  {
+    "order": 62,
+    "path": "/api/teacher/knowledge/{knowledge_id}",
+    "method": "DELETE"
+  },
+  {
+    "order": 63,
+    "path": "/api/teacher/teachers_profiles",
+    "method": "GET"
+  },
+  {
+    "order": 64,
+    "path": "/api/teacher/teachers_profiles",
+    "method": "POST"
+  },
+  {
+    "order": 65,
+    "path": "/api/teacher/teachers_profiles/{user_id}",
+    "method": "DELETE"
+  },
+  {
+    "order": 66,
+    "path": "/api/advanced-ai/history/query",
+    "method": "GET"
+  },
+  {
+    "order": 67,
+    "path": "/api/advanced-ai/sessions",
+    "method": "GET"
+  },
+  {
+    "order": 68,
+    "path": "/api/advanced-ai/sessions",
+    "method": "POST"
+  },
+  {
+    "order": 69,
+    "path": "/api/advanced-ai/sessions/{session_id}",
+    "method": "PATCH"
+  },
+  {
+    "order": 70,
+    "path": "/api/advanced-ai/sessions/{session_id}",
+    "method": "DELETE"
+  },
+  {
+    "order": 71,
+    "path": "/api/advanced-ai/sessions/{session_id}/messages",
+    "method": "GET"
+  },
+  {
+    "order": 72,
+    "path": "/api/advanced-ai/chat",
+    "method": "POST"
+  },
+  {
+    "order": 73,
+    "path": "/api/advanced-ai/chat/stream",
+    "method": "POST"
+  },
+  {
+    "order": 74,
+    "path": "/api/advanced-ai/report/chat-analysis",
+    "method": "GET"
+  },
+  {
+    "order": 75,
+    "path": "/api/advanced-ai/chat/upload",
+    "method": "POST"
+  },
+  {
+    "order": 76,
+    "path": "/api/advanced-teacher/dashboard/metrics",
+    "method": "GET"
+  },
+  {
+    "order": 77,
+    "path": "/api/advanced-teacher/warnings",
+    "method": "GET"
+  },
+  {
+    "order": 78,
+    "path": "/api/advanced-teacher/warnings/{warning_id}/process",
+    "method": "POST"
+  },
+  {
+    "order": 79,
+    "path": "/api/advanced-teacher/audit/list",
+    "method": "GET"
+  },
+  {
+    "order": 80,
+    "path": "/api/advanced-teacher/audit/adjust",
+    "method": "POST"
+  },
+  {
+    "order": 81,
+    "path": "/api/advanced-teacher/export/compliance-report",
+    "method": "POST"
+  },
+  {
+    "order": 82,
+    "path": "/api/advanced-teacher/students/{student_id}/export/docx",
+    "method": "GET"
+  },
+  {
+    "order": 83,
+    "path": "/api/v1/report/analysis/trigger",
+    "method": "POST"
+  },
+  {
+    "order": 84,
+    "path": "/api/v1/report/analysis/latest",
+    "method": "GET"
+  },
+  {
+    "order": 85,
+    "path": "/api/v1/report/analysis/stream",
+    "method": "GET"
+  },
+  {
+    "order": 86,
+    "path": "/api/v1/report/ai-interpret",
+    "method": "POST"
+  },
+  {
+    "order": 87,
+    "path": "/api/v1/report/analysis/diagnostics",
+    "method": "GET"
+  },
+  {
+    "order": 88,
+    "path": "/api/v1/report/analysis/collab/submit",
+    "method": "POST"
+  },
+  {
+    "order": 89,
+    "path": "/api/v1/report/analysis/collab/stream/{task_id}",
+    "method": "GET"
+  },
+  {
+    "order": 90,
+    "path": "/api/v1/report/analysis/collab/result/{task_id}",
+    "method": "GET"
+  },
+  {
+    "order": 91,
+    "path": "/api/v1/report/analysis/collab/health",
+    "method": "GET"
+  },
+  {
+    "order": 92,
+    "path": "/api/v1/assistant/risk-factor",
+    "method": "GET"
+  },
+  {
+    "order": 93,
+    "path": "/generate",
+    "method": "POST"
+  },
+  {
+    "order": 94,
+    "path": "/api/llm/generate",
+    "method": "POST"
+  },
+  {
+    "order": 95,
+    "path": "/api/health",
+    "method": "GET"
+  },
+  {
+    "order": 96,
+    "path": "/api/health/ready",
+    "method": "GET"
+  },
+  {
+    "order": 97,
+    "path": "/",
+    "method": "GET"
+  },
+  {
+    "order": 98,
+    "path": "/api/v1/model/current",
+    "method": "GET"
+  }
+]
