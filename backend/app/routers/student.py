@@ -1194,35 +1194,43 @@ def create_treehole_post(post_data: schemas.TreeholeCreate, db: Session = Depend
         is_favorited=False
     )
 
-def _get_treehole_responses(posts, user_id, db):
+def _get_treehole_responses(posts, user_id, db, post_ids_query):
     """Build the list responses with five batched lookups instead of five per post.
 
     The per-post helper issued three COUNTs plus two existence checks, so a page of N
-    posts cost 5N+1 statements and the post list has no limit. Each of the five values is
-    now one GROUP BY (or one IN over the page's post ids), so the count is flat. The
-    per-post values are unchanged: a post with no likes/comments/favourites still gets 0,
-    and is_liked/is_favorited stay False when no user is given.
+    posts cost 5N+1 statements. Each of the five values is now one GROUP BY (or one IN
+    over the same post set), so both the statement count and the bound-parameter count
+    are flat.
+
+    The post set is passed in as a query and referenced as a subquery, not as a
+    materialised list of ids: get_treehole_posts has no pagination, so the list is the
+    whole table and has no upper bound. SQLite rejects a statement once it binds more
+    than 32766 variables, which the per-row loop never did. Measured before this change:
+    treehole_likes.post_id IN (...) raised "too many SQL variables" at 32766 posts.
+
+    The per-post values are unchanged: a post with no likes/comments/favourites still
+    gets 0, and is_liked/is_favorited stay False when no user is given.
     """
-    post_ids = [post.id for post in posts]
-    if not post_ids:
+    if not posts:
         return []
-    # Bounded by the page size, not by table size, but the id list is still materialised:
-    # it is the page the caller already loaded, so it cannot outgrow what was read.
+    post_ids = post_ids_query.order_by(None).subquery()
     likes = dict(db.query(models.TreeholeLike.post_id, func.count(models.TreeholeLike.id))
-                 .filter(models.TreeholeLike.post_id.in_(post_ids))
+                 .filter(models.TreeholeLike.post_id.in_(post_ids.select()))
                  .group_by(models.TreeholeLike.post_id).all())
     comments = dict(db.query(models.TreeholeComment.post_id, func.count(models.TreeholeComment.id))
-                    .filter(models.TreeholeComment.post_id.in_(post_ids))
+                    .filter(models.TreeholeComment.post_id.in_(post_ids.select()))
                     .group_by(models.TreeholeComment.post_id).all())
     favorites = dict(db.query(models.TreeholeFavorite.post_id, func.count(models.TreeholeFavorite.id))
-                     .filter(models.TreeholeFavorite.post_id.in_(post_ids))
+                     .filter(models.TreeholeFavorite.post_id.in_(post_ids.select()))
                      .group_by(models.TreeholeFavorite.post_id).all())
     liked_ids, favorited_ids = set(), set()
     if user_id:
         liked_ids = {row[0] for row in db.query(models.TreeholeLike.post_id).filter(
-            models.TreeholeLike.post_id.in_(post_ids), models.TreeholeLike.user_id == user_id).all()}
+            models.TreeholeLike.post_id.in_(post_ids.select()),
+            models.TreeholeLike.user_id == user_id).all()}
         favorited_ids = {row[0] for row in db.query(models.TreeholeFavorite.post_id).filter(
-            models.TreeholeFavorite.post_id.in_(post_ids), models.TreeholeFavorite.user_id == user_id).all()}
+            models.TreeholeFavorite.post_id.in_(post_ids.select()),
+            models.TreeholeFavorite.user_id == user_id).all()}
 
     return [
         schemas.TreeholeResponse(
@@ -1261,8 +1269,11 @@ def get_treehole_posts(tab: str = "home", tag: str = None, db: Session = Depends
     if tab != "hot":
         query = query.order_by(models.TreeholePost.created_at.desc())
 
+    # The same filtered post set, handed to the response builder so it can reference the
+    # ids as a subquery instead of materialising them into an IN list.
+    post_id_query = query.with_entities(models.TreeholePost.id)
     posts = query.all()
-    return _get_treehole_responses(posts, current_user.id, db)
+    return _get_treehole_responses(posts, current_user.id, db, post_id_query)
 
 @router.post("/treehole/{post_id}/like")
 def toggle_like(post_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
