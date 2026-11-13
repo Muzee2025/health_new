@@ -83,12 +83,12 @@ def collect(paper):
     for a in soup.xpath('//a[@href]'):
         link = urljoin(url, a.get('href'))
         if any(term in link for term in ["MOESM", "/api/download?alt_name="]):
-            if re.search(r"\.(?:pdf|docx?|xlsx?|csv|zip)(?:\?|$)", link, re.I) or "/api/download?alt_name=" in link:
+            if re.search(r"\.(?:pdf|docx?|xlsx?|csv|zip)(?:\?|$)", link, re.IGNORECASE) or "/api/download?alt_name=" in link:
                 if link not in links:
                     links.append(link)
     for i, link in enumerate(links, 1):
         name = Path(urlsplit(link).path).name
-        if not re.search(r"\.(pdf|docx?|xlsx?|csv|zip)$", name, re.I):
+        if not re.search(r"\.(pdf|docx?|xlsx?|csv|zip)$", name, re.IGNORECASE):
             name = f"supplement-{i}.bin"
         result["downloads"].append(fetch(link, RAW / f"{sid}-{name}"))
     if sid == 'FENG2025':

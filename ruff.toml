@@ -26,7 +26,13 @@ exclude = [
 ]
 
 [lint]
-select = ["E4", "E7", "E9", "F", "I", "B"]
+# B904/RSE/FURB were added after measuring them across backend/app,
+# backend/tests, backend/scripts and scripts: B904 and RSE report 0 findings,
+# FURB reported 6 (`re.I`/`re.M` aliases) which were rewritten to the long
+# names. Everything here is a bug-class rule; the purely stylistic families
+# (C4, PIE810, RET, SIM, PLW, N, A, PERF) stay out on purpose — they were
+# measured at 8/4/8/31/37/30/5/8 findings and are not worth the churn.
+select = ["E4", "E7", "E9", "F", "I", "B", "B904", "RSE", "FURB"]
 # B008: FastAPI declares dependencies as `Depends()` in argument defaults.
 ignore = ["B008"]
 

@@ -117,6 +117,24 @@ export default [
     },
   },
   {
+    // Correctness rules the Vue presets leave out of `flat/essential`. All six
+    // were measured at 0 findings across the 27 SFCs before being enabled, so
+    // they cost nothing today and catch a real bug class later: a template ref
+    // that nothing reads, a declared prop that is never used, a component that
+    // emits without declaring it, a prop mutated in place, an async computed,
+    // and a v-for without a key.
+    name: 'xinyu/vue-correctness',
+    files: ['**/*.vue'],
+    rules: {
+      'vue/no-unused-refs': 'error',
+      'vue/no-unused-properties': 'error',
+      'vue/require-explicit-emits': 'error',
+      'vue/no-mutating-props': 'error',
+      'vue/no-async-in-computed-properties': 'error',
+      'vue/require-v-for-key': 'error',
+    },
+  },
+  {
     name: 'xinyu/overrides',
     rules: {
       // The repo names single-word views (Layout.vue, Login.vue, ...); renaming

@@ -159,7 +159,7 @@ for text in [
     insert(support_anchor, text)
 source_text = (ROOT / 'docs/plan/心域智链申报计划书.md').read_text(encoding='utf-8')
 references = []
-for number, body in re.findall(r'^\[(\d+)\]\s+(.+)$', source_text, re.M):
+for number, body in re.findall(r'^\[(\d+)\]\s+(.+)$', source_text, re.MULTILINE):
     number = int(number)
     if number > 26:
         continue

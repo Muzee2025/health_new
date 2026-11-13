@@ -122,7 +122,7 @@ def main():
         for row in papers['CHEN2023']['tables'][ti]['cells'][1:]:
             if len(row)<6: continue  # noqa: E701
             if row[0]: factor=row[0];ref=row[1] if row[5]=='-' else '连续变量每1单位'  # noqa: E701, E702
-            m=re.search(pattern,row[5],re.I)
+            m=re.search(pattern,row[5],re.IGNORECASE)
             if m:
                 val,lo,hi,op,p=m.groups()
                 factors.append({'source_id':'CHEN2023','table':f'Table {ti+1}','population':pop,'outcome':'心理困扰：PHQ-9≥10或GAD-7≥10','factor':factor,'comparison':row[1],'reference':ref,'adjusted_or':float(val),'ci95_lower':float(lo),'ci95_upper':float(hi),'p_reported':op+p,'causal_status':'横断面关联；OR不是风险比','source_cell':row[5]})

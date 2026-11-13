@@ -192,10 +192,10 @@ class Runner:
         code, ctype, page = self.request("GET", "/")
         if code != 200 or "text/html" not in ctype or b"<html" not in page.lower():
             raise RuntimeError("SPA root check failed")
-        refs = re.findall(rb'<script[^>]+src=["\']([^"\']+\.js)["\']', page, re.I)
+        refs = re.findall(rb'<script[^>]+src=["\']([^"\']+\.js)["\']', page, re.IGNORECASE)
         if not refs:
             # Vite module script may carry query params; retain only local paths.
-            refs = re.findall(rb'<script[^>]+src=["\']([^"\']+)["\']', page, re.I)
+            refs = re.findall(rb'<script[^>]+src=["\']([^"\']+)["\']', page, re.IGNORECASE)
         if not refs:
             raise RuntimeError("SPA JavaScript reference missing")
         for ref in refs:
