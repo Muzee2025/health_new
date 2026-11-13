@@ -73,6 +73,33 @@ jobs:
       # the first file it cannot compile (verified against a deliberately broken
       # module), so it fails the job exactly like py_compile did.
       - run: python -m compileall -q backend scripts
+      # Static N+1 gate. It reads the source with `ast` and counts two shapes that
+      # each cost one query per row, reported in the header line as two numbers:
+      #   real - a `db.query()` call inside a loop body.
+      #   lazy - a relationship attribute read on a loop variable (`w.student`)
+      #          with no eager load in that function. joinedload / selectinload /
+      #          subqueryload / contains_eager anywhere in the function clears it,
+      #          so an already-fixed site is not reported. That suppression is the
+      #          whole reason the check is usable: without it every eager-loaded
+      #          site would be flagged and people would learn to ignore the gate.
+      # Stdlib only, so it needs nothing beyond the interpreter.
+      #
+      # Read a green run as "no per-row query the scanner can see", NOT as
+      # "N+1 is cleaned up". Two real cases in this codebase (teacher /questions
+      # reading question.user, advanced_teacher /warnings reading w.student and
+      # w.processor) were found only by counting statements at runtime, while an
+      # earlier version of this gate was already green on them. The scanner
+      # matches syntax, so it cannot see a query built in a helper function and
+      # called per row; only a query-count probe catches that. Treat this as a
+      # regression brake for the two known shapes, not as proof of absence.
+      # Findings that are a fixed small number of retries (`for _ in range(3)`)
+      # are printed separately as retry/constant and do not fail the job.
+      # `--fail-on-findings` must stay: without it the script only reports and
+      # always exits 0, which is a gate that cannot fail. It was briefly broken
+      # this way in the other direction too (options after the path were
+      # silently dropped); scripts/tests/test_n1_query_gate.py pins both, and it
+      # also pins that a lazy-only finding trips the flag.
+      - run: python scripts/check-n1-queries.py --fail-on-findings backend/app
       # Repository hygiene: no secrets, no runtime state, no unexpected paths and
       # no new blobs over 2 MB. It was red before this step existed, which is why
       # nobody noticed. The oversized and pinned-database entries it accepts are
