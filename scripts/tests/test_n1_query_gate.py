@@ -151,6 +151,128 @@ class ClassifierTest(unittest.TestCase):
         self.assertEqual(got, [('retry/constant', 1)])
 
 
+class LazyLoadTest(unittest.TestCase):
+    """relationship reads on a loop variable are a second, separate shape.
+
+    The db.query() detector cannot see them: there is no query call in the loop,
+    SQLAlchemy emits one per row when the attribute is touched. Two endpoints
+    were already green on the gate while still doing one query per row, so this
+    class of finding has to be reported on its own.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load()
+
+    def _lazy(self, src):
+        import ast
+        mod = self.mod
+        tree = ast.parse(textwrap.dedent(src))
+        out = []
+        for func in ast.walk(tree):
+            if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            eager = mod._eagerly_loaded(func)
+            for node in ast.walk(func):
+                if isinstance(node, mod.LOOP_NODES):
+                    out.extend((ln, text) for ln, text in mod._lazy_loads_in(node, eager))
+        return out
+
+    def test_flags_relationship_read_without_eager_loading(self):
+        got = self._lazy('''
+            def f(db):
+                rows = db.query(CrisisWarning).all()
+                for w in rows:
+                    print(w.student.name)
+        ''')
+        self.assertEqual([text for _ln, text in got], ['w.student'])
+
+    def test_joinedload_clears_the_finding(self):
+        # The fix the backend applied; the gate must go quiet on it, or it would
+        # report already-fixed code and lose its credibility.
+        got = self._lazy('''
+            def f(db):
+                rows = db.query(CrisisWarning).options(joinedload(CrisisWarning.student)).all()
+                for w in rows:
+                    print(w.student.name)
+        ''')
+        self.assertEqual(got, [])
+
+    def test_selectinload_also_clears_it(self):
+        got = self._lazy('''
+            def f(db):
+                rows = db.query(CrisisWarning).options(selectinload(CrisisWarning.student)).all()
+                for w in rows:
+                    print(w.student.name)
+        ''')
+        self.assertEqual(got, [])
+
+    def test_non_relationship_attribute_is_ignored(self):
+        # `w.risk_level` is a column: already loaded, no query.
+        got = self._lazy('''
+            def f(db):
+                rows = db.query(CrisisWarning).all()
+                for w in rows:
+                    print(w.risk_level)
+        ''')
+        self.assertEqual(got, [])
+
+    def test_two_reads_of_the_same_relationship_on_one_line_count_once(self):
+        got = self._lazy('''
+            def f(db):
+                rows = db.query(CrisisWarning).all()
+                for w in rows:
+                    print(w.student.name or w.student.username)
+        ''')
+        self.assertEqual(len(got), 1)
+
+    def test_while_loop_has_no_loop_variable_and_must_not_crash(self):
+        got = self._lazy('''
+            def f(db):
+                i = 0
+                while i < 3:
+                    i += 1
+        ''')
+        self.assertEqual(got, [])
+
+
+class LazyLoadRegressionTest(unittest.TestCase):
+    """End-to-end on real revisions, so the two shapes are pinned together."""
+
+    REV_BEFORE_FIX = 'ec7b920'   # relationship reads not yet eager-loaded
+    REV_AFTER_FIX = '884a72b'    # joinedload applied
+
+    def _run(self, rev):
+        return subprocess.run(
+            [sys.executable, str(SCRIPT), '--git', rev, 'backend/app'],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, encoding='utf-8',
+            errors='replace',
+        )
+
+    def test_reports_lazy_findings_before_the_fix(self):
+        proc = self._run(self.REV_BEFORE_FIX)
+        self.assertIn('lazy=4', proc.stdout, proc.stdout[:2000])
+        for expected in ('w.student', 'w.processor', 'question.user'):
+            self.assertIn(expected, proc.stdout)
+
+    def test_reports_zero_lazy_findings_after_the_fix(self):
+        proc = self._run(self.REV_AFTER_FIX)
+        self.assertIn('real=0', proc.stdout)
+        self.assertIn('lazy=0', proc.stdout)
+
+    def test_fail_on_findings_trips_on_lazy_alone(self):
+        # A revision with no loop-local queries left but still lazy-loading must
+        # not pass the blocking gate.
+        proc = subprocess.run(
+            [sys.executable, str(SCRIPT), '--fail-on-findings',
+             '--git', self.REV_BEFORE_FIX, 'backend/app'],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, encoding='utf-8',
+            errors='replace',
+        )
+        self.assertEqual(proc.returncode, 1)
+        self.assertIn('FAIL:', proc.stderr)
+
+
 class CommandLineTest(unittest.TestCase):
     # A revision known to contain findings, so "must fail" is testable without
     # depending on the current worktree being dirty or clean.

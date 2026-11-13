@@ -57,6 +57,17 @@ TERMINALS = {
 # Bare names that are a session, for `db.get(...)` / `db.execute(...)`.
 SESSION_NAMES = {'db', 'session', 'sess', 's', 'conn', 'db_session', 'database'}
 
+# Attributes declared as `relationship(...)` in app/models.py. Accessing one on a
+# row inside a loop is a lazy load: one query per row, invisible to the
+# db.query() detector above. Kept as a literal so the scanner stays stdlib-only
+# and does not import the app; keep it in sync when a relationship is added.
+RELATIONSHIP_ATTRS = {
+    'user', 'student', 'teacher', 'processor', 'post', 'parent', 'session',
+    'likes', 'comments', 'favorites',
+}
+# Options that make an attribute eager, so the access is free.
+EAGER_OPTIONS = {'joinedload', 'selectinload', 'subqueryload', 'contains_eager'}
+
 LOOP_NODES = (ast.For, ast.AsyncFor, ast.While)
 COMP_NODES = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 
@@ -174,6 +185,53 @@ def _is_range_loop(loop) -> bool:
     return isinstance(it, ast.Call) and isinstance(it.func, ast.Name) and it.func.id == 'range'
 
 
+def _eagerly_loaded(func) -> set[str]:
+    """Relationship names made eager anywhere in the function.
+
+    `db.query(CrisisWarning).options(joinedload(CrisisWarning.student))` means
+    `w.student` costs nothing inside the loop. Without this the scanner would
+    flag every access the backend has already fixed, and a tool that cries wolf
+    on fixed code gets switched off.
+    """
+    eager: set[str] = set()
+    for node in ast.walk(func):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) \
+                and node.func.id in EAGER_OPTIONS:
+            for arg in node.args:
+                # joinedload(CrisisWarning.student) -> "student"
+                if isinstance(arg, ast.Attribute):
+                    eager.add(arg.attr)
+                elif isinstance(arg, ast.Constant) and isinstance(arg.value, str):
+                    eager.add(arg.value)
+    return eager
+
+
+def _lazy_loads_in(loop, eager: set[str]) -> list[tuple[int, str]]:
+    """Relationship reads on this loop's own variable that are not eager-loaded.
+
+    Only the variable this loop binds counts. A nested loop rebinds the name, so
+    the inner one reports its own accesses; nothing is double-counted.
+    """
+    target = getattr(loop, 'target', None)
+    if target is None:  # while loop: no loop variable, so no per-row relationship
+        return []
+    names = {n.id for n in ast.walk(target) if isinstance(n, ast.Name)}
+    if not names:
+        return []
+    found = []
+    for node in ast.walk(loop):
+        if isinstance(node, ast.Attribute) and node.attr in RELATIONSHIP_ATTRS \
+                and node.attr not in eager \
+                and isinstance(node.value, ast.Name) and node.value.id in names:
+            found.append((node.lineno, ast.unparse(node)[:90]))
+    # One entry per line: `w.student.name` and `w.student.username` are the same
+    # lazy load, not two.
+    seen: dict[int, str] = {}
+    for lineno, text in found:
+        seen.setdefault(lineno, text)
+    return sorted(seen.items())
+
+
 def _comp_body(node):
     """The part of a comprehension that runs once per element.
 
@@ -200,13 +258,15 @@ def scan_tree(root: Path):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
             qvars = _query_vars(func)
+            eager = _eagerly_loaded(func)
             for node in ast.walk(func):
                 if isinstance(node, LOOP_NODES):
                     calls = _db_calls_in(node.body, qvars)
-                    if not calls:
-                        continue
-                    kind = 'retry/constant' if _is_range_loop(node) else 'real'
-                    yield (path, func.name, kind, node.lineno, len(calls), calls[0][1])
+                    if calls:
+                        kind = 'retry/constant' if _is_range_loop(node) else 'real'
+                        yield (path, func.name, kind, node.lineno, len(calls), calls[0][1])
+                    for lineno, text in _lazy_loads_in(node, eager):
+                        yield (path, func.name, 'lazy', lineno, 1, text)
                 elif isinstance(node, COMP_NODES):
                     # Comprehension: everything inside runs once per element.
                     calls = _db_calls_in(_comp_body(node), qvars)
@@ -234,13 +294,15 @@ def scan_git(rev: str, root: Path):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
             qvars = _query_vars(func)
+            eager = _eagerly_loaded(func)
             for node in ast.walk(func):
                 if isinstance(node, LOOP_NODES):
                     calls = _db_calls_in(node.body, qvars)
-                    if not calls:
-                        continue
-                    kind = 'retry/constant' if _is_range_loop(node) else 'real'
-                    yield (Path(name), func.name, kind, node.lineno, len(calls), calls[0][1])
+                    if calls:
+                        kind = 'retry/constant' if _is_range_loop(node) else 'real'
+                        yield (Path(name), func.name, kind, node.lineno, len(calls), calls[0][1])
+                    for lineno, text in _lazy_loads_in(node, eager):
+                        yield (Path(name), func.name, 'lazy', lineno, 1, text)
                 elif isinstance(node, COMP_NODES):
                     calls = _db_calls_in(_comp_body(node), qvars)
                     if calls:
@@ -285,22 +347,29 @@ def main(argv: list[str]) -> int:
 
     findings = list(scan_git(rev, root) if rev else scan_tree(root))
     real = [f for f in findings if f[2] == 'real']
-    benign = [f for f in findings if f[2] != 'real']
+    lazy = [f for f in findings if f[2] == 'lazy']
+    benign = [f for f in findings if f[2] not in ('real', 'lazy')]
 
     print(f'# scanned {"git:" + rev if rev else root}  '
-          f'real={len(real)}  benign={len(benign)}\n')
+          f'real={len(real)}  lazy={len(lazy)}  benign={len(benign)}\n')
     if real:
         print(f'{"file":44} {"function":34} {"line":>6} {"calls":>5}')
         print('-' * 95)
         for path, func, _kind, lineno, count, sample in sorted(real, key=lambda f: (str(f[0]), f[3])):
             print(f'{str(path):44} {func:34} {lineno:6} {count:5}')
             print(f'{"":44}   e.g. {sample}')
+    if lazy:
+        print('\n# relationship read on a loop variable without eager loading '
+              '(one query per row; joinedload/selectinload clears it)')
+        for path, func, _kind, lineno, _count, sample in sorted(lazy, key=lambda f: (str(f[0]), f[3])):
+            print(f'  {path}:{lineno} {func} -> {sample}')
     if benign:
         print('\n# excluded as retry/constant (fixed small count, does not scale with data)')
         for path, func, _kind, lineno, count, _sample in sorted(benign, key=lambda f: (str(f[0]), f[3])):
             print(f'  {path}:{lineno} {func} ({count} call(s))')
-    if fail_on_findings and real:
-        print(f'\nFAIL: {len(real)} loop-local database round-trip(s) found', file=sys.stderr)
+    if fail_on_findings and (real or lazy):
+        print(f'\nFAIL: {len(real)} loop-local query call(s) and '
+              f'{len(lazy)} un-eager relationship read(s) found', file=sys.stderr)
         return 1
     return 0
 
