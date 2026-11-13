@@ -52,19 +52,17 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     steps:
-      # Full history, not the default single commit. Three of the N+1 gate tests
-      # assert against fixed past revisions (`--git 4a39036`, `--git ec7b920`)
-      # because "the gate must fail on known-bad code" cannot be checked against
-      # a worktree that is currently clean. With fetch-depth: 1 those revisions
-      # are absent, the scanner's `git ls-tree` exits 128, and the job went red
-      # for a reason that had nothing to do with the change being tested (run
-      # #70 and #73). The tests now also skip when a revision is missing, but
-      # skipping the three cases that prove the gate can fail would leave CI
-      # unable to tell a working gate from a broken one, so the history is
-      # fetched and they really run. Cost: the pack is ~100 MB.
+      # Default depth. The N+1 gate tests used to assert against fixed past
+      # revisions (`--git 4a39036`), which do not exist in a depth-1 checkout and
+      # made this job fail for a reason unrelated to the change (runs #70, #73).
+      # The history was fetched in full to fix that; it no longer needs to be,
+      # because those assertions now run against source snapshots committed under
+      # scripts/tests/fixtures/n1_gate/. Verified in a `git clone --depth 1` of
+      # this branch, where `git cat-file -e 4a39036^{commit}` exits 128: the
+      # suite reports 104 tests, OK, 0 skipped. The cases that prove the gate can
+      # still fail are real, not skipped; only their input changed from git
+      # history to a fixture.
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
