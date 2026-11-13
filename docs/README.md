@@ -140,7 +140,7 @@
 | [CI失败定位](test/CI失败定位_20261112.md) | 已定位并给出修法 | 失败在frontend第7步`assets:check`而非后端；根因为`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是CRLF版(2236B)、CI为LF版(2198B)；已在WSL ext4复现 |
 | [treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md) | 独立评审通过；P2 已修复落仓 | `f97ed0b` 修复并发取消收藏计数清零（52 项独立复验、父提交 1 项失败）；回归 `ae5063c` 落仓，基线 229 passed；上限与并发两结论以固定提交为准 |
 | [路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md) | 独立评审通过（v1.1） | `307368b` 补 WS 快照后 20 项独立复验通过（99 HTTP + 1 WS）；真实移除 WS 与遍历器失明均被拒绝；路由门禁验收关闭，P2 不混算 |
-| [CI复现复核](test/CI复现复核_20261113.md) | 复核通过（v1.1） | `4e7e611` 干净 LF 树 17/17 步 exit 0；2026-11-05 失败点定位为 frontend `assets:check`（非后端）；原 run 42049558772 为 SVG manifest HASH_MISMATCH、backend 全成功，当前 HEAD `9a81c48` run 43464692028 全绿（只读 GitHub Actions 证据）；未取到 CI 原始日志正文 |
+| [CI复现复核](test/CI复现复核_20261113.md) | 复核通过（v1.1） | `4e7e611` 干净 LF 树 17/17 步 exit 0；2026-11-05 失败点定位为 frontend `assets:check`（非后端）；原 run 42049558772 为 SVG manifest HASH_MISMATCH、backend 全成功，当前 HEAD `9a81c48` run 43464692028 全绿（只读 GitHub Actions 证据）；已取到旧失败 job 127321666743 的 decoded log 并核对到 HASH_MISMATCH 行 |
 
 ## 运维、运营与申报交付
 
