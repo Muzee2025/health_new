@@ -1384,11 +1384,20 @@ def get_questions(db: Session = Depends(get_db), current_user: models.User = Dep
                 .all()
             )
         }
-        actor_ids = {event.actor_id for event in events_by_question.values() if event.actor_id}
+        # The actors are referenced as a subquery over the same ranked events, not as an
+        # IN list of the ids just collected: a question list has no upper bound, and
+        # SQLite rejects a statement once it binds more than 32766 variables, which the
+        # per-row loop this batching replaced never did.
+        actor_ids = (
+            db.query(models.SupportWorkflowEvent.actor_id)
+            .join(ranked_events, ranked_events.c.event_id == models.SupportWorkflowEvent.id)
+            .filter(ranked_events.c.position == 1)
+        )
         actors = {
             actor.id: actor
-            for actor in db.query(models.User).filter(models.User.id.in_(actor_ids)).all()
-        } if actor_ids else {}
+            for actor in db.query(models.User).filter(
+                models.User.id.in_(actor_ids.subquery().select())).all()
+        }
     else:
         events_by_question = {}
         actors = {}
