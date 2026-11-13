@@ -39,6 +39,11 @@ ignore = ["B008"]
 [lint.per-file-ignores]
 "backend/tests/**" = ["B011"]
 "**/__init__.py" = ["F401"]
+# scripts/tests/fixtures/ holds source *snippets* cut out of real revisions, so
+# the N+1 gate's regression tests do not depend on git history. They are inputs
+# to an AST scan, not importable modules: names are undefined by design (F821)
+# and the files are never executed. Checked by the gate's own tests instead.
+"scripts/tests/fixtures/**" = ["F821", "F401", "F811", "E501"]
 
 [lint.isort]
 known-first-party = ["app"]

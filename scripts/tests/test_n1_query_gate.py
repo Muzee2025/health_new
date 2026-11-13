@@ -15,22 +15,6 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = REPO_ROOT / 'scripts' / 'check-n1-queries.py'
 
 
-def _rev_available(rev):
-    """True when `rev` exists in this clone.
-
-    CI checks out with `fetch-depth: 1`, so only the pushed commit is present and
-    every historical revision below is missing. The tests that assert on a fixed
-    past revision cannot run there, and failing them would blame the change under
-    test for something the checkout never fetched. Skipping is honest here only
-    because the same tests do run on a full clone and on the developer machine;
-    they are not silently dropped, they report as skipped with this reason.
-    """
-    return subprocess.run(
-        ['git', 'rev-parse', '--verify', '--quiet', rev + '^{commit}'],
-        cwd=str(REPO_ROOT), capture_output=True, text=True,
-    ).returncode == 0
-
-
 def _load():
     spec = importlib.util.spec_from_file_location('check_n1_queries', SCRIPT)
     module = importlib.util.module_from_spec(spec)
@@ -188,9 +172,11 @@ class LazyLoadTest(unittest.TestCase):
         for func in ast.walk(tree):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
-            eager = mod._eagerly_loaded(func)
+            by_var = mod._eager_by_var(func)
+            func_eager = mod._eager_in_expr(func)
             for node in ast.walk(func):
                 if isinstance(node, mod.LOOP_NODES):
+                    eager = mod._eager_for_loop(node, by_var, func_eager)
                     out.extend((ln, text) for ln, text in mod._lazy_loads_in(node, eager))
         return out
 
@@ -223,6 +209,51 @@ class LazyLoadTest(unittest.TestCase):
         ''')
         self.assertEqual(got, [])
 
+    # --- eager options must not leak across loops --------------------------
+
+    def test_one_joinedload_does_not_silence_a_second_lazy_loop(self):
+        # Regression: eager options were collected function-wide, so a joinedload
+        # on one query hid a second loop over a different, still-lazy query.
+        # Adding one joinedload then looked like it had fixed both loops.
+        got = self._lazy('''
+            def f(db):
+                rows = db.query(W).options(joinedload(W.student)).all()
+                for w in rows:
+                    print(w.student.name)
+                others = db.query(W).all()
+                for o in others:
+                    print(o.student.name)
+        ''')
+        self.assertEqual([text for _ln, text in got], ['o.student'])
+
+    def test_joinedload_propagates_through_a_reassigned_query_variable(self):
+        # The shape used by teacher.list_assigned_questions: the query is built,
+        # filtered, then materialised. `questions` carries no joinedload of its
+        # own but inherits it, and must not be reported.
+        got = self._lazy('''
+            def f(db):
+                query = db.query(Question).options(joinedload(Question.user))
+                query = query.filter(Question.status == "pending")
+                questions = query.order_by(Question.created_at.desc()).all()
+                for question in questions:
+                    print(question.user.name)
+        ''')
+        self.assertEqual(got, [])
+
+    def test_propagation_does_not_leak_to_an_unrelated_loop(self):
+        # Same propagation, but a second query in the same function stays lazy.
+        got = self._lazy('''
+            def f(db):
+                query = db.query(Question).options(joinedload(Question.user))
+                questions = query.all()
+                for q in questions:
+                    print(q.user.name)
+                plain = db.query(Question).all()
+                for p in plain:
+                    print(p.user.name)
+        ''')
+        self.assertEqual([text for _ln, text in got], ['p.user'])
+
     def test_non_relationship_attribute_is_ignored(self):
         # `w.risk_level` is a column: already loaded, no query.
         got = self._lazy('''
@@ -252,49 +283,66 @@ class LazyLoadTest(unittest.TestCase):
         self.assertEqual(got, [])
 
 
-@unittest.skipUnless(_rev_available('ec7b920') and _rev_available('884a72b'),
-                     'needs historical revisions; CI checks out fetch-depth: 1')
+FIXTURES = REPO_ROOT / 'scripts' / 'tests' / 'fixtures' / 'n1_gate'
+LAZY_BEFORE = FIXTURES / 'lazy_before.py'
+EAGER_AFTER = FIXTURES / 'eager_after.py'
+
+
 class LazyLoadRegressionTest(unittest.TestCase):
-    """End-to-end on real revisions, so the two shapes are pinned together."""
+    """End-to-end on checked-in source snapshots, not on git history.
 
-    REV_BEFORE_FIX = 'ec7b920'   # relationship reads not yet eager-loaded
-    REV_AFTER_FIX = '884a72b'    # joinedload applied
+    These used to assert against historical revisions (`--git ec7b920`). That
+    made the suite depend on full clone depth: CI checks out with fetch-depth: 1,
+    the objects were absent, `git ls-tree` returned 128 and subprocess raised.
+    The workflow was changed to fetch-depth: 0 to make it pass, which cost about
+    100 MB per run for the sake of six tests.
 
-    def _run(self, rev):
+    The fixtures are the same two functions cut out of those revisions, so the
+    regression is still pinned to real code while needing no history at all.
+    """
+
+    def _run(self, *args):
         return subprocess.run(
-            [sys.executable, str(SCRIPT), '--git', rev, 'backend/app'],
+            [sys.executable, str(SCRIPT), *args],
             cwd=str(REPO_ROOT), capture_output=True, text=True, encoding='utf-8',
             errors='replace',
         )
 
+    def test_fixtures_exist(self):
+        # A silently missing fixture would make the two tests below vacuous.
+        self.assertTrue(LAZY_BEFORE.is_file(), LAZY_BEFORE)
+        self.assertTrue(EAGER_AFTER.is_file(), EAGER_AFTER)
+
     def test_reports_lazy_findings_before_the_fix(self):
-        proc = self._run(self.REV_BEFORE_FIX)
+        proc = self._run(str(LAZY_BEFORE))
         self.assertIn('lazy=4', proc.stdout, proc.stdout[:2000])
         for expected in ('w.student', 'w.processor', 'question.user'):
             self.assertIn(expected, proc.stdout)
 
     def test_reports_zero_lazy_findings_after_the_fix(self):
-        proc = self._run(self.REV_AFTER_FIX)
+        proc = self._run(str(EAGER_AFTER))
         self.assertIn('real=0', proc.stdout)
         self.assertIn('lazy=0', proc.stdout)
 
     def test_fail_on_findings_trips_on_lazy_alone(self):
-        # A revision with no loop-local queries left but still lazy-loading must
-        # not pass the blocking gate.
-        proc = subprocess.run(
-            [sys.executable, str(SCRIPT), '--fail-on-findings',
-             '--git', self.REV_BEFORE_FIX, 'backend/app'],
-            cwd=str(REPO_ROOT), capture_output=True, text=True, encoding='utf-8',
-            errors='replace',
-        )
+        # Lazy-load debt must not pass the blocking gate just because no
+        # db.query() is left in a loop.
+        proc = self._run('--fail-on-findings', str(LAZY_BEFORE))
         self.assertEqual(proc.returncode, 1)
         self.assertIn('FAIL:', proc.stderr)
 
+    def test_single_file_path_is_accepted(self):
+        # The fixtures are single files; scanning them used to yield nothing
+        # because rglob only walks directories.
+        proc = self._run(str(LAZY_BEFORE))
+        self.assertIn('# scanned', proc.stdout)
+        self.assertNotIn('lazy=0', proc.stdout)
+
 
 class CommandLineTest(unittest.TestCase):
-    # A revision known to contain findings, so "must fail" is testable without
-    # depending on the current worktree being dirty or clean.
-    REV_WITH_FINDINGS = '4a39036'
+    # Fixture source with findings, so "must fail" is testable without depending
+    # on the current worktree or on git history.
+    REV_WITH_FINDINGS = str(LAZY_BEFORE)
 
     def _run(self, *args):
         return subprocess.run(
@@ -325,26 +373,20 @@ class CommandLineTest(unittest.TestCase):
     # like a passing check while checking nothing. A gate that cannot fail is
     # worse than no gate, because it is trusted.
 
-    @unittest.skipUnless(_rev_available('4a39036'),
-                         'needs a historical revision; CI checks out fetch-depth: 1')
     def test_fail_on_findings_exits_1_when_flag_comes_first(self):
-        proc = self._run('--fail-on-findings', '--git', self.REV_WITH_FINDINGS, 'backend/app')
+        proc = self._run('--fail-on-findings', self.REV_WITH_FINDINGS)
         self.assertEqual(proc.returncode, 1, proc.stdout[-2000:])
         self.assertIn('FAIL:', proc.stderr)
 
-    @unittest.skipUnless(_rev_available('4a39036'),
-                         'needs a historical revision; CI checks out fetch-depth: 1')
     def test_fail_on_findings_exits_1_when_flag_comes_last(self):
         # Regression: options after the positional path used to be ignored.
-        proc = self._run('--git', self.REV_WITH_FINDINGS, 'backend/app', '--fail-on-findings')
+        proc = self._run(self.REV_WITH_FINDINGS, '--fail-on-findings')
         self.assertEqual(proc.returncode, 1, proc.stdout[-2000:])
         self.assertIn('FAIL:', proc.stderr)
 
-    @unittest.skipUnless(_rev_available('4a39036'),
-                         'needs a historical revision; CI checks out fetch-depth: 1')
     def test_unknown_option_after_path_exits_2(self):
         # Regression: `backend/app --bogus` used to exit 0 silently.
-        proc = self._run('--git', self.REV_WITH_FINDINGS, 'backend/app', '--bogus')
+        proc = self._run(self.REV_WITH_FINDINGS, '--bogus')
         self.assertEqual(proc.returncode, 2)
         self.assertIn('unknown option', proc.stderr)
 
@@ -369,6 +411,25 @@ class CommandLineTest(unittest.TestCase):
 
     def test_short_help_flag_also_works(self):
         self.assertEqual(self._run('-h').returncode, 0)
+
+    # --- a missing path must not read as a clean scan -----------------------
+    #
+    # `Path('backend/nope').rglob('*.py')` yields nothing, so the first version
+    # printed `real=0 lazy=0` and exited 0 for a path that does not exist. In CI
+    # that turns a typo in the step's path into a green gate that scanned no
+    # code. Same for `git ls-tree`, which prints nothing and exits 0.
+
+    def test_missing_path_exits_2_instead_of_reporting_clean(self):
+        proc = self._run('backend/does-not-exist')
+        self.assertEqual(proc.returncode, 2, proc.stdout)
+        self.assertIn('no such path', proc.stderr)
+        self.assertNotIn('real=0', proc.stdout)
+
+    def test_missing_path_in_a_revision_exits_2(self):
+        proc = self._run('--git', 'HEAD', 'backend/does-not-exist')
+        self.assertEqual(proc.returncode, 2, proc.stdout)
+        self.assertIn('no such path in HEAD', proc.stderr)
+        self.assertNotIn('real=0', proc.stdout)
 
 
 if __name__ == '__main__':

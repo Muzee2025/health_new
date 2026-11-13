@@ -4,11 +4,27 @@ Finds database round-trips that sit *inside* a loop body, i.e. the query count
 grows with the number of rows returned by the endpoint.
 
 Usage:
-    python tmp/n1_scan.py [root]            # scan a directory tree (default: backend/app)
-    python tmp/n1_scan.py --git HEAD [root] # scan a git revision instead of the worktree
+    python scripts/check-n1-queries.py [root]            # scan a directory (default: backend/app)
+    python scripts/check-n1-queries.py --git HEAD [root] # scan a git revision, not the worktree
 
-Exit code: 0 always (it is a reporting tool). The acceptance criterion for a
-cleanup batch is an empty "real N+1" list, not the exit code.
+A single file is also accepted, which is how the fixtures under
+scripts/tests/fixtures/n1_gate/ are scanned.
+
+Two kinds of finding are reported, both blocking under --fail-on-findings:
+
+  real   a db.query()/db.get()/db.execute() call inside a loop body
+  lazy   a relationship read on a loop variable whose query has no
+         joinedload/selectinload/subqueryload/contains_eager
+
+The second one exists because the first cannot see it: `question.user` on a row
+inside a `for` loop issues one query per row without any `db.query()` in the
+loop, so a scanner that only matches calls goes green while the endpoint still
+does N+1. Eager options are resolved per loop variable, not per function: one
+`joinedload` must not silence a second, unrelated loop.
+
+Exit codes: 0 ok / nothing found, 1 findings with --fail-on-findings,
+2 bad usage or a path that does not exist. The acceptance criterion for a
+cleanup batch is an empty finding list, not the exit code.
 
 Three classes of false positive are separated out on purpose, because a naive
 scanner reports them and they are not bugs:
@@ -34,13 +50,20 @@ Static N+1 scanner: finds database round-trips that sit inside a loop body.
 
 usage: check-n1-queries.py [--fail-on-findings] [--git REV] [PATH]
 
-  PATH                 directory to scan (default: backend/app)
+  PATH                 file or directory to scan (default: backend/app)
   --git REV            scan a git revision instead of the worktree
-  --fail-on-findings   exit 1 when any real N+1 is found (default: report only)
+  --fail-on-findings   exit 1 when any real or lazy finding is present
   -h, --help           show this message
 
+Findings:
+  real   a db.query()/db.get()/db.execute() call inside a loop body
+  lazy   a relationship read on a loop variable without joinedload or another
+         eager option (one query per row, invisible to a call-only scan)
+
 Exit codes: 0 ok / nothing found, 1 findings with --fail-on-findings,
-2 bad usage.
+2 bad usage or a path that does not exist. A path that does not exist is an
+error, not a clean scan: reporting real=0 for it would pass a CI gate that
+looked at no code.
 
 Loop-local queries whose cost does not grow with data are reported separately
 as retry/constant and never fail the gate: a query that is the loop iterable
@@ -185,25 +208,106 @@ def _is_range_loop(loop) -> bool:
     return isinstance(it, ast.Call) and isinstance(it.func, ast.Name) and it.func.id == 'range'
 
 
-def _eagerly_loaded(func) -> set[str]:
-    """Relationship names made eager anywhere in the function.
+def _eager_in_expr(node) -> set[str]:
+    """Relationship names made eager by an expression.
 
-    `db.query(CrisisWarning).options(joinedload(CrisisWarning.student))` means
-    `w.student` costs nothing inside the loop. Without this the scanner would
-    flag every access the backend has already fixed, and a tool that cries wolf
-    on fixed code gets switched off.
+    `db.query(CrisisWarning).options(joinedload(CrisisWarning.student))` makes
+    `w.student` free for the rows that query returns.
     """
     eager: set[str] = set()
-    for node in ast.walk(func):
-        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) \
-                and node.func.id in EAGER_OPTIONS:
-            for arg in node.args:
+    for sub in ast.walk(node):
+        if isinstance(sub, ast.Call) and isinstance(sub.func, ast.Name) \
+                and sub.func.id in EAGER_OPTIONS:
+            for arg in sub.args:
                 # joinedload(CrisisWarning.student) -> "student"
                 if isinstance(arg, ast.Attribute):
                     eager.add(arg.attr)
                 elif isinstance(arg, ast.Constant) and isinstance(arg.value, str):
                     eager.add(arg.value)
     return eager
+
+
+def _is_query_bound(node) -> bool:
+    """True when an expression is a query result or a Query object."""
+    if not isinstance(node, (ast.Call, ast.Attribute)):
+        return False
+    for sub in _chain(node) if isinstance(node, ast.Call) else [node]:
+        if isinstance(sub, ast.Attribute) and sub.attr in TERMINALS | {'query'}:
+            return True
+    return False
+
+
+def _eager_by_var(func) -> dict[str, set[str]]:
+    """Map every local name bound to a query to the relationships it eager-loads.
+
+    Every query-bound name is recorded, including ones with an empty eager set.
+    Scoping matters in both directions:
+
+    - collecting eager options function-wide let one `joinedload` silence *every*
+      loop in the function, so a second loop over a different, still-lazy query
+      stopped being reported. Adding a joinedload to one query then looked like
+      it had fixed a different loop.
+    - recording only the names that *do* have eager options was not enough
+      either: the second loop's variable was absent, so it fell back to the
+      function-wide set and was silenced anyway. A name bound to a plain query
+      has an empty eager set, and that empty set is the correct answer.
+
+    Eager options propagate through chained assignments, because the common
+    shape builds a query first and materialises it later:
+
+        query = db.query(Question).options(joinedload(Question.user))
+        query = query.filter(...)
+        questions = query.order_by(...).all()
+
+    `questions` carries no joinedload of its own; it inherits it from `query`.
+    Without the propagation that pattern reports a lazy load the backend had
+    already fixed, which is exactly the false positive this must avoid.
+    """
+    by_var: dict[str, set[str]] = {}
+    # Two passes: a query built up over several statements needs the earlier
+    # names resolved before the later ones inherit from them.
+    for _ in range(3):
+        changed = False
+        for node in ast.walk(func):
+            if not isinstance(node, ast.Assign):
+                continue
+            eager = set(_eager_in_expr(node.value))
+            for sub in ast.walk(node.value):
+                if isinstance(sub, ast.Name) and sub.id in by_var:
+                    eager |= by_var[sub.id]
+            if not (_is_query_bound(node.value) or eager
+                    or any(isinstance(s, ast.Name) and s.id in by_var
+                           for s in ast.walk(node.value))):
+                continue
+            for target in node.targets:
+                if isinstance(target, ast.Name):
+                    before = by_var.get(target.id, set())
+                    merged = before | eager
+                    if merged != before:
+                        changed = True
+                    by_var[target.id] = merged
+        if not changed:
+            break
+    return by_var
+
+
+def _eager_for_loop(loop, eager_by_var: dict[str, set[str]], func_eager: set[str]) -> set[str]:
+    """The eager set that applies to this loop's rows.
+
+    Resolved through the variable the loop iterates over. Only when that variable
+    cannot be traced back to a query at all (a parameter, a helper's return
+    value) does it fall back to the function-wide set, where a false positive on
+    already-fixed code would cost more credibility than a miss.
+    """
+    it = getattr(loop, 'iter', None)
+    if isinstance(it, ast.Name) and it.id in eager_by_var:
+        return eager_by_var[it.id]
+    inline = _eager_in_expr(it) if it is not None else set()
+    if inline:
+        return inline
+    if _is_query_bound(it):
+        return set()
+    return func_eager
 
 
 def _lazy_loads_in(loop, eager: set[str]) -> list[tuple[int, str]]:
@@ -247,8 +351,20 @@ def _comp_body(node):
 
 
 def scan_tree(root: Path):
-    """Yield findings: (path, func, kind, lineno, count, sample)."""
-    for path in sorted(root.rglob('*.py')):
+    """Yield findings: (path, func, kind, lineno, count, sample).
+
+    A single file is accepted as well as a directory, so a fixture can be scanned
+    directly instead of having to sit in its own folder.
+
+    A path that does not exist yields nothing, and the caller must treat that as
+    an error: `rglob` on a missing directory silently returns an empty iterator,
+    so a typo in the CI step's path would print `real=0` and pass the gate while
+    scanning no code at all.
+    """
+    if not root.exists():
+        raise FileNotFoundError(str(root))
+    paths = [root] if root.is_file() else sorted(root.rglob('*.py'))
+    for path in paths:
         try:
             tree = ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
         except SyntaxError as exc:  # pragma: no cover - defensive
@@ -258,14 +374,15 @@ def scan_tree(root: Path):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
             qvars = _query_vars(func)
-            eager = _eagerly_loaded(func)
+            eager_by_var = _eager_by_var(func)
+            func_eager = _eager_in_expr(func)
             for node in ast.walk(func):
                 if isinstance(node, LOOP_NODES):
                     calls = _db_calls_in(node.body, qvars)
                     if calls:
                         kind = 'retry/constant' if _is_range_loop(node) else 'real'
                         yield (path, func.name, kind, node.lineno, len(calls), calls[0][1])
-                    for lineno, text in _lazy_loads_in(node, eager):
+                    for lineno, text in _lazy_loads_in(node, _eager_for_loop(node, eager_by_var, func_eager)):
                         yield (path, func.name, 'lazy', lineno, 1, text)
                 elif isinstance(node, COMP_NODES):
                     # Comprehension: everything inside runs once per element.
@@ -275,11 +392,17 @@ def scan_tree(root: Path):
 
 
 def scan_git(rev: str, root: Path):
-    """Scan a git revision without touching the worktree."""
+    """Scan a git revision without touching the worktree.
+
+    Same trap as scan_tree: `git ls-tree` on a path that is not in the revision
+    prints nothing and exits 0, so a typo would look like a clean scan.
+    """
     out = subprocess.run(
         ['git', 'ls-tree', '-r', '--name-only', rev, str(root).replace('\\', '/')],
         capture_output=True, text=True, encoding='utf-8', errors='replace', check=True,
     ).stdout.split()
+    if not out:
+        raise FileNotFoundError(f'{rev}:{root}')
     for name in out:
         if not name.endswith('.py'):
             continue
@@ -294,14 +417,15 @@ def scan_git(rev: str, root: Path):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
             qvars = _query_vars(func)
-            eager = _eagerly_loaded(func)
+            eager_by_var = _eager_by_var(func)
+            func_eager = _eager_in_expr(func)
             for node in ast.walk(func):
                 if isinstance(node, LOOP_NODES):
                     calls = _db_calls_in(node.body, qvars)
                     if calls:
                         kind = 'retry/constant' if _is_range_loop(node) else 'real'
                         yield (Path(name), func.name, kind, node.lineno, len(calls), calls[0][1])
-                    for lineno, text in _lazy_loads_in(node, eager):
+                    for lineno, text in _lazy_loads_in(node, _eager_for_loop(node, eager_by_var, func_eager)):
                         yield (Path(name), func.name, 'lazy', lineno, 1, text)
                 elif isinstance(node, COMP_NODES):
                     calls = _db_calls_in(_comp_body(node), qvars)
@@ -345,7 +469,21 @@ def main(argv: list[str]) -> int:
         return 2
     root = Path(positional[0]) if positional else Path('backend/app')
 
-    findings = list(scan_git(rev, root) if rev else scan_tree(root))
+    if rev:
+        try:
+            findings = list(scan_git(rev, root))
+        except FileNotFoundError:
+            print(f'no such path in {rev}: {root}', file=sys.stderr)
+            return 2
+    else:
+        try:
+            findings = list(scan_tree(root))
+        except FileNotFoundError:
+            # A missing path must not read as a clean scan: rglob on a typo'd
+            # directory yields nothing, and "real=0" would pass the CI gate
+            # without having looked at a single file.
+            print(f'no such path: {root}', file=sys.stderr)
+            return 2
     real = [f for f in findings if f[2] == 'real']
     lazy = [f for f in findings if f[2] == 'lazy']
     benign = [f for f in findings if f[2] not in ('real', 'lazy')]
