@@ -20,6 +20,7 @@ import os
 import sys
 import tempfile
 
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, event
@@ -41,8 +42,9 @@ LARGE = 16
 def _count_statements(seed, call, rows, role="teacher"):
     """Seed a throwaway database with ``rows`` records, make one request.
 
-    Returns (status, statements). The row count is a parameter, not a module
-    constant: seeding the same size twice would make every comparison vacuous.
+    Returns (status, statements, peak_bound_parameters). The row count is a
+    parameter, not a module constant: seeding the same size twice would make
+    every comparison vacuous.
     """
     db_url = f"sqlite:///{tempfile.NamedTemporaryFile(prefix='growth_', suffix='.db', delete=False).name}"
     engine = create_engine(db_url, connect_args={"check_same_thread": False}, poolclass=StaticPool)
@@ -63,10 +65,17 @@ def _count_statements(seed, call, rows, role="teacher"):
     db.close()
 
     statements = []
+    peak_parameters = [0]
 
     @event.listens_for(engine, "before_cursor_execute")
-    def record(_conn, _cursor, statement, _parameters, _context, _executemany):
+    def record(_conn, _cursor, statement, parameters, _context, _executemany):
         statements.append(statement)
+        # One bound variable per entry of a positional parameter sequence. This is
+        # the other half of the picture: a batched IN list can keep the statement
+        # count flat while binding one variable per id, which SQLite rejects past
+        # SQLITE_LIMIT_VARIABLE_NUMBER.
+        if isinstance(parameters, (list, tuple)):
+            peak_parameters[0] = max(peak_parameters[0], len(parameters))
 
     app = FastAPI()
     app.include_router(teacher.router)
@@ -85,12 +94,12 @@ def _count_statements(seed, call, rows, role="teacher"):
     )
     response = TestClient(app).get(call)
     engine.dispose()
-    return response.status_code, len(statements)
+    return response.status_code, len(statements), peak_parameters[0]
 
 
 def _assert_flat(seed, call, role="teacher"):
-    small_status, small = _count_statements(seed, call, SMALL, role)
-    large_status, large = _count_statements(seed, call, LARGE, role)
+    small_status, small, small_params = _count_statements(seed, call, SMALL, role)
+    large_status, large, large_params = _count_statements(seed, call, LARGE, role)
     assert small_status == 200, small_status
     assert large_status == 200, large_status
     # Four times the rows must not cost more statements. One extra is tolerated for
@@ -98,6 +107,14 @@ def _assert_flat(seed, call, role="teacher"):
     assert large <= small + 1, (
         f"{call}: {SMALL} rows cost {small} statements but {LARGE} rows cost {large}. "
         "The count grows with the row count, so this is a per-row query."
+    )
+    # A flat statement count is not enough on its own. A batched IN list keeps the
+    # statement count flat while binding one variable per id, and SQLite rejects the
+    # statement once it binds more than 32766 of them. Both properties have to hold.
+    assert large_params <= small_params + 1, (
+        f"{call}: {SMALL} rows bind {small_params} parameters but {LARGE} rows bind "
+        f"{large_params}. The parameter count grows with the row count, so a wide "
+        "enough IN list will raise 'too many SQL variables'."
     )
 
 
@@ -132,14 +149,20 @@ def test_crisis_review_statements_do_not_grow_with_events():
     _assert_flat(seed, "/api/teacher/crisis/9500/reviews")
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="open defect: get_treehole_posts has no pagination, and _get_treehole_responses "
+           "filters five queries on post_id IN (post_ids), so the parameter count is N+1. "
+           "Measured: 10 posts bind 11 parameters, 32766 posts raise 'too many SQL variables'. "
+           "Remove this marker once the lookups are joined instead of passed as an id list.",
+)
 def test_treehole_post_statements_do_not_grow_with_posts():
-    """The gate reports this one too, and here the finding was real.
+    """The statements are flat here, but the bound parameters are not.
 
-    ``_get_treehole_response`` used to run five counts per post (likes, comments,
-    favorites, is_liked, is_favorited) and the route has no limit, so the cost was
-    5N+1: measured 6 / 26 / 101 statements for 1 / 5 / 20 posts, and 21 / 81 on
-    the 4 / 16 seeds used here. It is a fixed number of batched queries now, and
-    this test is what keeps it that way.
+    ``_get_treehole_response`` used to run five counts per post, costing 5N+1
+    statements; that was batched, and the statement count is now flat. What is
+    still linear is the parameter count: each of the five batched queries binds
+    one variable per post id, and the route returns the whole table.
     """
     def seed(db, teacher_user, student_user, rows):
         for index in range(rows):
