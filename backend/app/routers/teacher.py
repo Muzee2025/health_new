@@ -1303,15 +1303,21 @@ def get_teachers_profiles(
     teachers = db.query(models.User).filter(models.User.role == "teacher").all()
     if not teachers:
         return []
-    # Two batched lookups instead of two per teacher.
-    teacher_ids = [t.id for t in teachers]
+    # Two batched lookups instead of two per teacher. The teacher set is referenced as a
+    # subquery over the same role filter, not as an IN list of the ids just collected: the
+    # teacher table has no upper bound, and SQLite rejects a statement once it binds more
+    # than 32766 variables, which the per-row loop this batching replaced never did.
+    # Measured before this change: 32767 teachers raised "too many SQL variables".
+    teacher_ids = db.query(models.User.id).filter(models.User.role == "teacher")
     profiles = {
         profile.user_id: profile
-        for profile in db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id.in_(teacher_ids)).all()
+        for profile in db.query(models.TeacherProfile).filter(
+            models.TeacherProfile.user_id.in_(teacher_ids.subquery().select())).all()
     }
     avatars = {
         avatar.teacher_id: avatar
-        for avatar in db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id.in_(teacher_ids)).all()
+        for avatar in db.query(models.TeacherAvatar).filter(
+            models.TeacherAvatar.teacher_id.in_(teacher_ids.subquery().select())).all()
     }
     result = []
     for t in teachers:
