@@ -152,6 +152,10 @@ class ClassifierTest(unittest.TestCase):
 
 
 class CommandLineTest(unittest.TestCase):
+    # A revision known to contain findings, so "must fail" is testable without
+    # depending on the current worktree being dirty or clean.
+    REV_WITH_FINDINGS = '4a39036'
+
     def _run(self, *args):
         return subprocess.run(
             [sys.executable, str(SCRIPT), *args],
@@ -172,6 +176,41 @@ class CommandLineTest(unittest.TestCase):
         proc = self._run('--nonsense')
         self.assertEqual(proc.returncode, 2)
         self.assertIn('unknown option', proc.stderr)
+
+    # --- the gate must be able to fail -------------------------------------
+    #
+    # These three exist because the first version parsed options only while
+    # args[0] started with "--". A flag placed after the path was silently
+    # dropped, so the gate printed its findings and still exited 0: it looked
+    # like a passing check while checking nothing. A gate that cannot fail is
+    # worse than no gate, because it is trusted.
+
+    def test_fail_on_findings_exits_1_when_flag_comes_first(self):
+        proc = self._run('--fail-on-findings', '--git', self.REV_WITH_FINDINGS, 'backend/app')
+        self.assertEqual(proc.returncode, 1, proc.stdout[-2000:])
+        self.assertIn('FAIL:', proc.stderr)
+
+    def test_fail_on_findings_exits_1_when_flag_comes_last(self):
+        # Regression: options after the positional path used to be ignored.
+        proc = self._run('--git', self.REV_WITH_FINDINGS, 'backend/app', '--fail-on-findings')
+        self.assertEqual(proc.returncode, 1, proc.stdout[-2000:])
+        self.assertIn('FAIL:', proc.stderr)
+
+    def test_unknown_option_after_path_exits_2(self):
+        # Regression: `backend/app --bogus` used to exit 0 silently.
+        proc = self._run('--git', self.REV_WITH_FINDINGS, 'backend/app', '--bogus')
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn('unknown option', proc.stderr)
+
+    def test_git_without_revision_exits_2(self):
+        proc = self._run('--git')
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn('--git needs a revision', proc.stderr)
+
+    def test_two_paths_exit_2(self):
+        proc = self._run('backend/app', 'backend/tests')
+        self.assertEqual(proc.returncode, 2)
+        self.assertIn('unexpected extra arguments', proc.stderr)
 
 
 if __name__ == '__main__':

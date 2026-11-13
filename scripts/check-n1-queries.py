@@ -231,18 +231,35 @@ def scan_git(rev: str, root: Path):
 def main(argv: list[str]) -> int:
     rev = None
     fail_on_findings = False
+    positional: list[str] = []
     args = argv[1:]
-    while args and args[0].startswith('--'):
-        if args[0] == '--git':
-            rev = args[1]
-            args = args[2:]
-        elif args[0] == '--fail-on-findings':
+    i = 0
+    # Scan *every* argument, not just the leading ones. Parsing only while
+    # args[0] starts with "--" silently drops anything after the path, so
+    # `check-n1-queries.py backend/app --fail-on-findings` looked like a
+    # passing gate while checking nothing. An unknown option is an error, never
+    # silently ignored.
+    while i < len(args):
+        arg = args[i]
+        if arg == '--git':
+            if i + 1 >= len(args):
+                print('--git needs a revision', file=sys.stderr)
+                return 2
+            rev = args[i + 1]
+            i += 2
+        elif arg == '--fail-on-findings':
             fail_on_findings = True
-            args = args[1:]
-        else:
-            print(f'unknown option {args[0]}', file=sys.stderr)
+            i += 1
+        elif arg.startswith('--'):
+            print(f'unknown option {arg}', file=sys.stderr)
             return 2
-    root = Path(args[0]) if args else Path('backend/app')
+        else:
+            positional.append(arg)
+            i += 1
+    if len(positional) > 1:
+        print(f'unexpected extra arguments: {" ".join(positional[1:])}', file=sys.stderr)
+        return 2
+    root = Path(positional[0]) if positional else Path('backend/app')
 
     findings = list(scan_git(rev, root) if rev else scan_tree(root))
     real = [f for f in findings if f[2] == 'real']
