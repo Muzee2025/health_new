@@ -19,6 +19,7 @@ const sharpStub = `module.exports = function () {
   throw new Error('Image processing must not run during preflight')
 }`
 const browserScripts = [
+  ['build-design-assets.mjs', ['sharp']],
   ['capture-attachment-ui.mjs', ['playwright']],
   ['capture-ui-baseline.mjs', ['playwright', 'sharp']],
   ['capture-w2-ui.mjs', ['playwright', 'sharp']],
@@ -244,7 +245,7 @@ for (const [script, names] of browserScripts) {
     })
     assert.equal(result.status, 2, result.stderr)
     assert.equal(result.stdout, '')
-    assert.match(result.stderr, /PLAYWRIGHT_MODULE_PATH/)
+    for (const name of names) assert.ok(result.stderr.includes(`${name.toUpperCase()}_MODULE_PATH`))
     assert.ok(!result.stderr.includes(f.root))
     assert.deepEqual(snapshot(f.root), before, 'dependency failure changed fixture files')
   })

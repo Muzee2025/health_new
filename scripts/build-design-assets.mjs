@@ -2,28 +2,11 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
 import { fileURLToPath } from 'node:url'
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 
+const { sharp } = loadScriptDependencies(import.meta.url, ['sharp'])
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const assetRoot = path.join(root, 'src/assets')
-const require = createRequire(import.meta.url)
-let sharp
-try {
-  sharp = require(process.env.SHARP_MODULE_PATH || 'sharp')
-} catch {
-  for (const moduleRoot of (process.env.NODE_PATH || '').split(path.delimiter).filter(Boolean)) {
-    try {
-      sharp = require(path.join(moduleRoot, 'sharp'))
-      break
-    } catch {
-      /* Try next configured module root. */
-    }
-  }
-}
-if (!sharp)
-  throw new Error(
-    'sharp is required. Set SHARP_MODULE_PATH to an existing sharp module, or NODE_PATH to its node_modules directory. No install is performed.',
-  )
 const date = '2026-10-21'
 // Digests must not depend on the checkout's line endings: Windows autocrlf writes
 // CRLF while a Linux CI checkout writes LF. Text inputs are digested after
