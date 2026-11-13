@@ -76,7 +76,17 @@ jobs:
       # on literal source text (test_fullstack_verification.py:99-105) and
       # reformatting breaks it. Treat these noqa lines as debt markers, not as
       # approval to write new code this way.
-      - run: python -m ruff check backend/app backend/tests backend/scripts scripts
+      # Whole trees, not four hand-picked subdirectories. Naming the
+      # subdirectories left 5 python files unchecked: backend/build_knowledge_base.py,
+      # backend/update_articles.py, backend/diagnostics/ and backend/migrations/ sit
+      # directly under backend/ and outside app|tests|scripts, so they were in no
+      # ruff gate at all (they were cleaned up anyway, which is how the gap was
+      # found: the cleanup could not be enforced). `ruff check backend scripts`
+      # covers those 5 files and is otherwise the same set -- 140 files against 135,
+      # verified with --show-files -- and reports the same 0 findings today. It also
+      # matches the `compileall backend scripts` step below, so there is one rule
+      # for what counts as "the python in this repo".
+      - run: python -m ruff check backend scripts
       # Every Python file, not two hand-picked ones. All 127 files under backend/
       # and scripts/ compile today, so this costs the same single step while it
       # now catches a syntax error anywhere in the tree. `compileall` exits 1 on
