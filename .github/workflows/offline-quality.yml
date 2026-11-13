@@ -52,7 +52,19 @@ jobs:
   backend:
     runs-on: ubuntu-latest
     steps:
+      # Full history, not the default single commit. Three of the N+1 gate tests
+      # assert against fixed past revisions (`--git 4a39036`, `--git ec7b920`)
+      # because "the gate must fail on known-bad code" cannot be checked against
+      # a worktree that is currently clean. With fetch-depth: 1 those revisions
+      # are absent, the scanner's `git ls-tree` exits 128, and the job went red
+      # for a reason that had nothing to do with the change being tested (run
+      # #70 and #73). The tests now also skip when a revision is missing, but
+      # skipping the three cases that prove the gate can fail would leave CI
+      # unable to tell a working gate from a broken one, so the history is
+      # fetched and they really run. Cost: the pack is ~100 MB.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

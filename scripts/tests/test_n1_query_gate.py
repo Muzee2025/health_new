@@ -15,6 +15,22 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPT = REPO_ROOT / 'scripts' / 'check-n1-queries.py'
 
 
+def _rev_available(rev):
+    """True when `rev` exists in this clone.
+
+    CI checks out with `fetch-depth: 1`, so only the pushed commit is present and
+    every historical revision below is missing. The tests that assert on a fixed
+    past revision cannot run there, and failing them would blame the change under
+    test for something the checkout never fetched. Skipping is honest here only
+    because the same tests do run on a full clone and on the developer machine;
+    they are not silently dropped, they report as skipped with this reason.
+    """
+    return subprocess.run(
+        ['git', 'rev-parse', '--verify', '--quiet', rev + '^{commit}'],
+        cwd=str(REPO_ROOT), capture_output=True, text=True,
+    ).returncode == 0
+
+
 def _load():
     spec = importlib.util.spec_from_file_location('check_n1_queries', SCRIPT)
     module = importlib.util.module_from_spec(spec)
@@ -236,6 +252,8 @@ class LazyLoadTest(unittest.TestCase):
         self.assertEqual(got, [])
 
 
+@unittest.skipUnless(_rev_available('ec7b920') and _rev_available('884a72b'),
+                     'needs historical revisions; CI checks out fetch-depth: 1')
 class LazyLoadRegressionTest(unittest.TestCase):
     """End-to-end on real revisions, so the two shapes are pinned together."""
 
@@ -307,17 +325,23 @@ class CommandLineTest(unittest.TestCase):
     # like a passing check while checking nothing. A gate that cannot fail is
     # worse than no gate, because it is trusted.
 
+    @unittest.skipUnless(_rev_available('4a39036'),
+                         'needs a historical revision; CI checks out fetch-depth: 1')
     def test_fail_on_findings_exits_1_when_flag_comes_first(self):
         proc = self._run('--fail-on-findings', '--git', self.REV_WITH_FINDINGS, 'backend/app')
         self.assertEqual(proc.returncode, 1, proc.stdout[-2000:])
         self.assertIn('FAIL:', proc.stderr)
 
+    @unittest.skipUnless(_rev_available('4a39036'),
+                         'needs a historical revision; CI checks out fetch-depth: 1')
     def test_fail_on_findings_exits_1_when_flag_comes_last(self):
         # Regression: options after the positional path used to be ignored.
         proc = self._run('--git', self.REV_WITH_FINDINGS, 'backend/app', '--fail-on-findings')
         self.assertEqual(proc.returncode, 1, proc.stdout[-2000:])
         self.assertIn('FAIL:', proc.stderr)
 
+    @unittest.skipUnless(_rev_available('4a39036'),
+                         'needs a historical revision; CI checks out fetch-depth: 1')
     def test_unknown_option_after_path_exits_2(self):
         # Regression: `backend/app --bogus` used to exit 0 silently.
         proc = self._run('--git', self.REV_WITH_FINDINGS, 'backend/app', '--bogus')
