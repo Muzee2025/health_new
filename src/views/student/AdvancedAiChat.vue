@@ -226,6 +226,12 @@ import {
 } from 'element-plus'
 import axios from 'axios'
 import RiskFactorFiveDimension from '../../components/RiskFactorFiveDimension.vue'
+import { sleep, withApiRetry } from '@/services/advancedChatRetry'
+import {
+  createTimeoutController,
+  parseSsePacket,
+  safeParseJson,
+} from '@/services/advancedChatStream'
 import { createChatStorage } from '@/services/chatIndexedDb'
 import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
 
@@ -391,6 +397,7 @@ const fetchSessions = async () => {
       () => sessionHttp.get('/api/advanced-ai/sessions'),
       'fetchSessions',
       3,
+      () => chatSession.isActive(),
     )
     const list = res.data.data || []
     const localMap = new Map((await getAllConversations()).map((x) => [x.id, x]))
@@ -493,57 +500,6 @@ const getStoredToken = () => {
   return token.toLowerCase().startsWith('bearer ') ? token.slice(7).trim() : token
 }
 
-const parseSsePacket = (packet) => {
-  const lines = packet.split('\n')
-  let event = 'message'
-  const dataLines = []
-  for (const line of lines) {
-    if (line.startsWith('event:')) event = line.slice(6).trim()
-    if (line.startsWith('data:')) dataLines.push(line.slice(5).trim())
-  }
-  return { event, data: dataLines.join('\n') }
-}
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
-
-const isRetryableHttpError = (err) => {
-  const status = err?.response?.status || err?.status || 0
-  if (err?.name === 'AbortError' || !chatSession.isActive()) return false
-  if (!status) return true
-  return status >= 500 || status === 429
-}
-
-const withApiRetry = async (fn, label, retries = 2) => {
-  let lastErr = null
-  for (let attempt = 0; attempt <= retries; attempt++) {
-    try {
-      return await fn()
-    } catch (err) {
-      if (!chatSession.isActive()) return
-      lastErr = err
-      if (!isRetryableHttpError(err) || attempt === retries) break
-      const waitMs = 400 * (attempt + 1)
-      console.warn(`[AdvancedAiChat] ${label} retrying`, {
-        attempt: attempt + 1,
-        waitMs,
-        status: err?.response?.status || err?.status,
-        message: err?.message,
-      })
-      await sleep(waitMs)
-    }
-  }
-  throw lastErr
-}
-
-const safeParseJson = (text) => {
-  try {
-    return JSON.parse(text)
-  } catch {
-    if (!chatSession.isActive()) return
-    return null
-  }
-}
-
 const resetThinkingPanel = () => {
   thinkingPhase.value = ''
   thinkingLogs.value = []
@@ -553,12 +509,6 @@ const appendThinkingLine = (text) => {
   const line = String(text || '').trim()
   if (!line) return
   thinkingLogs.value.push(line)
-}
-
-const createTimeoutController = (ms) => {
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(new Error(`timeout:${ms}`)), ms)
-  return { controller, timer }
 }
 
 const streamDeepThinkReply = async (payload, aiLocal) => {
@@ -600,15 +550,15 @@ const streamDeepThinkReply = async (payload, aiLocal) => {
         if (event === 'phase') {
           thinkingPhase.value = data
         } else if (event === 'memory_chunk' || event === 'trend_chunk') {
-          const parsed = safeParseJson(data)
+          const parsed = safeParseJson(data, () => chatSession.isActive())
           appendThinkingLine(parsed?.text || data)
         } else if (event === 'message_chunk') {
-          const parsed = safeParseJson(data)
+          const parsed = safeParseJson(data, () => chatSession.isActive())
           aiLocal.content += parsed?.text || ''
         } else if (event === 'done') {
-          finalPayload = safeParseJson(data) || null
+          finalPayload = safeParseJson(data, () => chatSession.isActive()) || null
         } else if (event === 'error') {
-          const parsed = safeParseJson(data)
+          const parsed = safeParseJson(data, () => chatSession.isActive())
           throw new Error(parsed?.text || '流式处理失败')
         }
       }
@@ -700,6 +650,7 @@ const loadSession = async (id) => {
       () => sessionHttp.get(`/api/advanced-ai/sessions/${id}/messages`),
       'loadSessionMessages',
       2,
+      () => chatSession.isActive(),
     )
     chatHistory.value = res.data.data || []
     for (const m of chatHistory.value) {
