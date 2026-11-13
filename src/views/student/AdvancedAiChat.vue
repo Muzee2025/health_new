@@ -234,6 +234,7 @@ import {
 } from '@/services/advancedChatStream'
 import { createChatStorage } from '@/services/chatIndexedDb'
 import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
+import { useChatSessions } from '@/composables/useChatSessions'
 
 const sessionAbort = new AbortController()
 const chatSession = createPrivateChatSession(
@@ -241,15 +242,8 @@ const chatSession = createPrivateChatSession(
   storedSessionToken,
   sessionAbort.signal,
 )
-const {
-  deleteConversationLocal,
-  getAllConversations,
-  getUiState,
-  listMessages,
-  putMessage,
-  saveUiState,
-  upsertConversation,
-} = createChatStorage(chatSession)
+const chatStorage = createChatStorage(chatSession)
+const { putMessage, upsertConversation } = chatStorage
 const sessionRequest = (method, url, data, config = {}) =>
   chatSession.run(() =>
     axios.request({ ...config, method, url, data, signal: sessionAbort.signal }),
@@ -304,6 +298,35 @@ const filteredSessions = computed(() => {
 })
 
 const ws = ref(null)
+
+const {
+  syncSessionsFromServer,
+  loadSessionsFromLocal,
+  persistUiState,
+  createNewChat,
+  loadSession,
+  renameSession,
+  deleteSession,
+} = useChatSessions({
+  chatSession,
+  sessionHttp,
+  storage: chatStorage,
+  state: {
+    sessions,
+    loadingSessions,
+    currentSessionId,
+    currentMode,
+    chatHistory,
+    inputText,
+    isAnonymous,
+    chatScrollRef,
+    crisisBannerVisible,
+  },
+  withApiRetry,
+  sleep,
+  ElMessage,
+  ElMessageBox,
+})
 
 const initWebSocket = () => {
   const token = getStoredToken()
@@ -390,104 +413,6 @@ const formatSessionTime = (time) => {
   return `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-const fetchSessions = async () => {
-  loadingSessions.value = true
-  try {
-    const res = await withApiRetry(
-      () => sessionHttp.get('/api/advanced-ai/sessions'),
-      'fetchSessions',
-      3,
-      () => chatSession.isActive(),
-    )
-    const list = res.data.data || []
-    const localMap = new Map((await getAllConversations()).map((x) => [x.id, x]))
-    const serverIds = new Set(list.map((x) => x.id))
-    for (const [localId] of localMap) {
-      if (!serverIds.has(localId)) {
-        await deleteConversationLocal(localId)
-      }
-    }
-    for (const row of list) {
-      const local = localMap.get(row.id)
-      await upsertConversation({
-        id: row.id,
-        title: row.title || '新对话',
-        mode: row.mode || 'daily',
-        createdAt: local?.createdAt || row.updated_at || new Date().toISOString(),
-        updatedAt: row.updated_at || new Date().toISOString(),
-        updated_at: row.updated_at || new Date().toISOString(),
-        archived: local?.archived || false,
-      })
-    }
-    await loadSessionsFromLocal()
-  } finally {
-    loadingSessions.value = false
-  }
-}
-
-const syncSessionsFromServer = async () => {
-  try {
-    await fetchSessions()
-    return true
-  } catch (err) {
-    if (!chatSession.isActive()) return
-    console.warn('[AdvancedAiChat] syncSessionsFromServer failed', {
-      status: err?.response?.status || err?.status,
-      url: err?.response?.config?.url,
-      message: err?.message,
-    })
-    // 网络波动时保留本地会话可用
-    return false
-  }
-}
-
-const loadSessionsFromLocal = async () => {
-  loadingSessions.value = true
-  try {
-    const rows = await getAllConversations()
-    sessions.value = rows
-      .map((x) => ({
-        id: x.id,
-        title: x.title || '新对话',
-        mode: x.mode || 'daily',
-        createdAt: x.createdAt,
-        updated_at: x.updatedAt || x.updated_at || x.createdAt,
-        archived: Boolean(x.archived),
-      }))
-      .sort((a, b) => String(b.updated_at || '').localeCompare(String(a.updated_at || '')))
-  } catch (error) {
-    if (!chatSession.isActive()) return
-    console.error('Failed to load chat sessions:', error)
-    sessions.value = []
-  } finally {
-    loadingSessions.value = false
-  }
-}
-
-const persistUiState = async () => {
-  // An anonymous session keeps nothing: its draft is exactly the text the user
-  // typed believing it would not be stored. The switch back to a named session
-  // calls loadSession, which persists first, so the check has to be here and
-  // not only in the caller.
-  if (isAnonymous.value || !chatSession.isActive() || !currentSessionId.value) return
-  await saveUiState(currentSessionId.value, {
-    draft: inputText.value,
-    scrollTop: chatScrollRef.value?.scrollTop || 0,
-    updatedAt: new Date().toISOString(),
-  })
-}
-
-const restoreUiState = async (sessionId) => {
-  const state = await getUiState(sessionId)
-  chatSession.assertActive()
-  inputText.value = state?.draft || ''
-  await nextTick()
-  if (chatScrollRef.value) {
-    if (typeof state?.scrollTop === 'number') chatScrollRef.value.scrollTop = state.scrollTop
-    else chatScrollRef.value.scrollTop = chatScrollRef.value.scrollHeight
-  }
-}
-
 const uuid = () =>
   globalThis.crypto?.randomUUID
     ? globalThis.crypto.randomUUID()
@@ -571,139 +496,6 @@ const streamDeepThinkReply = async (payload, aiLocal) => {
   } finally {
     clearTimeout(timer)
     sessionAbort.signal.removeEventListener('abort', abortStream)
-  }
-}
-
-const createNewChat = async (mode) => {
-  await persistUiState()
-  const conversationId = uuid()
-  const now = new Date().toISOString()
-  await upsertConversation({
-    id: conversationId,
-    title: '新对话',
-    mode,
-    createdAt: now,
-    updatedAt: now,
-    updated_at: now,
-    archived: false,
-  })
-  await loadSessionsFromLocal()
-  currentSessionId.value = conversationId
-  currentMode.value = mode
-  chatHistory.value = []
-  crisisBannerVisible.value = false
-  try {
-    const res = await sessionHttp.post('/api/advanced-ai/sessions', {
-      mode,
-      conversation_id: conversationId,
-    })
-    currentSessionId.value = res.data.session_id
-    currentMode.value = mode
-    const initial = {
-      id: `${conversationId}-ai-init`,
-      role: 'ai',
-      content: res.data.initial_message,
-      timestamp: now,
-    }
-    chatHistory.value = [initial]
-    await putMessage({ ...initial, conversationId })
-    await upsertConversation({
-      id: conversationId,
-      title: '新对话',
-      mode,
-      createdAt: now,
-      updatedAt: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      archived: false,
-    })
-    crisisBannerVisible.value = false
-    await loadSessionsFromLocal()
-    await restoreUiState(conversationId)
-  } catch {
-    if (!chatSession.isActive()) return
-    await deleteConversationLocal(conversationId)
-    await loadSessionsFromLocal()
-    ElMessage.error('创建会话失败')
-  }
-}
-
-const loadSession = async (id) => {
-  await persistUiState()
-  currentSessionId.value = id
-  const session = sessions.value.find((s) => s.id === id)
-  if (session) currentMode.value = session.mode
-  let hasLocalMessages = false
-  try {
-    const localMessages = await listMessages(id)
-    if (localMessages.length) {
-      hasLocalMessages = true
-      chatHistory.value = localMessages.map((m) => ({
-        id: m.id,
-        role: m.role,
-        content: m.content,
-        emotion_tags: m.emotion_tags || null,
-        is_crisis: m.is_crisis || false,
-        created_at: m.timestamp || m.created_at,
-      }))
-    }
-    const res = await withApiRetry(
-      () => sessionHttp.get(`/api/advanced-ai/sessions/${id}/messages`),
-      'loadSessionMessages',
-      2,
-      () => chatSession.isActive(),
-    )
-    chatHistory.value = res.data.data || []
-    for (const m of chatHistory.value) {
-      await putMessage({
-        id: `${id}-${m.id || m.created_at || uuid()}`,
-        conversationId: id,
-        role: m.role,
-        content: m.content,
-        model: m.role === 'ai' ? 'emohaa' : '',
-        emotion_tags: m.emotion_tags || null,
-        is_crisis: Boolean(m.is_crisis),
-        timestamp: m.created_at || new Date().toISOString(),
-      })
-    }
-    crisisBannerVisible.value = false
-    await restoreUiState(id)
-  } catch (error) {
-    if (!chatSession.isActive()) return
-    const status = error?.response?.status
-    if (status === 401 || status === 403) {
-      ElMessage.error('登录状态已失效，请重新登录后继续')
-      return
-    }
-    if (status === 404) {
-      await deleteConversationLocal(id)
-      await loadSessionsFromLocal()
-      const next = sessions.value.find((x) => !x.archived)
-      if (next) {
-        await loadSession(next.id)
-      } else {
-        await createNewChat(currentMode.value || 'daily')
-      }
-      ElMessage.warning('会话不存在，已自动修复并切换到可用会话')
-      return
-    }
-    const synced = await syncSessionsFromServer()
-    if (hasLocalMessages && !synced) {
-      console.warn('[AdvancedAiChat] server unavailable, fallback to local cache mode', {
-        status: status || error?.status,
-        url: error?.response?.config?.url,
-        message: error?.message,
-      })
-      return
-    }
-    if (!navigator.onLine) {
-      ElMessage.warning('当前网络不可用，请检查网络后重试')
-      return
-    }
-    if (!synced) {
-      ElMessage.error('会话服务暂时不可用，请稍后重试')
-      return
-    }
-    ElMessage.error('加载会话失败')
   }
 }
 
@@ -922,113 +714,6 @@ const toggleDeepThink = () => {
   } catch {
     if (!chatSession.isActive()) return
     ElMessage.error('无法保存深度思考设置，请检查浏览器存储权限')
-  }
-}
-
-const renameSession = async (session) => {
-  const { value } = await ElMessageBox.prompt('请输入新的会话名称', '重命名会话', {
-    confirmButtonText: '确认',
-    cancelButtonText: '取消',
-    inputValue: session.title || '',
-    inputPattern: /\S+/,
-    inputErrorMessage: '名称不能为空',
-  })
-  const title = (value || '').trim()
-  if (!title) return
-  await upsertConversation({
-    id: session.id,
-    title,
-    mode: session.mode,
-    updatedAt: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    archived: Boolean(session.archived),
-  })
-  try {
-    await sessionHttp.patch(`/api/advanced-ai/sessions/${session.id}`, { title })
-  } catch {
-    if (!chatSession.isActive()) return
-    ElMessage.warning('服务端重命名失败，已保留本地名称')
-  }
-  await loadSessionsFromLocal()
-}
-
-const verifySessionRemovedOnServer = async (sessionId) => {
-  const res = await sessionHttp.get('/api/advanced-ai/sessions')
-  const list = res?.data?.data || []
-  return !list.some((row) => row.id === sessionId)
-}
-
-const deleteSessionRemoteWithRetry = async (sessionId, maxRetries = 2) => {
-  let lastError = null
-  for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
-    try {
-      await sessionHttp.delete(`/api/advanced-ai/sessions/${sessionId}`)
-      const verified = await verifySessionRemovedOnServer(sessionId)
-      if (!verified) throw new Error('verify_failed')
-      return { ok: true, state: 'deleted', attempt: attempt + 1 }
-    } catch (error) {
-      if (!chatSession.isActive()) return
-      lastError = error
-      const status = error?.response?.status
-      if (status === 404) {
-        const verified = await verifySessionRemovedOnServer(sessionId)
-        if (verified) return { ok: true, state: 'already_deleted', attempt: attempt + 1 }
-        return { ok: false, state: 'inconsistent', attempt: attempt + 1, error }
-      }
-      if (status === 401 || status === 403) {
-        return { ok: false, state: 'auth_failed', attempt: attempt + 1, error }
-      }
-      const isRetryable = !status || status >= 500
-      if (isRetryable && attempt < maxRetries) {
-        await sleep(250 * (attempt + 1))
-        continue
-      }
-      return {
-        ok: false,
-        state: isRetryable ? 'server_failed' : 'bad_request',
-        attempt: attempt + 1,
-        error,
-      }
-    }
-  }
-  return { ok: false, state: 'server_failed', attempt: maxRetries + 1, error: lastError }
-}
-
-const deleteSession = async (session) => {
-  await ElMessageBox.confirm('删除后会清空本地缓存和远端会话消息，是否继续？', '删除会话', {
-    type: 'warning',
-    confirmButtonText: '删除',
-    cancelButtonText: '取消',
-  })
-  const result = await deleteSessionRemoteWithRetry(session.id, 2)
-  if (!result.ok) {
-    if (result.state === 'auth_failed') {
-      ElMessage.error('服务端删除失败：登录状态已失效，请重新登录后重试（本地未删除）')
-      return
-    }
-    if (result.state === 'inconsistent') {
-      ElMessage.error('服务端删除状态不一致：会话同步校验失败（本地未删除）')
-      return
-    }
-    if (!navigator.onLine) {
-      ElMessage.warning('服务端删除失败：当前网络不可用（本地未删除）')
-      return
-    }
-    ElMessage.error('服务端删除失败：远端会话未删除（本地未删除）')
-    return
-  }
-
-  await deleteConversationLocal(session.id)
-  await loadSessionsFromLocal()
-  if (result.state === 'already_deleted') {
-    ElMessage.success('删除成功：服务端会话已不存在，本地索引已同步清理')
-  } else {
-    ElMessage.success('删除成功：服务端与本地索引已同步删除')
-  }
-  if (currentSessionId.value === session.id) {
-    const next = sessions.value.find((x) => x.id !== session.id && !x.archived)
-    if (next) await loadSession(next.id)
-    else await createNewChat(currentMode.value)
   }
 }
 

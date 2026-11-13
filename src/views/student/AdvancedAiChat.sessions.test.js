@@ -1,0 +1,258 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { effectScope, nextTick } from 'vue'
+import AdvancedAiChat from './AdvancedAiChat.vue'
+
+const mocks = vi.hoisted(() => ({
+  request: vi.fn(),
+  conversations: new Map(),
+  messageRows: new Map(),
+  uiStates: new Map(),
+  getAllConversations: vi.fn(),
+  deleteConversationLocal: vi.fn(),
+  listMessages: vi.fn(),
+  putMessage: vi.fn(),
+  getUiState: vi.fn(),
+  saveUiState: vi.fn(),
+  upsertConversation: vi.fn(),
+  messageInfo: vi.fn(),
+  messageSuccess: vi.fn(),
+  messageWarning: vi.fn(),
+  messageError: vi.fn(),
+  mountedHooks: [],
+  unmountedHooks: [],
+}))
+
+vi.mock('vue', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    onMounted: (callback) => mocks.mountedHooks.push(callback),
+    onBeforeUnmount: (callback) => mocks.unmountedHooks.push(callback),
+    useSSRContext: () => ({ modules: new Set() }),
+  }
+})
+
+vi.mock('axios', () => ({
+  default: {
+    request: (...args) => mocks.request(...args),
+    getUri: () => 'http://127.0.0.1:5173/api/ws',
+  },
+}))
+
+vi.mock('element-plus', () => {
+  const message = vi.fn()
+  Object.assign(message, {
+    info: mocks.messageInfo,
+    success: mocks.messageSuccess,
+    warning: mocks.messageWarning,
+    error: mocks.messageError,
+  })
+  return {
+    ElMessage: message,
+    ElMessageBox: { confirm: vi.fn(), prompt: vi.fn() },
+    ElButton: {},
+    ElInput: {},
+    ElDropdown: {},
+    ElDropdownMenu: {},
+    ElDropdownItem: {},
+    ElSwitch: {},
+    ElIcon: {},
+    ElAvatar: {},
+    vLoading: {},
+  }
+})
+
+vi.mock('../../components/RiskFactorFiveDimension.vue', () => ({ default: {} }))
+
+vi.mock('@/services/advancedChatRetry', () => ({
+  sleep: vi.fn(async () => {}),
+  withApiRetry: vi.fn(async (request) => request()),
+}))
+
+vi.mock('@/services/advancedChatStream', () => ({
+  createTimeoutController: vi.fn(),
+  parseSsePacket: vi.fn(),
+  safeParseJson: vi.fn(),
+}))
+
+vi.mock('@/services/chatIndexedDb', () => ({
+  createChatStorage: (session) => {
+    const guard =
+      (operation) =>
+      (...args) =>
+        session.run(() => operation(...args))
+    return {
+      getAllConversations: guard(mocks.getAllConversations),
+      deleteConversationLocal: guard(mocks.deleteConversationLocal),
+      listMessages: guard(mocks.listMessages),
+      putMessage: guard(mocks.putMessage),
+      getUiState: guard(mocks.getUiState),
+      saveUiState: guard(mocks.saveUiState),
+      upsertConversation: guard(mocks.upsertConversation),
+    }
+  },
+}))
+
+function createLocalStorage() {
+  const values = new Map([['token', 'synthetic-session-A']])
+  return {
+    getItem: (key) => values.get(key) ?? null,
+    setItem: (key, value) => values.set(key, String(value)),
+    removeItem: (key) => values.delete(key),
+    clear: () => values.clear(),
+  }
+}
+
+function createPage() {
+  const scope = effectScope()
+  const page = scope.run(() => AdvancedAiChat.setup?.({}, { expose: vi.fn() }))
+  if (!page) throw new Error('AdvancedAiChat setup did not return its bindings')
+  return { page: page, scope }
+}
+
+function conversation(id) {
+  return {
+    id,
+    title: id,
+    mode: 'daily',
+    createdAt: '2026-11-14T00:00:00.000Z',
+    updatedAt: '2026-11-14T00:00:00.000Z',
+    updated_at: '2026-11-14T00:00:00.000Z',
+    archived: false,
+  }
+}
+
+beforeEach(() => {
+  vi.clearAllMocks()
+  mocks.conversations.clear()
+  mocks.messageRows.clear()
+  mocks.uiStates.clear()
+  mocks.mountedHooks.length = 0
+  mocks.unmountedHooks.length = 0
+  vi.stubGlobal('localStorage', createLocalStorage())
+
+  mocks.getAllConversations.mockImplementation(async () => [...mocks.conversations.values()])
+  mocks.deleteConversationLocal.mockImplementation(async (id) => {
+    mocks.conversations.delete(id)
+    mocks.uiStates.delete(id)
+    for (const [messageId, row] of mocks.messageRows) {
+      if (row.conversationId === id) mocks.messageRows.delete(messageId)
+    }
+  })
+  mocks.listMessages.mockImplementation(async (id) =>
+    [...mocks.messageRows.values()].filter((row) => row.conversationId === id),
+  )
+  mocks.putMessage.mockImplementation(async (row) => {
+    mocks.messageRows.set(String(row.id), row)
+  })
+  mocks.getUiState.mockImplementation(async (id) => mocks.uiStates.get(id) || null)
+  mocks.saveUiState.mockImplementation(async (id, row) => {
+    mocks.uiStates.set(id, row)
+  })
+  mocks.upsertConversation.mockImplementation(async (row) => {
+    mocks.conversations.set(String(row.id), row)
+  })
+  mocks.request.mockRejectedValue(new Error('Unexpected API request in characterization test'))
+})
+
+afterEach(() => {
+  vi.unstubAllGlobals()
+})
+
+describe('AdvancedAiChat session lifecycle integration contract', () => {
+  it('removes a locally cached session after a server 404 and loads the next available session', async () => {
+    mocks.conversations.set('missing-session', conversation('missing-session'))
+    mocks.conversations.set('survivor-session', conversation('survivor-session'))
+    mocks.request.mockImplementation(async ({ url }) => {
+      if (url === '/api/advanced-ai/sessions/missing-session/messages') {
+        throw { response: { status: 404 } }
+      }
+      if (url === '/api/advanced-ai/sessions/survivor-session/messages') {
+        return {
+          data: {
+            data: [
+              {
+                id: 'server-message',
+                role: 'ai',
+                content: 'surviving session',
+                created_at: '2026-11-14T00:00:00.000Z',
+              },
+            ],
+          },
+        }
+      }
+      throw new Error(`Unexpected URL: ${url}`)
+    })
+
+    const { page, scope } = createPage()
+    try {
+      await page.loadSessionsFromLocal()
+      await page.loadSession('missing-session')
+
+      expect(mocks.deleteConversationLocal).toHaveBeenCalledWith('missing-session')
+      expect(page.currentSessionId.value).toBe('survivor-session')
+      expect(page.sessions.value.map((row) => row.id)).toEqual(['survivor-session'])
+      expect(page.chatHistory.value[0].content).toBe('surviving session')
+    } finally {
+      scope.stop()
+    }
+  })
+
+  it('keeps cached messages visible when the message endpoint and session sync both fail', async () => {
+    mocks.conversations.set('cached-session', conversation('cached-session'))
+    mocks.messageRows.set('cached-message', {
+      id: 'cached-message',
+      conversationId: 'cached-session',
+      role: 'ai',
+      content: 'cached reply',
+      timestamp: '2026-11-14T00:00:00.000Z',
+    })
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    mocks.request.mockRejectedValue(new Error('synthetic network failure'))
+
+    const { page, scope } = createPage()
+    try {
+      await page.loadSessionsFromLocal()
+      await page.loadSession('cached-session')
+
+      expect(page.chatHistory.value).toHaveLength(1)
+      expect(page.chatHistory.value[0]).toMatchObject({ content: 'cached reply', role: 'ai' })
+      expect(mocks.deleteConversationLocal).not.toHaveBeenCalled()
+      expect(mocks.messageError).not.toHaveBeenCalled()
+    } finally {
+      scope.stop()
+    }
+  })
+
+  it('clears anonymous content without persisting it or contacting the session API', async () => {
+    const { page, scope } = createPage()
+    try {
+      page.inputText.value = 'ephemeral draft'
+      page.chatHistory.value = [{ id: 'temporary', role: 'user', content: 'ephemeral message' }]
+      page.isAnonymous.value = true
+      await nextTick()
+      await page.persistUiState()
+
+      expect(page.inputText.value).toBe('')
+      expect(page.chatHistory.value).toEqual([])
+      expect(mocks.saveUiState).not.toHaveBeenCalled()
+      expect(mocks.request).not.toHaveBeenCalled()
+    } finally {
+      scope.stop()
+    }
+  })
+
+  it('blocks local reads from the previous identity after the login token changes', async () => {
+    const { page, scope } = createPage()
+    try {
+      localStorage.setItem('token', 'synthetic-session-B')
+      await page.loadSessionsFromLocal()
+
+      expect(mocks.getAllConversations).not.toHaveBeenCalled()
+      expect(mocks.request).not.toHaveBeenCalled()
+      expect(page.sessions.value).toEqual([])
+    } finally {
+      scope.stop()
+    }
+  })
+})
