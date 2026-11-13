@@ -798,24 +798,67 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
     check_teacher_role(current_user)
     
     students = db.query(models.User).filter(models.User.role == "student", models.User.id.in_(assigned_student_ids(db, current_user.id))).all()
+    if not students:
+        return []
+    student_ids = [s.id for s in students]
+    # Three batched lookups instead of four per student. The newest SDS/SAS result is
+    # ranked per student in one window query, and the pending-warning count and newest
+    # timestamp come from a single GROUP BY, so the per-row values are unchanged.
+    ranked_tests = (
+        db.query(
+            models.TestResult.user_id.label("user_id"),
+            models.TestResult.id.label("test_id"),
+            func.row_number().over(
+                partition_by=models.TestResult.user_id,
+                order_by=models.TestResult.created_at.desc(),
+            ).label("position"),
+        )
+        .filter(
+            models.TestResult.user_id.in_(student_ids),
+            models.TestResult.test_type.in_(["SDS", "SAS"]),
+        )
+        .subquery()
+    )
+    latest_tests = {
+        result.user_id: result
+        for result in (
+            db.query(models.TestResult)
+            .join(ranked_tests, ranked_tests.c.test_id == models.TestResult.id)
+            .filter(ranked_tests.c.position == 1)
+            .all()
+        )
+    }
+    profiles = {
+        profile.user_id: profile
+        for profile in db.query(models.StudentProfile).filter(models.StudentProfile.user_id.in_(student_ids)).all()
+    }
+    pending_crisis = {
+        student_id: (count, newest)
+        for student_id, count, newest in (
+            db.query(
+                models.CrisisWarning.student_id,
+                func.count(models.CrisisWarning.id),
+                func.max(models.CrisisWarning.created_at),
+            )
+            .filter(
+                models.CrisisWarning.student_id.in_(student_ids),
+                models.CrisisWarning.status == "pending",
+            )
+            .group_by(models.CrisisWarning.student_id)
+            .all()
+        )
+    }
+
     result = []
     for s in students:
         # A dialogue tag is not an independently measured clinical risk score.
         risk_level = None
-        latest_time = None
         score = None
-        latest_test = (db.query(models.TestResult).filter(models.TestResult.user_id == s.id,
-                       models.TestResult.test_type.in_(["SDS", "SAS"]))
-                       .order_by(models.TestResult.created_at.desc()).first())
+        latest_test = latest_tests.get(s.id)
         latest_time = latest_test.created_at if latest_test else None
-        
-        profile = db.query(models.StudentProfile).filter(models.StudentProfile.user_id == s.id).first()
-        pending_crisis_query = db.query(models.CrisisWarning).filter(
-            models.CrisisWarning.student_id == s.id,
-            models.CrisisWarning.status == "pending",
-        )
-        pending_crisis_count = pending_crisis_query.count()
-        latest_pending_warning = pending_crisis_query.order_by(models.CrisisWarning.created_at.desc()).first()
+
+        profile = profiles.get(s.id)
+        pending_crisis_count, latest_warning_at = pending_crisis.get(s.id, (0, None))
 
         result.append(schemas.TeacherStudentList(
             id=s.id,
@@ -831,7 +874,7 @@ def get_students(db: Session = Depends(get_db), current_user: models.User = Depe
             latest_test_score=score,
             has_pending_crisis=pending_crisis_count > 0,
             pending_crisis_count=pending_crisis_count,
-            latest_crisis_warning_at=latest_pending_warning.created_at if latest_pending_warning else None,
+            latest_crisis_warning_at=latest_warning_at,
         ))
     return result
 

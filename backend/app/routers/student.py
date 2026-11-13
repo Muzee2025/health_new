@@ -367,10 +367,22 @@ def create_appointment(app_data: schemas.AppointmentCreate, db: Session = Depend
 def get_appointments(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_student_role(current_user)
     appointments = db.query(models.Appointment).filter(models.Appointment.student_id == current_user.id).order_by(models.Appointment.created_at.desc()).all()
+    if not appointments:
+        return []
+    # Two batched lookups instead of two per appointment; the response shape is unchanged.
+    teacher_ids = {app.teacher_id for app in appointments}
+    teachers = {
+        teacher.id: teacher
+        for teacher in db.query(models.User).filter(models.User.id.in_(teacher_ids)).all()
+    }
+    profiles = {
+        profile.user_id: profile
+        for profile in db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id.in_(teacher_ids)).all()
+    }
     result = []
     for app in appointments:
-        teacher = db.query(models.User).filter(models.User.id == app.teacher_id).first()
-        profile = db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id == app.teacher_id).first()
+        teacher = teachers.get(app.teacher_id)
+        profile = profiles.get(app.teacher_id)
         result.append({
             "id": app.id,
             "time_slot": app.time_slot,
