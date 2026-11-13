@@ -1,27 +1,17 @@
-import hashlib
 import json
-import os
 import random
 import re
-import uuid
 from collections import Counter
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
+from datetime import datetime, timedelta
 from typing import List
 
 import bcrypt
-from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
-from fastapi.responses import FileResponse
-from pydantic import BaseModel, Field
-from sqlalchemy import exists, func, insert, literal, select, update
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from sqlalchemy import func, update
 from sqlalchemy.orm import Session, joinedload
 
 from app.security import validate_new_password
 from app.services.article_catalog import page_articles
-from app.services.crisis_pending_service import (
-    merge_pending_records,
-    paginate_rows,
-)
 from app.services.rag_service import (
     add_document_to_rag,
     delete_document_from_rag,
@@ -29,305 +19,111 @@ from app.services.rag_service import (
 )
 from app.student_access import assigned_student_ids, require_assigned_student
 from app.support_workflow import append_event, require_support_schema
-from app.upload_security import (
-    DOCUMENT_TYPES,
-    IMAGE_TYPES,
-    MAX_IMAGE_BYTES,
-    read_bounded_upload,
-    read_image_upload,
-    validate_document_content,
-    validate_image_content,
-)
-from app.utils.websocket_manager import manager
 
 from .. import models, schemas
 from ..database import get_db
 from .auth import get_current_user
+from .teacher_crisis import (
+    CrisisDecisionRequest as CrisisDecisionRequest,
+)
+from .teacher_crisis import (
+    CrisisReviewRequest as CrisisReviewRequest,
+)
+from .teacher_crisis import (
+    FollowUpCancel as FollowUpCancel,
+)
+from .teacher_crisis import (
+    FollowUpComplete as FollowUpComplete,
+)
+from .teacher_crisis import (
+    FollowUpCreate as FollowUpCreate,
+)
+from .teacher_crisis import (
+    _follow_up_dict as _follow_up_dict,
+)
+from .teacher_crisis import (
+    _serialize_real_warning_row as _serialize_real_warning_row,
+)
+from .teacher_crisis import (
+    _transition_follow_up as _transition_follow_up,
+)
+from .teacher_crisis import (
+    cancel_follow_up as cancel_follow_up,
+)
+from .teacher_crisis import (
+    complete_follow_up as complete_follow_up,
+)
+from .teacher_crisis import (
+    create_follow_up as create_follow_up,
+)
+from .teacher_crisis import (
+    follow_up_router as _teacher_follow_up_router,
+)
+from .teacher_crisis import (
+    get_crisis_review_history as get_crisis_review_history,
+)
+from .teacher_crisis import (
+    get_pending_crisis_records as get_pending_crisis_records,
+)
+from .teacher_crisis import (
+    list_follow_ups as list_follow_ups,
+)
+from .teacher_crisis import (
+    review_pending_crisis as review_pending_crisis,
+)
+from .teacher_crisis import (
+    router as _teacher_crisis_router,
+)
+from .teacher_media import (
+    ALLOWED_AVATAR_EXT as ALLOWED_AVATAR_EXT,
+)
+from .teacher_media import (
+    PICTURE_SOURCE_DIR as PICTURE_SOURCE_DIR,
+)
+from .teacher_media import (
+    TEACHER_AVATAR_DIR as TEACHER_AVATAR_DIR,
+)
+from .teacher_media import (
+    TEACHER_AVATAR_SUBDIR as TEACHER_AVATAR_SUBDIR,
+)
+from .teacher_media import (
+    AvatarFromPictureRequest as AvatarFromPictureRequest,
+)
+from .teacher_media import (
+    _article_document_directory as _article_document_directory,
+)
+from .teacher_media import (
+    _safe_remove_file as _safe_remove_file,
+)
+from .teacher_media import (
+    _upsert_teacher_avatar_content as _upsert_teacher_avatar_content,
+)
+from .teacher_media import (
+    download_article_document as download_article_document,
+)
+from .teacher_media import (
+    router as _teacher_media_router,
+)
+from .teacher_media import (
+    set_teacher_avatar_from_picture as set_teacher_avatar_from_picture,
+)
+from .teacher_media import (
+    upload_file as upload_file,
+)
+from .teacher_media import (
+    upload_teacher_avatar as upload_teacher_avatar,
+)
+from .teacher_shared import (
+    _build_avatar_url as _build_avatar_url,
+)
+from .teacher_shared import (
+    check_teacher_role as check_teacher_role,
+)
 
 router = APIRouter(prefix="/api/teacher", tags=["Teacher"])
-TEACHER_AVATAR_SUBDIR = "teacher_avatars"
-TEACHER_AVATAR_DIR = Path("uploads") / TEACHER_AVATAR_SUBDIR
-PICTURE_SOURCE_DIR = Path(r"D:\Muzee\develop\IDEA_code\health_new\picture")
-ALLOWED_AVATAR_EXT = set(IMAGE_TYPES)
 
 
-class CrisisReviewRequest(BaseModel):
-    recordId: str
-    action: str
-    reason: str = Field(min_length=1, max_length=2000)
-
-
-class CrisisDecisionRequest(BaseModel):
-    action: str
-    reason: str = Field(min_length=1, max_length=2000)
-
-
-class FollowUpCreate(BaseModel):
-    source_type: str
-    source_id: int
-    student_id: int
-    due_at: datetime
-    summary: str = Field(min_length=1, max_length=4000)
-
-
-class FollowUpComplete(BaseModel):
-    outcome: str = Field(min_length=1, max_length=4000)
-
-
-class FollowUpCancel(BaseModel):
-    reason: str = Field(min_length=1, max_length=2000)
-
-
-def _serialize_real_warning_row(db: Session, warning: models.CrisisWarning,
-                                message_content: str | None = None) -> dict:
-    # message_content is supplied by the batched caller; the per-row lookup below only
-    # runs when a caller passes nothing (single-record paths).
-    if message_content is not None:
-        msg_content = message_content
-    else:
-        msg_content = ""
-        if warning.chat_message_id:
-            msg = db.query(models.AIChatMessage).join(models.AIChatSession).filter(models.AIChatMessage.id == warning.chat_message_id, models.AIChatSession.user_id == warning.student_id).first()
-            if msg:
-                msg_content = msg.content or ""
-    return {
-        "id": f"real-{warning.id}",
-        "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
-        "studentId": str(warning.student.student_id or warning.student_id) if warning.student else str(warning.student_id),
-        "studentName": warning.student.name or warning.student.username if warning.student else "未知",
-        "className": warning.student.class_name if warning.student else "未知",
-        "riskLevel": warning.risk_level,
-        "description": msg_content or "未知",
-        "status": "pending" if warning.status == "pending" else "reviewed",
-        "highlight": True,
-    }
-
-def check_teacher_role(user: models.User):
-    if user.role != "teacher":
-        raise HTTPException(status_code=403, detail="Teacher role required")
-    return user
-
-
-def _build_avatar_url(request: Request | None, relative_path: str) -> str:
-    clean = (relative_path or "").replace("\\", "/").strip("/")
-    static_path = f"/static/{clean}"
-    if request is None:
-        return f"http://127.0.0.1:8000{static_path}"
-    return str(request.base_url).rstrip("/") + static_path
-
-
-def _safe_remove_file(path: Path):
-    try:
-        if path.exists() and path.is_file():
-            path.unlink()
-    except Exception:
-        # 文件清理失败不影响主流程
-        pass
-
-
-def _upsert_teacher_avatar_content(
-    *,
-    request: Request,
-    db: Session,
-    teacher_id: int,
-    content: bytes,
-    ext: str,
-):
-    image_hash = hashlib.sha256(content).hexdigest()
-    conflict = (
-        db.query(models.TeacherAvatar)
-        .filter(
-            models.TeacherAvatar.image_hash == image_hash,
-            models.TeacherAvatar.teacher_id != teacher_id,
-        )
-        .first()
-    )
-    if conflict:
-        raise HTTPException(status_code=409, detail="该头像已被其他教师使用，禁止共用图片")
-
-    TEACHER_AVATAR_DIR.mkdir(parents=True, exist_ok=True)
-    filename = f"teacher_{teacher_id}_{uuid.uuid4().hex}{ext}"
-    relative_path = f"{TEACHER_AVATAR_SUBDIR}/{filename}"
-    abs_path = Path("uploads") / relative_path
-
-    with abs_path.open("wb") as f:
-        f.write(content)
-
-    old_abs_path: Path | None = None
-    avatar = db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id == teacher_id).first()
-    if avatar:
-        old_abs_path = Path("uploads") / avatar.relative_path
-        avatar.file_name = filename
-        avatar.relative_path = relative_path
-        avatar.image_hash = image_hash
-        avatar.file_size = len(content)
-    else:
-        avatar = models.TeacherAvatar(
-            teacher_id=teacher_id,
-            file_name=filename,
-            relative_path=relative_path,
-            image_hash=image_hash,
-            file_size=len(content),
-        )
-        db.add(avatar)
-
-    profile = db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id == teacher_id).first()
-    avatar_url = _build_avatar_url(request, relative_path)
-    if profile:
-        profile.avatar = avatar_url
-    else:
-        db.add(models.TeacherProfile(user_id=teacher_id, avatar=avatar_url, time_slots="[]"))
-    try:
-        db.commit()
-    except Exception:
-        # The file was written before the row: roll it back so a failed commit cannot
-        # leave an unreferenced image on disk. Only the file written just above is
-        # removed; the previous avatar is untouched.
-        db.rollback()
-        _safe_remove_file(abs_path)
-        raise
-
-    if old_abs_path and old_abs_path != abs_path:
-        _safe_remove_file(old_abs_path)
-
-    return {
-        "message": "头像上传成功",
-        "teacher_id": teacher_id,
-        "avatar_url": avatar_url,
-        "relative_path": relative_path,
-        "image_hash": image_hash,
-        "file_size": len(content),
-    }
-
-
-@router.get("/crisis/pending")
-def get_pending_crisis_records(
-    page: int = 1,
-    pageSize: int = 20,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    check_teacher_role(current_user)
-    real_warnings = (
-        db.query(models.CrisisWarning)
-        .filter(models.CrisisWarning.status == "pending", models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
-        .options(joinedload(models.CrisisWarning.student))
-        .order_by(models.CrisisWarning.created_at.desc())
-        .all()
-    )
-    # One batched message lookup instead of one per warning row. Keyed by
-    # (message id, owning student): the same message can be named by two warnings, so a
-    # lookup keyed by message id alone would hand one student's message to the other.
-    # The warnings are joined rather than passed as an IN list: a pending-warning list has
-    # no upper bound, and SQLite rejects a statement once it binds more than 32766
-    # variables (SQLITE_LIMIT_VARIABLE_NUMBER), which a per-row loop never did.
-    pending_messages: dict[tuple[int, int], str] = {}
-    if real_warnings:
-        for message_id, content, owner in (
-            db.query(models.AIChatMessage.id, models.AIChatMessage.content,
-                     models.AIChatSession.user_id)
-            .join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id)
-            .join(models.CrisisWarning, models.CrisisWarning.chat_message_id == models.AIChatMessage.id)
-            .filter(models.CrisisWarning.status == "pending",
-                    models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
-            .all()
-        ):
-            pending_messages[(message_id, owner)] = content or ""
-    real_rows = [_serialize_real_warning_row(
-        db, warning,
-        (pending_messages.get((warning.chat_message_id, warning.student_id), "")
-         if warning.chat_message_id else ""),
-    ) for warning in real_warnings]
-    mock_rows = []  # Global synthetic records do not establish a trusted assignment.
-    merged_rows = merge_pending_records(mock_rows, real_rows)
-    data = paginate_rows(merged_rows, page=page, page_size=pageSize)
-    return {"status": "success", "data": data}
-
-
-@router.post("/crisis/review")
-async def review_pending_crisis(
-    payload: CrisisReviewRequest,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    check_teacher_role(current_user)
-    record_id = (payload.recordId or "").strip()
-    if not record_id:
-        raise HTTPException(status_code=400, detail="recordId is required")
-
-    if record_id.startswith("mock-"):
-        raise HTTPException(status_code=404, detail="Warning not found")
-
-    if not record_id.startswith("real-"):
-        raise HTTPException(status_code=400, detail="recordId must start with real- or mock-")
-
-    source_id = record_id.removeprefix("real-")
-    try:
-        warning_id = int(source_id)
-    except ValueError as exc:
-        raise HTTPException(status_code=400, detail="real record id must be integer") from exc
-
-    warning = db.query(models.CrisisWarning).filter(models.CrisisWarning.id == warning_id, models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).first()
-    if not warning:
-        raise HTTPException(status_code=404, detail="Warning not found")
-    if payload.action not in {"pass", "reject", "escalate"}:
-        raise HTTPException(status_code=422, detail="action must be pass, reject, or escalate")
-    reason = payload.reason.strip()
-    if not reason:
-        raise HTTPException(status_code=422, detail="reason is required")
-    require_support_schema(db)
-    result = db.execute(update(models.CrisisWarning)
-        .where(models.CrisisWarning.id == warning_id, models.CrisisWarning.status == "pending",
-            models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
-        .values(status="processed", processed_at=func.now(), processed_by=current_user.id))
-    if result.rowcount != 1:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Warning was already reviewed")
-    append_event(db, subject_type="crisis_warning", subject_id=warning_id,
-                 student_id=warning.student_id, actor_id=current_user.id,
-                 action=payload.action, reason=reason)
-    db.commit()
-    db.refresh(warning)
-    try:
-        await manager.send_personal_message({
-            "type": "warning_processed",
-            "data": {"warning_id": warning.id, "status": "processed",
-                     "message": "预警信息已由老师审阅"},
-        }, warning.student_id, "student")
-    except Exception:
-        # The durable review must remain successful when a live socket is absent.
-        pass
-    return {"status": "success", "data": {"recordId": record_id, "action": payload.action,
-        "reason": reason, "status": "processed", "reviewed_at": warning.processed_at,
-        "reviewed_by": current_user.name or current_user.username}}
-
-
-@router.get("/crisis/{warning_id}/reviews")
-def get_crisis_review_history(warning_id: int, db: Session = Depends(get_db),
-                              current_user: models.User = Depends(get_current_user)):
-    check_teacher_role(current_user)
-    require_support_schema(db)
-    warning = db.query(models.CrisisWarning).filter(
-        models.CrisisWarning.id == warning_id,
-        models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).first()
-    if warning is None:
-        raise HTTPException(status_code=404, detail="Warning not found")
-    events = (db.query(models.SupportWorkflowEvent)
-        .filter_by(subject_type="crisis_warning", subject_id=warning_id)
-        .order_by(models.SupportWorkflowEvent.id.asc()).all())
-    # One lookup for every actor the events name, instead of one query per event. The
-    # actor set is a subquery over the same events, not an IN list of the ids just
-    # collected: an event list has no upper bound, and SQLite rejects a statement once it
-    # binds more than 32766 variables, which the per-row loop never did.
-    actor_ids = db.query(models.SupportWorkflowEvent.actor_id).filter_by(
-        subject_type="crisis_warning", subject_id=warning_id)
-    actor_names = {
-        actor.id: (actor.name or actor.username)
-        for actor in db.query(models.User).filter(
-            models.User.id.in_(actor_ids.subquery().select())).all()
-    }
-    return {"status": "success", "data": [{"action": e.action, "reason": e.reason,
-        "reviewed_at": e.created_at, "reviewed_by": actor_names.get(e.actor_id)} for e in events]}
+router.routes.extend(_teacher_crisis_router.routes)
 
 
 def _support_actor_name(db: Session, actor_id: int | None):
@@ -444,232 +240,11 @@ def answer_assigned_question(question_id: int, payload: schemas.QuestionAnswer,
         "answered_by": current_user.name or current_user.username}}
 
 
-def _follow_up_dict(task: models.SupportFollowUp, db: Session):
-    def as_utc(value):
-        if value is None:
-            return None
-        normalized = value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value.astimezone(timezone.utc)
-        return normalized.isoformat().replace("+00:00", "Z")
-
-    return {"id": task.id, "source_type": task.source_type, "source_id": task.source_id,
-        "student_id": task.student_id, "due_at": as_utc(task.due_at), "summary": task.summary,
-        "status": task.status, "created_by": task.created_by, "created_at": as_utc(task.created_at),
-        "outcome": task.outcome, "completed_at": as_utc(task.completed_at),
-        "cancelled_at": as_utc(task.cancelled_at)}
+router.routes.extend(_teacher_follow_up_router.routes)
 
 
-@router.get("/follow-ups")
-def list_follow_ups(status: str | None = None, db: Session = Depends(get_db),
-                    current_user: models.User = Depends(get_current_user)):
-    check_teacher_role(current_user)
-    require_support_schema(db)
-    if status not in (None, "open", "completed", "cancelled"):
-        raise HTTPException(status_code=422, detail="Unsupported follow-up status")
-    query = db.query(models.SupportFollowUp).filter(
-        models.SupportFollowUp.created_by == current_user.id,
-        models.SupportFollowUp.student_id.in_(assigned_student_ids(db, current_user.id)))
-    if status:
-        query = query.filter(models.SupportFollowUp.status == status)
-    tasks = query.order_by(models.SupportFollowUp.due_at.asc()).all()
-    return {"status": "success", "data": [_follow_up_dict(t, db) for t in tasks]}
+router.routes.extend(_teacher_media_router.routes)
 
-
-@router.post("/follow-ups", status_code=201)
-def create_follow_up(payload: FollowUpCreate, db: Session = Depends(get_db),
-                     current_user: models.User = Depends(get_current_user)):
-    check_teacher_role(current_user)
-    require_support_schema(db)
-    student = require_assigned_student(db, current_user.id, payload.student_id)
-    source_type = payload.source_type.strip()
-    summary = payload.summary.strip()
-    if not summary:
-        raise HTTPException(status_code=422, detail="summary is required")
-    if payload.due_at.tzinfo is None or payload.due_at.utcoffset() is None:
-        raise HTTPException(status_code=422, detail="due_at must include a timezone offset")
-    due_at_utc = payload.due_at.astimezone(timezone.utc).replace(tzinfo=None)
-    if source_type == "question":
-        source = db.query(models.Question).filter_by(id=payload.source_id, user_id=student.id).first()
-    elif source_type == "crisis_warning":
-        source = db.query(models.CrisisWarning).filter_by(id=payload.source_id, student_id=student.id).first()
-    else:
-        raise HTTPException(status_code=422, detail="source_type must be question or crisis_warning")
-    if source is None:
-        raise HTTPException(status_code=404, detail="Source record not found")
-    assignment_exists = exists(select(1).select_from(models.TeacherStudentAssignment).where(
-        models.TeacherStudentAssignment.teacher_id == current_user.id,
-        models.TeacherStudentAssignment.student_id == student.id))
-    if source_type == "question":
-        source_exists = exists(select(1).select_from(models.Question).where(
-            models.Question.id == payload.source_id, models.Question.user_id == models.User.id))
-    else:
-        source_exists = exists(select(1).select_from(models.CrisisWarning).where(
-            models.CrisisWarning.id == payload.source_id, models.CrisisWarning.student_id == models.User.id))
-    statement = insert(models.SupportFollowUp).from_select(
-        ["source_type", "source_id", "student_id", "created_by", "due_at", "summary", "status"],
-        select(literal(source_type), literal(payload.source_id), models.User.id, literal(current_user.id),
-            literal(due_at_utc), literal(summary), literal("open")).where(
-                models.User.id == student.id, models.User.role == "student", assignment_exists, source_exists)
-    ).returning(models.SupportFollowUp.id)
-    task_id = db.execute(statement).scalar_one_or_none()
-    if task_id is None:
-        db.rollback()
-        raise HTTPException(status_code=404, detail="Student assignment or source record is no longer available")
-    task = db.get(models.SupportFollowUp, task_id)
-    db.add(models.SupportFollowUpEvent(follow_up_id=task_id, actor_id=current_user.id,
-        action="created", note=summary))
-    db.commit()
-    db.refresh(task)
-    return {"status": "success", "data": _follow_up_dict(task, db)}
-
-
-def _transition_follow_up(task_id: int, action: str, note: str, db: Session, current_user: models.User):
-    check_teacher_role(current_user)
-    require_support_schema(db)
-    task = db.query(models.SupportFollowUp).filter(
-        models.SupportFollowUp.id == task_id, models.SupportFollowUp.created_by == current_user.id,
-        models.SupportFollowUp.student_id.in_(assigned_student_ids(db, current_user.id))).first()
-    if task is None:
-        raise HTTPException(status_code=404, detail="Follow-up not found")
-    fields = {"status": action, "outcome": note,
-        "completed_at": func.now() if action == "completed" else None,
-        "cancelled_at": func.now() if action == "cancelled" else None}
-    result = db.execute(update(models.SupportFollowUp).where(
-        models.SupportFollowUp.id == task_id, models.SupportFollowUp.status == "open",
-        models.SupportFollowUp.created_by == current_user.id,
-        models.SupportFollowUp.student_id.in_(assigned_student_ids(db, current_user.id))).values(**fields))
-    if result.rowcount != 1:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="Follow-up is already closed")
-    db.add(models.SupportFollowUpEvent(follow_up_id=task_id, actor_id=current_user.id,
-        action=action, note=note))
-    db.commit()
-    db.refresh(task)
-    return {"status": "success", "data": _follow_up_dict(task, db)}
-
-
-@router.post("/follow-ups/{task_id}/complete")
-def complete_follow_up(task_id: int, payload: FollowUpComplete, db: Session = Depends(get_db),
-                        current_user: models.User = Depends(get_current_user)):
-    if not payload.outcome.strip():
-        raise HTTPException(status_code=422, detail="outcome is required")
-    return _transition_follow_up(task_id, "completed", payload.outcome.strip(), db, current_user)
-
-
-@router.post("/follow-ups/{task_id}/cancel")
-def cancel_follow_up(task_id: int, payload: FollowUpCancel, db: Session = Depends(get_db),
-                     current_user: models.User = Depends(get_current_user)):
-    if not payload.reason.strip():
-        raise HTTPException(status_code=422, detail="reason is required")
-    return _transition_follow_up(task_id, "cancelled", payload.reason.strip(), db, current_user)
-
-@router.post("/upload")
-async def upload_file(request: Request, file: UploadFile = File(...), current_user: models.User = Depends(get_current_user)):
-    check_teacher_role(current_user)
-    content = await read_bounded_upload(file)
-    requested_ext = Path(file.filename or "").suffix.lower()
-    is_document = requested_ext in DOCUMENT_TYPES
-    if is_document:
-        ext = validate_document_content(content, file.filename or "", file.content_type)
-        directory = _article_document_directory()
-    else:
-        ext = validate_image_content(content, file.filename or "", file.content_type)
-        directory = Path("uploads") / "public_images"
-        directory.mkdir(parents=True, exist_ok=True)
-        if directory.is_symlink():
-            raise HTTPException(status_code=503, detail="Upload storage is unavailable")
-    filename = f"{uuid.uuid4().hex}{ext}"
-    try:
-        with (directory / filename).open("xb") as stream:
-            stream.write(content)
-    except OSError:
-        raise HTTPException(status_code=503, detail="Upload storage is unavailable") from None
-    if is_document:
-        return {"url": str(request.url_for("download_article_document", filename=filename))}
-    return {"url": str(request.base_url).rstrip("/") + f"/static/public_images/{filename}"}
-
-
-def _article_document_directory() -> Path:
-    base = Path("uploads").resolve()
-    directory = base / "article_documents"
-    if directory.is_symlink():
-        raise HTTPException(status_code=503, detail="Document storage is unavailable")
-    directory.mkdir(parents=True, exist_ok=True)
-    if directory.resolve().parent != base:
-        raise HTTPException(status_code=503, detail="Document storage is unavailable")
-    return directory
-
-
-@router.get("/documents/{filename}")
-def download_article_document(filename: str, current_user: models.User = Depends(get_current_user)):
-    if current_user.role not in {"student", "teacher"}:
-        raise HTTPException(status_code=403, detail="Sign in to download this document")
-    if not re.fullmatch(r"[0-9a-f]{32}\.(?:pdf|docx)", filename):
-        raise HTTPException(status_code=404, detail="Document not found")
-    directory = _article_document_directory()
-    path = directory / filename
-    if path.is_symlink() or not path.is_file() or path.resolve().parent != directory.resolve():
-        raise HTTPException(status_code=404, detail="Document not found")
-    return FileResponse(path, media_type=DOCUMENT_TYPES[path.suffix], filename=f"document{path.suffix}",
-                        headers={"X-Content-Type-Options": "nosniff", "Content-Security-Policy": "sandbox; default-src 'none'", "Cache-Control": "private, no-store"})
-
-
-@router.post("/avatar")
-async def upload_teacher_avatar(
-    request: Request,
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    """
-    教师头像上传（严格一对一）：
-    1) teacher_id 在 teacher_avatars 唯一；
-    2) image_hash 全局唯一，禁止共用同一张图；
-    3) 上传新头像时自动删除旧头像文件并更新记录。
-    """
-    check_teacher_role(current_user)
-    content, ext = await read_image_upload(file)
-
-    return _upsert_teacher_avatar_content(
-        request=request,
-        db=db,
-        teacher_id=current_user.id,
-        content=content,
-        ext=ext,
-    )
-
-
-class AvatarFromPictureRequest(BaseModel):
-    filename: str
-
-
-@router.post("/avatar/from-picture")
-def set_teacher_avatar_from_picture(
-    payload: AvatarFromPictureRequest,
-    request: Request,
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    check_teacher_role(current_user)
-    filename = os.path.basename((payload.filename or "").strip())
-    if not filename:
-        raise HTTPException(status_code=400, detail="filename 不能为空")
-    source_path = PICTURE_SOURCE_DIR / filename
-    ext = source_path.suffix.lower()
-    if ext not in ALLOWED_AVATAR_EXT:
-        raise HTTPException(status_code=400, detail=f"仅支持 {sorted(ALLOWED_AVATAR_EXT)} 格式")
-    if not source_path.exists() or not source_path.is_file():
-        raise HTTPException(status_code=404, detail="指定图片不存在")
-    if source_path.stat().st_size > MAX_IMAGE_BYTES:
-        raise HTTPException(status_code=413, detail="Image must be at most 5 MiB")
-    content = source_path.read_bytes()
-    ext = validate_image_content(content, filename)
-    return _upsert_teacher_avatar_content(
-        request=request,
-        db=db,
-        teacher_id=current_user.id,
-        content=content,
-        ext=ext,
-    )
 
 @router.get("/dashboard/stats")
 def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
