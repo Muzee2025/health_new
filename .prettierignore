@@ -17,3 +17,14 @@ scripts/archive/
 # Intermediate document output
 *.tmp
 docs/**/*.bak
+
+# Deliberately out of Prettier's scope. These were never checked, and putting
+# them in would mean reformatting material that is not source:
+# - AGENTS.md is the team's operating rules (owner: Lead); reformatting it
+#   rewrites a document other people are editing, for no code benefit.
+# - prompts/ holds frozen prompt records whose exact line layout is the record.
+# - dashboard/ is a 2026-05 standalone prototype page, not part of the app build.
+# Listed here so `prettier --check .` reports the truth instead of staying red.
+AGENTS.md
+prompts/
+dashboard/

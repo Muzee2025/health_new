@@ -18,8 +18,8 @@
     "perf:check": "node scripts/check-frontend-loading.mjs",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{js,ts,vue,css}\" \"scripts/**/*.mjs\" \"public/sw.js\" \"vite.config.js\"",
-    "format:check": "prettier --check \"src/**/*.{js,ts,vue,css}\" \"scripts/**/*.mjs\" \"public/sw.js\" \"vite.config.js\""
+    "format": "prettier --write \"src/**/*.{js,ts,vue,css,json}\" \"scripts/**/*.mjs\" \"public/sw.js\" \"*.{js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,vue,css,json}\" \"scripts/**/*.mjs\" \"public/sw.js\" \"*.{js,json}\""
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
