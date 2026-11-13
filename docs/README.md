@@ -10,6 +10,8 @@
 
 新增[treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md)：上限修复（帖子集子查询化）通过，但并发取消收藏仍有 P2 回归（计数 2/2→0/0），修复 `f97ed0b` 改用 `json_each` 固定实际读出的帖子 id 集合、峰值参数恒 2；独立复验 52 项通过、父提交 1 项失败，回归测试 `ae5063c` 落仓（两个独立连接+`before_cursor_execute` 交错，基线 **229 passed/3 skipped**）。同批 N+1/无界 IN 系列共 **11 处**全清：P1 三处（61→3/52→6/13→4）、高频两处（41→3/81→4）、treehole（33000 过）、actor 两处（33000→恒 4）、questions、`get_teachers_profiles`（32767 崩→恒 1）。门禁 helper 精确率 2/3≈67%（treehole 真阳 1 + 误报 1），维持非阻断。
 
+新增[CI复现复核](test/CI复现复核_20261113.md)（v1.1，2026-11-14）：只读 GitHub Actions 证据确认原 run 42049558772 失败点为 frontend `assets:check`（SVG manifest HASH_MISMATCH），backend 全成功；当前 HEAD `9a81c48` 的 run 43464692028 全绿。
+
 新增[路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md)：固定 `e224cb6`/`1af1375` 复核——HTTP 修订 15 项独立检查通过（导入失败各模式 exit 1、真实 student/teacher 路由重排均被抓、99 对与基线一致），但「整个 app」仍有覆盖缺口：隔离进程内移除真实 `/api/ws`（WebSocket，`APIWebSocketRoute` 不在 `openapi()` 内）后 `--check` 仍 `IDENTICAL 99` exit 0，验收断言 1 failed；另更正方案中 `/api/advanced-ai` 实为 10 对（18 是 `app.routes` 条目数）。**v1.1（2026-11-14）**：`307368b` 补 WS 快照后独立复验 **20 passed exit 0**（18 独立 + 2 仓库，100 项 = 99 HTTP + 1 WS），真实移除 WS 与遍历器失明均被拒绝，路径前缀漂移也能抓，**路由门禁验收关闭**；嵌套挂载限制仍是后续拆分前提。P2 已关闭，不与路由门禁混算。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
@@ -138,6 +140,7 @@
 | [CI失败定位](test/CI失败定位_20261112.md) | 已定位并给出修法 | 失败在frontend第7步`assets:check`而非后端；根因为`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是CRLF版(2236B)、CI为LF版(2198B)；已在WSL ext4复现 |
 | [treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md) | 独立评审通过；P2 已修复落仓 | `f97ed0b` 修复并发取消收藏计数清零（52 项独立复验、父提交 1 项失败）；回归 `ae5063c` 落仓，基线 229 passed；上限与并发两结论以固定提交为准 |
 | [路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md) | 独立评审通过（v1.1） | `307368b` 补 WS 快照后 20 项独立复验通过（99 HTTP + 1 WS）；真实移除 WS 与遍历器失明均被拒绝；路由门禁验收关闭，P2 不混算 |
+| [CI复现复核](test/CI复现复核_20261113.md) | 复核通过（v1.1） | `4e7e611` 干净 LF 树 17/17 步 exit 0；2026-11-05 失败点定位为 frontend `assets:check`（非后端）；原 run 42049558772 为 SVG manifest HASH_MISMATCH、backend 全成功，当前 HEAD `9a81c48` run 43464692028 全绿（只读 GitHub Actions 证据）；未取到 CI 原始日志正文 |
 
 ## 运维、运营与申报交付
 
