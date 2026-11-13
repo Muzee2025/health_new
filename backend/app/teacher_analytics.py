@@ -50,15 +50,43 @@ def dashboard_payload(db: Session, teacher_id: int) -> dict:
 def audit_items(db: Session, teacher_id: int) -> list[dict]:
     warnings = (db.query(models.CrisisWarning).filter(models.CrisisWarning.student_id.in_(assigned_student_ids(db, teacher_id)))
                 .order_by(models.CrisisWarning.created_at.desc()).all())
+    if not warnings:
+        return []
+    # Two batched lookups instead of two per warning: the students behind the warnings,
+    # and the triggering messages (joined so a message from another student cannot leak).
+    students = {
+        student.id: student
+        for student in db.query(models.User).filter(
+            models.User.id.in_({warning.student_id for warning in warnings}),
+            models.User.role == "student",
+        ).all()
+    }
+    message_ids = {warning.chat_message_id for warning in warnings if warning.chat_message_id}
+    # message id -> (content, owning student). The owning student is fetched with the
+    # message so the same guard as before holds: a message is only shown when it
+    # belongs to the student the warning names.
+    message_rows = {}
+    if message_ids:
+        for message_id, content, owner in (
+            db.query(models.AIChatMessage.id, models.AIChatMessage.content, models.AIChatSession.user_id)
+            .join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id)
+            .filter(models.AIChatMessage.id.in_(message_ids))
+            .all()
+        ):
+            message_rows[message_id] = (content, owner)
+
     output = []
     for warning in warnings:
-        student = db.query(models.User).filter(models.User.id == warning.student_id, models.User.role == "student").first()
-        message = (db.query(models.AIChatMessage).join(models.AIChatSession)
-                   .filter(models.AIChatMessage.id == warning.chat_message_id, models.AIChatSession.user_id == warning.student_id).first()) if warning.chat_message_id else None
+        student = students.get(warning.student_id)
+        message_content = ""
+        if warning.chat_message_id:
+            row = message_rows.get(warning.chat_message_id)
+            if row is not None and row[1] == warning.student_id:
+                message_content = row[0]
         output.append({"chat_id": f"warning-{warning.id}", "warning_id": warning.id,
                        "student_info": {"id": student.id, "name": student.name or student.username,
                                         "student_id": student.student_id, "grade": student.class_name, "gender": None, "age": None},
-                       "trigger_msg": message.content if message else "", "ai_reply": "", "heatmap": [], "risk_radar": {},
+                       "trigger_msg": message_content, "ai_reply": "", "heatmap": [], "risk_radar": {},
                        "risk_type": warning.risk_level, "risk_score": None,
                        "abnormal_behavior_summary": warning.trigger_keyword, "status": warning.status,
                        "timestamp": warning.created_at.isoformat() if warning.created_at else None})

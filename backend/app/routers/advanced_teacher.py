@@ -11,7 +11,7 @@ from docx.shared import Inches, Pt
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from starlette.background import BackgroundTask
 
 from app import models
@@ -129,14 +129,28 @@ async def get_dashboard_metrics(db: Session = Depends(get_db), current_user: Use
 @router.get("/warnings")
 async def get_crisis_warnings(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     check_teacher_role(current_user)
-    warnings = db.query(CrisisWarning).filter(CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).order_by(CrisisWarning.created_at.desc()).all()
+    warnings = db.query(CrisisWarning).filter(CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id))).options(joinedload(CrisisWarning.student), joinedload(CrisisWarning.processor)).order_by(CrisisWarning.created_at.desc()).all()
+    # One batched lookup for every triggering message instead of one per warning.
+    # The join keeps the original guard: a message only counts when it belongs to the
+    # student the warning names.
+    message_ids = {w.chat_message_id for w in warnings if w.chat_message_id}
+    trigger_messages = {}
+    if message_ids:
+        for message_id, content, owner in (
+            db.query(AIChatMessage.id, AIChatMessage.content, AIChatSession.user_id)
+            .join(AIChatSession, AIChatSession.id == AIChatMessage.session_id)
+            .filter(AIChatMessage.id.in_(message_ids))
+            .all()
+        ):
+            trigger_messages[message_id] = (content, owner)
+
     res = []
     for w in warnings:
         msg_content = ""
         if w.chat_message_id:
-            msg = db.query(AIChatMessage).join(AIChatSession).filter(AIChatMessage.id == w.chat_message_id, AIChatSession.user_id == w.student_id).first()
-            if msg:
-                msg_content = msg.content
+            row = trigger_messages.get(w.chat_message_id)
+            if row is not None and row[1] == w.student_id:
+                msg_content = row[0]
         res.append({
             "id": w.id,
             "student_id": w.student_id,

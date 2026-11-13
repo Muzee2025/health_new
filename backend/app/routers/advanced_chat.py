@@ -497,17 +497,23 @@ def _build_historical_session_context(
 
     timeline_lines: List[str] = []
     context_blocks: List[str] = []
-    for session in sessions:
-        msgs = (
-            db.query(AIChatMessage)
-            .filter(
-                AIChatMessage.session_id == session.id,
-                AIChatMessage.role.in_(["user", "ai"]),
-            )
-            .order_by(AIChatMessage.created_at.asc())
-            .limit(max_messages_per_session)
-            .all()
+    # One query for every selected session's messages, grouped afterwards, instead of
+    # one query per session. The per-session cap and ordering are applied in Python so
+    # each session still contributes at most max_messages_per_session oldest-first rows.
+    messages_by_session: dict = {}
+    for message in (
+        db.query(AIChatMessage)
+        .filter(
+            AIChatMessage.session_id.in_([session.id for session in sessions]),
+            AIChatMessage.role.in_(["user", "ai"]),
         )
+        .order_by(AIChatMessage.created_at.asc())
+        .all()
+    ):
+        messages_by_session.setdefault(message.session_id, []).append(message)
+
+    for session in sessions:
+        msgs = messages_by_session.get(session.id, [])[:max_messages_per_session]
         highlights = _build_session_message_highlights(msgs, user_message, max_items=4)
         timeline_lines.append(
             f"{_format_dt(session.updated_at)} | 会话《{(session.title or '新对话')[:30]}》 | 模式={session.mode} | session_id={session.id}"

@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, Upl
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import exists, func, insert, literal, select, update
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.security import validate_new_password
 from app.services.article_catalog import page_articles
@@ -78,12 +78,18 @@ class FollowUpCancel(BaseModel):
     reason: str = Field(min_length=1, max_length=2000)
 
 
-def _serialize_real_warning_row(db: Session, warning: models.CrisisWarning) -> dict:
-    msg_content = ""
-    if warning.chat_message_id:
-        msg = db.query(models.AIChatMessage).join(models.AIChatSession).filter(models.AIChatMessage.id == warning.chat_message_id, models.AIChatSession.user_id == warning.student_id).first()
-        if msg:
-            msg_content = msg.content or ""
+def _serialize_real_warning_row(db: Session, warning: models.CrisisWarning,
+                                message_content: str | None = None) -> dict:
+    # message_content is supplied by the batched caller; the per-row lookup below only
+    # runs when a caller passes nothing (single-record paths).
+    if message_content is not None:
+        msg_content = message_content
+    else:
+        msg_content = ""
+        if warning.chat_message_id:
+            msg = db.query(models.AIChatMessage).join(models.AIChatSession).filter(models.AIChatMessage.id == warning.chat_message_id, models.AIChatSession.user_id == warning.student_id).first()
+            if msg:
+                msg_content = msg.content or ""
     return {
         "id": f"real-{warning.id}",
         "createdAt": warning.created_at.strftime("%Y-%m-%d %H:%M:%S") if warning.created_at else None,
@@ -205,10 +211,29 @@ def get_pending_crisis_records(
     real_warnings = (
         db.query(models.CrisisWarning)
         .filter(models.CrisisWarning.status == "pending", models.CrisisWarning.student_id.in_(assigned_student_ids(db, current_user.id)))
+        .options(joinedload(models.CrisisWarning.student))
         .order_by(models.CrisisWarning.created_at.desc())
         .all()
     )
-    real_rows = [_serialize_real_warning_row(db, warning) for warning in real_warnings]
+    # One batched message lookup instead of one per warning row. Keyed by
+    # (message id, owning student): the same message can be named by two warnings, so a
+    # lookup keyed by message id alone would hand one student's message to the other.
+    pending_message_ids = {w.chat_message_id for w in real_warnings if w.chat_message_id}
+    pending_messages: dict[tuple[int, int], str] = {}
+    if pending_message_ids:
+        for message_id, content, owner in (
+            db.query(models.AIChatMessage.id, models.AIChatMessage.content,
+                     models.AIChatSession.user_id)
+            .join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id)
+            .filter(models.AIChatMessage.id.in_(pending_message_ids))
+            .all()
+        ):
+            pending_messages[(message_id, owner)] = content or ""
+    real_rows = [_serialize_real_warning_row(
+        db, warning,
+        (pending_messages.get((warning.chat_message_id, warning.student_id), "")
+         if warning.chat_message_id else ""),
+    ) for warning in real_warnings]
     mock_rows = []  # Global synthetic records do not establish a trusted assignment.
     merged_rows = merge_pending_records(mock_rows, real_rows)
     data = paginate_rows(merged_rows, page=page, page_size=pageSize)
@@ -303,21 +328,56 @@ def list_assigned_questions(status: str | None = None, db: Session = Depends(get
     if status not in (None, "pending", "answered"):
         raise HTTPException(status_code=422, detail="status must be pending or answered")
     query = (db.query(models.Question).join(models.User, models.User.id == models.Question.user_id)
-        .filter(models.Question.user_id.in_(assigned_student_ids(db, current_user.id))))
+        .filter(models.Question.user_id.in_(assigned_student_ids(db, current_user.id)))
+        .options(joinedload(models.Question.user)))
     if status:
         query = query.filter(models.Question.status == status)
     questions = query.order_by(models.Question.created_at.desc()).all()
+    if not questions:
+        return {"status": "success", "data": []}
+    # The newest answer event per question in one query, then one lookup for every
+    # actor named by those events: two statements instead of two per question.
+    ranked_events = (
+        db.query(
+            models.SupportWorkflowEvent.id.label("event_id"),
+            models.SupportWorkflowEvent.subject_id.label("subject_id"),
+            func.row_number().over(
+                partition_by=models.SupportWorkflowEvent.subject_id,
+                order_by=models.SupportWorkflowEvent.id.desc(),
+            ).label("position"),
+        )
+        .filter(
+            models.SupportWorkflowEvent.subject_type == "question",
+            models.SupportWorkflowEvent.subject_id.in_([question.id for question in questions]),
+            models.SupportWorkflowEvent.action == "answer",
+        )
+        .subquery()
+    )
+    events_by_question = {
+        event.subject_id: event
+        for event in (
+            db.query(models.SupportWorkflowEvent)
+            .join(ranked_events, ranked_events.c.event_id == models.SupportWorkflowEvent.id)
+            .filter(ranked_events.c.position == 1)
+            .all()
+        )
+    }
+    actor_ids = {event.actor_id for event in events_by_question.values() if event.actor_id}
+    actors = {
+        actor.id: actor
+        for actor in db.query(models.User).filter(models.User.id.in_(actor_ids)).all()
+    } if actor_ids else {}
+
     output = []
     for question in questions:
-        event = (db.query(models.SupportWorkflowEvent)
-            .filter_by(subject_type="question", subject_id=question.id, action="answer")
-            .order_by(models.SupportWorkflowEvent.id.desc()).first())
+        event = events_by_question.get(question.id)
+        actor = actors.get(event.actor_id) if event and event.actor_id else None
         output.append({"id": question.id, "student_id": question.user_id,
             "student_name": question.user.name or question.user.username,
             "question_text": question.question_text, "status": question.status,
             "created_at": question.created_at, "answer_text": question.answer_text,
             "answered_at": event.created_at if event else None,
-            "answered_by": _support_actor_name(db, event.actor_id) if event else None})
+            "answered_by": (actor.name or actor.username) if actor else None})
     return {"status": "success", "data": output}
 
 
@@ -953,12 +1013,13 @@ def get_student_detail(student_id: int, db: Session = Depends(get_db), current_u
     test_history = db.query(models.TestResult).filter(models.TestResult.user_id == student_id).order_by(models.TestResult.created_at.asc()).all()
     
     appointments = db.query(models.Appointment).filter(models.Appointment.student_id == student_id, models.Appointment.teacher_id == current_user.id).order_by(models.Appointment.created_at.desc()).all()
+    # Every row here is filtered to this teacher, so the name is already loaded on
+    # current_user; the per-row User lookup it replaced was always the same row.
     app_result = []
     for app in appointments:
-        t = db.query(models.User).filter(models.User.id == app.teacher_id).first()
         app_result.append({
             "id": app.id,
-            "teacher_name": t.name if t else "Unknown",
+            "teacher_name": current_user.name,
             "time_slot": app.time_slot,
             "status": app.status,
             "created_at": app.created_at
@@ -978,9 +1039,20 @@ def get_student_detail(student_id: int, db: Session = Depends(get_db), current_u
     
     # 获取脱敏聊天记录
     chat_sessions = db.query(models.AIChatSession).filter(models.AIChatSession.user_id == student_id).order_by(models.AIChatSession.created_at.desc()).limit(5).all()
+    # One query for all five sessions' messages, grouped afterwards, instead of one
+    # query per session. Ordering is kept per session exactly as before.
+    messages_by_session = {}
+    if chat_sessions:
+        for message in (
+            db.query(models.AIChatMessage)
+            .filter(models.AIChatMessage.session_id.in_([session.id for session in chat_sessions]))
+            .order_by(models.AIChatMessage.created_at.asc())
+            .all()
+        ):
+            messages_by_session.setdefault(message.session_id, []).append(message)
     desensitized_chats = []
     for session in chat_sessions:
-        msgs = db.query(models.AIChatMessage).filter(models.AIChatMessage.session_id == session.id).order_by(models.AIChatMessage.created_at.asc()).all()
+        msgs = messages_by_session.get(session.id, [])
         session_msgs = []
         for m in msgs:
             # 简单脱敏处理：替换可能的名字/数字（这里只是模拟，实际应调用更复杂的NER模型脱敏）
@@ -1044,10 +1116,18 @@ def add_intervention(record: schemas.InterventionRecordCreate, db: Session = Dep
 def get_interventions(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_teacher_role(current_user)
     records = db.query(models.InterventionRecord).filter(models.InterventionRecord.teacher_id == current_user.id, models.InterventionRecord.student_id.in_(assigned_student_ids(db, current_user.id))).order_by(models.InterventionRecord.created_at.desc()).all()
+    if not records:
+        return []
+    # Two batched lookups instead of two per record.
+    user_ids = {r.student_id for r in records} | {r.teacher_id for r in records}
+    users = {
+        user.id: user
+        for user in db.query(models.User).filter(models.User.id.in_(user_ids)).all()
+    }
     result = []
     for r in records:
-        student = db.query(models.User).filter(models.User.id == r.student_id).first()
-        teacher = db.query(models.User).filter(models.User.id == r.teacher_id).first()
+        student = users.get(r.student_id)
+        teacher = users.get(r.teacher_id)
         result.append({
             "id": r.id,
             "student_name": student.name if student else "Unknown",
@@ -1156,10 +1236,22 @@ def get_teachers_profiles(
 ):
     check_teacher_role(current_user)
     teachers = db.query(models.User).filter(models.User.role == "teacher").all()
+    if not teachers:
+        return []
+    # Two batched lookups instead of two per teacher.
+    teacher_ids = [t.id for t in teachers]
+    profiles = {
+        profile.user_id: profile
+        for profile in db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id.in_(teacher_ids)).all()
+    }
+    avatars = {
+        avatar.teacher_id: avatar
+        for avatar in db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id.in_(teacher_ids)).all()
+    }
     result = []
     for t in teachers:
-        profile = db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id == t.id).first()
-        avatar = db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id == t.id).first()
+        profile = profiles.get(t.id)
+        avatar = avatars.get(t.id)
         result.append({
             "user_id": t.id,
             "username": t.username,

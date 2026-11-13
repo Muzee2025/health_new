@@ -1316,14 +1316,48 @@ def get_questions(db: Session = Depends(get_db), current_user: models.User = Dep
     teacher_count = len(assigned_teacher_ids(db, current_user.id))
     questions = db.query(models.Question).filter(models.Question.user_id == current_user.id).order_by(models.Question.created_at.desc()).all()
     has_events = "support_workflow_events" in inspect(db.get_bind()).get_table_names()
+    if questions and has_events:
+        # The newest answer event per question in one query, plus one lookup for every
+        # actor it names, instead of two statements per question.
+        ranked_events = (
+            db.query(
+                models.SupportWorkflowEvent.id.label("event_id"),
+                models.SupportWorkflowEvent.subject_id.label("subject_id"),
+                func.row_number().over(
+                    partition_by=models.SupportWorkflowEvent.subject_id,
+                    order_by=models.SupportWorkflowEvent.id.desc(),
+                ).label("position"),
+            )
+            .filter(
+                models.SupportWorkflowEvent.subject_type == "question",
+                models.SupportWorkflowEvent.subject_id.in_([question.id for question in questions]),
+                models.SupportWorkflowEvent.action == "answer",
+            )
+            .subquery()
+        )
+        events_by_question = {
+            event.subject_id: event
+            for event in (
+                db.query(models.SupportWorkflowEvent)
+                .join(ranked_events, ranked_events.c.event_id == models.SupportWorkflowEvent.id)
+                .filter(ranked_events.c.position == 1)
+                .all()
+            )
+        }
+        actor_ids = {event.actor_id for event in events_by_question.values() if event.actor_id}
+        actors = {
+            actor.id: actor
+            for actor in db.query(models.User).filter(models.User.id.in_(actor_ids)).all()
+        } if actor_ids else {}
+    else:
+        events_by_question = {}
+        actors = {}
     output = []
     for question in questions:
         event = None
         if has_events and question.answer_text:
-            event = (db.query(models.SupportWorkflowEvent)
-                .filter_by(subject_type="question", subject_id=question.id, action="answer")
-                .order_by(models.SupportWorkflowEvent.id.desc()).first())
-        actor = db.query(models.User).filter_by(id=event.actor_id).first() if event and event.actor_id else None
+            event = events_by_question.get(question.id)
+        actor = actors.get(event.actor_id) if event and event.actor_id else None
         output.append({"id": question.id, "user_id": question.user_id, "question_text": question.question_text,
             "answer_text": question.answer_text, "status": question.status, "created_at": question.created_at,
             "response_state": "answered" if question.answer_text else ("pending" if teacher_count else "unassigned"),
