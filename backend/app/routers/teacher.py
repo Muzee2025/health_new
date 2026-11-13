@@ -582,64 +582,82 @@ def set_teacher_avatar_from_picture(
 def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
     check_teacher_role(current_user)
     
-    total_students = db.query(models.User).filter(models.User.role == "student", models.User.id.in_(assigned_student_ids(db, current_user.id))).count()
-    
     # Risk distribution based on AI Chat sessions
     students = db.query(models.User).filter(models.User.role == "student", models.User.id.in_(assigned_student_ids(db, current_user.id))).all()
+    total_students = len(students)
     risk_dist = {"green": 0, "yellow": 0, "red": 0, "untested": 0}
     high_risk_count = 0
     warnings = []
-    
+
+    # One statement for the whole roster: rank each student's tagged AI replies and keep
+    # the newest five. This replaces two queries per student and keeps the original
+    # per-student "latest 5 messages" window exactly (window functions need SQLite 3.25+).
+    ranked_messages = (
+        db.query(
+            models.AIChatSession.user_id.label("user_id"),
+            models.AIChatMessage.id.label("message_id"),
+            func.row_number().over(
+                partition_by=models.AIChatSession.user_id,
+                order_by=models.AIChatMessage.created_at.desc(),
+            ).label("position"),
+        )
+        .join(models.AIChatSession, models.AIChatSession.id == models.AIChatMessage.session_id)
+        .filter(
+            models.AIChatSession.user_id.in_(assigned_student_ids(db, current_user.id)),
+            models.AIChatMessage.role == "ai",
+            models.AIChatMessage.emotion_tags.is_not(None),
+        )
+        .subquery()
+    )
+    messages_by_student = {}
+    latest_rows = (
+        db.query(models.AIChatMessage, ranked_messages.c.user_id)
+        .join(ranked_messages, ranked_messages.c.message_id == models.AIChatMessage.id)
+        .filter(ranked_messages.c.position <= 5)
+        .all()
+    )
+    for message, student_id in latest_rows:
+        messages_by_student.setdefault(student_id, []).append(message)
+
     for s in students:
-        # Get latest chat messages for the student
-        latest_sessions = db.query(models.AIChatSession).filter(models.AIChatSession.user_id == s.id).all()
-        if latest_sessions:
-            session_ids = [session.id for session in latest_sessions]
-            latest_ai_msgs = db.query(models.AIChatMessage).filter(
-                models.AIChatMessage.session_id.in_(session_ids),
-                models.AIChatMessage.role == "ai",
-                models.AIChatMessage.emotion_tags.is_not(None)
-            ).order_by(models.AIChatMessage.created_at.desc()).limit(5).all()
-            
-            if latest_ai_msgs:
-                # Calculate average stress from recent messages
-                stress_sum = 0
-                count = 0
-                has_crisis = False
-                for msg in latest_ai_msgs:
-                    if msg.is_crisis:
-                        has_crisis = True
-                    try:
-                        tags = json.loads(msg.emotion_tags)
-                        stress_sum += (tags.get("sadness", 0) + tags.get("fear", 0) + tags.get("anger", 0)) / 3
-                        count += 1
-                    except Exception:
-                        # emotion_tags is a free-text JSON column: legacy rows may hold a
-                        # list or null, so tags.get() can raise AttributeError as well as
-                        # json.loads raising TypeError/ValueError. Skip such rows.
-                        pass
-                
-                avg_stress = stress_sum / count if count > 0 else 0
-                
-                if has_crisis or avg_stress > 0.7:
-                    risk_dist["red"] += 1
-                    high_risk_count += 1
-                    warnings.append({
-                        "id": s.id,
-                        "student_id": s.student_id,
-                        "name": s.name,
-                        "score": round(avg_stress * 100),
-                        "risk_level": "red"
-                    })
-                elif avg_stress > 0.4:
-                    risk_dist["yellow"] += 1
-                else:
-                    risk_dist["green"] += 1
+        latest_ai_msgs = messages_by_student.get(s.id, [])
+        if latest_ai_msgs:
+            # Calculate average stress from recent messages
+            stress_sum = 0
+            count = 0
+            has_crisis = False
+            for msg in latest_ai_msgs:
+                if msg.is_crisis:
+                    has_crisis = True
+                try:
+                    tags = json.loads(msg.emotion_tags)
+                    stress_sum += (tags.get("sadness", 0) + tags.get("fear", 0) + tags.get("anger", 0)) / 3
+                    count += 1
+                except Exception:
+                    # emotion_tags is a free-text JSON column: legacy rows may hold a
+                    # list or null, so tags.get() can raise AttributeError as well as
+                    # json.loads raising TypeError/ValueError. Skip such rows.
+                    pass
+
+            avg_stress = stress_sum / count if count > 0 else 0
+
+            if has_crisis or avg_stress > 0.7:
+                risk_dist["red"] += 1
+                high_risk_count += 1
+                warnings.append({
+                    "id": s.id,
+                    "student_id": s.student_id,
+                    "name": s.name,
+                    "score": round(avg_stress * 100),
+                    "risk_level": "red"
+                })
+            elif avg_stress > 0.4:
+                risk_dist["yellow"] += 1
             else:
-                risk_dist["untested"] += 1
+                risk_dist["green"] += 1
         else:
             risk_dist["untested"] += 1
-            
+
     # Appointments stats
     today = datetime.now().date()
     today_str = today.strftime("%Y-%m-%d")
@@ -654,22 +672,29 @@ def get_dashboard_stats(db: Session = Depends(get_db), current_user: models.User
     ).count()
     
     emotion_trend = []
+    trend_start = datetime.combine(today - timedelta(days=6), datetime.min.time())
+    trend_end = datetime.combine(today, datetime.min.time()) + timedelta(days=1)
+    # One statement for the whole 7-day window; each message is bucketed by its own day
+    # so the per-day averages and sample counts stay identical to the per-day queries.
+    trend_messages = (db.query(models.AIChatMessage.created_at, models.AIChatMessage.emotion_tags)
+                      .join(models.AIChatSession)
+                      .filter(models.AIChatSession.user_id.in_(assigned_student_ids(db, current_user.id)),
+                              models.AIChatMessage.created_at >= trend_start,
+                              models.AIChatMessage.created_at < trend_end,
+                              models.AIChatMessage.role == "ai").all())
+    trend_values = {}
+    for created_at, emotion_tags in trend_messages:
+        day = created_at.date() if hasattr(created_at, "date") else created_at
+        try:
+            value = json.loads(emotion_tags or "{}").get("joy")
+        except (ValueError, TypeError):
+            continue
+        if isinstance(value, (int, float)) and 0 <= value <= 1:
+            trend_values.setdefault(day, []).append(value)
+
     for i in range(6, -1, -1):
         day = today - timedelta(days=i)
-        start_at = datetime.combine(day, datetime.min.time())
-        end_at = start_at + timedelta(days=1)
-        messages = (db.query(models.AIChatMessage).join(models.AIChatSession)
-                    .filter(models.AIChatSession.user_id.in_(assigned_student_ids(db, current_user.id)),
-                            models.AIChatMessage.created_at >= start_at, models.AIChatMessage.created_at < end_at,
-                            models.AIChatMessage.role == "ai").all())
-        values = []
-        for message in messages:
-            try:
-                value = json.loads(message.emotion_tags or "{}").get("joy")
-                if isinstance(value, (int, float)) and 0 <= value <= 1:
-                    values.append(value)
-            except (ValueError, TypeError):
-                pass
+        values = trend_values.get(day, [])
         emotion_trend.append({"day": day.isoformat(), "score": round(sum(values) / len(values) * 100, 1) if values else None,
                               "sample_count": len(values)})
 
@@ -723,11 +748,25 @@ def get_appointments(
     
     # An ordinary teacher may only view their own appointments.
     appointments = db.query(models.Appointment).filter(models.Appointment.teacher_id == current_user.id, models.Appointment.student_id.in_(assigned_student_ids(db, current_user.id))).order_by(models.Appointment.created_at.desc()).all()
+    if not appointments:
+        return []
+    # Prefetch the related rows in three statements instead of three per appointment.
+    # The response shape is unchanged; only the lookup strategy differs.
+    student_ids = {app.student_id for app in appointments}
+    teacher_ids = {app.teacher_id for app in appointments}
+    users = {
+        user.id: user
+        for user in db.query(models.User).filter(models.User.id.in_(student_ids | teacher_ids)).all()
+    }
+    avatars = {
+        avatar.teacher_id: avatar
+        for avatar in db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id.in_(teacher_ids)).all()
+    }
     result = []
     for app in appointments:
-        student = db.query(models.User).filter(models.User.id == app.student_id).first()
-        teacher = db.query(models.User).filter(models.User.id == app.teacher_id).first()
-        teacher_avatar = db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id == app.teacher_id).first()
+        student = users.get(app.student_id)
+        teacher = users.get(app.teacher_id)
+        teacher_avatar = avatars.get(app.teacher_id)
         result.append({
             "id": app.id,
             "student_name": student.name if student else "Unknown",

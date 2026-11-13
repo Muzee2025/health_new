@@ -273,10 +273,34 @@ def get_treehole_by_word(
 def get_teachers(request: Request, db: Session = Depends(get_db), current_user: Optional[models.User] = Depends(get_optional_user)):
     bookable = assigned_teacher_ids(db, current_user.id) if current_user and current_user.role == "student" else set()
     teachers = db.query(models.User).filter(models.User.role == "teacher").all()
+    if not teachers:
+        return []
+    # Three batched lookups instead of three per teacher. Only non-cancelled bookings
+    # count as taken, exactly as before; the response shape is unchanged.
+    teacher_ids = [t.id for t in teachers]
+    profiles = {
+        profile.user_id: profile
+        for profile in db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id.in_(teacher_ids)).all()
+    }
+    avatar_rows = {
+        avatar.teacher_id: avatar
+        for avatar in db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id.in_(teacher_ids)).all()
+    }
+    booked_by_teacher = {}
+    for teacher_id, time_slot in (
+        db.query(models.Appointment.teacher_id, models.Appointment.time_slot)
+        .filter(
+            models.Appointment.teacher_id.in_(teacher_ids),
+            models.Appointment.status != "cancelled",
+        )
+        .all()
+    ):
+        booked_by_teacher.setdefault(teacher_id, []).append(time_slot)
+
     result = []
     for t in teachers:
-        profile = db.query(models.TeacherProfile).filter(models.TeacherProfile.user_id == t.id).first()
-        avatar_row = db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id == t.id).first()
+        profile = profiles.get(t.id)
+        avatar_row = avatar_rows.get(t.id)
         time_slots = []
         if profile and profile.time_slots:
             try:
@@ -286,11 +310,7 @@ def get_teachers(request: Request, db: Session = Depends(get_db), current_user: 
                 # nested value must not break the teacher list for the student.
                 pass
 
-        appointments = db.query(models.Appointment).filter(
-            models.Appointment.teacher_id == t.id,
-            models.Appointment.status != 'cancelled'
-        ).all()
-        booked_slots = [a.time_slot for a in appointments]
+        booked_slots = booked_by_teacher.get(t.id, [])
 
         avatar_url = ""
         if avatar_row and avatar_row.relative_path:
