@@ -40,7 +40,7 @@ class ZhipuEmohaaService:
 
                 self.client = ZhipuAiClient(api_key=api_key)
                 self.provider = "zai_sdk"
-            except Exception:  # noqa: BLE001
+            except Exception:
                 logger.warning("zai_sdk_unavailable_fallback_to_http")
 
     def _http_chat_completion(

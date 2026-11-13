@@ -11,8 +11,8 @@ from sqlalchemy.orm import sessionmaker
 if os.environ.get("HEALTH_TEST_ISOLATED") != "1":
     raise RuntimeError("Run through scripts/run-backend-baseline.py")
 
-from app.database import Base, get_db  # noqa: E402
-from app.routers.health import router  # noqa: E402
+from app.database import Base, get_db
+from app.routers.health import router
 
 
 def _test_app(db_dependency):

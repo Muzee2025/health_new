@@ -13,7 +13,7 @@ from sqlalchemy import create_engine, text
 if os.environ.get("HEALTH_TEST_ISOLATED") != "1":
     raise RuntimeError("Run through scripts/run-backend-baseline.py")
 
-from app.models import Base  # noqa: E402
+from app.models import Base
 
 ROOT = Path(__file__).resolve().parents[2]
 PREPARE = ROOT / "backend" / "scripts" / "prepare-local-database.py"

@@ -21,11 +21,11 @@ os.environ["JWT_SECRET_KEY"] = "W2-security-test-only-key-7f41a2d9c03e8b65"
 os.environ.setdefault("ACCESS_TOKEN_EXPIRE_MINUTES", "30")
 os.environ.setdefault("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173")
 
-from app import models  # noqa: E402
-from app.database import Base, get_db  # noqa: E402
-from app.main import app  # noqa: E402
-from app.security import login_guard  # noqa: E402
-from app.upload_body_limit import UPLOAD_PATHS, UPLOAD_REQUEST_LIMIT, UploadBodyLimitMiddleware  # noqa: E402
+from app import models
+from app.database import Base, get_db
+from app.main import app
+from app.security import login_guard
+from app.upload_body_limit import UPLOAD_PATHS, UPLOAD_REQUEST_LIMIT, UploadBodyLimitMiddleware
 
 TEST_KEY = os.environ["JWT_SECRET_KEY"]
 TOKEN_ISSUER = "health-new"

@@ -32,8 +32,13 @@ exclude = [
 # names. Everything here is a bug-class rule; the purely stylistic families
 # (C4, PIE810, RET, SIM, PLW, N, A, PERF) stay out on purpose — they were
 # measured at 8/4/8/31/37/30/5/8 findings and are not worth the churn.
-select = ["E4", "E7", "E9", "F", "I", "B", "B904", "RSE", "FURB"]
+select = ["E4", "E7", "E9", "F", "I", "B", "B904", "RSE", "FURB", "RUF100"]
 # B008: FastAPI declares dependencies as `Depends()` in argument defaults.
+# RUF100: a `noqa` that suppresses nothing is a lie in the source, and the 525
+# directives added across scripts/ are debt markers -- a stale one there claims
+# a rule is being violated when it is not. Enabling this is what keeps them
+# honest; the 15 that were already dead were removed (AST-identical, comments
+# only: 6 files, verified per file).
 ignore = ["B008"]
 
 [lint.per-file-ignores]
