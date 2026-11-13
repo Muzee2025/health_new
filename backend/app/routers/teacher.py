@@ -315,12 +315,17 @@ def get_crisis_review_history(warning_id: int, db: Session = Depends(get_db),
     events = (db.query(models.SupportWorkflowEvent)
         .filter_by(subject_type="crisis_warning", subject_id=warning_id)
         .order_by(models.SupportWorkflowEvent.id.asc()).all())
-    # One lookup for every actor the events name, instead of one query per event.
-    actor_ids = {event.actor_id for event in events if event.actor_id}
+    # One lookup for every actor the events name, instead of one query per event. The
+    # actor set is a subquery over the same events, not an IN list of the ids just
+    # collected: an event list has no upper bound, and SQLite rejects a statement once it
+    # binds more than 32766 variables, which the per-row loop never did.
+    actor_ids = db.query(models.SupportWorkflowEvent.actor_id).filter_by(
+        subject_type="crisis_warning", subject_id=warning_id)
     actor_names = {
         actor.id: (actor.name or actor.username)
-        for actor in db.query(models.User).filter(models.User.id.in_(actor_ids)).all()
-    } if actor_ids else {}
+        for actor in db.query(models.User).filter(
+            models.User.id.in_(actor_ids.subquery().select())).all()
+    }
     return {"status": "success", "data": [{"action": e.action, "reason": e.reason,
         "reviewed_at": e.created_at, "reviewed_by": actor_names.get(e.actor_id)} for e in events]}
 
@@ -380,11 +385,21 @@ def list_assigned_questions(status: str | None = None, db: Session = Depends(get
             .all()
         )
     }
-    actor_ids = {event.actor_id for event in events_by_question.values() if event.actor_id}
+    # The actors are referenced as a subquery over the same ranked events, not as an IN
+    # list of the ids just collected: a question list has no upper bound, and SQLite
+    # rejects a statement once it binds more than 32766 variables, which the per-row loop
+    # this batching replaced never did. The join keeps the same rows as the dict above,
+    # because it reads the same ranked events at position 1.
+    actor_ids = (
+        db.query(models.SupportWorkflowEvent.actor_id)
+        .join(ranked_events, ranked_events.c.event_id == models.SupportWorkflowEvent.id)
+        .filter(ranked_events.c.position == 1)
+    )
     actors = {
         actor.id: actor
-        for actor in db.query(models.User).filter(models.User.id.in_(actor_ids)).all()
-    } if actor_ids else {}
+        for actor in db.query(models.User).filter(
+            models.User.id.in_(actor_ids.subquery().select())).all()
+    }
 
     output = []
     for question in questions:
