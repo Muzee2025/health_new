@@ -1,9 +1,11 @@
 // Browser regression with synthetic identities only; no real API is contacted.
 import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
+const { playwright } = loadScriptDependencies(import.meta.url, ['playwright'])
+const { chromium } = playwright
 const require = createRequire(import.meta.url)
 const fs = require('fs')
 const assert = require('assert/strict')
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright')
 const base = process.env.BASELINE_BASE_URL || 'http://127.0.0.1:5173'
 assert(['127.0.0.1', 'localhost', '[::1]'].includes(new URL(base).hostname))
 ;(async () => {

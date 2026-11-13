@@ -1,10 +1,12 @@
 // Real HTTP/browser verification. Only synthetic accounts in a new private QA DB.
 import assert from 'node:assert/strict'
 import { readFile, mkdir, writeFile } from 'node:fs/promises'
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 import { resolve, relative, sep } from 'node:path'
-import { preview } from 'vite'
 
+const { playwright } = loadScriptDependencies(import.meta.url, ['playwright'])
+const { chromium } = playwright
+const { preview } = await import('vite')
 const args = Object.fromEntries(
   process.argv.slice(2).reduce((pairs, item, index, all) => {
     if (item.startsWith('--')) pairs.push([item.slice(2), all[index + 1]])
@@ -28,10 +30,6 @@ assert(
     accounts.users.every((user) => user.username.startsWith('qa-')),
   'Synthetic QA accounts required',
 )
-const require = createRequire(import.meta.url)
-const { chromium } = process.env.PLAYWRIGHT_MODULE_PATH
-  ? require(resolve(process.env.PLAYWRIGHT_MODULE_PATH))
-  : require('playwright')
 await mkdir(output, { recursive: false })
 const server = await preview({
   root,

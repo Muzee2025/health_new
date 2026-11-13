@@ -1,10 +1,11 @@
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 
-const require = createRequire(import.meta.url)
+const { playwright, sharp } = loadScriptDependencies(import.meta.url, ['playwright', 'sharp'])
+const { chromium } = playwright
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(scriptDir, '..')
 const outputDir = resolve(repoRoot, 'docs/design/screenshots/before')
@@ -24,15 +25,6 @@ const syntheticTeacher = {
   role: 'teacher',
   teacher_id: '演示编号-900002',
 }
-
-function loadModule(envName, packageName) {
-  const configured = process.env[envName]
-  if (configured) return require(resolve(configured))
-  return require(packageName)
-}
-
-const { chromium } = loadModule('PLAYWRIGHT_MODULE_PATH', 'playwright')
-const sharp = loadModule('SHARP_MODULE_PATH', 'sharp')
 
 const svgPlaceholder = Buffer.from(
   '<svg xmlns="http://www.w3.org/2000/svg" width="320" height="200" viewBox="0 0 320 200"><defs><linearGradient id="g"><stop stop-color="#dbeafe"/><stop offset="1" stop-color="#ede9fe"/></linearGradient></defs><rect width="320" height="200" rx="20" fill="url(#g)"/><circle cx="160" cy="75" r="32" fill="#93c5fd"/><path d="M92 178c8-40 34-58 68-58s60 18 68 58" fill="#c4b5fd"/><text x="160" y="194" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475569">合成演示素材</text></svg>',

@@ -1,11 +1,12 @@
 // W2 synthetic UI regression, derived from the preserved W1 baseline capture.
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 
-const require = createRequire(import.meta.url)
+const { playwright, sharp } = loadScriptDependencies(import.meta.url, ['playwright', 'sharp'])
+const { chromium } = playwright
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(scriptDir, '..')
 const outputDir = resolve(repoRoot, process.env.W2_UI_QA_OUTPUT || 'tmp/w2-ui-qa')
@@ -29,14 +30,6 @@ const syntheticTeacher = {
   teacher_id: '演示编号-900002',
 }
 
-function loadModule(envName, packageName) {
-  const configured = process.env[envName]
-  if (configured) return require(resolve(configured))
-  return require(packageName)
-}
-
-const { chromium } = loadModule('PLAYWRIGHT_MODULE_PATH', 'playwright')
-const sharp = loadModule('SHARP_MODULE_PATH', 'sharp')
 const experienceChecks =
   process.env.W2_UI_EXTENDED === '1'
     ? (await import('./frontend-experience-checks.mjs')).checkExperience

@@ -1,0 +1,218 @@
+{
+  "owner": "A",
+  "version": "1.2",
+  "status": "passed",
+  "generatedAt": "2026-11-13T01:39:58.865Z",
+  "task": "SCRIPT-DEPS-20261113",
+  "branch": "codex/application-delivery",
+  "baseCommit": "15d4a5ac8e5f18ea3cbf2271e92fe0fc85222fcc",
+  "node": "v24.14.0",
+  "checks": [
+    {
+      "command": "node --test scripts/tests/optional-script-dependencies.test.mjs",
+      "exitCode": 0,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "node --test scripts/tests/*.test.mjs",
+      "exitCode": 0,
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "filesPassed": 12,
+      "passed": 41
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run format:check",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run assets:check",
+      "exitCode": 0,
+      "coverage": "134/134",
+      "approved": 124,
+      "legacyUnverified": 10
+    },
+    {
+      "command": "npm run assets:source-check",
+      "exitCode": 0,
+      "scannedFiles": 63,
+      "errors": 0
+    },
+    {
+      "command": "node --check (helper, 9 scripts, test)",
+      "exitCode": 0,
+      "filesPassed": 11
+    },
+    {
+      "command": ".venv/Scripts/python.exe scripts/check-repo.py --json",
+      "exitCode": 0,
+      "trackedCount": 1395,
+      "scope": "existing tracked files; new paths inspected separately"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "realModulePreflight": [
+    {
+      "script": "scripts/capture-attachment-ui.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/capture-ui-baseline.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/capture-w2-ui.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/check-chart-gallery.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/check-client-isolation.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/check-content-experience.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/check-frontend-loading.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/export-application-diagrams.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    },
+    {
+      "script": "scripts/verify-interface-ai.mjs",
+      "args": [
+        "--check-deps"
+      ],
+      "exitCode": 0,
+      "ok": true
+    }
+  ],
+  "preflightConfiguration": {
+    "packagesAlreadyInstalled": true,
+    "environmentVariableNamesOnly": [
+      "PLAYWRIGHT_MODULE_PATH",
+      "SHARP_MODULE_PATH"
+    ],
+    "valuesRecorded": false,
+    "browserLaunched": false
+  },
+  "independentReview": {
+    "task": "DEP-REVIEW-20261113",
+    "role": "independent read-only reviewer",
+    "findingCount": 0,
+    "passed": 35,
+    "syntaxFilesPassed": 10,
+    "browserRun": false,
+    "codeWrittenByReviewer": false,
+    "conclusion": "no blockers; dependency-preflight technical item can close"
+  },
+  "sourceHashAlgorithm": "SHA-256 of UTF-8 text after CRLF-to-LF normalization",
+  "sourceHashes": {
+    "scripts/capture-attachment-ui.mjs": "a5a4ab702249ae53853a6ecafcbd1b478a1896d440b066c20ca5397885567ecf",
+    "scripts/capture-ui-baseline.mjs": "f36e8a4609b8cf857633c6e19305f96d51254540fc5f3cbf46ba3d2e188dc26b",
+    "scripts/capture-w2-ui.mjs": "79ed88bd76a98055442124c29467eea8d6bfd6b42a908b929aed4d40f4908637",
+    "scripts/check-chart-gallery.mjs": "d7a77d105b3f6e5a8a2ce099d9cac80a270e8cd4eab1daf6d6129072cbde116f",
+    "scripts/check-client-isolation.mjs": "c095366834e02e808d5abcc2460b1d6aff5edb3eefad3e548cad8df4c961b1d7",
+    "scripts/check-content-experience.mjs": "df1c4977567fe2cfe44a122c0b22d65410ef21f5e9ff612a48ca9dd920a7003f",
+    "scripts/check-frontend-loading.mjs": "4332c1b37d781dc62e43201bbaa3561c335e9285e81dad5c0e8002b122ac911f",
+    "scripts/export-application-diagrams.mjs": "323f3b5cc1de14285ce11dfed6fa3a6d592f942942c4fd001aa9484d1186e9fa",
+    "scripts/verify-interface-ai.mjs": "848b68381ad277922aff8f498600d2de35d2cb27eb38096e4cf1ee68b116a274",
+    "scripts/optional-script-dependencies.mjs": "f4dac418423e2fe9970c278c942df869da56fb7ca0746f60314464f21a82265c",
+    "scripts/tests/optional-script-dependencies.test.mjs": "a6042c43fb61f35342ed98b44d562a4d4fbbdf01a6de18a3aee3d65007776198",
+    ".github/workflows/offline-quality.yml": "31414141d59dc33ca6eddaf2a8028e820ece3b3c5a92a718c27b397c708bf031"
+  },
+  "boundaries": {
+    "packageManifestChanged": false,
+    "lockfileChanged": false,
+    "businessCodeChanged": false,
+    "originalDatabaseAccessed": false,
+    "originalEnvAccessed": false,
+    "browserCaptureRun": false,
+    "buildRun": false,
+    "remoteCiRun": false,
+    "gitCommitCreated": false,
+    "pushed": false
+  },
+  "closingAudit": {
+    "exitCode": 0,
+    "newFilesInspected": 5,
+    "newMarkdownMetadataLinksAndIndexVerified": 2,
+    "sourceHashesVerified": 12,
+    "protectedTrackedPathsChanged": 0,
+    "initialAuditFailure": {
+      "exitCode": 1,
+      "reason": "PowerShell stdin converted literal non-ASCII Python paths to question marks; Errno 22",
+      "resolution": "Enumerate UTF-8 paths from git instead; corrected audit passed"
+    }
+  },
+  "userAcceptance": {
+    "date": "2026-11-13",
+    "status": "code-quality-accepted",
+    "source": "冰仔（Lead）本地验收，结论已同步 Codex",
+    "acceptedBy": "冰仔（Lead）",
+    "statement": "冰仔（Lead）已本地验收任务 A 代码（11 个脚本 node --check 全过、35 项测试全过），结论已同步 Codex",
+    "checks": [
+      {
+        "command": "node --check",
+        "filesPassed": 11
+      },
+      {
+        "testCount": 35,
+        "allPassed": true
+      }
+    ],
+    "testsRerunForThisRegistration": false
+  }
+}

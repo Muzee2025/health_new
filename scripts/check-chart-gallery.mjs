@@ -1,4 +1,4 @@
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
@@ -6,9 +6,8 @@ import assert from 'node:assert/strict'
 import { fileURLToPath } from 'node:url'
 import { getChartDemoData } from '../docs/design/chart-demo-data.js'
 
-const require = createRequire(import.meta.url)
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright')
-const sharp = require(process.env.SHARP_MODULE_PATH || 'sharp')
+const { playwright, sharp } = loadScriptDependencies(import.meta.url, ['playwright', 'sharp'])
+const { chromium } = playwright
 const root = fileURLToPath(new URL('../', import.meta.url))
 const output = path.resolve(root, process.env.CHART_QA_OUTPUT || 'tmp/chart-gallery-qa')
 const origin = new URL(process.env.BASELINE_BASE_URL || 'http://127.0.0.1:5173').origin

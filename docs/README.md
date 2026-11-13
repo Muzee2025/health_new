@@ -1,6 +1,8 @@
 # 文档索引
 
-> owner: A ｜ version: 3.9 ｜ status: 工程规范与CI修复方案已登记 ｜ updated: 2026-11-12
+> owner: A ｜ version: 4.0 ｜ status: 浏览器脚本依赖预检交付已登记 ｜ updated: 2026-11-13
+
+新增[浏览器脚本依赖预检说明](ops/浏览器脚本依赖预检.md)、[验收](test/浏览器脚本依赖预检验收_20261113.md)与[机器证据](test/browser-script-dependency-verification-20261113.json)：9 个入口统一检测可选包、两处本机路径移除；新增 35 项隔离测试及 CI 步骤，独立复核无阻断。本机只执行依赖预检，未执行捕获/构建或触发远端 CI。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
 

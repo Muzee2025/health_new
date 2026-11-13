@@ -42,6 +42,9 @@ jobs:
       - run: npm run assets:check
       - run: npm run assets:source-test
       - run: npm run assets:source-check
+      # Runs copied scripts with stub modules; no browser, optional packages or
+      # capture/build output is used. --check-deps must stop before main work.
+      - run: node --test scripts/tests/optional-script-dependencies.test.mjs
 
   backend:
     runs-on: ubuntu-latest

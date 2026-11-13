@@ -2,11 +2,11 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import assert from 'node:assert/strict'
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 import { gzipSync } from 'node:zlib'
 
-const require = createRequire(import.meta.url)
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright')
+const { playwright } = loadScriptDependencies(import.meta.url, ['playwright'])
+const { chromium } = playwright
 const base = new URL(process.env.LOADING_BASE_URL || 'http://127.0.0.1:4185')
 assert.equal(base.hostname, '127.0.0.1', 'Use an isolated loopback compiled preview')
 const directory = path.resolve(process.env.LOADING_BUILD_DIR || 'tmp/frontend-audit')

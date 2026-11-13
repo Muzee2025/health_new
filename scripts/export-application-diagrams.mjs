@@ -2,13 +2,11 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { createRequire } from 'node:module'
-const require = createRequire(import.meta.url)
-const { chromium } = require(
-  process.env.CODEX_PLAYWRIGHT_PATH ||
-    'C:/Users/14012/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright',
-)
-const sharp = require('C:/Users/14012/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp')
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
+const { playwright, sharp } = loadScriptDependencies(import.meta.url, ['playwright', 'sharp'], {
+  playwrightAliases: ['CODEX_PLAYWRIGHT_PATH'],
+})
+const { chromium } = playwright
 const root = path.resolve(import.meta.dirname, '..')
 const output = path.join(root, 'tmp/ai-application-20261027/html-diagrams')
 await fs.mkdir(output, { recursive: true })

@@ -1,10 +1,11 @@
 import assert from 'node:assert/strict'
-import { createRequire } from 'node:module'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 import { dirname, resolve, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { mkdir, writeFile } from 'node:fs/promises'
 
-const require = createRequire(import.meta.url)
+const { playwright } = loadScriptDependencies(import.meta.url, ['playwright'])
+const { chromium } = playwright
 const scriptDir = dirname(fileURLToPath(import.meta.url))
 const repoRoot = resolve(scriptDir, '..')
 const baseUrl = process.env.CONTENT_BASE_URL || 'http://127.0.0.1:4198'
@@ -29,11 +30,6 @@ const syntheticTeacher = { id: 'qa-teacher-content-001', name: '合成教师', r
 const categories = ['情绪管理', '睡眠健康', '人际关系']
 const longTitle = `给忙碌的日常留出一点温柔的空间：${'从一个小小的呼吸练习开始，慢慢找回自己的节奏'.repeat(3)}`
 const pad = (value) => String(value).padStart(3, '0')
-
-function loadModule(envName, packageName) {
-  const configured = process.env[envName]
-  return configured ? require(resolve(configured)) : require(packageName)
-}
 
 function makeArticles() {
   return Array.from({ length: 26 }, (_, index) => {
@@ -71,7 +67,6 @@ function safeName(value) {
 
 async function main() {
   await mkdir(outputDir, { recursive: true })
-  const { chromium } = loadModule('PLAYWRIGHT_MODULE_PATH', 'playwright')
   const results = []
   const runErrors = []
   let browser

@@ -5,13 +5,12 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { createServer } from 'node:http'
 import { pathToFileURL } from 'node:url'
+import { loadScriptDependencies } from './optional-script-dependencies.mjs'
 
+const { playwright } = loadScriptDependencies(import.meta.url, ['playwright'])
+const { chromium } = playwright
 const root = process.cwd()
 const out = resolve(root, 'tmp/attachment-system-20261029')
-const bundle =
-  'C:/Users/14012/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules'
-const runtimeRequire = createRequire(resolve(bundle, '../package.json'))
-const { chromium } = runtimeRequire('playwright')
 const projectRequire = createRequire(resolve(root, 'package.json'))
 const { build } = await import(pathToFileURL(projectRequire.resolve('vite')).href)
 await mkdir(resolve(out, 'screens'), { recursive: true })
