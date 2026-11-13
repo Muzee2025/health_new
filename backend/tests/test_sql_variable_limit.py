@@ -179,12 +179,33 @@ def test_assigned_question_list_survives_a_tight_variable_limit(varlimit_context
 
 
 def test_student_question_list_survives_a_tight_variable_limit(varlimit_context):
-    """Same shape from the student side, over that student's own questions."""
+    """Same shape from the student side, over that student's own questions.
+
+    The actor lookup is what binds one variable per row here, so the seed has to
+    give each question an answer event naming a *different* actor. Without those
+    events the actor set is empty and the endpoint passes under any cap, which is
+    exactly the hole this test used to have: it asserted nothing about the list it
+    was written for.
+    """
     app, SessionLocal, engine, teacher_user, students = varlimit_context
     db = SessionLocal()
+    # One distinct answering teacher per question, so a materialised actor list
+    # holds STUDENT_COUNT entries rather than collapsing to a single id.
+    actors = [models.User(id=2000 + index, username=f"ans{index}", password_hash="x",
+                          role="teacher", name=f"答题老师{index}")
+              for index in range(STUDENT_COUNT)]
+    db.add_all(actors)
+    db.commit()
     for index in range(STUDENT_COUNT):
         db.add(models.Question(id=7100 + index, user_id=students[0].id,
-                              question_text=f"q{index}", status="answered"))
+                              question_text=f"q{index}", answer_text=f"a{index}",
+                              status="answered"))
+    db.flush()
+    for index in range(STUDENT_COUNT):
+        db.add(models.SupportWorkflowEvent(
+            subject_type="question", subject_id=7100 + index, student_id=students[0].id,
+            actor_id=actors[index].id, action="answer", result_text=f"a{index}",
+        ))
     db.commit()
     db.close()
 
@@ -193,6 +214,13 @@ def test_student_question_list_survives_a_tight_variable_limit(varlimit_context)
     with tight_variable_limit(engine):
         response = client.get("/api/student/questions")
     assert response.status_code == 200, response.text
+    # The events must actually reach the response, otherwise a fix that ignores
+    # actors altogether would satisfy the cap assertion above.
+    body = response.json()
+    assert len(body) == STUDENT_COUNT, len(body)
+    answerers = {item.get("answered_by") for item in body}
+    assert None not in answerers, answerers
+    assert len(answerers) > 1, answerers
 
 
 def test_audit_list_survives_a_tight_variable_limit(varlimit_context):
