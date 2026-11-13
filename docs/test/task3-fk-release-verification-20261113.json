@@ -1,0 +1,229 @@
+{
+  "owner": "A",
+  "version": "1.0",
+  "status": "A-pushed-B-investigated-C-awaiting-auth",
+  "generatedAt": "2026-11-13T01:53:57.512Z",
+  "taskA": {
+    "commit": "c742945",
+    "filesChanged": 19,
+    "insertions": 724,
+    "deletions": 58,
+    "commitMessageBom": false,
+    "pushExitCode": 0,
+    "pushDestination": "https://github.com/Muzee2025/health_new.git",
+    "pushBranch": "codex/application-delivery",
+    "remoteEqualsLocalAfterPush": true,
+    "implementationTestsRerunThisPhase": false
+  },
+  "taskB": {
+    "command": ".venv/Scripts/python.exe (isolated investigate-fk.py)",
+    "exitCode": 0,
+    "source": "backend/health.db",
+    "sourceMode": "mode=ro; query_only=ON; read transaction",
+    "users": {
+      "count": 8,
+      "min_id": 1,
+      "max_id": 8
+    },
+    "user101Exists": false,
+    "report8Sanitized": {
+      "id": 8,
+      "user_id": 101,
+      "report_date": "2026-04-20",
+      "risk_level": {
+        "redacted": true,
+        "type": "str",
+        "length": 3
+      },
+      "analysis_json": {
+        "redacted": true,
+        "type": "str",
+        "length": 2983
+      },
+      "created_at": "2026-04-20 14:00:00",
+      "updated_at": "2026-04-20 14:00:21"
+    },
+    "reportColumns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "user_id",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "report_date",
+        "type": "VARCHAR(20)",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "risk_level",
+        "type": "VARCHAR(20)",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "analysis_json",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "created_at",
+        "type": "DATETIME",
+        "notnull": 1,
+        "dflt_value": "CURRENT_TIMESTAMP",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "updated_at",
+        "type": "DATETIME",
+        "notnull": 1,
+        "dflt_value": "CURRENT_TIMESTAMP",
+        "pk": 0
+      }
+    ],
+    "sourceChecks": {
+      "foreign_key_check": [
+        [
+          "psychological_reports",
+          8,
+          "users",
+          0
+        ]
+      ],
+      "integrity_check": [
+        "ok"
+      ]
+    },
+    "substituteIdForSimulationOnly": 1,
+    "snapshot": "tmp/codex-task3-20261113-1794534501159/foreign-key-investigation/health-copy.db",
+    "cases": [
+      {
+        "foreign_key_check": [],
+        "integrity_check": [
+          "ok"
+        ],
+        "name": "a-delete",
+        "copy": "tmp/codex-task3-20261113-1794534501159/foreign-key-investigation/a-delete.db",
+        "foreignKeysEnabled": true,
+        "report8Exists": false,
+        "report8UserId": null,
+        "tableCountChanges": {
+          "psychological_reports": [
+            15,
+            14
+          ]
+        }
+      },
+      {
+        "foreign_key_check": [],
+        "integrity_check": [
+          "ok"
+        ],
+        "name": "b-reassign",
+        "copy": "tmp/codex-task3-20261113-1794534501159/foreign-key-investigation/b-reassign.db",
+        "foreignKeysEnabled": true,
+        "report8Exists": true,
+        "report8UserId": 1,
+        "tableCountChanges": {}
+      },
+      {
+        "foreign_key_check": [
+          [
+            "psychological_reports",
+            8,
+            "users",
+            0
+          ]
+        ],
+        "integrity_check": [
+          "ok"
+        ],
+        "name": "c-preserve",
+        "copy": "tmp/codex-task3-20261113-1794534501159/foreign-key-investigation/c-preserve.db",
+        "foreignKeysEnabled": true,
+        "report8Exists": true,
+        "report8UserId": 101,
+        "tableCountChanges": {}
+      }
+    ],
+    "protectedFilesBefore": {
+      "health.db": {
+        "bytes": 1761280,
+        "sha256": "4781d0e2184f9a5238263b6b4513492952b2771fd53af8d1e8bc683a7a490d6c"
+      }
+    },
+    "protectedFilesAfter": {
+      "health.db": {
+        "bytes": 1761280,
+        "sha256": "4781d0e2184f9a5238263b6b4513492952b2771fd53af8d1e8bc683a7a490d6c"
+      }
+    },
+    "protectedFilesUnchanged": true,
+    "recommendation": "preserve original historical row; do not delete or reassign without a separately established data-ownership decision"
+  },
+  "taskC": {
+    "ghAvailable": true,
+    "ghAuthStatus": {
+      "command": "gh auth status",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "You are not logged into any GitHub hosts. To log in, run: gh auth login"
+    },
+    "environmentVariablesPresent": {
+      "GH_TOKEN": false,
+      "GITHUB_TOKEN": false
+    },
+    "gitRemoteHead": {
+      "command": "git ls-remote origin HEAD",
+      "exitCode": 0,
+      "stdout": "a7e6f5a6d64d5a90fa01b2d2870c31724c8ea4fa\tHEAD",
+      "stderr": ""
+    },
+    "gitPushAlreadyVerifiedByTaskA": "c742945",
+    "browserLoginAttempted": false,
+    "softwareInstalled": false
+  },
+  "boundaries": {
+    "sourceDatabaseWritten": false,
+    "rawClinicalTextRecorded": false,
+    "riskValuesRecorded": false,
+    "tokenValuesRecorded": false,
+    "originalEnvAccessed": false,
+    "browserAutomationRun": false,
+    "softwareInstalled": false,
+    "releaseCreated": false,
+    "tagCreated": false,
+    "remoteCiResultVerified": false
+  },
+  "independentReview": {
+    "task": "TASK3-REVIEW",
+    "mode": "read-only review of documents, sanitized JSON, specified temporary scripts and static report-display code",
+    "blockers": 0,
+    "conclusion": "acceptable",
+    "databaseAccessed": false,
+    "configurationOrCredentialsAccessed": false,
+    "investigationRerun": false,
+    "browserOrBuildRun": false,
+    "filesWritten": false
+  }
+}

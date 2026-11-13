@@ -214,5 +214,14 @@
       }
     ],
     "testsRerunForThisRegistration": false
+  },
+  "evidenceCollectionScope": "Task A local implementation checks before publication; later publication recorded separately.",
+  "publication": {
+    "commit": "c742945",
+    "branch": "codex/application-delivery",
+    "pushed": true,
+    "remoteConfirmedEqualAfterFetch": true,
+    "commitMessageBom": false,
+    "remoteCiResultVerified": false
   }
 }
