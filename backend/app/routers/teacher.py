@@ -830,12 +830,25 @@ def get_appointments(
         return []
     # Prefetch the related rows in three statements instead of three per appointment.
     # The response shape is unchanged; only the lookup strategy differs.
-    student_ids = {app.student_id for app in appointments}
+    # The students are looked up through the appointments rather than passed as an IN
+    # list of the ids just collected: an appointment list has no upper bound, and SQLite
+    # rejects a statement once it binds more than 32766 variables, which the per-row
+    # loop never did. The subquery starts from the same filtered appointments, so the
+    # same rows come back. teacher_ids stays a plain IN list: every appointment above was
+    # filtered on teacher_id == current_user.id, so it is a single id.
     teacher_ids = {app.teacher_id for app in appointments}
+    appt_students = db.query(models.Appointment.student_id).filter(
+        models.Appointment.teacher_id == current_user.id,
+        models.Appointment.student_id.in_(assigned_student_ids(db, current_user.id)))
     users = {
         user.id: user
-        for user in db.query(models.User).filter(models.User.id.in_(student_ids | teacher_ids)).all()
+        for user in db.query(models.User).filter(
+            models.User.id.in_(appt_students.subquery().select())).all()
     }
+    users.update({
+        user.id: user
+        for user in db.query(models.User).filter(models.User.id.in_(teacher_ids)).all()
+    })
     avatars = {
         avatar.teacher_id: avatar
         for avatar in db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id.in_(teacher_ids)).all()
@@ -1144,12 +1157,24 @@ def get_interventions(db: Session = Depends(get_db), current_user: models.User =
     records = db.query(models.InterventionRecord).filter(models.InterventionRecord.teacher_id == current_user.id, models.InterventionRecord.student_id.in_(assigned_student_ids(db, current_user.id))).order_by(models.InterventionRecord.created_at.desc()).all()
     if not records:
         return []
-    # Two batched lookups instead of two per record.
-    user_ids = {r.student_id for r in records} | {r.teacher_id for r in records}
+    # Two batched lookups instead of two per record. The students come from a subquery
+    # over the same filtered records, not from an IN list of the ids just collected: a
+    # record list has no upper bound, and SQLite rejects a statement once it binds more
+    # than 32766 variables, which the per-row loop never did. teacher_ids stays a plain
+    # IN list: every record above was filtered on teacher_id == current_user.id.
+    teacher_ids = {r.teacher_id for r in records}
+    record_students = db.query(models.InterventionRecord.student_id).filter(
+        models.InterventionRecord.teacher_id == current_user.id,
+        models.InterventionRecord.student_id.in_(assigned_student_ids(db, current_user.id)))
     users = {
         user.id: user
-        for user in db.query(models.User).filter(models.User.id.in_(user_ids)).all()
+        for user in db.query(models.User).filter(
+            models.User.id.in_(record_students.subquery().select())).all()
     }
+    users.update({
+        user.id: user
+        for user in db.query(models.User).filter(models.User.id.in_(teacher_ids)).all()
+    })
     result = []
     for r in records:
         student = users.get(r.student_id)
