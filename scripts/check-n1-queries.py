@@ -354,6 +354,46 @@ def _comp_body(node):
     return [node.elt]
 
 
+def _guarded_by_param(func) -> set[str]:
+    """Parameters that guard a query in this helper: `if p is not None: ... query`.
+
+    A helper can make its query conditional on an argument the caller supplies,
+    which turns a per-row call into zero queries per row:
+
+        def _serialize(db, warning, message_content=None):
+            if message_content is not None:   # batched caller passes it
+                msg_content = message_content
+            else:
+                msg = db.query(...).first()    # single-record path only
+
+    The scanner cannot evaluate the branch, but it can see that the branch exists
+    and that it is keyed on a parameter. A caller that passes a value for that
+    parameter may be short-circuiting the query, so the finding is downgraded
+    rather than reported as a certain per-row query. Deciding it exactly needs
+    the runtime statement count, which a static AST scan cannot produce.
+    """
+    params = {a.arg for a in func.args.args}
+    guarded: set[str] = set()
+    for node in ast.walk(func):
+        if not isinstance(node, ast.If):
+            continue
+        names = {n.id for n in ast.walk(node.test) if isinstance(n, ast.Name)}
+        keyed = names & params
+        if not keyed:
+            continue
+        for branch in (node.body, node.orelse):
+            for sub in branch:
+                for inner in ast.walk(sub):
+                    if isinstance(inner, ast.Call) and isinstance(inner.func, ast.Attribute) \
+                            and inner.func.attr in TERMINALS:
+                        try:
+                            if '.query(' in ast.unparse(inner):
+                                guarded |= keyed
+                        except Exception:  # pragma: no cover
+                            pass
+    return guarded
+
+
 def _helper_queries(tree) -> dict[str, list[str]]:
     """Local functions that hit the database, keyed by name.
 
@@ -399,12 +439,44 @@ def _helper_queries(tree) -> dict[str, list[str]]:
     return helpers
 
 
-def _per_row_helper_calls(loop, helpers: dict[str, list[str]], self_name: str):
+def _helper_guards(tree) -> dict[str, tuple[list[str], set[str]]]:
+    """Map helper name -> (parameter order, parameters that guard its query)."""
+    guards: dict[str, tuple[list[str], set[str]]] = {}
+    for func in ast.walk(tree):
+        if isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            guarded = _guarded_by_param(func)
+            if guarded:
+                params = [a.arg for a in func.args.args]
+                guards[func.name] = (params, guarded)
+    return guards
+
+
+def _call_passes_guard(call, params: list[str], guarded: set[str]) -> bool:
+    """True when the call site supplies a value for a parameter that guards the query.
+
+    A default (`None`) is the "go query" path, so only an explicitly passed
+    positional or keyword argument counts: passing it is what lets the helper
+    skip the query. Positional arguments are mapped by index, because a guard on
+    the third parameter must not be considered fed by a call that passes only
+    the first two.
+    """
+    supplied = {params[i] for i in range(len(call.args)) if i < len(params)}
+    supplied |= {kw.arg for kw in call.keywords if kw.arg}
+    return bool(supplied & guarded)
+
+
+def _per_row_helper_calls(loop, helpers: dict[str, list[str]], self_name: str,
+                          guards: dict[str, set[str]] | None = None):
     """Calls to DB-touching local helpers from a per-row position.
 
     The comprehension's iterator is skipped for the same reason `_comp_body`
     exists: a helper called once to build the batch is not a per-row call.
+
+    A helper whose query is guarded by a parameter the caller supplies is
+    reported with `?` after the reason, meaning "may be short-circuited": the
+    scanner can see the branch but cannot evaluate it.
     """
+    guards = guards or {}
     parts: list = []
     if isinstance(loop, (ast.For, ast.AsyncFor)):
         parts = loop.body if isinstance(loop.body, list) else [loop.body]
@@ -419,7 +491,11 @@ def _per_row_helper_calls(loop, helpers: dict[str, list[str]], self_name: str):
             name = call.func.id
             if name == self_name or name not in helpers:
                 continue
-            yield call.lineno, name, helpers[name]
+            why = helpers[name]
+            entry = guards.get(name)
+            if entry and _call_passes_guard(call, *entry):
+                why = [*why, 'may be short-circuited by an argument']
+            yield call.lineno, name, why
 
 
 def scan_tree(root: Path):
@@ -443,6 +519,7 @@ def scan_tree(root: Path):
             print(f'!! parse error {path}: {exc}', file=sys.stderr)
             continue
         helpers = _helper_queries(tree)
+        guards = _helper_guards(tree)
         for func in ast.walk(tree):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
@@ -458,7 +535,7 @@ def scan_tree(root: Path):
                     for lineno, text in _lazy_loads_in(node, _eager_for_loop(node, eager_by_var, func_eager)):
                         yield (path, func.name, 'lazy', lineno, 1, text)
                     if not _is_range_loop(node):
-                        for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                        for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name, guards):
                             yield (path, func.name, 'helper', lineno, 1,
                                    f'{helper}() [{", ".join(why)}]')
                 elif isinstance(node, COMP_NODES):
@@ -466,7 +543,7 @@ def scan_tree(root: Path):
                     calls = _db_calls_in(_comp_body(node), qvars)
                     if calls:
                         yield (path, func.name, 'real', node.lineno, len(calls), calls[0][1])
-                    for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                    for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name, guards):
                         yield (path, func.name, 'helper', lineno, 1,
                                f'{helper}() [{", ".join(why)}]')
 
@@ -494,6 +571,7 @@ def scan_git(rev: str, root: Path):
         except SyntaxError:
             continue
         helpers = _helper_queries(tree)
+        guards = _helper_guards(tree)
         for func in ast.walk(tree):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
@@ -509,14 +587,14 @@ def scan_git(rev: str, root: Path):
                     for lineno, text in _lazy_loads_in(node, _eager_for_loop(node, eager_by_var, func_eager)):
                         yield (Path(name), func.name, 'lazy', lineno, 1, text)
                     if not _is_range_loop(node):
-                        for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                        for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name, guards):
                             yield (Path(name), func.name, 'helper', lineno, 1,
                                    f'{helper}() [{", ".join(why)}]')
                 elif isinstance(node, COMP_NODES):
                     calls = _db_calls_in(_comp_body(node), qvars)
                     if calls:
                         yield (Path(name), func.name, 'real', node.lineno, len(calls), calls[0][1])
-                    for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                    for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name, guards):
                         yield (Path(name), func.name, 'helper', lineno, 1,
                                f'{helper}() [{", ".join(why)}]')
 

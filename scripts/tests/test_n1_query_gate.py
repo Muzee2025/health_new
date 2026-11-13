@@ -370,6 +370,78 @@ class HelperCallTest(unittest.TestCase):
         ''')
         self.assertEqual(got, [])
 
+    # --- a query guarded by an argument may be short-circuited --------------
+    #
+    # `_serialize_real_warning_row` queries only on its single-record path:
+    #
+    #     if message_content is not None:   # batched caller passes it
+    #         ...
+    #     else:
+    #         db.query(...).first()
+    #
+    # The backend measured 3 / 20 / 60 warnings at a constant 3 statements, so
+    # reporting it as a certain per-row query would be a false positive. The
+    # scanner cannot evaluate the branch, but it can mark the finding.
+
+    def _why(self, src):
+        import ast
+        mod = self.mod
+        tree = ast.parse(textwrap.dedent(src))
+        helpers = mod._helper_queries(tree)
+        guards = mod._helper_guards(tree)
+        out = []
+        for func in ast.walk(tree):
+            if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            for node in ast.walk(func):
+                if isinstance(node, (ast.For, ast.AsyncFor)) or isinstance(node, mod.COMP_NODES):
+                    out.extend(why for _ln, _n, why
+                               in mod._per_row_helper_calls(node, helpers, func.name, guards))
+        return out
+
+    def test_guarded_query_with_argument_supplied_is_marked(self):
+        got = self._why('''
+            def _ser(db, warning, message_content=None):
+                if message_content is not None:
+                    text = message_content
+                else:
+                    text = db.query(Msg).first()
+                return text
+
+            def f(db, rows):
+                return [_ser(db, w, "") for w in rows]
+        ''')
+        self.assertEqual(len(got), 1)
+        self.assertIn('may be short-circuited by an argument', got[0])
+
+    def test_guarded_query_without_the_argument_stays_plain(self):
+        # Called with only the first two arguments, so the guard's parameter
+        # takes its None default and the query really runs per row.
+        got = self._why('''
+            def _ser(db, warning, message_content=None):
+                if message_content is not None:
+                    text = message_content
+                else:
+                    text = db.query(Msg).first()
+                return text
+
+            def f(db, rows):
+                return [_ser(db, w) for w in rows]
+        ''')
+        self.assertEqual(len(got), 1)
+        self.assertNotIn('may be short-circuited by an argument', got[0])
+
+    def test_unguarded_query_is_never_marked(self):
+        got = self._why('''
+            def _row(db, post):
+                return db.query(Like).filter(Like.post_id == post.id).count()
+
+            def f(db, rows):
+                return [_row(db, p) for p in rows]
+        ''')
+        self.assertEqual(len(got), 1)
+        self.assertNotIn('may be short-circuited by an argument', got[0])
+
     def test_retry_loop_is_not_treated_as_per_row(self):
         # `for attempt in range(3)` runs a fixed number of times, so the helper's
         # query does not scale with data. The scan skips range loops; this pins
