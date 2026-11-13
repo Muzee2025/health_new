@@ -1203,7 +1203,8 @@ def _treehole_id_scope(post_ids):
       query as a live subquery re-evaluated it per statement, so a concurrent
       unfavourite changed which ids the later aggregates saw: the post stayed in the
       response (it was already loaded) while its counts silently became 0. Passing the
-      ids that were actually loaded keeps one response internally consistent.
+      ids that were actually loaded keeps every aggregate looking at the same posts.
+      (The values themselves are still read per statement, not under one snapshot.)
     * The id set must not cost one bound variable per row. ``get_treehole_posts`` has
       no pagination, so it reads the whole table; a materialised ``IN (...)`` list
       raised "too many SQL variables" at 32766 posts. ``json_each`` binds the whole
@@ -1225,8 +1226,15 @@ def _get_treehole_responses(posts, user_id, db):
     count are flat.
 
     The post set is the ids of the posts actually loaded by the caller, bound through
-    ``_treehole_id_scope``: a fixed set (so one response cannot mix two database
-    states) that costs exactly one bound parameter at any size.
+    ``_treehole_id_scope``: the *same* post ids are used by every aggregate, and they
+    cost exactly one bound parameter at any size.
+
+    Scope of that guarantee: it fixes which posts the aggregates cover, so a post that
+    was loaded cannot lose its counts when a concurrent request changes the filter. It
+    does not open a read transaction, so the aggregate VALUES themselves are still read
+    per statement; a like or comment added between two statements is simply not counted
+    by the earlier one. Consistent per-post values under concurrent writes would need a
+    transaction or a single joined query, which this change deliberately does not add.
 
     The per-post values are unchanged: a post with no likes/comments/favourites still
     gets 0, and is_liked/is_favorited stay False when no user is given.

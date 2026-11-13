@@ -1,12 +1,14 @@
 # 文档索引
 
-> owner: A ｜ version: 4.1 ｜ status: 仓库可瘦身项盘点已登记 ｜ updated: 2026-11-13
+> owner: A ｜ version: 4.2 ｜ status: treehole 第9处评审与 N+1 系列收口已登记 ｜ updated: 2026-11-14
 
 新增[仓库可瘦身项盘点](ops/仓库可瘦身项盘点_20261113.md)：按 `-z` NUL 分隔精确清点为 **1404 文件 / 152.79 MiB**（此前 1369/150.8MB 与今日 1403 两个口径都少算了 2 个被中文路径编码吞掉的文件）。用 git blob SHA1 逐成员复核 9 个 ZIP，**更正旧结论「7 个 100% 重复」为「5 个 100% 可还原、合计 3.31 MiB」**：`高校两学期模拟库.zip` 与 `合成问答训练集.zip` 各含 1 个被 `.gitignore` 排除、不在库内的 sqlite，删 ZIP 会永久丢失。另实测 16 个 PPTX 的磁盘 mtime **全部是入库时间 `2026-11-12 22:16:52`、完全不可用于判版本**，改用 `docProps/core.xml` + 幻灯片文本 SHA 比对，发现 3 个 PPTX 文本完全相同（仅图片渲染数 88/46/7 不同）。全库 93 组字节级重复浪费 12.73 MiB。`docs/` 184 个 md 中 6 个未进索引，逐个核实后**仅 1 个真零引用**。含保守/激进两方案与 6 项待确认清单，**未删除、未移动、未提交任何文件**。
 
 新增[浏览器脚本依赖预检说明](ops/浏览器脚本依赖预检.md)、[验收](test/浏览器脚本依赖预检验收_20261113.md)与[机器证据](test/browser-script-dependency-verification-20261113.json)：9 个入口统一检测可选包、两处本机路径移除；新增 35 项隔离测试及 CI 步骤，独立复核无阻断。初次本地交付只执行依赖预检，未执行捕获/构建；后续推送与调查结果见下段。
 
 后续[任务 ABC 收尾验收](test/任务ABC收尾验收_20261113.md)与[机器记录](test/task3-fk-release-verification-20261113.json)：任务 A 更正 Lead 验收归属后，19 文件已提交推送为 `c742945`；B 完成原库只读/副本三方案比较，建议保留历史孤儿；C 核实 gh 未登录、token 变量均不存在，Release 前提仍待补。未修改原库或进行 Release 发布，远端 CI 结果未在本轮核验。
+
+新增[treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md)：上限修复（帖子集子查询化）通过，但并发取消收藏仍有 P2 回归（计数 2/2→0/0），修复 `f97ed0b` 改用 `json_each` 固定实际读出的帖子 id 集合、峰值参数恒 2；独立复验 52 项通过、父提交 1 项失败，回归测试 `ae5063c` 落仓（两个独立连接+`before_cursor_execute` 交错，基线 **229 passed/3 skipped**）。同批 N+1/无界 IN 系列共 **11 处**全清：P1 三处（61→3/52→6/13→4）、高频两处（41→3/81→4）、treehole（33000 过）、actor 两处（33000→恒 4）、questions、`get_teachers_profiles`（32767 崩→恒 1）。门禁 helper 精确率 2/3≈67%（treehole 真阳 1 + 误报 1），维持非阻断。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
 
@@ -132,6 +134,7 @@
 | [全栈隔离独立复核](test/全栈验收独立复核.md) | 部分通过；目标构建阻塞 | 工具/本机契约与缓存代理证据；固定目标容器未完成验收 |
 | [AI评测与试点方案](test/AI评测与试点方案.md) | 待专业/校内确认 | 12合成案例、失败分母、评分记录、提供商与试点前置；无真实效果结论 |
 | [CI失败定位](test/CI失败定位_20261112.md) | 已定位并给出修法 | 失败在frontend第7步`assets:check`而非后端；根因为`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是CRLF版(2236B)、CI为LF版(2198B)；已在WSL ext4复现 |
+| [treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md) | 独立评审通过；P2 已修复落仓 | `f97ed0b` 修复并发取消收藏计数清零（52 项独立复验、父提交 1 项失败）；回归 `ae5063c` 落仓，基线 229 passed；上限与并发两结论以固定提交为准 |
 
 ## 运维、运营与申报交付
 
