@@ -851,6 +851,9 @@ def get_appointments(
     # loop never did. The subquery starts from the same filtered appointments, so the
     # same rows come back. teacher_ids stays a plain IN list: every appointment above was
     # filtered on teacher_id == current_user.id, so it is a single id.
+    # Both halves stay in one query, joined with OR, so a user that is somehow in both
+    # sets is still read once, exactly as the single IN (student_ids | teacher_ids) did.
+    # Merging two separate lookups into a dict would silently let one row win.
     teacher_ids = {app.teacher_id for app in appointments}
     appt_students = db.query(models.Appointment.student_id).filter(
         models.Appointment.teacher_id == current_user.id,
@@ -858,12 +861,9 @@ def get_appointments(
     users = {
         user.id: user
         for user in db.query(models.User).filter(
-            models.User.id.in_(appt_students.subquery().select())).all()
+            models.User.id.in_(appt_students.subquery().select())
+            | models.User.id.in_(teacher_ids)).all()
     }
-    users.update({
-        user.id: user
-        for user in db.query(models.User).filter(models.User.id.in_(teacher_ids)).all()
-    })
     avatars = {
         avatar.teacher_id: avatar
         for avatar in db.query(models.TeacherAvatar).filter(models.TeacherAvatar.teacher_id.in_(teacher_ids)).all()
@@ -1177,6 +1177,8 @@ def get_interventions(db: Session = Depends(get_db), current_user: models.User =
     # record list has no upper bound, and SQLite rejects a statement once it binds more
     # than 32766 variables, which the per-row loop never did. teacher_ids stays a plain
     # IN list: every record above was filtered on teacher_id == current_user.id.
+    # Both halves stay in one query, joined with OR, so a user that is somehow in both
+    # sets is still read once, exactly as the single IN (student_ids | teacher_ids) did.
     teacher_ids = {r.teacher_id for r in records}
     record_students = db.query(models.InterventionRecord.student_id).filter(
         models.InterventionRecord.teacher_id == current_user.id,
@@ -1184,12 +1186,9 @@ def get_interventions(db: Session = Depends(get_db), current_user: models.User =
     users = {
         user.id: user
         for user in db.query(models.User).filter(
-            models.User.id.in_(record_students.subquery().select())).all()
+            models.User.id.in_(record_students.subquery().select())
+            | models.User.id.in_(teacher_ids)).all()
     }
-    users.update({
-        user.id: user
-        for user in db.query(models.User).filter(models.User.id.in_(teacher_ids)).all()
-    })
     result = []
     for r in records:
         student = users.get(r.student_id)
