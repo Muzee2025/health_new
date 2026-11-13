@@ -72,18 +72,17 @@
             </el-table-column>
           </el-table>
         </div>
-        <div v-if="!loadingArticles && !articleLoadError && total" class="pagination-wrapper">
-          <el-pagination
-            v-model:current-page="articlePage"
-            :page-size="articlePageSize"
-            :total="total"
-            :pager-count="5"
-            layout="total, prev, pager, next"
-            :hide-on-single-page="true"
-            aria-label="文章分页"
-            @current-change="scrollToArticles"
-          />
-        </div>
+        <PagedFooter
+          v-if="!loadingArticles && !articleLoadError && total"
+          v-model:current-page="articlePage"
+          :page-size="articlePageSize"
+          :total="total"
+          layout="total, prev, pager, next"
+          :hide-on-single-page="true"
+          align="center"
+          aria-label="文章分页"
+          @change="scrollToArticles"
+        />
       </el-tab-pane>
 
       <!-- Teacher Management Tab -->
@@ -264,10 +263,10 @@ import {
   ElAlert,
   ElSelect,
   ElOption,
-  ElPagination,
   vLoading,
 } from 'element-plus'
 import { useArticleCatalog } from '../../composables/useArticleCatalog'
+import PagedFooter from '../../components/PagedFooter.vue'
 
 const router = useRouter()
 const currentTeacherId = (() => {
@@ -551,12 +550,6 @@ onMounted(() => {
 .article-toolbar :deep(.el-select) {
   width: 180px;
 }
-.pagination-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 16px;
-}
-
 .help-text {
   font-size: 12px;
   color: var(--text-secondary);

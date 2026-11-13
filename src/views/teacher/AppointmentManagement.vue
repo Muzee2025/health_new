@@ -82,16 +82,12 @@
         </el-table>
       </div>
 
-      <div class="pagination-wrapper">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50]"
-          :pager-count="5"
-          layout="total, sizes, prev, pager, next"
-          :total="filteredData.length"
-        />
-      </div>
+      <PagedFooter
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="pageSizes"
+        :total="filteredData.length"
+      />
     </div>
   </div>
 </template>
@@ -99,6 +95,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import axios from 'axios'
+import PagedFooter from '../../components/PagedFooter.vue'
+import { usePagination } from '../../composables/usePagination'
 import {
   ElMessage,
   ElSelect,
@@ -111,7 +109,6 @@ import {
   ElIcon,
   ElDropdownMenu,
   ElDropdownItem,
-  ElPagination,
   ElAlert,
   vLoading,
 } from 'element-plus'
@@ -121,9 +118,6 @@ const loading = ref(false)
 const loadError = ref(false)
 const appointments = ref([])
 const filterStatus = ref('')
-
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const resolveTeacherAvatar = (row) => {
   const seed = row?.teacher_id ?? row?.teacher_name ?? row?.id ?? ''
@@ -177,11 +171,7 @@ const filteredData = computed(() => {
   })
 })
 
-const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  return filteredData.value.slice(start, start + pageSize.value)
-})
-
+const { currentPage, pageSize, pageSizes, paginatedData } = usePagination(filteredData)
 const normalizeStatus = (status) => (status === 'approved' ? 'confirmed' : status)
 const isConfirmed = (status) => normalizeStatus(status) === 'confirmed'
 
@@ -228,53 +218,12 @@ onMounted(() => {
   box-shadow: 0 2px 10px color-mix(in srgb, var(--gray-900) 2%, transparent);
 }
 
-.pagination-wrapper {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  min-width: 0;
-  width: 100%;
-}
 @media (max-width: 760px) {
   .filter-card {
     padding: 14px;
   }
   .filter-select {
     width: 100%;
-  }
-  .pagination-wrapper {
-    justify-content: flex-start;
-    overflow: visible;
-  }
-  .pagination-wrapper :deep(.el-pagination) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 8px 10px;
-    max-width: 100%;
-  }
-  .pagination-wrapper :deep(.el-pagination__total) {
-    order: 1;
-    margin-right: 0;
-  }
-  .pagination-wrapper :deep(.el-pagination__sizes) {
-    order: 2;
-    margin: 0;
-  }
-  .pagination-wrapper :deep(.el-pagination__sizes .el-select) {
-    width: 104px;
-  }
-  .pagination-wrapper :deep(.btn-prev) {
-    order: 3;
-    margin: 0;
-  }
-  .pagination-wrapper :deep(.el-pager) {
-    order: 4;
-    margin: 0;
-  }
-  .pagination-wrapper :deep(.btn-next) {
-    order: 5;
-    margin: 0;
   }
 }
 

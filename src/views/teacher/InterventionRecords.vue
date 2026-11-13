@@ -54,16 +54,12 @@
         </el-table>
       </div>
 
-      <div class="pagination-wrapper">
-        <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 50]"
-          :pager-count="5"
-          layout="total, sizes, prev, pager, next"
-          :total="filteredData.length"
-        />
-      </div>
+      <PagedFooter
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="pageSizes"
+        :total="filteredData.length"
+      />
     </div>
   </div>
 </template>
@@ -71,13 +67,14 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
+import PagedFooter from '../../components/PagedFooter.vue'
+import { usePagination } from '../../composables/usePagination'
 import {
   ElInput,
   ElIcon,
   ElDatePicker,
   ElTable,
   ElTableColumn,
-  ElPagination,
   ElAlert,
   ElButton,
   vLoading,
@@ -88,9 +85,6 @@ const loadError = ref(false)
 const records = ref([])
 const searchQuery = ref('')
 const dateRange = ref([])
-
-const currentPage = ref(1)
-const pageSize = ref(10)
 
 const fetchRecords = async () => {
   loading.value = true
@@ -126,10 +120,7 @@ const filteredData = computed(() => {
   })
 })
 
-const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value
-  return filteredData.value.slice(start, start + pageSize.value)
-})
+const { currentPage, pageSize, pageSizes, paginatedData } = usePagination(filteredData)
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -184,13 +175,6 @@ onUnmounted(() => {
   line-height: 1.5;
 }
 
-.pagination-wrapper {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  min-width: 0;
-  width: 100%;
-}
 @media (max-width: 760px) {
   .filter-card {
     align-items: stretch;
@@ -244,40 +228,6 @@ onUnmounted(() => {
   :global(.teacher-intervention-date-popper .el-date-range-picker__content.is-left) {
     border-right: 0;
     border-bottom: 1px solid var(--el-datepicker-inner-border-color);
-  }
-  .pagination-wrapper {
-    justify-content: flex-start;
-    overflow: visible;
-  }
-  .pagination-wrapper :deep(.el-pagination) {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 8px 10px;
-    max-width: 100%;
-  }
-  .pagination-wrapper :deep(.el-pagination__total) {
-    order: 1;
-    margin-right: 0;
-  }
-  .pagination-wrapper :deep(.el-pagination__sizes) {
-    order: 2;
-    margin: 0;
-  }
-  .pagination-wrapper :deep(.el-pagination__sizes .el-select) {
-    width: 104px;
-  }
-  .pagination-wrapper :deep(.btn-prev) {
-    order: 3;
-    margin: 0;
-  }
-  .pagination-wrapper :deep(.el-pager) {
-    order: 4;
-    margin: 0;
-  }
-  .pagination-wrapper :deep(.btn-next) {
-    order: 5;
-    margin: 0;
   }
 }
 </style>

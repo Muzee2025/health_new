@@ -97,18 +97,17 @@
           >清空筛选</el-button
         >
       </div>
-      <div v-if="!loading && !loadError && total" class="pagination-wrapper">
-        <el-pagination
-          v-model:current-page="page"
-          :page-size="pageSize"
-          :total="total"
-          :pager-count="5"
-          layout="total, prev, pager, next"
-          :hide-on-single-page="true"
-          aria-label="文章分页"
-          @current-change="scrollToArticles"
-        />
-      </div>
+      <PagedFooter
+        v-if="!loading && !loadError && total"
+        v-model:current-page="page"
+        :page-size="pageSize"
+        :total="total"
+        layout="total, prev, pager, next"
+        :hide-on-single-page="true"
+        align="center"
+        aria-label="文章分页"
+        @change="scrollToArticles"
+      />
     </el-card>
   </div>
 </template>
@@ -132,9 +131,9 @@ import {
   ElCol,
   ElTag,
   ElIcon,
-  ElPagination,
 } from 'element-plus'
 import { useArticleCatalog } from '../../composables/useArticleCatalog'
+import PagedFooter from '../../components/PagedFooter.vue'
 
 const router = useRouter()
 
@@ -303,11 +302,6 @@ const handleImageError = (e) => {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-}
-.pagination-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 8px;
 }
 .source-tag,
 .views {
