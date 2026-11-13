@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 4.2 ｜ status: treehole 第9处评审与 N+1 系列收口已登记 ｜ updated: 2026-11-14
+> owner: A ｜ version: 4.3 ｜ status: 路由快照门禁独立评审已登记 ｜ updated: 2026-11-14
 
 新增[仓库可瘦身项盘点](ops/仓库可瘦身项盘点_20261113.md)：按 `-z` NUL 分隔精确清点为 **1404 文件 / 152.79 MiB**（此前 1369/150.8MB 与今日 1403 两个口径都少算了 2 个被中文路径编码吞掉的文件）。用 git blob SHA1 逐成员复核 9 个 ZIP，**更正旧结论「7 个 100% 重复」为「5 个 100% 可还原、合计 3.31 MiB」**：`高校两学期模拟库.zip` 与 `合成问答训练集.zip` 各含 1 个被 `.gitignore` 排除、不在库内的 sqlite，删 ZIP 会永久丢失。另实测 16 个 PPTX 的磁盘 mtime **全部是入库时间 `2026-11-12 22:16:52`、完全不可用于判版本**，改用 `docProps/core.xml` + 幻灯片文本 SHA 比对，发现 3 个 PPTX 文本完全相同（仅图片渲染数 88/46/7 不同）。全库 93 组字节级重复浪费 12.73 MiB。`docs/` 184 个 md 中 6 个未进索引，逐个核实后**仅 1 个真零引用**。含保守/激进两方案与 6 项待确认清单，**未删除、未移动、未提交任何文件**。
 
@@ -9,6 +9,8 @@
 后续[任务 ABC 收尾验收](test/任务ABC收尾验收_20261113.md)与[机器记录](test/task3-fk-release-verification-20261113.json)：任务 A 更正 Lead 验收归属后，19 文件已提交推送为 `c742945`；B 完成原库只读/副本三方案比较，建议保留历史孤儿；C 核实 gh 未登录、token 变量均不存在，Release 前提仍待补。未修改原库或进行 Release 发布，远端 CI 结果未在本轮核验。
 
 新增[treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md)：上限修复（帖子集子查询化）通过，但并发取消收藏仍有 P2 回归（计数 2/2→0/0），修复 `f97ed0b` 改用 `json_each` 固定实际读出的帖子 id 集合、峰值参数恒 2；独立复验 52 项通过、父提交 1 项失败，回归测试 `ae5063c` 落仓（两个独立连接+`before_cursor_execute` 交错，基线 **229 passed/3 skipped**）。同批 N+1/无界 IN 系列共 **11 处**全清：P1 三处（61→3/52→6/13→4）、高频两处（41→3/81→4）、treehole（33000 过）、actor 两处（33000→恒 4）、questions、`get_teachers_profiles`（32767 崩→恒 1）。门禁 helper 精确率 2/3≈67%（treehole 真阳 1 + 误报 1），维持非阻断。
+
+新增[路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md)：固定 `e224cb6`/`1af1375` 复核——HTTP 修订 15 项独立检查通过（导入失败各模式 exit 1、真实 student/teacher 路由重排均被抓、99 对与基线一致），但「整个 app」仍有覆盖缺口：隔离进程内移除真实 `/api/ws`（WebSocket，`APIWebSocketRoute` 不在 `openapi()` 内）后 `--check` 仍 `IDENTICAL 99` exit 0，验收断言 1 failed。已交后端补 WS 快照或把门禁明确限于 HTTP；另更正方案中 `/api/advanced-ai` 实为 10 对（18 是 `app.routes` 条目数）。P2 已关闭，不与路由门禁混算。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
 
@@ -135,6 +137,7 @@
 | [AI评测与试点方案](test/AI评测与试点方案.md) | 待专业/校内确认 | 12合成案例、失败分母、评分记录、提供商与试点前置；无真实效果结论 |
 | [CI失败定位](test/CI失败定位_20261112.md) | 已定位并给出修法 | 失败在frontend第7步`assets:check`而非后端；根因为`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是CRLF版(2236B)、CI为LF版(2198B)；已在WSL ext4复现 |
 | [treehole 第9处独立评审](test/treehole第9处独立评审_20261113.md) | 独立评审通过；P2 已修复落仓 | `f97ed0b` 修复并发取消收藏计数清零（52 项独立复验、父提交 1 项失败）；回归 `ae5063c` 落仓，基线 229 passed；上限与并发两结论以固定提交为准 |
+| [路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md) | 独立评审；WS 覆盖缺口待收口 | HTTP 修订 15 项独立通过；`/api/ws` 不在 `openapi()` 内，移除后 `--check` 仍 exit 0，待后端补 WS 快照或限 HTTP；P2 不混算 |
 
 ## 运维、运营与申报交付
 
