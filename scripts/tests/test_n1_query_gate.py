@@ -288,6 +288,113 @@ LAZY_BEFORE = FIXTURES / 'lazy_before.py'
 EAGER_AFTER = FIXTURES / 'eager_after.py'
 
 
+class HelperCallTest(unittest.TestCase):
+    """per-row calls to a local helper that queries on the caller's behalf.
+
+    Neither existing detector sees this shape: the loop body holds no
+    `db.query()`, and the relationship read happens inside the helper on a
+    parameter. `get_treehole_posts` was green while issuing five counts per
+    post.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mod = _load()
+
+    def _helpers(self, src):
+        import ast
+        mod = self.mod
+        tree = ast.parse(textwrap.dedent(src))
+        helpers = mod._helper_queries(tree)
+        out = []
+        for func in ast.walk(tree):
+            if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            for node in ast.walk(func):
+                if isinstance(node, (ast.For, ast.AsyncFor)) or isinstance(node, mod.COMP_NODES):
+                    out.extend((ln, name) for ln, name, _why
+                               in mod._per_row_helper_calls(node, helpers, func.name))
+        return out
+
+    def test_flags_helper_that_queries_per_row(self):
+        got = self._helpers('''
+            def _row(db, post):
+                return db.query(Like).filter(Like.post_id == post.id).count()
+
+            def list_posts(db):
+                posts = db.query(Post).all()
+                return [_row(db, p) for p in posts]
+        ''')
+        self.assertEqual([name for _ln, name in got], ['_row'])
+
+    def test_flags_helper_that_reads_a_relationship_off_its_parameter(self):
+        got = self._helpers('''
+            def _ser(db, warning):
+                return warning.student.name
+
+            def list_warnings(db):
+                rows = db.query(CrisisWarning).all()
+                for w in rows:
+                    print(_ser(db, w))
+        ''')
+        self.assertEqual([name for _ln, name in got], ['_ser'])
+
+    def test_ignores_helper_that_does_no_io(self):
+        # A pure helper in a loop cannot turn it into N+1, and reporting it
+        # would make the class useless.
+        got = self._helpers('''
+            def _fmt(dt):
+                return dt.strftime("%Y")
+
+            def f(rows):
+                for r in rows:
+                    print(_fmt(r.created_at))
+        ''')
+        self.assertEqual(got, [])
+
+    def test_ignores_recursive_call(self):
+        got = self._helpers('''
+            def walk(db, node):
+                for child in node.children:
+                    walk(db, child)
+        ''')
+        self.assertEqual(got, [])
+
+    def test_helper_called_once_outside_a_loop_is_not_reported(self):
+        got = self._helpers('''
+            def _row(db, post):
+                return db.query(Like).count()
+
+            def f(db, posts):
+                return _row(db, posts)
+        ''')
+        self.assertEqual(got, [])
+
+    def test_retry_loop_is_not_treated_as_per_row(self):
+        # `for attempt in range(3)` runs a fixed number of times, so the helper's
+        # query does not scale with data. The scan skips range loops; this pins
+        # the end-to-end behaviour rather than the helper in isolation.
+        import ast
+        mod = self.mod
+        tree = ast.parse(textwrap.dedent('''
+            def _fetch(db):
+                return db.query(X).first()
+
+            def f(db):
+                for attempt in range(3):
+                    _fetch(db)
+        '''))
+        helpers = mod._helper_queries(tree)
+        reported = []
+        for func in ast.walk(tree):
+            if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            for node in ast.walk(func):
+                if isinstance(node, (ast.For, ast.AsyncFor)) and not mod._is_range_loop(node):
+                    reported.extend(mod._per_row_helper_calls(node, helpers, func.name))
+        self.assertEqual(reported, [])
+
+
 class LazyLoadRegressionTest(unittest.TestCase):
     """End-to-end on checked-in source snapshots, not on git history.
 

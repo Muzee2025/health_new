@@ -22,6 +22,10 @@ loop, so a scanner that only matches calls goes green while the endpoint still
 does N+1. Eager options are resolved per loop variable, not per function: one
 `joinedload` must not silence a second, unrelated loop.
 
+A third class, `helper`, is reported but does not fail the gate: a per-row call
+to a local function that itself queries. It is advisory because the scanner
+cannot tell whether the caller short-circuits that query through an argument.
+
 Exit codes: 0 ok / nothing found, 1 findings with --fail-on-findings,
 2 bad usage or a path that does not exist. The acceptance criterion for a
 cleanup batch is an empty finding list, not the exit code.
@@ -350,6 +354,74 @@ def _comp_body(node):
     return [node.elt]
 
 
+def _helper_queries(tree) -> dict[str, list[str]]:
+    """Local functions that hit the database, keyed by name.
+
+    This is the cross-function half of the problem. A loop that calls a local
+    helper once per row is doing N+1 just as surely as one that calls
+    `db.query()` inline, but the call itself carries no `.query(` and the
+    relationship read happens inside the helper, on a *parameter* -- so both
+    existing detectors miss it:
+
+        posts = query.all()
+        return [_get_treehole_response(p, uid, db) for p in posts]
+
+    `_get_treehole_response` runs five counts per post. The gate reported
+    `real=0 lazy=0` on that endpoint.
+
+    Only helpers that actually issue a query or read a relationship off one of
+    their parameters are recorded, so `_format_dt` or `_sse_event` in a loop
+    stays invisible: a helper that does no I/O cannot turn a loop into N+1.
+    """
+    helpers: dict[str, list[str]] = {}
+    for func in ast.walk(tree):
+        if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        params = [a.arg for a in func.args.args]
+        reasons: list[str] = []
+        for node in ast.walk(func):
+            if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) \
+                    and node.func.attr in TERMINALS:
+                try:
+                    if '.query(' in ast.unparse(node) or 'session.' in ast.unparse(node):
+                        reasons.append('query')
+                        break
+                except Exception:  # pragma: no cover - unparse is total on real code
+                    pass
+        if not reasons:
+            for node in ast.walk(func):
+                if isinstance(node, ast.Attribute) and node.attr in RELATIONSHIP_ATTRS \
+                        and isinstance(node.value, ast.Name) and node.value.id in params:
+                    reasons.append(f'relationship:{node.attr}')
+                    break
+        if reasons:
+            helpers[func.name] = reasons
+    return helpers
+
+
+def _per_row_helper_calls(loop, helpers: dict[str, list[str]], self_name: str):
+    """Calls to DB-touching local helpers from a per-row position.
+
+    The comprehension's iterator is skipped for the same reason `_comp_body`
+    exists: a helper called once to build the batch is not a per-row call.
+    """
+    parts: list = []
+    if isinstance(loop, (ast.For, ast.AsyncFor)):
+        parts = loop.body if isinstance(loop.body, list) else [loop.body]
+    elif isinstance(loop, COMP_NODES):
+        parts = _comp_body(loop)
+    else:
+        return  # while loop: no per-row iteration variable to speak of
+    for sub in parts:
+        for call in ast.walk(sub):
+            if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Name)):
+                continue
+            name = call.func.id
+            if name == self_name or name not in helpers:
+                continue
+            yield call.lineno, name, helpers[name]
+
+
 def scan_tree(root: Path):
     """Yield findings: (path, func, kind, lineno, count, sample).
 
@@ -370,6 +442,7 @@ def scan_tree(root: Path):
         except SyntaxError as exc:  # pragma: no cover - defensive
             print(f'!! parse error {path}: {exc}', file=sys.stderr)
             continue
+        helpers = _helper_queries(tree)
         for func in ast.walk(tree):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
@@ -384,11 +457,18 @@ def scan_tree(root: Path):
                         yield (path, func.name, kind, node.lineno, len(calls), calls[0][1])
                     for lineno, text in _lazy_loads_in(node, _eager_for_loop(node, eager_by_var, func_eager)):
                         yield (path, func.name, 'lazy', lineno, 1, text)
+                    if not _is_range_loop(node):
+                        for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                            yield (path, func.name, 'helper', lineno, 1,
+                                   f'{helper}() [{", ".join(why)}]')
                 elif isinstance(node, COMP_NODES):
                     # Comprehension: everything inside runs once per element.
                     calls = _db_calls_in(_comp_body(node), qvars)
                     if calls:
                         yield (path, func.name, 'real', node.lineno, len(calls), calls[0][1])
+                    for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                        yield (path, func.name, 'helper', lineno, 1,
+                               f'{helper}() [{", ".join(why)}]')
 
 
 def scan_git(rev: str, root: Path):
@@ -413,6 +493,7 @@ def scan_git(rev: str, root: Path):
             tree = ast.parse(src, filename=name)
         except SyntaxError:
             continue
+        helpers = _helper_queries(tree)
         for func in ast.walk(tree):
             if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 continue
@@ -427,10 +508,17 @@ def scan_git(rev: str, root: Path):
                         yield (Path(name), func.name, kind, node.lineno, len(calls), calls[0][1])
                     for lineno, text in _lazy_loads_in(node, _eager_for_loop(node, eager_by_var, func_eager)):
                         yield (Path(name), func.name, 'lazy', lineno, 1, text)
+                    if not _is_range_loop(node):
+                        for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                            yield (Path(name), func.name, 'helper', lineno, 1,
+                                   f'{helper}() [{", ".join(why)}]')
                 elif isinstance(node, COMP_NODES):
                     calls = _db_calls_in(_comp_body(node), qvars)
                     if calls:
                         yield (Path(name), func.name, 'real', node.lineno, len(calls), calls[0][1])
+                    for lineno, helper, why in _per_row_helper_calls(node, helpers, func.name):
+                        yield (Path(name), func.name, 'helper', lineno, 1,
+                               f'{helper}() [{", ".join(why)}]')
 
 
 def main(argv: list[str]) -> int:
@@ -486,10 +574,12 @@ def main(argv: list[str]) -> int:
             return 2
     real = [f for f in findings if f[2] == 'real']
     lazy = [f for f in findings if f[2] == 'lazy']
-    benign = [f for f in findings if f[2] not in ('real', 'lazy')]
+    helper = [f for f in findings if f[2] == 'helper']
+    benign = [f for f in findings if f[2] not in ('real', 'lazy', 'helper')]
 
     print(f'# scanned {"git:" + rev if rev else root}  '
-          f'real={len(real)}  lazy={len(lazy)}  benign={len(benign)}\n')
+          f'real={len(real)}  lazy={len(lazy)}  helper={len(helper)}  '
+          f'benign={len(benign)}\n')
     if real:
         print(f'{"file":44} {"function":34} {"line":>6} {"calls":>5}')
         print('-' * 95)
@@ -505,10 +595,35 @@ def main(argv: list[str]) -> int:
         print('\n# excluded as retry/constant (fixed small count, does not scale with data)')
         for path, func, _kind, lineno, count, _sample in sorted(benign, key=lambda f: (str(f[0]), f[3])):
             print(f'  {path}:{lineno} {func} ({count} call(s))')
+    if helper:
+        print('\n# per-row call to a local helper that itself queries or reads a '
+              'relationship (one query per row, invisible to a call-only scan)')
+        for path, func, _kind, lineno, _count, sample in sorted(helper, key=lambda f: (str(f[0]), f[3])):
+            print(f'  {path}:{lineno} {func} -> {sample}')
     if fail_on_findings and (real or lazy):
         print(f'\nFAIL: {len(real)} loop-local query call(s) and '
               f'{len(lazy)} un-eager relationship read(s) found', file=sys.stderr)
         return 1
+    if helper:
+        # Advisory, not blocking, and deliberately so. This class has a
+        # false-positive mode the scanner cannot decide: a helper whose query is
+        # short-circuited by an argument the caller supplies.
+        #
+        #   def _serialize(db, warning, message_content=None):
+        #       if message_content is not None:   # caller passes it -> no query
+        #           ...
+        #       else:
+        #           db.query(...).first()
+        #
+        # `get_pending_crisis_records` is reported here for exactly that reason,
+        # although its batched caller pre-computes the message and the
+        # relationship it reads is joinedloaded. Measured on this tree, 1 of 3
+        # findings is of that kind. A gate that fails a third of the time on
+        # code that is already correct is a gate that gets switched off, so this
+        # stays visible in the report and out of the exit code until the
+        # short-circuit can be decided statically.
+        print('\nNOTE: the per-row helper calls above are advisory and do not fail '
+              'the gate (see _helper_queries).', file=sys.stderr)
     return 0
 
 
