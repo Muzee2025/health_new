@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 4.6 ｜ status: student 第 1、2 批及 teacher 第 3 批独立复核已登记；后续模块仍待推进 ｜ updated: 2026-11-14
+> owner: A ｜ version: 4.7 ｜ status: student 第 1、2 批与 teacher 第 3 批路由拆分已登记；前端 C2 已收口，独立复核及隔离浏览器冒烟待完成 ｜ updated: 2026-11-14
 
 新增[仓库可瘦身项盘点](ops/仓库可瘦身项盘点_20261113.md)：按 `-z` NUL 分隔精确清点为 **1404 文件 / 152.79 MiB**（此前 1369/150.8MB 与今日 1403 两个口径都少算了 2 个被中文路径编码吞掉的文件）。用 git blob SHA1 逐成员复核 9 个 ZIP，**更正旧结论「7 个 100% 重复」为「5 个 100% 可还原、合计 3.31 MiB」**：`高校两学期模拟库.zip` 与 `合成问答训练集.zip` 各含 1 个被 `.gitignore` 排除、不在库内的 sqlite，删 ZIP 会永久丢失。另实测 16 个 PPTX 的磁盘 mtime **全部是入库时间 `2026-11-12 22:16:52`、完全不可用于判版本**，改用 `docProps/core.xml` + 幻灯片文本 SHA 比对，发现 3 个 PPTX 文本完全相同（仅图片渲染数 88/46/7 不同）。全库 93 组字节级重复浪费 12.73 MiB。`docs/` 184 个 md 中 6 个未进索引，逐个核实后**仅 1 个真零引用**。含保守/激进两方案与 6 项待确认清单，**未删除、未移动、未提交任何文件**。
 
@@ -14,7 +14,9 @@
 
 新增[路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md)：固定 `e224cb6`/`1af1375` 复核——HTTP 修订 15 项独立检查通过（导入失败各模式 exit 1、真实 student/teacher 路由重排均被抓、99 对与基线一致），但「整个 app」仍有覆盖缺口：隔离进程内移除真实 `/api/ws`（WebSocket，`APIWebSocketRoute` 不在 `openapi()` 内）后 `--check` 仍 `IDENTICAL 99` exit 0，验收断言 1 failed；另更正方案中 `/api/advanced-ai` 实为 10 对（18 是 `app.routes` 条目数）。**v1.1（2026-11-14）**：`307368b` 补 WS 快照后独立复验 **20 passed exit 0**（18 独立 + 2 仓库，100 项 = 99 HTTP + 1 WS），真实移除 WS 与遍历器失明均被拒绝，路径前缀漂移也能抓，**路由门禁验收关闭**；嵌套挂载限制仍是后续拆分前提。P2 已关闭，不与路由门禁混算。
 
-后端 student 路由拆分第 1、2 批已推送并复核：`378f789` 拆出 dashboard 7 条，`1ca688a` 拆出 report 6 条与 treehole 7 条；共享 helper 保留，100 个 path+method 对的原注册顺序不变。方案修订 `c30aae3` 补列 `_treehole_id_scope`。独立复核见[首批报告](test/后端首批路由拆分独立复核_20261114.md)（提交 `07a6b3e`）和[第二批报告](test/后端第二批路由拆分独立复核_20261114.md)（提交 `eca2900`）。执行者报告两批隔离基线均为 **231 passed / 3 skipped / 26 warnings**，Ruff 与 N+1 门禁 exit 0；首批 CI [#113](https://github.com/Muzee2025/health_new/actions/runs/43467298917)、第二批及方案修订 CI [#115](https://github.com/Muzee2025/health_new/actions/runs/43475016880) / [#116](https://github.com/Muzee2025/health_new/actions/runs/43475394004)、第二批复核报告 CI [#117](https://github.com/Muzee2025/health_new/actions/runs/43477177241) 均成功。此登记只覆盖 student dashboard/report/treehole；未改 teacher 或 advanced_chat 路由，也不代表部署或商业化门禁通过。
+后端 student 路由拆分第 1、2 批已推送并复核：`378f789` 拆出 dashboard 7 条，`1ca688a` 拆出 report 6 条与 treehole 7 条；共享 helper 保留，100 个 path+method 对的原注册顺序不变。方案修订 `c30aae3` 补列 `_treehole_id_scope`。Teacher 第三批 `985efc6` 拆分后，独立复核见[Teacher 第三批报告](test/Teacher第三批路由拆分独立复核_20261114.md)（报告 `affee1d`，行号更正 `31d9954`）：100 对路由顺序一致、迁出定义 AST 29/29，隔离基线 231 passed / 3 skipped / 26 warnings，Ruff、N+1 与编译均 exit 0；动态 helper 身份探针因应用配置门禁未能完成。前两批独立复核见[首批报告](test/后端首批路由拆分独立复核_20261114.md)（提交 `07a6b3e`）和[第二批报告](test/后端第二批路由拆分独立复核_20261114.md)（提交 `eca2900`）。执行者报告前两批隔离基线均为 **231 passed / 3 skipped / 26 warnings**，Ruff 与 N+1 门禁 exit 0；CI #113、#115、#116、#117 均成功。此登记不代表部署或商业化门禁通过。
+
+前端 C2 会话状态迁移已随 `9cd5d10` 收口：补齐身份 A 晚响应隔离、404 清理后新建、远端删除失败保留本地及成功级联删除断言；定向测试 13 项、全量测试 66 项 / 18 文件通过，tsc、format、lint、build 均 exit 0，CI #125 前后端 jobs 成功。详见[前端大文件拆分方案](design/前端大文件拆分方案.md)。独立复核仍在进行；18080/18081 未监听，隔离浏览器 smoke 尚未执行。C3–C5 尚未排期。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
 
@@ -109,8 +111,8 @@
 | [截图与浏览器验证](design/screenshots/README.md) | 定稿 | 原14页合成基线与新旧展示页验证入口 |
 | [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
 | [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
-| [前端大文件拆分方案](design/前端大文件拆分方案.md) | 待评审 | Report.vue 2032行/AdvancedAiChat.vue 1532行的拆分路径、9+3组件与8composable、风险行号；含0字节死文件删除记录 |
-| [后端路由拆分方案](design/后端路由拆分方案.md) | student 第 1、2 批完成；后续模块待推进 | dashboard 7 条、report 6 条、treehole 7 条已拆分；共享 helper 与 100 对原路由顺序保持，teacher/advanced_chat 未纳入这两批 |
+| [前端大文件拆分方案](design/前端大文件拆分方案.md) | C0–C2 代码与测试通过；C2 独立复核及隔离浏览器 smoke 待完成 | `9cd5d10` 完成 `useChatSessions` 迁移；13 项聚焦测试、66 项全量测试通过；C3–C5 待排期 |
+| [后端路由拆分方案](design/后端路由拆分方案.md) | student 第 1、2 批及 teacher 第 3 批完成；后续批次推进中 | dashboard/report/treehole 与 teacher crisis/follow-up/media 已拆分；共享 helper 保留，100 对原路由顺序不变；独立复核报告见基线与测试表 |
 | [后端重复接口合并方案](design/后端重复接口合并方案.md) | 待评审 | 六组同名接口分级：仅`/articles/page`真重复，其余五组ACL或契约不同不建议合并；pymysql为残留、python-docx非残留 |
 | [工程规范引入方案](design/工程规范引入方案.md) | 待评审 | ESLint 10.14/Prettier 3.10/Ruff 0.17选型与规则集、分批格式化改动量（前端84文件、后端73文件）与三处踩坑记录 |
 
