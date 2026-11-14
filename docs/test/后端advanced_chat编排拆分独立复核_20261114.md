@@ -1,6 +1,6 @@
 # 后端 advanced_chat 编排拆分独立复核
 
-> owner: 复核 · version: 1.0 · status: 本机独立复核通过；CI 由测试成员核对 · updated: 2026-11-14
+> owner: 复核 · version: 1.1 · status: 本机独立复核与 CI 通过 · updated: 2026-11-14
 
 ## 范围与结论
 
@@ -28,7 +28,7 @@
 - 静态门禁：
   `.\.venv\Scripts\python.exe -m ruff check backend\app` exit 0；两个改动模块 `py_compile` exit 0；`git show --check --oneline 2e7f243` exit 0。
 - 测试命令运行期间 HEAD 后续前进到前端提交 `6e73ecb`；复核已确认该提交相对 `2e7f243` 未修改两个后端目标文件，故上述测试覆盖的后端代码与目标提交一致。
-- Actions CI 结果不由本报告代替；待测试成员按提交 SHA 核对后补记。
+- CI：测试成员确认 `2e7f243` 对应 CI #157，frontend、backend jobs 均成功；CI 摘要未提供测试数量。[查看 CI #157](https://github.com/Muzee2025/health_new/actions/runs/43578325615)
 
 ## 边界
 
