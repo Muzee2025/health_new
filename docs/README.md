@@ -1,6 +1,6 @@
 # 文档索引
 
-> owner: A ｜ version: 5.4 ｜ status: 后端路由拆分五批完成；前端 C3a–C3c 已实施并完成独立复核，C3a CI 待补核；C2/C3 浏览器冒烟未执行 ｜ updated: 2026-11-14
+> owner: A ｜ version: 5.5 ｜ status: 后端路由与 advanced_chat 编排拆分完成；前端 C0–C4 已实施并完成自动化复核（C3a CI 待核）；C2/C3/C4 浏览器 smoke 未执行；C5 待排期 ｜ updated: 2026-11-14
 
 新增[仓库可瘦身项盘点](ops/仓库可瘦身项盘点_20261113.md)：按 `-z` NUL 分隔精确清点为 **1404 文件 / 152.79 MiB**（此前 1369/150.8MB 与今日 1403 两个口径都少算了 2 个被中文路径编码吞掉的文件）。用 git blob SHA1 逐成员复核 9 个 ZIP，**更正旧结论「7 个 100% 重复」为「5 个 100% 可还原、合计 3.31 MiB」**：`高校两学期模拟库.zip` 与 `合成问答训练集.zip` 各含 1 个被 `.gitignore` 排除、不在库内的 sqlite，删 ZIP 会永久丢失。另实测 16 个 PPTX 的磁盘 mtime **全部是入库时间 `2026-11-12 22:16:52`、完全不可用于判版本**，改用 `docProps/core.xml` + 幻灯片文本 SHA 比对，发现 3 个 PPTX 文本完全相同（仅图片渲染数 88/46/7 不同）。全库 93 组字节级重复浪费 12.73 MiB。`docs/` 184 个 md 中 6 个未进索引，逐个核实后**仅 1 个真零引用**。含保守/激进两方案与 6 项待确认清单，**未删除、未移动、未提交任何文件**。
 
@@ -14,11 +14,15 @@
 
 新增[路由快照门禁独立评审](test/路由快照门禁独立评审_20261114.md)：固定 `e224cb6`/`1af1375` 复核——HTTP 修订 15 项独立检查通过（导入失败各模式 exit 1、真实 student/teacher 路由重排均被抓、99 对与基线一致），但「整个 app」仍有覆盖缺口：隔离进程内移除真实 `/api/ws`（WebSocket，`APIWebSocketRoute` 不在 `openapi()` 内）后 `--check` 仍 `IDENTICAL 99` exit 0，验收断言 1 failed；另更正方案中 `/api/advanced-ai` 实为 10 对（18 是 `app.routes` 条目数）。**v1.1（2026-11-14）**：`307368b` 补 WS 快照后独立复验 **20 passed exit 0**（18 独立 + 2 仓库，100 项 = 99 HTTP + 1 WS），真实移除 WS 与遍历器失明均被拒绝，路径前缀漂移也能抓，**路由门禁验收关闭**；嵌套挂载限制仍是后续拆分前提。P2 已关闭，不与路由门禁混算。
 
-后端路由拆分五批实施均已推送：`378f789`（student dashboard 7 条）、`1ca688a`（student report/treehole 13 条）、`985efc6`（teacher crisis/media）、`fc500c2`（teacher dashboard/students）、`c1a52ed`（teacher_content 8 条 + student_content 5 条）；100 个 `path+method` 对保持原序。第 1–3 批独立报告见[首批](test/后端首批路由拆分独立复核_20261114.md)、[第二批](test/后端第二批路由拆分独立复核_20261114.md)、[第三批](test/Teacher第三批路由拆分独立复核_20261114.md)。第 4 批未单独触发 CI，其提交链末端 `5318a1d` 对应的 [run #127](https://github.com/Muzee2025/health_new/actions/runs/43532558791) 前后端 jobs 成功。第 5 批独立复核见[学生与教师内容路由报告](test/学生与教师内容路由拆分独立复核_20261114.md)（`6753acb`）：指定范围通过，隔离专项 18 passed / 14 warnings，路由快照 100 对原序，Ruff 和 diff 检查 exit 0；全量基线 231/3 与 AST 24/24 为提交者证据，复核者未独立重跑。[CI #128](https://github.com/Muzee2025/health_new/actions/runs/43535057799) 前后端 jobs 成功。批次方案修正 `7183fad` 已推送，其 CI 待核。`advanced_chat` 函数级拆分仍为后续工作；路由拆分完成不代表部署或商业化门禁通过。
+后端路由拆分五批实施均已推送：`378f789`（student dashboard 7 条）、`1ca688a`（student report/treehole 13 条）、`985efc6`（teacher crisis/media）、`fc500c2`（teacher dashboard/students）、`c1a52ed`（teacher_content 8 条 + student_content 5 条）；100 个 `path+method` 对保持原序。第 1–3 批独立报告见[首批](test/后端首批路由拆分独立复核_20261114.md)、[第二批](test/后端第二批路由拆分独立复核_20261114.md)、[第三批](test/Teacher第三批路由拆分独立复核_20261114.md)。第 4 批未单独触发 CI，其提交链末端 `5318a1d` 对应的 [run #127](https://github.com/Muzee2025/health_new/actions/runs/43532558791) 前后端 jobs 成功。第 5 批独立复核见[学生与教师内容路由报告](test/学生与教师内容路由拆分独立复核_20261114.md)（`6753acb`）：指定范围通过，隔离专项 18 passed / 14 warnings，路由快照 100 对原序，Ruff 和 diff 检查 exit 0；全量基线 231/3 与 AST 24/24 为提交者证据，复核者未独立重跑。[CI #128](https://github.com/Muzee2025/health_new/actions/runs/43535057799) 前后端 jobs 成功。批次方案修正 `7183fad` 已推送，其 CI 待核。`advanced_chat` 编排拆分已由 `2e7f243` 完成（独立复核通过，CI #157 前后端 jobs 成功）；路由拆分完成不代表部署或商业化门禁通过。
 
 前端 C2 会话状态迁移已随 `9cd5d10` 收口：补齐身份 A 晚响应隔离、404 清理后新建、远端删除失败保留本地及成功级联删除断言；定向测试 13 项、全量测试 66 项 / 18 文件通过，tsc、format、lint、build 均 exit 0。独立复核见[报告](test/AdvancedAiChat_C2会话生命周期独立复核_20261114.md)（`bd1a4dc`）：独立复跑 3 个测试文件、13 项通过，exit 0；CI #125 前后端 jobs 成功。接入前测试时序依据前端记录，复核无法从提交历史独立证明；18080/18081 未监听，隔离浏览器 smoke 未执行。
 
-前端 C3 按 Composer → Sidebar → MessageList 顺序完成：C3a `9f8283b` 抽出 `ChatComposer`，C3b `f5e41a6` 抽出 `ChatSessionSidebar`，C3c `8024faa` 抽出 `ChatMessageList`；复核发现的 `isDangerText` 默认值问题已由 `e6f12cf` 修复。实施者报告 C3a 定向 2 文件/17 项、全量 19 文件/78 项通过；C3b 定向 2 文件/12 项、全量 20 文件/84 项通过；C3c 修复后定向 2 文件/14 项、全量 21 文件/91 项通过，前端类型、格式、lint、build 和素材门禁均通过。独立复核分别见 `402c48a`、`c28d068`、`a95b043`：C3a 17 项、C3b 12 项、C3c 修复后 14 项定向测试通过；C3b CI #140 与 C3c CI #150 前后端 jobs 成功，C3a CI 尚待确认。C3a/C3c 素材检查仍有 10 条既有 `LEGACY_UNVERIFIED` 警告；C3c 浏览器 smoke 未执行，C2 浏览器 smoke 也仍待环境；C4–C5 尚未排期。
+前端 C3 按 Composer → Sidebar → MessageList 顺序完成：C3a `9f8283b` 抽出 `ChatComposer`，C3b `f5e41a6` 抽出 `ChatSessionSidebar`，C3c `8024faa` 抽出 `ChatMessageList`；复核发现的 `isDangerText` 默认值问题已由 `e6f12cf` 修复。实施者报告 C3a 定向 2 文件/17 项、全量 19 文件/78 项通过；C3b 定向 2 文件/12 项、全量 20 文件/84 项通过；C3c 修复后定向 2 文件/14 项、全量 21 文件/91 项通过，前端类型、格式、lint、build 和素材门禁均通过。独立复核分别见 `402c48a`、`c28d068`、`a95b043`：C3a 17 项、C3b 12 项、C3c 修复后 14 项定向测试通过；C3b CI #140 与 C3c CI #150 前后端 jobs 成功，C3a CI 尚待确认。C3a/C3c 素材检查仍有 10 条既有 `LEGACY_UNVERIFIED` 警告；C3c 浏览器 smoke 未执行，C2/C3/C4 浏览器 smoke 未执行；C5 待排期。
+
+后端 `advanced_chat` 编排拆分 `2e7f243` 已完成，独立复核报告为[后端编排拆分独立复核](test/后端advanced_chat编排拆分独立复核_20261114.md)（`9e285f8`）：`/chat` 与 `/chat/stream` 的路由签名及归一化 AST 一致，旧模块 monkeypatch 注入、SSE/事务顺序保持；定向隔离测试 15 passed / 20 warnings、全量基线 231 passed / 3 skipped / 26 warnings、100 对路由顺序、Ruff、编译及 N+1 均通过；CI #157 前后端 jobs 成功。
+
+前端 C4 `6e73ecb` 抽出 WebSocket 与深度思考设置 composable，匿名切换和初始化顺序保持；独立复核见[报告](test/前端C4_WebSocket与深度思考设置独立复核_20261114.md)（`c00664b`）：定向 3 文件/18 项、全量 23 文件/101 项通过，CI #158 前后端 jobs 成功。浏览器 smoke 未执行；类型、格式、lint、build 与素材门禁按实施者/CI 证据登记。
 
 新增[CI失败定位](test/CI失败定位_20261112.md)：远程run #1失败在frontend第7步`npm run assets:check`，非后端。根因是`avatars/psych-teacher-cartoon.svg`的manifest哈希记的是Windows工作区CRLF版(2236B)，CI的LF checkout为2198B，`check-assets.mjs:26`按原始字节校验即报`HASH_MISMATCH`。已在WSL Ubuntu+ext4干净LF树复现，后端6步全部success。修法为manifest改LF哈希+脚本归一化+`.gitattributes`三处同改。
 
@@ -113,7 +117,7 @@
 | [截图与浏览器验证](design/screenshots/README.md) | 定稿 | 原14页合成基线与新旧展示页验证入口 |
 | [PPT网格](design/ppt-kit/16x9-grid.md) | 定稿 | 16:9版式和安全区 |
 | [PPT品牌引用](design/ppt-kit/logo-reference.md) | 定稿 | 复用源品牌文件，避免二次复制 |
-| [前端大文件拆分方案](design/前端大文件拆分方案.md) | C0–C3c 实施及自动化独立复核完成；C3a CI 待补核；浏览器 smoke 待环境 | C3a `9f8283b` / 17 定向、78 全量；C3b `f5e41a6` / 12 定向、84 全量、CI #140；C3c `8024faa` + `e6f12cf` / 14 定向、91 全量、CI #150；C4–C5 待排期 |
+| [前端大文件拆分方案](design/前端大文件拆分方案.md) | C0–C4 实施及自动化复核完成；C3a CI 待核；C2/C3/C4 浏览器 smoke 未执行 | C3a `9f8283b` / 17 定向、78 全量；C3b `f5e41a6` / 12 定向、84 全量、CI #140；C3c `8024faa` + `e6f12cf` / 14 定向、91 全量、CI #150；C4 `6e73ecb` / 18 定向、101 全量、CI #158；C5 待排期 |
 | [后端路由拆分方案](design/后端路由拆分方案.md) | 五批路由拆分实施及第 5 批指定范围复核完成 | `378f789`、`1ca688a`、`985efc6`、`fc500c2`、`c1a52ed`；100 对原路由顺序保持；`7183fad` 修正第 4/5 批及 advanced_chat 后续范围 |
 | [后端重复接口合并方案](design/后端重复接口合并方案.md) | 待评审 | 六组同名接口分级：仅`/articles/page`真重复，其余五组ACL或契约不同不建议合并；pymysql为残留、python-docx非残留 |
 | [工程规范引入方案](design/工程规范引入方案.md) | 待评审 | ESLint 10.14/Prettier 3.10/Ruff 0.17选型与规则集、分批格式化改动量（前端84文件、后端73文件）与三处踩坑记录 |
@@ -155,6 +159,8 @@
 | [前端 C3a ChatComposer 独立复核](test/前端C3a_ChatComposer拆分独立复核_20261114.md) | 复核范围通过；CI 待核 | `402c48a` 独立复跑 2 个文件/17 项通过；方案总览接口行有非阻断文档差异 |
 | [前端 C3b ChatSessionSidebar 独立复核](test/前端C3b_ChatSessionSidebar拆分独立复核_20261114.md) | 组件契约、页面接线与 CI #140 通过 | `c28d068` 独立复跑 2 个文件/12 项通过；全量门禁为实施者报告 |
 | [前端 C3c ChatMessageList 独立复核](test/前端C3c_ChatMessageList拆分独立复核_20261114.md) | `e6f12cf` 修复复验通过；CI #150 前后端 jobs 成功 | `a95b043` 独立复跑 2 个文件/14 项通过；未独立重跑全量门禁或浏览器 smoke |
+| [后端 advanced_chat 编排拆分独立复核](test/后端advanced_chat编排拆分独立复核_20261114.md) | 独立复核通过；CI #157 前后端 jobs 成功 | `2e7f243`：路由签名与编排主体 AST 一致，兼容注入和 SSE/事务顺序通过；定向 15 passed、隔离基线 231 passed / 3 skipped，路由快照 100 对原序 |
+| [前端 C4 WebSocket 与深度思考设置独立复核](test/前端C4_WebSocket与深度思考设置独立复核_20261114.md) | 自动化复核通过；CI #158 前后端 jobs 成功；浏览器 smoke 未执行 | `6e73ecb`：独立目标测试 3 文件/18 项、全量 23 文件/101 项通过；类型等全量门禁为实施者/CI 证据 |
 | [CI复现复核](test/CI复现复核_20261113.md) | 复核通过（v1.1） | `4e7e611` 干净 LF 树 17/17 步 exit 0；2026-11-05 失败点定位为 frontend `assets:check`（非后端）；原 run 42049558772 为 SVG manifest HASH_MISMATCH、backend 全成功，当前 HEAD `9a81c48` run 43464692028 全绿（只读 GitHub Actions 证据）；已取到旧失败 job 127321666743 的 decoded log 并核对到 HASH_MISMATCH 行 |
 
 ## 运维、运营与申报交付
