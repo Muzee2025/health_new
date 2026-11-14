@@ -1,6 +1,6 @@
 # 前端 C3b ChatSessionSidebar 拆分独立复核
 
-> owner: 复核 ｜ version: 1.0 ｜ status: 组件契约与页面接线复核通过；CI 待测试核对 ｜ updated: 2026-11-14
+> owner: 复核 ｜ version: 1.1 ｜ status: 组件契约、页面接线与 CI #140 复核通过 ｜ updated: 2026-11-14
 
 ## 范围与结论
 
@@ -14,6 +14,7 @@
 - 独立执行：`npx vitest run src/views/student/chat/ChatSessionSidebar.test.js src/views/student/AdvancedAiChat.sessions.test.js --reporter=verbose`，exit 0，**2 files / 12 passed**（5 项 Sidebar 契约、7 项会话/页面集成；1.36s）。
 - `git show --check --oneline f5e41a6`：exit 0。
 - 提交者报告全量前端测试 **84 项 / 20 文件**，以及类型、格式、lint、build、素材门禁通过；本复核未独立重跑全量门禁。CI 由测试 Bot 核对，本报告不代报。
+- 测试 Bot 按 SHA 确认 `f5e41a6` 对应 CI #140，frontend/backend jobs 均成功；后端基线、unittest、Ruff、编译、N+1、仓库与 Compose 步骤，以及前端测试和构建门禁均成功。CI 摘要未提供测试数量。
 
 ## 组件契约与页面接线
 
@@ -24,4 +25,4 @@
 
 ## 限制
 
-本次独立实测覆盖 Sidebar 契约与会话页面集成两个测试文件；没有独立执行全量前端门禁、浏览器 smoke 或 CI。未运行的门禁不计为复核者通过。
+本次独立实测覆盖 Sidebar 契约与会话页面集成两个测试文件；没有独立执行全量前端门禁、浏览器 smoke。CI #140 状态由测试 Bot 确认，未报告摘要未提供的测试数量。未运行的门禁不计为复核者通过。
