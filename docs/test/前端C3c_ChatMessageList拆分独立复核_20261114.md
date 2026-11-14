@@ -1,6 +1,6 @@
 # 前端 C3c ChatMessageList 拆分独立复核
 
-> owner: 复核 ｜ version: 1.1 ｜ status: `e6f12cf` 修复复验通过；CI 由测试 Bot 核对 ｜ updated: 2026-11-14
+> owner: 复核 ｜ version: 1.2 ｜ status: `e6f12cf` 修复复验通过；CI #150 前后端 jobs 成功 ｜ updated: 2026-11-14
 
 ## 范围与结论
 
@@ -13,7 +13,8 @@
 - 初审起点：分支 `codex/application-delivery`，HEAD `8024faa`；`git status --short` 为空。修复复验起点：HEAD `e6f12cf`。
 - 修复后独立运行：`npx vitest run src/views/student/chat/ChatMessageList.test.js src/views/student/AdvancedAiChat.sessions.test.js --reporter=verbose`，exit 0，**2 files / 14 passed**；新增的省略 prop 默认行为断言通过。
 - `git show --check --oneline e6f12cf`：exit 0。
-- 未独立重跑全量前端门禁；CI 结果由测试 Bot 核对。浏览器 smoke 未执行。
+- 测试 Bot 按 SHA 确认 `e6f12cf` 对应 CI #150，frontend/backend jobs 均成功；CI 摘要未提供测试数量。
+- 未独立重跑全量前端门禁。浏览器 smoke 未执行。
 
 ## 接线与行为核对
 
@@ -28,4 +29,4 @@
 
 ## 证据边界
 
-复验结果仅覆盖本次独立运行的两个目标测试文件和提交检查，不代表浏览器 smoke 或全量前端门禁由复核者独立通过。全量门禁为实施者报告；CI 状态以测试 Bot 的 SHA 核对结果为准。
+复验结果仅覆盖本次独立运行的两个目标测试文件和提交检查，不代表浏览器 smoke 或全量前端门禁由复核者独立通过。全量门禁为实施者报告；CI #150 仅按测试 Bot 报告的 job 状态记录，不补报未公开的测试数量。
