@@ -168,39 +168,17 @@
         </aside>
       </div>
 
-      <footer class="input-bar">
-        <el-input
-          aria-label="输入消息"
-          v-model="inputText"
-          type="textarea"
-          :rows="2"
-          placeholder="在这里输入你想说的话..."
-          resize="none"
-          :disabled="!isAnonymous && !currentSessionId"
-          @keydown.enter.prevent="sendMessage"
-        />
-        <button
-          type="button"
-          aria-label="发送消息"
-          class="send-btn"
-          @click="sendMessage"
-          :disabled="!inputText.trim() || (!isAnonymous && !currentSessionId) || isTyping"
-        >
-          发送
-        </button>
-        <button
-          type="button"
-          class="deep-think-toggle"
-          :class="{ active: deepThinkEnabled }"
-          @click="toggleDeepThink"
-          :disabled="isTyping"
-        >
-          {{ deepThinkEnabled ? '深度思考: 开' : '深度思考: 关' }}
-        </button>
-      </footer>
-      <div v-if="lastReplyChars > 0" class="reply-stats">
-        本回答共{{ lastReplyChars }}字，约为您平时请求的{{ lastReplyRatio.toFixed(1) }}倍
-      </div>
+      <ChatComposer
+        v-model="inputText"
+        :is-anonymous="isAnonymous"
+        :current-session-id="currentSessionId"
+        :is-typing="isTyping"
+        :deep-think-enabled="deepThinkEnabled"
+        :last-reply-chars="lastReplyChars"
+        :last-reply-ratio="lastReplyRatio"
+        @send="sendMessage"
+        @toggle-deep="toggleDeepThink"
+      />
     </section>
   </div>
 </template>
@@ -226,6 +204,7 @@ import {
 } from 'element-plus'
 import axios from 'axios'
 import RiskFactorFiveDimension from '../../components/RiskFactorFiveDimension.vue'
+import ChatComposer from './chat/ChatComposer.vue'
 import { sleep, withApiRetry } from '@/services/advancedChatRetry'
 import {
   createTimeoutController,
@@ -1152,64 +1131,6 @@ const scrollToBottom = async () => {
   color: var(--danger);
 }
 
-.input-bar {
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  padding: 12px 16px;
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-}
-
-.deep-think-toggle {
-  width: 120px;
-  height: 60px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-subtle);
-  color: var(--text-secondary);
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.deep-think-toggle.active {
-  background: var(--accent-sage-soft);
-  border-color: var(--success-text);
-  color: var(--success-text);
-}
-
-.reply-stats {
-  margin-top: 8px;
-  color: var(--text-secondary);
-  font-size: 12px;
-}
-
-.input-bar :deep(.el-textarea__inner) {
-  min-height: 60px !important;
-  border-radius: var(--radius);
-  box-shadow: none;
-  border: 1px solid var(--border);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.send-btn {
-  width: 80px;
-  height: 60px;
-  border: none;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: var(--surface);
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.send-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .mt-16 {
   margin-top: 16px;
 }
@@ -1285,18 +1206,6 @@ const scrollToBottom = async () => {
   }
   .anon-switch {
     justify-content: flex-start;
-  }
-  .input-bar {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .input-bar :deep(.el-textarea) {
-    flex: 1 1 100%;
-    min-width: 0;
-  }
-  .input-bar .send-btn,
-  .input-bar .deep-think-toggle {
-    min-height: 44px;
   }
   .message-row {
     max-width: 100%;

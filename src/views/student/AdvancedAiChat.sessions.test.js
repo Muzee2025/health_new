@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { effectScope, nextTick } from 'vue'
+import * as Vue from 'vue'
+import { createRenderer, effectScope, nextTick } from 'vue'
+import { compileScript, compileTemplate, parse } from '@vue/compiler-sfc'
+import { readFileSync } from 'node:fs'
+import { runInNewContext } from 'node:vm'
 import AdvancedAiChat from './AdvancedAiChat.vue'
+import ChatComposer from './chat/ChatComposer.vue'
 
 const mocks = vi.hoisted(() => ({
   request: vi.fn(),
@@ -41,6 +46,7 @@ vi.mock('axios', () => ({
 
 vi.mock('element-plus', () => {
   const message = vi.fn()
+  const emptyComponent = { render: () => null }
   Object.assign(message, {
     info: mocks.messageInfo,
     success: mocks.messageSuccess,
@@ -50,19 +56,21 @@ vi.mock('element-plus', () => {
   return {
     ElMessage: message,
     ElMessageBox: { confirm: vi.fn(), prompt: vi.fn() },
-    ElButton: {},
-    ElInput: {},
-    ElDropdown: {},
-    ElDropdownMenu: {},
-    ElDropdownItem: {},
-    ElSwitch: {},
-    ElIcon: {},
-    ElAvatar: {},
+    ElButton: emptyComponent,
+    ElInput: emptyComponent,
+    ElDropdown: emptyComponent,
+    ElDropdownMenu: emptyComponent,
+    ElDropdownItem: emptyComponent,
+    ElSwitch: emptyComponent,
+    ElIcon: emptyComponent,
+    ElAvatar: emptyComponent,
     vLoading: {},
   }
 })
 
-vi.mock('../../components/RiskFactorFiveDimension.vue', () => ({ default: {} }))
+vi.mock('../../components/RiskFactorFiveDimension.vue', () => ({
+  default: { render: () => null },
+}))
 
 vi.mock('@/services/advancedChatRetry', () => ({
   sleep: vi.fn(async () => {}),
@@ -108,6 +116,92 @@ function createPage() {
   const page = scope.run(() => AdvancedAiChat.setup?.({}, { expose: vi.fn() }))
   if (!page) throw new Error('AdvancedAiChat setup did not return its bindings')
   return { page: page, scope }
+}
+
+const pageSource = readFileSync(new URL('./AdvancedAiChat.vue', import.meta.url), 'utf8')
+const pageFilename = 'src/views/student/AdvancedAiChat.vue'
+const { descriptor: pageDescriptor } = parse(pageSource, { filename: pageFilename })
+const pageScript = compileScript(pageDescriptor, { id: 'advanced-chat-composer-integration' })
+const pageTemplate = compileTemplate({
+  source: pageDescriptor.template.content,
+  filename: pageFilename,
+  id: 'advanced-chat-composer-integration',
+  compilerOptions: { bindingMetadata: pageScript.bindings, mode: 'function' },
+})
+if (pageTemplate.errors.length) throw pageTemplate.errors[0]
+const integrationRender = runInNewContext(`(Vue) => { ${pageTemplate.code} }`)(Vue)
+
+function createTreeRenderer() {
+  const insert = (node, parent, anchor = null) => {
+    if (node.parent) {
+      const oldIndex = node.parent.children.indexOf(node)
+      if (oldIndex >= 0) node.parent.children.splice(oldIndex, 1)
+    }
+    const index = anchor ? parent.children.indexOf(anchor) : -1
+    if (index < 0) parent.children.push(node)
+    else parent.children.splice(index, 0, node)
+    node.parent = parent
+  }
+
+  return createRenderer({
+    patchProp(node, key, _previous, next) {
+      node.props[key] = next
+    },
+    insert,
+    remove(node) {
+      if (!node.parent) return
+      const index = node.parent.children.indexOf(node)
+      if (index >= 0) node.parent.children.splice(index, 1)
+      node.parent = null
+    },
+    createElement(type) {
+      return { type, props: {}, children: [], parent: null, text: '' }
+    },
+    createText(text) {
+      return { type: '#text', props: {}, children: [], parent: null, text }
+    },
+    createComment(text) {
+      return { type: '#comment', props: {}, children: [], parent: null, text }
+    },
+    setText(node, text) {
+      node.text = text
+    },
+    setElementText(node, text) {
+      node.text = text
+      node.children = []
+    },
+    parentNode(node) {
+      return node.parent
+    },
+    nextSibling(node) {
+      if (!node.parent) return null
+      const index = node.parent.children.indexOf(node)
+      return node.parent.children[index + 1] || null
+    },
+    insertStaticContent(content, parent, anchor) {
+      const node = {
+        type: '#static',
+        props: {},
+        children: [],
+        parent: null,
+        text: content,
+      }
+      insert(node, parent, anchor)
+      return [node, node]
+    },
+  })
+}
+
+function findVNode(vnode, predicate) {
+  if (!vnode) return null
+  if (predicate(vnode)) return vnode
+  if (Array.isArray(vnode.children)) {
+    for (const child of vnode.children) {
+      const match = findVNode(child, predicate)
+      if (match) return match
+    }
+  }
+  return null
 }
 
 function conversation(id) {
@@ -168,6 +262,47 @@ afterEach(() => {
 })
 
 describe('AdvancedAiChat session lifecycle integration contract', () => {
+  it('wires composer model and actions to the existing page bindings', async () => {
+    const originalSetup = AdvancedAiChat.setup
+    const originalRender = AdvancedAiChat.render
+    const originalComposerRender = ChatComposer.render
+    const sendMessage = vi.fn()
+    const toggleDeepThink = vi.fn()
+    AdvancedAiChat.setup = (props, context) => {
+      const bindings = originalSetup(props, context)
+      bindings.sendMessage = sendMessage
+      bindings.toggleDeepThink = toggleDeepThink
+      return bindings
+    }
+    AdvancedAiChat.render = integrationRender
+    ChatComposer.render = () => null
+
+    const root = { type: 'root', props: {}, children: [], parent: null, text: '' }
+    const app = createTreeRenderer().createApp(AdvancedAiChat)
+    app.component('LibraryIcon', { render: () => null })
+    app.component('router-link', { render: () => null })
+    try {
+      app.mount(root)
+      const composer = findVNode(app._instance.subTree, (vnode) => vnode.type === ChatComposer)
+      expect(composer).toBeTruthy()
+      expect(composer.props['onUpdate:modelValue']).toBeTypeOf('function')
+      composer.props['onUpdate:modelValue']('composer integration draft')
+      expect(app._instance.setupState.inputText).toBe('composer integration draft')
+
+      expect(composer.props.onSend).toBe(sendMessage)
+      composer.props.onSend()
+      expect(sendMessage).toHaveBeenCalledOnce()
+      expect(composer.props.onToggleDeep).toBe(toggleDeepThink)
+      composer.props.onToggleDeep()
+      expect(toggleDeepThink).toHaveBeenCalledOnce()
+    } finally {
+      app.unmount()
+      AdvancedAiChat.setup = originalSetup
+      AdvancedAiChat.render = originalRender
+      ChatComposer.render = originalComposerRender
+    }
+  })
+
   it('removes a locally cached session after a server 404 and loads the next available session', async () => {
     mocks.conversations.set('missing-session', conversation('missing-session'))
     mocks.conversations.set('survivor-session', conversation('survivor-session'))
