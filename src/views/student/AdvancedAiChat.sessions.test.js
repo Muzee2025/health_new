@@ -7,6 +7,7 @@ import { runInNewContext } from 'node:vm'
 import AdvancedAiChat from './AdvancedAiChat.vue'
 import ChatComposer from './chat/ChatComposer.vue'
 import ChatSessionSidebar from './chat/ChatSessionSidebar.vue'
+import ChatMessageList from './chat/ChatMessageList.vue'
 
 const mocks = vi.hoisted(() => ({
   request: vi.fn(),
@@ -131,6 +132,26 @@ const pageTemplate = compileTemplate({
 })
 if (pageTemplate.errors.length) throw pageTemplate.errors[0]
 const integrationRender = runInNewContext(`(Vue) => { ${pageTemplate.code} }`)(Vue)
+
+const messageListSource = readFileSync(
+  new URL('./chat/ChatMessageList.vue', import.meta.url),
+  'utf8',
+)
+const messageListFilename = 'src/views/student/chat/ChatMessageList.vue'
+const { descriptor: messageListDescriptor } = parse(messageListSource, {
+  filename: messageListFilename,
+})
+const messageListScript = compileScript(messageListDescriptor, {
+  id: 'advanced-chat-message-list-integration',
+})
+const messageListTemplate = compileTemplate({
+  source: messageListDescriptor.template.content,
+  filename: messageListFilename,
+  id: 'advanced-chat-message-list-integration',
+  compilerOptions: { bindingMetadata: messageListScript.bindings, mode: 'function' },
+})
+if (messageListTemplate.errors.length) throw messageListTemplate.errors[0]
+const messageListRender = runInNewContext(`(Vue) => { ${messageListTemplate.code} }`)(Vue)
 
 function createTreeRenderer() {
   const insert = (node, parent, anchor = null) => {
@@ -268,6 +289,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
     const originalRender = AdvancedAiChat.render
     const originalComposerRender = ChatComposer.render
     const originalSidebarRender = ChatSessionSidebar.render
+    const originalMessageListRender = ChatMessageList.render
     const sendMessage = vi.fn()
     const toggleDeepThink = vi.fn()
     AdvancedAiChat.setup = (props, context) => {
@@ -279,6 +301,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
     AdvancedAiChat.render = integrationRender
     ChatComposer.render = () => null
     ChatSessionSidebar.render = () => null
+    ChatMessageList.render = messageListRender
     const root = { type: 'root', props: {}, children: [], parent: null, text: '' }
     const app = createTreeRenderer().createApp(AdvancedAiChat)
     app.component('LibraryIcon', { render: () => null })
@@ -303,6 +326,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
       AdvancedAiChat.render = originalRender
       ChatComposer.render = originalComposerRender
       ChatSessionSidebar.render = originalSidebarRender
+      ChatMessageList.render = originalMessageListRender
     }
   })
 
@@ -311,6 +335,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
     const originalRender = AdvancedAiChat.render
     const originalSidebarRender = ChatSessionSidebar.render
     const originalComposerRender = ChatComposer.render
+    const originalMessageListRender = ChatMessageList.render
     const createNewChat = vi.fn()
     const loadSession = vi.fn()
     const handleSessionCommand = vi.fn()
@@ -324,6 +349,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
     AdvancedAiChat.render = integrationRender
     ChatSessionSidebar.render = () => null
     ChatComposer.render = () => null
+    ChatMessageList.render = () => null
     const root = { type: 'root', props: {}, children: [], parent: null, text: '' }
     const app = createTreeRenderer().createApp(AdvancedAiChat)
     app.component('LibraryIcon', { render: () => null })
@@ -351,6 +377,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
       AdvancedAiChat.render = originalRender
       ChatSessionSidebar.render = originalSidebarRender
       ChatComposer.render = originalComposerRender
+      ChatMessageList.render = originalMessageListRender
     }
   })
 
@@ -506,6 +533,80 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
       expect(page.sessions.value).toEqual([])
     } finally {
       scope.stop()
+    }
+  })
+  it('keeps C2 draft and scroll persistence connected to the message list scroll element', async () => {
+    const originalSetup = AdvancedAiChat.setup
+    const originalRender = AdvancedAiChat.render
+    const originalComposerRender = ChatComposer.render
+    const originalSidebarRender = ChatSessionSidebar.render
+    const originalMessageListRender = ChatMessageList.render
+    const originalMessageListSetup = ChatMessageList.setup
+    const scrollElement = { scrollTop: 0, scrollHeight: 180 }
+    const scrollToBottom = vi.fn(async () => {
+      scrollElement.scrollTop = scrollElement.scrollHeight
+    })
+    AdvancedAiChat.render = integrationRender
+    ChatComposer.render = () => null
+    ChatSessionSidebar.render = () => null
+    ChatMessageList.setup = (_props, { expose }) => {
+      expose({ scrollElement: Vue.ref(scrollElement), scrollToBottom })
+      return () => null
+    }
+
+    const root = { type: 'root', props: {}, children: [], parent: null, text: '' }
+    const app = createTreeRenderer().createApp(AdvancedAiChat)
+    app.component('LibraryIcon', { render: () => null })
+    app.component('router-link', { render: () => null })
+    try {
+      app.mount(root)
+      const messageList = findVNode(
+        app._instance.subTree,
+        (vnode) => vnode.type === ChatMessageList,
+      )
+      expect(messageList).toBeTruthy()
+      expect(messageList.ref).toBeTruthy()
+      expect(messageList.props.messages).toBe(app._instance.setupState.chatHistory)
+
+      const page = app._instance.setupState
+      expect(page.messageListRef).toBeTruthy()
+      expect(page.chatScrollRef.scrollTop).toBe(0)
+      expect(page.chatScrollRef.scrollHeight).toBe(180)
+      scrollElement.scrollTop = 27
+      scrollElement.scrollHeight = 180
+      page.currentSessionId = 'message-list-scroll'
+      page.inputText = 'persisted message draft'
+
+      expect(page.chatScrollRef.scrollTop).toBe(27)
+      expect(page.chatScrollRef.scrollHeight).toBe(180)
+      await page.persistUiState()
+      expect(mocks.saveUiState).toHaveBeenCalledWith(
+        'message-list-scroll',
+        expect.objectContaining({ draft: 'persisted message draft', scrollTop: 27 }),
+      )
+
+      mocks.uiStates.set('message-list-scroll', {
+        draft: 'restored draft',
+        scrollTop: 42,
+      })
+      page.inputText = ''
+      scrollElement.scrollTop = 0
+      page.currentSessionId = null
+      mocks.request.mockResolvedValue({ data: { data: [] } })
+      await page.loadSession('message-list-scroll')
+      expect(page.inputText).toBe('restored draft')
+      expect(scrollElement.scrollTop).toBe(42)
+
+      await page.scrollToBottom()
+      expect(scrollElement.scrollTop).toBe(180)
+    } finally {
+      app.unmount()
+      AdvancedAiChat.setup = originalSetup
+      AdvancedAiChat.render = originalRender
+      ChatComposer.render = originalComposerRender
+      ChatSessionSidebar.render = originalSidebarRender
+      ChatMessageList.render = originalMessageListRender
+      ChatMessageList.setup = originalMessageListSetup
     }
   })
 })
