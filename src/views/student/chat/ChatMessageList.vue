@@ -15,7 +15,7 @@ defineProps({
   phaseLabelMap: { type: Object, default: () => ({}) },
   isTyping: { type: Boolean, default: false },
   instantFeedback: { type: String, default: '' },
-  isDangerText: { type: Function, default: () => () => false },
+  isDangerText: { type: Function, default: () => false },
 })
 
 const scrollElement = ref(null)

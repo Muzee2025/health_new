@@ -202,6 +202,19 @@ describe('ChatMessageList component contract', () => {
     }
   })
 
+  it('does not mark user messages as dangerous when no detector is provided', () => {
+    const { app, root } = mountList({
+      messages: [{ id: 'user-plain', role: 'user', content: 'ordinary message' }],
+    })
+
+    try {
+      const bubble = findNode(root, (node) => hasClass(node, 'bubble'))
+      expect(hasClass(bubble, 'bubble-danger')).toBe(false)
+    } finally {
+      app.unmount()
+    }
+  })
+
   it('shows the crisis banner and anchors thinking details to the matching message', () => {
     const { app, root } = mountList({
       messages: [
