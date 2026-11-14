@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs'
 import { runInNewContext } from 'node:vm'
 import AdvancedAiChat from './AdvancedAiChat.vue'
 import ChatComposer from './chat/ChatComposer.vue'
+import ChatSessionSidebar from './chat/ChatSessionSidebar.vue'
 
 const mocks = vi.hoisted(() => ({
   request: vi.fn(),
@@ -266,6 +267,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
     const originalSetup = AdvancedAiChat.setup
     const originalRender = AdvancedAiChat.render
     const originalComposerRender = ChatComposer.render
+    const originalSidebarRender = ChatSessionSidebar.render
     const sendMessage = vi.fn()
     const toggleDeepThink = vi.fn()
     AdvancedAiChat.setup = (props, context) => {
@@ -276,7 +278,7 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
     }
     AdvancedAiChat.render = integrationRender
     ChatComposer.render = () => null
-
+    ChatSessionSidebar.render = () => null
     const root = { type: 'root', props: {}, children: [], parent: null, text: '' }
     const app = createTreeRenderer().createApp(AdvancedAiChat)
     app.component('LibraryIcon', { render: () => null })
@@ -299,6 +301,55 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
       app.unmount()
       AdvancedAiChat.setup = originalSetup
       AdvancedAiChat.render = originalRender
+      ChatComposer.render = originalComposerRender
+      ChatSessionSidebar.render = originalSidebarRender
+    }
+  })
+
+  it('routes sidebar events to the existing session actions', () => {
+    const originalSetup = AdvancedAiChat.setup
+    const originalRender = AdvancedAiChat.render
+    const originalSidebarRender = ChatSessionSidebar.render
+    const originalComposerRender = ChatComposer.render
+    const createNewChat = vi.fn()
+    const loadSession = vi.fn()
+    const handleSessionCommand = vi.fn()
+    AdvancedAiChat.setup = (props, context) => {
+      const bindings = originalSetup(props, context)
+      bindings.createNewChat = createNewChat
+      bindings.loadSession = loadSession
+      bindings.handleSessionCommand = handleSessionCommand
+      return bindings
+    }
+    AdvancedAiChat.render = integrationRender
+    ChatSessionSidebar.render = () => null
+    ChatComposer.render = () => null
+    const root = { type: 'root', props: {}, children: [], parent: null, text: '' }
+    const app = createTreeRenderer().createApp(AdvancedAiChat)
+    app.component('LibraryIcon', { render: () => null })
+    app.component('router-link', { render: () => null })
+    try {
+      app.mount(root)
+      const sidebar = findVNode(app._instance.subTree, (vnode) => vnode.type === ChatSessionSidebar)
+      expect(sidebar).toBeTruthy()
+      expect(sidebar.props.onCreate).toBe(createNewChat)
+      expect(sidebar.props.onSelect).toBe(loadSession)
+
+      const target = { id: 'sidebar-session', title: 'A session' }
+      sidebar.props.onCreate('counseling')
+      sidebar.props.onSelect('sidebar-session')
+      sidebar.props.onRename(target)
+      sidebar.props.onDelete(target)
+
+      expect(createNewChat).toHaveBeenCalledWith('counseling')
+      expect(loadSession).toHaveBeenCalledWith('sidebar-session')
+      expect(handleSessionCommand).toHaveBeenNthCalledWith(1, 'rename', target)
+      expect(handleSessionCommand).toHaveBeenNthCalledWith(2, 'delete', target)
+    } finally {
+      app.unmount()
+      AdvancedAiChat.setup = originalSetup
+      AdvancedAiChat.render = originalRender
+      ChatSessionSidebar.render = originalSidebarRender
       ChatComposer.render = originalComposerRender
     }
   })

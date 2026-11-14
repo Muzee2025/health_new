@@ -1,50 +1,15 @@
 <template>
   <div class="chat-page business-page">
-    <aside class="session-panel">
-      <div class="session-toolbar">
-        <el-button type="primary" plain class="new-conv-btn" @click="createNewChat(currentMode)"
-          ><LibraryIcon name="add" /> 新对话</el-button
-        >
-      </div>
-      <div class="session-search">
-        <el-input v-model="searchQuery" placeholder="搜索聊天记录..." />
-      </div>
-      <div class="session-list" v-loading="loadingSessions">
-        <div
-          v-for="session in filteredSessions"
-          :key="session.id"
-          :class="['session-item', currentSessionId === session.id ? 'active' : '']"
-          role="button"
-          tabindex="0"
-          :aria-current="currentSessionId === session.id ? 'true' : undefined"
-          @click="loadSession(session.id)"
-          @keydown.enter.stop.prevent="loadSession(session.id)"
-          @keydown.space.stop.prevent="loadSession(session.id)"
-        >
-          <div class="session-top">
-            <span
-              class="session-mode-dot"
-              :class="session.mode === 'daily' ? 'dot-daily' : 'dot-counsel'"
-            />
-            <span class="session-name">{{ session.title }}</span>
-            <span v-if="session.archived" class="session-archived">已归档</span>
-            <span class="session-time">{{ formatSessionTime(session.updated_at) }}</span>
-            <el-dropdown @command="(cmd) => handleSessionCommand(cmd, session)">
-              <span class="session-more" @click.stop>•••</span>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item command="rename">重命名</el-dropdown-item>
-                  <el-dropdown-item command="delete" divided>删除</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-          </div>
-          <div class="session-preview">
-            {{ session.mode === 'daily' ? '日常聊天会话' : '心理咨询会话' }}
-          </div>
-        </div>
-      </div>
-    </aside>
+    <ChatSessionSidebar
+      :sessions="sessions"
+      :current-session-id="currentSessionId"
+      :loading-sessions="loadingSessions"
+      :current-mode="currentMode"
+      @create="createNewChat"
+      @select="loadSession"
+      @rename="handleSessionCommand('rename', $event)"
+      @delete="handleSessionCommand('delete', $event)"
+    />
 
     <section class="chat-main-wrap">
       <header class="chat-top-bar">
@@ -188,23 +153,12 @@ import { getVisualAsset } from '../../design/asset-registry'
 const userAvatar = getVisualAsset('studentAvatar').url
 const anonymousAvatar = getVisualAsset('anonymousAvatar').url
 
-import { ref, nextTick, onMounted, onBeforeUnmount, computed, watch } from 'vue'
-import {
-  ElMessage,
-  ElMessageBox,
-  ElButton,
-  ElInput,
-  ElDropdown,
-  ElDropdownMenu,
-  ElDropdownItem,
-  ElSwitch,
-  ElIcon,
-  ElAvatar,
-  vLoading,
-} from 'element-plus'
+import { ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ElMessage, ElMessageBox, ElSwitch, ElIcon, ElAvatar } from 'element-plus'
 import axios from 'axios'
 import RiskFactorFiveDimension from '../../components/RiskFactorFiveDimension.vue'
 import ChatComposer from './chat/ChatComposer.vue'
+import ChatSessionSidebar from './chat/ChatSessionSidebar.vue'
 import { sleep, withApiRetry } from '@/services/advancedChatRetry'
 import {
   createTimeoutController,
@@ -261,7 +215,6 @@ const phaseLabelMap = {
 
 const sessions = ref([])
 const loadingSessions = ref(false)
-const searchQuery = ref('')
 const currentSessionId = ref(null)
 const currentMode = ref('daily')
 
@@ -269,12 +222,6 @@ const chatHistory = ref([])
 const chatScrollRef = ref(null)
 const crisisBannerVisible = ref(false)
 let crisisBannerTimer = null
-
-const filteredSessions = computed(() => {
-  const base = sessions.value.filter((s) => !s.archived)
-  if (!searchQuery.value) return base
-  return base.filter((s) => s.title.includes(searchQuery.value))
-})
 
 const ws = ref(null)
 
@@ -385,12 +332,6 @@ watch(isAnonymous, async (val) => {
     await createNewChat(currentMode.value || 'daily')
   }
 })
-
-const formatSessionTime = (time) => {
-  if (!time) return '--:--'
-  const d = new Date(time)
-  return `${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
 
 const uuid = () =>
   globalThis.crypto?.randomUUID
@@ -748,119 +689,6 @@ const scrollToBottom = async () => {
   margin: 0;
 }
 
-.session-panel {
-  width: 280px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-}
-
-.session-search {
-  padding: 14px;
-}
-
-.session-toolbar {
-  padding: 12px 14px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.new-conv-btn {
-  width: 110px;
-}
-
-.session-search :deep(.el-input__wrapper) {
-  border-radius: var(--radius);
-  box-shadow: none;
-  border: 1px solid var(--border);
-}
-
-.session-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 10px 10px;
-}
-
-.session-item {
-  padding: 16px 12px;
-  border-radius: var(--radius);
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.session-item:hover {
-  background: var(--surface-subtle);
-}
-.session-item:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-.session-item.active {
-  background: var(--brand-50);
-}
-
-.session-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.session-archived {
-  font-size: 12px;
-  color: var(--text-secondary);
-  background: var(--surface-subtle);
-  border-radius: 999px;
-  padding: 1px 6px;
-}
-
-.session-more {
-  color: var(--text-secondary);
-  cursor: pointer;
-  user-select: none;
-  padding: 0 4px;
-}
-
-.session-mode-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.dot-daily {
-  background: var(--primary);
-}
-
-.dot-counsel {
-  background: var(--success-text);
-}
-
-.session-name {
-  flex: 1;
-  font-size: 13px;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.session-time {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.session-preview {
-  margin-top: 6px;
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
 .chat-main-wrap {
   flex: 1;
   display: flex;
@@ -1171,10 +999,6 @@ const scrollToBottom = async () => {
     height: auto;
   }
 
-  .session-panel {
-    width: 100%;
-  }
-
   .chat-content {
     flex-direction: column;
   }
@@ -1188,13 +1012,6 @@ const scrollToBottom = async () => {
 @media (max-width: 600px) {
   .chat-page {
     gap: 10px;
-  }
-  .session-panel {
-    max-height: 240px;
-    min-height: 0;
-  }
-  .session-list {
-    max-height: 130px;
   }
   .chat-top-bar {
     align-items: stretch;
