@@ -284,6 +284,82 @@ afterEach(() => {
 })
 
 describe('AdvancedAiChat session lifecycle integration contract', () => {
+  it('preserves settings, local index, server sync, session load, and websocket initialization order', async () => {
+    const events = []
+    const localStorageGet = globalThis.localStorage.getItem.bind(globalThis.localStorage)
+    vi.spyOn(globalThis.localStorage, 'getItem').mockImplementation((key) => {
+      if (key.startsWith('advanced_ai_')) events.push('settings:' + key)
+      return localStorageGet(key)
+    })
+    globalThis.localStorage.setItem('advanced_ai_deep_think_enabled', '1')
+    globalThis.localStorage.setItem('advanced_ai_normal_reply_avg_chars', '120')
+    globalThis.localStorage.setItem('advanced_ai_normal_reply_count', '3')
+    mocks.conversations.set('seed-session', conversation('seed-session'))
+    mocks.getAllConversations.mockImplementation(async () => {
+      events.push('local-index')
+      return [...mocks.conversations.values()]
+    })
+    mocks.request.mockImplementation(async ({ method, url }) => {
+      events.push('request:' + method + ':' + url)
+      if (url === '/api/advanced-ai/sessions') {
+        return {
+          data: {
+            data: [
+              {
+                id: 'seed-session',
+                title: 'seed-session',
+                mode: 'daily',
+                updated_at: '2026-11-14T00:00:00.000Z',
+              },
+            ],
+          },
+        }
+      }
+      if (url === '/api/advanced-ai/sessions/seed-session/messages') {
+        return { data: { data: [] } }
+      }
+      throw new Error('Unexpected integration request: ' + url)
+    })
+
+    class TestWebSocket {
+      constructor() {
+        events.push('websocket')
+        this.close = vi.fn()
+        TestWebSocket.instances.push(this)
+      }
+    }
+    TestWebSocket.instances = []
+    vi.stubGlobal('window', { location: { href: 'http://127.0.0.1:5173/student/chat' } })
+    vi.stubGlobal('WebSocket', TestWebSocket)
+
+    const { page, scope } = createPage()
+    try {
+      await mocks.mountedHooks[0]()
+
+      const settingsIndex = events.indexOf('settings:advanced_ai_deep_think_enabled')
+      const localIndex = events.indexOf('local-index')
+      const syncIndex = events.indexOf('request:get:/api/advanced-ai/sessions')
+      const loadIndex = events.indexOf(
+        'request:get:/api/advanced-ai/sessions/seed-session/messages',
+      )
+      const websocketIndex = events.indexOf('websocket')
+      expect(settingsIndex).toBeGreaterThanOrEqual(0)
+      expect(settingsIndex).toBeLessThan(localIndex)
+      expect(localIndex).toBeLessThan(syncIndex)
+      expect(syncIndex).toBeLessThan(loadIndex)
+      expect(loadIndex).toBeLessThan(websocketIndex)
+      expect(page.deepThinkEnabled.value).toBe(true)
+      expect(page.normalReplyAvgChars.value).toBe(120)
+      expect(page.normalReplyCount.value).toBe(3)
+
+      mocks.unmountedHooks[0]()
+      expect(TestWebSocket.instances).toHaveLength(1)
+      expect(TestWebSocket.instances[0].close).toHaveBeenCalledOnce()
+    } finally {
+      scope.stop()
+    }
+  })
+
   it('wires composer model and actions to the existing page bindings', async () => {
     const originalSetup = AdvancedAiChat.setup
     const originalRender = AdvancedAiChat.render
@@ -446,11 +522,14 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
   })
 
   it('clears anonymous content without persisting it or contacting the session API', async () => {
+    const transitionEvents = []
+    mocks.messageInfo.mockImplementation(() => transitionEvents.push('anonymous-notice'))
     const { page, scope } = createPage()
     try {
       page.inputText.value = 'ephemeral draft'
       page.chatHistory.value = [{ id: 'temporary', role: 'user', content: 'ephemeral message' }]
       page.isAnonymous.value = true
+      await nextTick()
       await nextTick()
       await page.persistUiState()
 
@@ -458,6 +537,28 @@ describe('AdvancedAiChat session lifecycle integration contract', () => {
       expect(page.chatHistory.value).toEqual([])
       expect(mocks.saveUiState).not.toHaveBeenCalled()
       expect(mocks.request).not.toHaveBeenCalled()
+      expect(transitionEvents).toEqual(['anonymous-notice'])
+
+      let resolveReloadRequest
+      const reloadRequested = new Promise((resolve) => {
+        resolveReloadRequest = resolve
+      })
+      mocks.messageSuccess.mockImplementation(() => transitionEvents.push('real-mode-notice'))
+      mocks.request.mockImplementation(async ({ url }) => {
+        transitionEvents.push('request:' + url)
+        resolveReloadRequest()
+        return { data: { data: [] } }
+      })
+      page.sessions.value = [conversation('saved-session')]
+      page.currentSessionId.value = 'saved-session'
+      page.isAnonymous.value = false
+      await nextTick()
+      await reloadRequested
+
+      expect(transitionEvents.slice(-2)).toEqual([
+        'real-mode-notice',
+        'request:/api/advanced-ai/sessions/saved-session/messages',
+      ])
     } finally {
       scope.stop()
     }

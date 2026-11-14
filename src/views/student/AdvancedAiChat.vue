@@ -103,7 +103,9 @@ import {
 } from '@/services/advancedChatStream'
 import { createChatStorage } from '@/services/chatIndexedDb'
 import { createPrivateChatSession, storedSessionToken } from '@/services/privateChatSession'
+import { useChatWebSocket } from '@/composables/useChatWebSocket'
 import { useChatSessions } from '@/composables/useChatSessions'
+import { useDeepThinkSettings } from '@/composables/useDeepThinkSettings'
 
 const sessionAbort = new AbortController()
 const chatSession = createPrivateChatSession(
@@ -123,20 +125,11 @@ const sessionHttp = {
   patch: (url, data, config) => sessionRequest('patch', url, data, config),
   delete: (url, config) => sessionRequest('delete', url, undefined, config),
 }
-let wsReconnectTimer = null
-
 const inputText = ref('')
 const isTyping = ref(false)
 const isAnonymous = ref(false)
 const instantFeedback = ref('')
 const langStatus = ref(null)
-const deepThinkEnabled = ref(false)
-const DEEP_THINK_STORAGE_KEY = 'advanced_ai_deep_think_enabled'
-const DEEP_THINK_WELCOME_KEY = 'advanced_ai_deep_think_welcome_shown'
-const NORMAL_REPLY_AVG_KEY = 'advanced_ai_normal_reply_avg_chars'
-const NORMAL_REPLY_COUNT_KEY = 'advanced_ai_normal_reply_count'
-const normalReplyAvgChars = ref(0)
-const normalReplyCount = ref(0)
 const lastReplyChars = ref(0)
 const lastReplyRatio = ref(1)
 const isDeepStreaming = ref(false)
@@ -159,8 +152,6 @@ const messageListRef = ref(null)
 const chatScrollRef = computed(() => messageListRef.value?.scrollElement ?? null)
 const crisisBannerVisible = ref(false)
 let crisisBannerTimer = null
-
-const ws = ref(null)
 
 const {
   syncSessionsFromServer,
@@ -191,47 +182,17 @@ const {
   ElMessageBox,
 })
 
-const initWebSocket = () => {
-  const token = getStoredToken()
-  if (!token || !chatSession.isActive()) return
-  const wsUrl = new URL(axios.getUri({ url: '/api/ws' }), window.location.href)
-  wsUrl.protocol = wsUrl.protocol === 'https:' ? 'wss:' : 'ws:'
-  ws.value = new WebSocket(wsUrl.href, ['access_token', token])
-  ws.value.onopen = () => {
-    console.log('Student WS connected')
-  }
-  ws.value.onmessage = (event) => {
-    if (!chatSession.isActive()) return
-    try {
-      const msg = JSON.parse(event.data)
-      if (msg.type === 'warning_processed') {
-        ElMessage.success({
-          message: msg.data.message || '老师已收到您的预警信息，正在处理中，请保持通讯畅通。',
-          duration: 10000,
-          showClose: true,
-        })
-      }
-    } catch (e) {
-      if (!chatSession.isActive()) return
-    }
-  }
-  ws.value.onclose = (event) => {
-    if (chatSession.isActive() && event.code !== 1008)
-      wsReconnectTimer = setTimeout(initWebSocket, 5000)
-  }
-}
+const {
+  deepThinkEnabled,
+  normalReplyAvgChars,
+  normalReplyCount,
+  loadSettings: loadDeepThinkSettings,
+  toggleDeepThink,
+  persistNormalReplyStats,
+} = useDeepThinkSettings({ chatSession, ElMessage, ElMessageBox })
 
 onMounted(async () => {
-  try {
-    deepThinkEnabled.value = localStorage.getItem(DEEP_THINK_STORAGE_KEY) === '1'
-    normalReplyAvgChars.value = Number(localStorage.getItem(NORMAL_REPLY_AVG_KEY) || '0')
-    normalReplyCount.value = Number(localStorage.getItem(NORMAL_REPLY_COUNT_KEY) || '0')
-  } catch {
-    if (!chatSession.isActive()) return
-    deepThinkEnabled.value = false
-    normalReplyAvgChars.value = 0
-    normalReplyCount.value = 0
-  }
+  if (!loadDeepThinkSettings()) return
   await loadSessionsFromLocal()
   if (!chatSession.isActive()) return
   await syncSessionsFromServer()
@@ -244,9 +205,8 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   sessionAbort.abort()
-  clearTimeout(wsReconnectTimer)
   if (crisisBannerTimer) clearTimeout(crisisBannerTimer)
-  if (ws.value) ws.value.close()
+  closeWebSocket()
 })
 
 watch(isAnonymous, async (val) => {
@@ -281,6 +241,13 @@ const getStoredToken = () => {
   if (!token) return ''
   return token.toLowerCase().startsWith('bearer ') ? token.slice(7).trim() : token
 }
+
+const { connect: initWebSocket, close: closeWebSocket } = useChatWebSocket({
+  chatSession,
+  getStoredToken,
+  axios,
+  ElMessage,
+})
 
 const resetThinkingPanel = () => {
   thinkingPhase.value = ''
@@ -471,17 +438,10 @@ const sendMessage = async () => {
       const total = normalReplyAvgChars.value * normalReplyCount.value + currentChars
       normalReplyCount.value += 1
       normalReplyAvgChars.value = total / Math.max(normalReplyCount.value, 1)
-      try {
-        localStorage.setItem(NORMAL_REPLY_AVG_KEY, String(normalReplyAvgChars.value))
-        localStorage.setItem(NORMAL_REPLY_COUNT_KEY, String(normalReplyCount.value))
-      } catch {
-        if (!chatSession.isActive()) return
-        // 本地存储不可用时仅忽略，不影响主流程
-      }
+      if (!persistNormalReplyStats()) return
     }
 
     langStatus.value = { language: data.language, confidence: data.confidence }
-    chatHistory.value[chatHistory.value.length - 1].heatmap = data.attention_heatmap || []
     const aiLocal = streamAiLocal || {
       id: uuid(),
       role: 'ai',
@@ -553,24 +513,6 @@ const sendMessage = async () => {
     if (!isAnonymous.value && chatSession.isActive()) {
       await persistUiState()
     }
-  }
-}
-
-const toggleDeepThink = () => {
-  const next = !deepThinkEnabled.value
-  try {
-    localStorage.setItem(DEEP_THINK_STORAGE_KEY, next ? '1' : '0')
-    deepThinkEnabled.value = next
-    if (next && localStorage.getItem(DEEP_THINK_WELCOME_KEY) !== '1') {
-      ElMessageBox.alert('已开启深度思考，回复将更长、更系统。', '深度思考模式', {
-        confirmButtonText: '我知道了',
-      })
-      localStorage.setItem(DEEP_THINK_WELCOME_KEY, '1')
-    }
-    ElMessage.success(next ? '已开启深度思考模式' : '已关闭深度思考模式')
-  } catch {
-    if (!chatSession.isActive()) return
-    ElMessage.error('无法保存深度思考设置，请检查浏览器存储权限')
   }
 }
 
@@ -707,58 +649,6 @@ const scrollToBottom = async () => {
   background: var(--surface-warm);
   padding: 16px;
   overflow-y: auto;
-}
-
-.panel-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 14px;
-}
-
-.panel-title-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.panel-title-row h4 {
-  margin: 0;
-  font-size: 14px;
-  color: var(--text-primary);
-}
-
-.panel-hint {
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.radar-box {
-  height: 220px;
-}
-
-.risk-result {
-  margin-top: 8px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.risk-low {
-  color: var(--success-text);
-}
-
-.risk-mid {
-  color: var(--warning-text);
-}
-
-.risk-high {
-  color: var(--danger);
-}
-
-.mt-16 {
-  margin-top: 16px;
 }
 
 @media (max-width: 1200px) {
