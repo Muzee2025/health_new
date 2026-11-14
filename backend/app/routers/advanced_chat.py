@@ -1,7 +1,6 @@
 import asyncio
 import json
 import logging
-import re
 import time
 import uuid
 from collections import Counter
@@ -33,6 +32,22 @@ from app.models import (
     TestResult,
     User,
 )
+from app.routers.advanced_chat_helpers import (
+    _build_context_snapshot,
+    _calc_sentiment_score,
+    _cosine_similarity,
+    _day_range,
+    _default_emotion_tags,
+    _extract_target_date,
+    _format_deep_think_reply,
+    _format_dt,
+    _is_effective_emotion_input,
+    _normalize_history_for_model,
+    _safe_datetime_str,
+    _safe_json_loads,
+    _sse_event,
+    _tokenize_for_match,
+)
 from app.routers.auth import get_current_user
 from app.services.dialogue_analysis_service import enqueue_dialogue_analysis
 from app.services.nlp_engine import NLPModelsService
@@ -58,13 +73,17 @@ CRISIS_SUPPORT_MESSAGE = (
 )
 
 # --- 模型 ---
+
+
 class SessionCreate(BaseModel):
     mode: str = "daily" # daily or counseling
     conversation_id: Optional[str] = None
     title: Optional[str] = None
 
+
 class SessionRename(BaseModel):
     title: str
+
 
 class ChatRequest(BaseModel):
     session_id: Optional[str] = None
@@ -74,6 +93,7 @@ class ChatRequest(BaseModel):
     mode: str = "daily"
     deep_think: bool = False
     history: Optional[List[Dict[str, Any]]] = None
+
 
 class ChatResponse(BaseModel):
     id: str
@@ -91,17 +111,6 @@ class ChatResponse(BaseModel):
     warning_state: str = "not_applicable"
 
 
-def _default_emotion_tags() -> Dict[str, float]:
-    return {
-        "joy": 0.0,
-        "sadness": 0.0,
-        "neutral": 1.0,
-        "fear": 0.0,
-        "anxiety": 0.0,
-        "anger": 0.0,
-    }
-
-
 def _keyword_crisis_detect(text: str) -> Tuple[bool, str]:
     source = str(text or "").strip()
     if not source:
@@ -112,26 +121,6 @@ def _keyword_crisis_detect(text: str) -> Tuple[bool, str]:
     return False, ""
 
 
-def _is_effective_emotion_input(text: str) -> bool:
-    clean = str(text or "").strip()
-    if not clean:
-        return False
-    return bool(re.search(r"[\u4e00-\u9fffA-Za-z0-9]", clean))
-
-
-def _normalize_history_for_model(raw_history: List[Dict[str, Any]] | None, deep_think: bool) -> List[Dict[str, str]]:
-    if not deep_think or not raw_history:
-        return []
-    history: List[Dict[str, str]] = []
-    for item in raw_history[-10:]:
-        role = str(item.get("role", "user"))
-        if role == "ai":
-            role = "assistant"
-        if role not in ("user", "assistant", "system"):
-            role = "user"
-        history.append({"role": role, "content": str(item.get("content", ""))[:500]})
-    return history
-
 def _build_db_history_for_model(hist_msgs: List[AIChatMessage], deep_think: bool) -> List[Dict[str, str]]:
     if not deep_think:
         return []
@@ -141,44 +130,6 @@ def _build_db_history_for_model(hist_msgs: List[AIChatMessage], deep_think: bool
         for m in context_msgs[-10:]
     ]
 
-def _format_deep_think_reply(
-    raw_text: str,
-    trace_id: str,
-) -> str:
-    text = (raw_text or "").strip()
-    if not text:
-        raise RuntimeError(f"deep_think_empty_response trace_id={trace_id}")
-    return text
-
-
-def _safe_json_loads(value: Any, default: Any = None) -> Any:
-    """Parse a JSON text column, or `default` when it is empty or unreadable.
-
-    The columns this reads (emotion_tags, heatmap) are unvalidated TEXT: a row
-    may hold NULL, an empty string, `[]`, or a value written by an older
-    release, so a bad one must degrade to `default` instead of failing the
-    whole history response.
-    """
-    if value is None:
-        return default
-    if not isinstance(value, (str, bytes, bytearray)):
-        # Some drivers hand back an already-decoded value; keep it as it is.
-        return value
-    text = value.decode("utf-8", "replace") if isinstance(value, (bytes, bytearray)) else value
-    if not text.strip():
-        return default
-    try:
-        return json.loads(text)
-    except (TypeError, ValueError):
-        return default
-
-
-def _safe_datetime_str(value: Any) -> str | None:
-    if value is None:
-        return None
-    if isinstance(value, datetime):
-        return value.isoformat(timespec="seconds")
-    return str(value)
 
 async def _emotion_pipeline(message: str) -> Dict[str, Any]:
     clean = str(message or "").strip()
@@ -227,14 +178,6 @@ async def _emotion_pipeline(message: str) -> Dict[str, Any]:
     }
 
 
-def _build_context_snapshot(history: List[Dict[str, str]]) -> Dict[str, Any]:
-    trimmed = history[-8:] if history else []
-    return {
-        "turns": len(trimmed),
-        "messages": trimmed,
-    }
-
-
 def _extract_topic_tags(text: str, top_k: int = 4) -> List[str]:
     source = (text or "").strip()
     if not source:
@@ -254,13 +197,6 @@ def _extract_topic_tags(text: str, top_k: int = 4) -> List[str]:
     if not tags:
         tags = _tokenize_for_match(source)[:top_k]
     return tags[:top_k]
-
-
-def _calc_sentiment_score(emotions: Dict[str, float]) -> int:
-    joy = float(emotions.get("joy", 0))
-    neg = (float(emotions.get("sadness", 0)) + float(emotions.get("fear", 0)) + float(emotions.get("anger", 0))) / 3
-    score = (joy * 0.65 + (1 - neg) * 0.35) * 100
-    return max(0, min(100, int(round(score))))
 
 
 def _archive_dialogue(
@@ -397,43 +333,6 @@ async def query_chat_history(
     }
 
 
-def _sse_event(event: str, data: Any) -> str:
-    payload = data if isinstance(data, str) else json.dumps(data, ensure_ascii=False)
-    return f"event: {event}\ndata: {payload}\n\n"
-
-
-def _tokenize_for_match(text: str) -> List[str]:
-    raw = (text or "").lower()
-    chunks = re.findall(r"[\u4e00-\u9fff]{1,4}|[a-z0-9]{2,}", raw)
-    return [c for c in chunks if len(c.strip()) >= 2]
-
-
-def _extract_target_date(user_message: str) -> Optional[datetime]:
-    text = (user_message or "").strip()
-    if not text:
-        return None
-    match = re.search(r"(20\d{2})[-/年](\d{1,2})[-/月](\d{1,2})", text)
-    if not match:
-        return None
-    year, month, day = map(int, match.groups())
-    try:
-        return datetime(year, month, day)
-    except ValueError:
-        return None
-
-
-def _day_range(target_day: datetime) -> Tuple[datetime, datetime]:
-    day_start = datetime(target_day.year, target_day.month, target_day.day, 0, 0, 0)
-    day_end = day_start + timedelta(days=1) - timedelta(microseconds=1)
-    return day_start, day_end
-
-
-def _format_dt(ts: Optional[datetime]) -> str:
-    if not ts:
-        return "未知时间"
-    return ts.strftime("%Y-%m-%d %H:%M")
-
-
 def _build_session_message_highlights(
     messages: List[AIChatMessage],
     query_text: str,
@@ -531,17 +430,6 @@ def _build_historical_session_context(
         "timeline_lines": timeline_lines,
         "history_context": history_context,
     }
-
-
-def _cosine_similarity(vec_a: List[float], vec_b: List[float]) -> float:
-    if not vec_a or not vec_b or len(vec_a) != len(vec_b):
-        return 0.0
-    dot = sum(a * b for a, b in zip(vec_a, vec_b, strict=True))
-    norm_a = sum(a * a for a in vec_a) ** 0.5
-    norm_b = sum(b * b for b in vec_b) ** 0.5
-    if norm_a <= 0 or norm_b <= 0:
-        return 0.0
-    return dot / (norm_a * norm_b)
 
 
 def _embed_for_recall(user_message: str, candidates: List[str]) -> Tuple[List[float], List[List[float]]]:
@@ -731,6 +619,8 @@ def _generate_trend_description(trend_data: Dict[str, Any]) -> str:
     return f"近7天情绪指数均值 {recent_avg}，上周约 {prev_avg}，当前趋势{direction}（变化 {delta:+.1f}）。"
 
 # --- Session API ---
+
+
 @router.get("/sessions")
 async def get_chat_sessions(
     db: Session = Depends(get_db),
@@ -757,6 +647,7 @@ async def get_chat_sessions(
     except Exception as exc:
         logger.error("get_chat_sessions_failed user_id=%s error=%s", getattr(current_user, "id", None), type(exc).__name__)
         raise HTTPException(status_code=500, detail="加载会话失败") from exc
+
 
 @router.post("/sessions")
 async def create_chat_session(
@@ -800,6 +691,7 @@ async def create_chat_session(
         raise HTTPException(status_code=400, detail="Session id already exists") from None
     return {"status": "success", "session_id": new_session.id, "initial_message": initial_prompt}
 
+
 @router.patch("/sessions/{session_id}")
 async def rename_chat_session(
     session_id: str,
@@ -821,6 +713,7 @@ async def rename_chat_session(
     session.updated_at = func.now()
     db.commit()
     return {"status": "success"}
+
 
 @router.delete("/sessions/{session_id}")
 async def delete_chat_session(
@@ -906,6 +799,7 @@ async def delete_chat_session(
             )
             raise HTTPException(status_code=500, detail="服务端删除失败（一致性校验未通过）") from exc
 
+
 @router.get("/sessions/{session_id}/messages")
 async def get_session_messages(
     session_id: str,
@@ -947,6 +841,7 @@ async def get_session_messages(
             "created_at": m.created_at
         })
     return {"status": "success", "data": res}
+
 
 @router.post("/chat", response_model=ChatResponse)
 async def ai_chat_interaction(
@@ -1531,6 +1426,7 @@ async def ai_chat_stream(
         headers={"Cache-Control": "no-cache", "Connection": "keep-alive"},
     )
 
+
 @router.get("/report/chat-analysis")
 async def get_chat_based_report(
     db: Session = Depends(get_db),
@@ -1597,6 +1493,7 @@ async def get_chat_based_report(
                        "status": ai_report.get("status", "fallback" if messages else "insufficient"),
                        "model_id": ai_report.get("model_id")},
     }
+
 
 @router.post("/chat/upload")
 async def upload_image_or_audio(
